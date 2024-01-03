@@ -1,9 +1,8 @@
 import React from 'react'
 import { FcGoogle } from "react-icons/fc";
-import InputField from '../component/InputField';
+import InputField from '../component/fields/InputField';
 
 import Link from 'next/link';
-import Checkbox from '../component/Checkbox';
 
 const Signup = () => {
   return (
@@ -13,7 +12,7 @@ const Signup = () => {
       <h4 className="mb-2.5 text-4xl font-bold text-navy-700 ">
         Sign Up
       </h4>
-      <p className="mb-9 ml-1 text-base text-gray-600">
+      <p className="mb-4 ml-1 text-base text-gray-600">
         create your account for sign in !
       </p>
     
@@ -50,12 +49,12 @@ const Signup = () => {
       <button className="linear mt-2 w-full rounded-xl bg-blue-500 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700">
         Sign Up
       </button>
-      <div className="mt-4">
+      <div className="mt-4 flex items-center justify-center">
         <span className=" text-sm font-medium text-navy-700 ">
           Already have account ?
         </span>
         <Link
-          href=" "
+          href="/signin"
           className="ml-1 text-sm font-medium text-blue-500 hover:text-brand-600 "
         >
           Sign In
