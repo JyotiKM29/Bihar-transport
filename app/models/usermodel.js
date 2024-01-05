@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 
-const loginHistorySchema = new mongoose.Schema({
-  ip: { type: String, required: true },
+var loginHistorySchema = new mongoose.Schema({
+  ip: String ,
   location: String,
   loginTime: { type: Date, default: Date.now },
 });
+
 
 const userSchema = new mongoose.Schema(
   {
