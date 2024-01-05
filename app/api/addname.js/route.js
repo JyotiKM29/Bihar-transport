@@ -1,5 +1,5 @@
 import connectDB from '../middleware/connectDB';
-import user from '../models/usermodel'
+import user from '../../models/usermodel'
 import mongoose from 'mongoose'
 
 
