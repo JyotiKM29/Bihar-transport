@@ -26,7 +26,7 @@ const DashboardLayout = ({ children }) => {
       );
     } else {
       return (
-        <button className="bg-blue-50 h-min p-4" onClick={toggleSidebar}>
+        <button style={{ backgroundColor: 'transparent' }}className="bg-transparent h-min p-4" onClick={toggleSidebar}>
           <FaBars className="h-6 w-6" />
         </button>
       );
@@ -35,11 +35,11 @@ const DashboardLayout = ({ children }) => {
 
   return (
     <div className="flex h-screen w-screen">
-      <div className="hidden md:block lg:min-w-min md:w-[5rem]">
+      <div className="hidden lg:block xl:min-w-min lg:w-[5rem]">
         <Sidebar  />
       </div>
-      <div className="md:hidden fixed bg-white">{renderSidebar()}</div>
-      <div className="p-12 md:p-8 w-full bg-blue-50">{children}</div>
+      <div className="lg:hidden fixed bg-white">{renderSidebar()}</div>
+      <div className="p-8 pt-14 md:p-8 w-full min-h-full overflow-y-scroll bg-blue-50">{children}</div>
     </div>
   
   );

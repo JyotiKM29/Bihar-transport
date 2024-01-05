@@ -7,7 +7,7 @@ import Link from 'next/link';
 const Signup = () => {
   return (
     <div className=" flex h-screen w-screen items-center justify-center px-4  bg-gradient-to-r from-sky-500 to-indigo-500">
-    {/* Sign in section */}
+    {/* Sign in section */
     <form className="mt-[10vh] w-full  flex-col items-center  md:max-w-[420px] border  py-4 px-8 md:py-8 md:px-16 rounded-3xl bg-white">
       <h4 className="mb-2.5 text-4xl font-bold text-navy-700 ">
         Sign Up
@@ -54,13 +54,13 @@ const Signup = () => {
           Already have account ?
         </span>
         <Link
-          href="/signin"
+          href="/"
           className="ml-1 text-sm font-medium text-blue-500 hover:text-brand-600 "
         >
           Sign In
         </Link>
       </div>
-    </form>
+    </form>}
   </div>
   )
 }
