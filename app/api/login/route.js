@@ -28,7 +28,7 @@ export async function POST (req,res){
 
         // if user but not admin 
     if(!existingUser.isAdmin){
-        return Responses.json({ msg: "ask owner to assign you as admin role" });
+        return Response.json({ msg: "ask owner to assign you as admin role" });
         }
         
 
