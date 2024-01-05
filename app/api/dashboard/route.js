@@ -1,10 +1,28 @@
 import connectDB from '../../middleware/connectDB'
-
+import user from '../../models/usermodel'
 
 export async function POST(req, res){
     
-    await connectDB();
-    
+  
+
+    try {
+        await connectDB();
+
+        const { id } = await req.json();
+
+        const owner = user.findOne({ "_id": id });
+        if (!owner) {
+            return res.json({ msg: "you're not allowed to visit here" });
+        }
+
+        const totaluser = await user.find();
+        return Response.json({ totaluser: totaluser.length, user: totaluser });
+
+    } catch (error) {
+        console.log(error);
+        return Response.json({ msg: "error", error: error.message });
+    }
+
 
 
 
