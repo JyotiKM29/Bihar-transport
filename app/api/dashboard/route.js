@@ -3,8 +3,6 @@ import user from '../../models/usermodel'
 
 export async function POST(req, res){
     
-  
-
     try {
         await connectDB();
 
@@ -23,8 +21,9 @@ export async function POST(req, res){
         return Response.json({ msg: "error", error: error.message });
     }
 
+}
 
-
-
-
+ 
+export function GET(req, res) {
+  return Response.json({ msg: "this method is not allowed here" });
 }

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-var loginHistorySchema = new mongoose.Schema({
+const loginHistorySchema = new mongoose.Schema({
   ip: String ,
   location: String,
   loginTime: { type: Date, default: Date.now },

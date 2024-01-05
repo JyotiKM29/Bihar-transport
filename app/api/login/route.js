@@ -5,12 +5,12 @@ export async function POST(req, res) {
   try {
     await connectDB();
     const { name, email, phone, password, ip, location } = await req.json();
-    console.log(email, password, ip, location);
+    // console.log(email, password, ip, location);
 
     // Check for existing user with the same email
     const existingUser = await user.findOne({ email });
 
-    console.log("admin", existingUser);
+    // console.log("admin", existingUser);
 
     if (existingUser === null) {
       return Response.json({ msg: "you're not allowed" });
@@ -37,12 +37,12 @@ export async function POST(req, res) {
 
    // Save the changes
       const check = await existingUser.save();
-      if(check) console.log(check,"hey betu");
-    console.log("final user look like", existingUser);
+    //   if(check) console.log(check,"hey betu");
+    // console.log("final user look like", existingUser);
 
     if (existingUser.isOwner) {
       return Response.json({
-        msg: "Thank you for visiting owner",
+        msg: "Thank you for visiting, sir",
         user: existingUser,
       });
     }
