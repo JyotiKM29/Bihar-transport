@@ -78,7 +78,7 @@ const Sidebar = () => {
             <button
             
               onClick={() => handleButtonClick(item)}
-              className={`flex items-center justify-start px-6 py-4 gap-x-3 md:gap-x-6 hover:bg-blue-50 active:bg-blue-50 ${
+              className={`flex items-center justify-start w-full px-6 py-4 gap-x-3 md:gap-x-6 hover:bg-blue-50 active:bg-blue-50 ${
                 selectedButton === item.index
                   ? "rounded-md border-r-4 lg:border-r-8 border-blue-700"
                   : ""
