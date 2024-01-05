@@ -6,12 +6,16 @@ export async function POST (req, res){
   
     try {
         await connectDB();
-        const data = await req.json();
-        console.log(data);
+        const {name,email,password,phone} = await req.json();
+        // console.log(data);
       console.log("yes");
 
       let dummy = new user({
-        name:data.name,
+        name,
+        email,
+        password,
+        phone
+
       });
 
       const result = await dummy.save();
