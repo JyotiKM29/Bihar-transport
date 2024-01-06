@@ -9,8 +9,10 @@ export async function POST(req, res){
         const { id } = await req.json();
 
         const owner = user.findOne({ "_id": id });
-        if (!owner.isOwner) {
-            return Response.json({ msg: "you're not allowed to visit here" });
+        if (! owner.isOwner) {
+            return Response.json({
+              msg: "you're not allowed to visit here",
+            });
         }
 
         const totaluser = await user.find();
