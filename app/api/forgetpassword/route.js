@@ -4,8 +4,8 @@ import { NextResponse } from "next/server";
 import jwt from 'jsonwebtoken';
 
 export async function POST(req, res) {
-    
-    await connectDB();
+    try {
+          await connectDB();
     const { email } = await req.json();
 
     const existinguser = await user.findOne({email });
@@ -17,6 +17,14 @@ export async function POST(req, res) {
                 status: 400,
                 contentType: "application/json"
             })
+    }
+
+
+    if (!existinguser.isAdmin &  !existinguser.isOwner) {
+         return Response.json({
+           message: "Sorry but, we don't serve you... We only serve few specific persons",
+           status: 400
+         });
     }
 
     // if admin
@@ -38,9 +46,20 @@ export async function POST(req, res) {
       existinguser.resetTokenExpiresAt = expiresAt;
       await existinguser.save();
 
-    return Response.json({ User:existinguser, message: "User already exists" ,
+    return Response.json({ User:existinguser, message: "Admin found" ,
             status: 200, 
             contentType : "application/json"
         }); 
+    } catch (error) {
+        console.log("error at forget password api route", error);
+        return Response.json({ msg: error.message, status: 404 });
+    }
+  
+}
+
+
+
+export function GET(req) {
+    return Response.json({ msg: "this method is not allowed", status: 400 });
 }
 
