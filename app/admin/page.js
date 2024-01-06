@@ -1,7 +1,13 @@
 import React from "react";
 import RadialBarChart from "../component/Charts/RadialBarChart";
 import { BsBank2 } from "react-icons/bs";
+
+
 function Admin() {
+
+  // const shouldRenderChart = typeof window !== 'undefined'; // Check if window is defined
+
+
   return (
     <div className="w-full max-h-full ">
       <div className="w-full mb-4">

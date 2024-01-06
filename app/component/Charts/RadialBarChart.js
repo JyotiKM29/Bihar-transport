@@ -1,13 +1,14 @@
 'use client'
-import React, { useEffect, useRef } from 'react';
-import ReactApexChart from 'react-apexcharts';
+
+import dynamic from "next/dynamic";
+const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const RadialBarChart = () => {
-  const chartRef = useRef(null);
+   
+    const  series = [70];
 
-  useEffect(() => {
     const options = {
-      series: [70],
+     
       chart: {
         height: "100%",
         type: 'radialBar',
@@ -31,7 +32,7 @@ const RadialBarChart = () => {
             value: {
               // offset:-5,
               color: "#1e40af",
-              fontSize: "2vw",
+              fontSize: "2.7vh",
               fontWeight:"bold",
               show: true,
               
@@ -57,19 +58,11 @@ const RadialBarChart = () => {
       labels: ['Cricket'],
     };
 
-    if (chartRef.current) {
-      const chart = new ApexCharts(chartRef.current, options);
-      chart.render();
-    }
+   
 
-    return () => {
-      if (chartRef.current) {
-        chartRef.current.innerHTML = '';
-      }
-    };
-  }, []);
-
-  return <div ref={chartRef} id="chart" />;
+  return <>
+    <ApexChart type="radialBar" options={options} series={series} height={"100%"} width={"100%"} />
+  </>;
 };
 
 export default RadialBarChart;
