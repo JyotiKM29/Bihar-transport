@@ -28,7 +28,9 @@ const userSchema = new mongoose.Schema(
     isphoneVerified: { type: Boolean, default: false },
     isAdmin: { type: Boolean, default: false },
     isOwner: { type: Boolean, default: false },
-    ip: String, // New field for storing the current IP address
+    resetToken: { type: String, default: null },
+    resetTokenIssuedAt: { type: Date, default: null },
+    resetTokenExpiresAt: { type: Date, default: null },
     loginHistory: [loginHistorySchema], // Array to store login history
   },
   { timestamps: true }
