@@ -1,7 +1,7 @@
 import React from "react";
 import RadialBarChart from "../component/Charts/RadialBarChart";
 import { BsBank2 } from "react-icons/bs";
-function Page() {
+function Admin() {
   return (
     <div className="w-full max-h-full ">
       <div className="w-full mb-4">
@@ -107,6 +107,6 @@ function Page() {
   );
 }
 
-export default Page;
+export default Admin;
 
 // className='bg-purple-200 border rounded-3xl shadow-md p-6'
