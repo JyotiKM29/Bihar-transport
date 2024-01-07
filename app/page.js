@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import InputField from "./component/fields/InputField";
 import { FaCheck } from "react-icons/fa6";
@@ -11,14 +11,14 @@ import { useRouter } from "next/navigation";
 
 const SignIn = () => {
   const router = useRouter();
-  const {toast} = useToast();
+  const { toast } = useToast();
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState("");
-
-  
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await fetch(
@@ -54,33 +54,34 @@ const SignIn = () => {
       const newResult = await result.json();
 
       if (newResult.status === "ok") {
-        displayToast('Successfully login ', '✅');
+        setLoading(false);
+        displayToast("Successfully login ", "✅");
         router.push("/admin");
       } else {
-        console.log('hi' , newResult.msg);
-        displayToast('Error', '❌', newResult.msg);
+        setLoading(false);
+        console.log("hi", newResult.msg);
+        displayToast("Error", "❌", newResult.msg);
       }
 
       // router.push("/admin")
 
       console.log(newResult);
     } catch (error) {
+      setLoading(false);
       console.error("Error:", error.message);
-      displayToast('Error', '❌', error.message);
+      displayToast("Error", "❌", error.message);
     }
-
+    setLoading(false);
     console.log(email, password);
   }
 
-
-  const displayToast = (title, action, description = '') => {
+  const displayToast = (title, action, description = "") => {
     toast({
       title,
       action,
       description,
     });
   };
-
 
   return (
     <div className=" flex h-screen w-screen items-center justify-center px-4  bg-gradient-to-r from-sky-500 to-indigo-500">
@@ -130,7 +131,7 @@ const SignIn = () => {
           className="linear mt-2 w-full rounded-xl bg-blue-500 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
           type="submit"
         >
-          Sign In
+          {loading ? "Loading ..." : "Sign In"}
         </button>
         <div className="mt-4 flex items-center justify-center">
           <span className=" text-sm font-medium text-navy-700 ">

@@ -18,10 +18,15 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
 
+  const [loading, setLoading] = useState(false);
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     if (!name || !email || !phone || !password) {
+      setLoading(false);
+
       return displayToast('Fill all fields', '🥲');
     }
 
@@ -33,18 +38,22 @@ const Signup = () => {
 
       if (result.status ==='ok') {
         // const data = await response.json();
+        setLoading(false);
         console.log('Data:', result);
         displayToast('Successfully Created', '✅');
         router.push("/admin");
 
       } else {
+        setLoading(false);
         console.error('Error occurred:', result.msg);
         displayToast('Error occurred', '❌', result.message);
       }
     } catch (error) {
+      setLoading(false);
       console.error('Error:', error.message);
       displayToast('Error', '❌', error.message);
     }
+    setLoading(false);
   };
 
   const displayToast = (title, action, description = '') => {
@@ -144,7 +153,7 @@ const Signup = () => {
             href="/"
             className="ml-1 text-sm font-medium text-blue-500 hover:text-brand-600"
           >
-            Sign In
+         {loading ?"Loading ..." : " Sign In"}
           </Link>
         </div>
       </form>
