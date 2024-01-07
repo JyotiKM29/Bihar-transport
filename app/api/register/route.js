@@ -10,22 +10,33 @@ export async function POST (req, res){
         // console.log(data);
       console.log("yes");
 
+
+      const User = await user.findOne({ email });
+
+      if (User) {
+        return Response.json({
+          msg: "failed",
+          status:404,
+          message: "user already exists, please login"
+        });
+      }
+
+
       let dummy = new user({
         name,
         email,
         password,
         phone
-
       });
 
       const result = await dummy.save();
 
       console.log("data saved in database", result);
-        return Response.json({ status: "successfull", result });
+        return Response.json({ status:200,message: "user added successfully", user:dummy });
         
     } catch (error) {
       console.log(error);
-      return Response.json({ msg: "eroor occurred", error: error.message });
+      return Response.json({ msg: "error occurred", error: error.message });
     }
   }  
  

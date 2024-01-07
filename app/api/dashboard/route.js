@@ -10,17 +10,22 @@ export async function POST(req, res){
 
         const owner = user.findOne({ "_id": id });
         if (! owner.isOwner) {
-            return Response.json({
+          return Response.json({
+              status:"failure",
               msg: "you're not allowed to visit here",
             });
         }
 
         const totaluser = await user.find();
-        return Response.json({ totaluser: totaluser.length, user: totaluser });
+        return Response.json({status:"ok", totaluser: totaluser.length, user: totaluser });
 
     } catch (error) {
         console.log(error);
-        return Response.json({ msg: "error", error: error.message });
+        return Response.json({
+          status: "failure",
+          msg: "error",
+          error: error.message,
+        });
     }
 
 }
