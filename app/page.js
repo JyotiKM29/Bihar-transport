@@ -11,9 +11,11 @@ import { useRouter } from "next/navigation";
 
 const SignIn = () => {
   const router = useRouter();
-  const toast = useToast();
+  const {toast} = useToast();
   const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
+
+  
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -49,20 +51,36 @@ const SignIn = () => {
         }),
       });
 
-      const newResult  = await result.json();
+      const newResult = await result.json();
 
-      
+      if (newResult.status === "ok") {
+        displayToast('Successfully login ', '✅');
+        router.push("/admin");
+      } else {
+        console.log('hi' , newResult.msg);
+        displayToast('Error', '❌', newResult.msg);
+      }
 
       // router.push("/admin")
 
       console.log(newResult);
-
     } catch (error) {
       console.error("Error:", error.message);
+      displayToast('Error', '❌', error.message);
     }
 
     console.log(email, password);
   }
+
+
+  const displayToast = (title, action, description = '') => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
+
 
   return (
     <div className=" flex h-screen w-screen items-center justify-center px-4  bg-gradient-to-r from-sky-500 to-indigo-500">

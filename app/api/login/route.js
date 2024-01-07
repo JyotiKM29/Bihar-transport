@@ -42,12 +42,13 @@ export async function POST(req, res) {
 
     if (existingUser.isOwner) {
       return Response.json({
+        status:"ok",
         msg: "Thank you for visiting, sir",
         user: existingUser,
       });
     }
 
-    return Response.json({ msg: "welcome Admin", user: existingUser });
+    return Response.json({status:"ok", msg: "welcome Admin", user: existingUser });
   } catch (error) {
     console.log("error at login api", error);
     return Response.json({ msg: "error", error: error.message });
