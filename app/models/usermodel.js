@@ -1,11 +1,19 @@
 import mongoose from "mongoose";
 
-const loginHistorySchema = new mongoose.Schema({
-  ip: String ,
-  location: String,
-  loginTime: { type: Date, default: Date.now },
-});
+const loginHistorySchema = new mongoose.Schema(
+  {
+    ip: String,
+    location: String,
+    loginTime: { type: Date, default: Date.now },
+  },
+  { timestamps: true }
+);
 
+
+const adminSchema = new mongoose.Schema({
+  assignedBy: { type: String, required: true },
+},
+  { timestamps: true })
 
 const userSchema = new mongoose.Schema(
   {
@@ -27,6 +35,7 @@ const userSchema = new mongoose.Schema(
     isemailVerified: { type: Boolean, default: false },
     isphoneVerified: { type: Boolean, default: false },
     isAdmin: { type: Boolean, default: false },
+    adminDetails:[adminSchema],
     isOwner: { type: Boolean, default: false },
     resetToken: { type: String, default: null },
     resetTokenIssuedAt: { type: Date, default: null },
