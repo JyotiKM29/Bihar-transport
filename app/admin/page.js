@@ -9,7 +9,7 @@ function Admin() {
 
 
   return (
-    <div className="w-full max-h-full ">
+    <div className="w-full min-h-full">
       <div className="w-full mb-4">
         <h1 className="text-4xl">Dashboard</h1>
       </div>
@@ -35,9 +35,9 @@ function Admin() {
               className="bg-white  rounded-3xl shadow-md  
               h-full w-full flex"
             >
-              <div className=" h-full w-1/2 p-6">
-                <h4>Pending Order</h4>
-                <h2>10</h2>
+              <div className=" h-full w-1/2 p-6 flex flex-col justify-between">
+                <h4 className="text-lg text-slate-400">Pending Order</h4>
+                <h2 className="text-5xl text-semiBold ">10</h2>
               </div>
               <div className=" h-full w-1/2 p-2">
                 <RadialBarChart />

@@ -12,7 +12,7 @@ export async function POST(req, res) {
 
     // console.log("admin", existingUser);
 
-    if (existingUser === null) {
+    if (!existingUser) {
       return Response.json({ msg: "you're not allowed" });
     }
 
