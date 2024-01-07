@@ -32,11 +32,11 @@ export async function POST (req, res){
       const result = await dummy.save();
 
       console.log("data saved in database", result);
-        return Response.json({ status:200,message: "user added successfully", user:dummy });
+        return Response.json({ status:"ok",message: "user added successfully", user:dummy });
         
     } catch (error) {
       console.log(error);
-      return Response.json({ msg: "error occurred", error: error.message });
+      return Response.json({status:400, msg: "error occurred", error: error.message });
     }
   }  
  
