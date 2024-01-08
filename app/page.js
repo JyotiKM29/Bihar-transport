@@ -1,11 +1,11 @@
 "use client";
+import { Button } from "./components/ui/button"
 import React, { use, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import InputField from "./component/fields/InputField";
-import { FaCheck } from "react-icons/fa6";
+// import InputField from "./component/fields/InputField";
+import { Input } from "./components/ui/input";
 
 import Link from "next/link";
-import Checkbox from "./component/fields/Checkbox";
 import { useToast } from "./components/ui/use-toast";
 import { useRouter } from "next/navigation";
 
@@ -96,7 +96,7 @@ const SignIn = () => {
         </p>
 
         {/* Email */}
-        <InputField
+        <Input
           variant="auth"
           extra="mb-3"
           label="Email*"
@@ -108,7 +108,9 @@ const SignIn = () => {
         />
 
         {/* Password */}
-        <InputField
+        <Input
+          
+          className="mt-3"
           variant="auth"
           extra="mb-3"
           label="Password*"
@@ -127,12 +129,12 @@ const SignIn = () => {
             Forgot Password?
           </Link>
         </div>
-        <button
+        <Button
           className="linear mt-2 w-full rounded-xl bg-blue-500 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
           type="submit"
         >
           {loading ? "Loading ..." : "Sign In"}
-        </button>
+        </Button>
         <div className="mt-4 flex items-center justify-center">
           <span className=" text-sm font-medium text-navy-700 ">
             Not registered yet?

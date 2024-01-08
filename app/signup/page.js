@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useToast } from "../components/ui/use-toast";
 
-import InputField from "../component/fields/InputField";
+import InputField from "../components/InputField";
 
 import Link from "next/link";
 import { Toast } from "@radix-ui/react-toast";
