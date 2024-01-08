@@ -32,7 +32,7 @@ const RadialBarChart = () => {
             value: {
               // offset:-5,
               color: "#1e40af",
-              fontSize: "2.7vh",
+              fontSize: "2.2vh",
               fontWeight:"bold",
               show: true,
               

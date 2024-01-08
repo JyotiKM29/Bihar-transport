@@ -7,36 +7,37 @@ import { FaClock } from "react-icons/fa";
 
 const TodayData = () => {
   return (
-    <div className="w-full h-[90vh]">
-      <div className="w-full mb-4">
-        <h1 className="text-4xl">Today Dashboard</h1>
+    <div className="h-[90vh] w-full">
+      <div className=" mb-4 w-full ">
+        <h1 className="text-4xl opacity-0 lg:opacity-100">Today Dashboard</h1>
       </div>
       <div
-        className="min-h xl:h-[95%] w-full grid
-  grid-cols-4  grid-rows-4 md:grid-rows-5
-   xl:grid-cols-5 xl:grid-rows-2 gap-6"
+        className="min-h grid w-full grid-cols-4
+  grid-rows-4  gap-6 md:grid-rows-5
+   xl:h-[95%] xl:grid-cols-5 xl:grid-rows-2"
       >
         <div
           className="col-span-4 row-span-2 
-      lg:col-span-4 lg:row-span-2 
-      xl:row-span-1 xl:col-span-4 
-       grid 
-      grid-cols-1 grid-rows-6
-      md:grid-cols-2 md:grid-rows-3
-     
-    xl:grid-cols-3 xl:grid-rows-2 gap-6 "
+                      grid grid-cols-1 
+                     grid-rows-6 gap-6 
+                      md:grid-cols-2 
+                       md:grid-rows-3 lg:col-span-4
+                        lg:row-span-2 xl:col-span-4
+                       xl:row-span-1 xl:grid-cols-3 xl:grid-rows-2 "
         >
           {Array.from({ length: 6 }).map((_, index) => (
             <div
               key={index}
-              className="bg-white  rounded-3xl shadow-md  
-          h-full w-full flex"
+              className="flex  h-full w-full  
+          rounded-3xl bg-white p-4 shadow-md "
             >
-              <div className=" h-full w-1/2 pl-10 py-10  flex flex-col justify-between">
-                <h4 className="text-lg text-slate-400">Pending Order</h4>
-                <h2 className="text-6xl text-semiBold ">10</h2>
+              <div className=" flex h-full w-1/2 flex-col justify-between p-4 xl:p-1 2xl:p-2">
+                <p className="text-2xl text-slate-400 xl:text-base 2xl:text-lg ">
+                  Pending Order
+                </p>
+                <h2 className="text-semiBold text-8xl lg:text-5xl ">10</h2>
               </div>
-              <div className=" h-full w-1/2 p-2">
+              <div className=" h-full w-1/2 ">
                 <RadialBarChart />
               </div>
             </div>
@@ -45,74 +46,76 @@ const TodayData = () => {
 
         <div
           className="
-    row-start-3 col-span-4
-    
-    xl:row-span-2 xl:col-span-1 grid 
-    
-    md:grid-cols-3 md:grid-rows-1
-    xl:grid-rows-3 xl:grid-cols-1 gap-6"
+    col-span-4 row-start-3
+    grid gap-6 md:grid-cols-3 
+    md:grid-rows-1 xl:col-span-1
+    xl:row-span-2 xl:grid-cols-1 xl:grid-rows-3"
         >
-          <div className="bg-gradient-to-t from-[#0906b7] to-blue-500 border rounded-3xl shadow-md p-6 text-white flex flex-col justify-between">
+          <div className="flex flex-col justify-between rounded-3xl border bg-gradient-to-t from-[#0906b7] to-blue-500 p-4 lg:p-7 text-white shadow-md">
             <p className="text-2xl font-light">Total Order</p>
-            <h4 className="text-7xl  text-center font-semiBold">100</h4>
-            <FiBarChart className="h-12 w-12 relative self-end" />
+            <h4 className="font-semiBold  text-center text-8xl xl:text-7xl">100</h4>
+            <FiBarChart className="relative h-12 w-12 self-end" />
           </div>
 
-          <div className="bg-white border rounded-3xl shadow-md p-6 flex flex-col space-y-2">
-            <p className="text-slate-400 text-md  ">Easy way Bill Expiry</p>
-            <p className="text-blue-700 text-md text-right">in 2 days</p>
-            <h4 className="text-7xl text-bold">0</h4>
-            <div className="border rounded-full bg-blue-200 h-[5rem] w-[5rem] self-end flex justify-center items-center">
-
-            <FaClock  className="fill-blue-700 h-10 w-10"/>
+          <div className="flex flex-col justify-between rounded-3xl border bg-white p-4 lg:p-6 shadow-md">
+            <div>
+              <p className="text-md text-left  text-slate-400">
+                Easy way Bill Expiry{" "}
+              </p>
+              <p className="text-left text-blue-700 ">in 2 days</p>
             </div>
+
+            <h4 className="text-bold text-center text-8xl  xl:text-6xl">0</h4>
+
+            <FaClock className="h-12  self-end fill-blue-700" size={20} />
           </div>
 
-          <div className="bg-gradient-to-t from-[#0906b7] to-blue-500  border rounded-3xl shadow-md p-6">
-            <p>Advance Booking</p>
-            <h4>
-              <span>10</span>/10
+          <div className="flex flex-col justify-between  rounded-3xl border bg-gradient-to-t from-[#0906b7] to-blue-500 p-4 lg:p-7 text-white shadow-md ">
+            <p className="self-start text-2xl font-light">Advance Booking</p>
+            <h4 className="self-end text-7xl xl:text-5xl" style={{ fontWeight: "300" }}>
+              <span style={{ fontWeight: "500" }}>10</span>/10
             </h4>
           </div>
         </div>
 
         <div
           className="
-      row-span-2
-    xl:row-start-2 xl:row-end-3 col-span-4 md:flex space-y-6 md:gap-6"
+      col-span-4
+    row-span-2 space-y-6 md:flex md:gap-6 xl:row-start-2 xl:row-end-3"
         >
-          <div className=" w-full md:w-2/5 grid grid-rows-3 gap-6">
+          <div className=" grid w-full grid-rows-3 gap-6  md:w-2/5">
             {Array.from({ length: 3 }).map((_, index) => (
               <div
                 key={index}
-                className="bg-white  rounded-3xl shadow-md  h-full w-full "
+                className="h-full  w-full rounded-3xl  bg-white shadow-md p-4 lg:px-6 lg:py-4 flex flex-col justify-between"
               >
-                <div className=" h-[70%] w-full py-5 px-6 flex justify-between">
-                  <h2 className="text-4xl"> 10</h2>
+                <div className=" flex w-full justify-between ">
+                  <h2 className="text-4xl md:text-6xl"> 10</h2>
                   <div>
                     <h4 className="text-lg text-slate-400">Invoice</h4>
-                    <h2 className="text-lg text-right text-blue-700">37%</h2>
+                    <h2 className="text-right text-lg text-blue-700">37%</h2>
                   </div>
                 </div>
-                <div className=" h-[10%] w-full px-6">
+               
                   <Progress value={80} />
-                </div>
+                
               </div>
             ))}
           </div>
-          <div className="w-full  md:w-3/5 grid grid-rows-2 gap-6">
+          <div className="grid  w-full grid-rows-2 gap-6 md:w-3/5">
             {Array.from({ length: 2 }).map((_, index) => (
               <div
                 key={index}
-                className="bg-white border rounded-3xl shadow-md p-6   flex"
+                className="flex rounded-3xl border bg-white p-4 lg:p-7   shadow-md"
               >
-                <div className="w-2/3 h-full flex flex-col justify-between">
+                <div className="flex h-full w-2/3 flex-col justify-between">
                   <p className="text-xl text-slate-400">Balance Amount</p>
-                  <h2 className="text-6xl">100000</h2>
+                  <h2 className="text-4xl 2xl:text-6xl">100000</h2>
                 </div>
-                <div className="w-1/3 h-full">
-                  <div className="w-[75%] h-full border rounded-full px-15 py-8 bg-blue-100">
-                    <BsBank2 className="h-full w-full fill-blue-700" />
+                <div className="h-full w-1/3 flex justify-center items-center">
+                  <div className="h-[20vw] w-[20vw] md:h-[15vw] md:w-[15vw]  xl:h-[8vw] xl:w-[8vw] rounded-full border bg-blue-100 flex justify-center items-center">
+                    <BsBank2 className="h-[10vw] w-[10vw] 
+                    md:h-[6vw] md:w-[6vw] xl:w-[3vw] xl:h-[3vw] fill-blue-700" />
                   </div>
                 </div>
               </div>
