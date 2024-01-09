@@ -8,26 +8,25 @@ const RadialBarChart = () => {
     const  series = [70];
 
     const options = {
-     
       chart: {
         height: "100%",
         type: 'radialBar',
       },
+      
       plotOptions: {
         radialBar: {
           hollow: {
             margin: 15,
             size: '56%',
           },
-          
+        
 
           dataLabels: {
             showOn: "always",
             name: {
-              // offsetY: -10,
+              
               show: false,
-              // color: "#888",
-              // fontSize: "13px"
+            
             },
             value: {
               // offset:-5,
@@ -60,9 +59,9 @@ const RadialBarChart = () => {
 
    
 
-  return <>
+  return   <div style={{ width: '120%', height: '120%' }}>
     <ApexChart type="radialBar" options={options} series={series} height={"100%"} width={"100%"} />
-  </>;
+  </div>;
 };
 
 export default RadialBarChart;

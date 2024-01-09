@@ -31,13 +31,13 @@ const TodayData = () => {
               className="flex  h-full w-full  
           rounded-3xl bg-white p-4 shadow-md "
             >
-              <div className=" flex h-full w-1/2 flex-col justify-between p-4 xl:p-1 2xl:p-2">
-                <p className="text-2xl text-slate-400 xl:text-base 2xl:text-lg ">
+              <div className=" flex h-full w-2/5 flex-col justify-between p-4 xl:p-1 2xl:p-2">
+                <p className="text-2xl text-slate-400 xl:text-base 2xl:text-lg xl:text-wrap 2xl:text-wrap">
                   Pending Order
                 </p>
                 <h2 className="text-semiBold text-8xl lg:text-5xl ">10</h2>
               </div>
-              <div className=" h-full w-1/2 ">
+              <div className=" h-full w-3/5 flex-grow-1 ">
                 <RadialBarChart />
               </div>
             </div>
@@ -113,9 +113,9 @@ const TodayData = () => {
                   <h2 className="text-4xl 2xl:text-6xl">100000</h2>
                 </div>
                 <div className="h-full w-1/3 flex justify-center items-center">
-                  <div className="h-[20vw] w-[20vw] md:h-[15vw] md:w-[15vw]  xl:h-[8vw] xl:w-[8vw] rounded-full border bg-blue-100 flex justify-center items-center">
+                  <div className="h-[20vw] w-[20vw] md:h-[15vw] md:w-[15vw]  xl:h-[8vw] xl:w-[8vw] 2xl:h-[6vw] 2xl:w-[6vw] rounded-full border bg-blue-100 flex justify-center items-center">
                     <BsBank2 className="h-[10vw] w-[10vw] 
-                    md:h-[6vw] md:w-[6vw] xl:w-[3vw] xl:h-[3vw] fill-blue-700" />
+                    md:h-[6vw] md:w-[6vw] xl:w-[3vw] xl:h-[3vw] 2xl:h-[1.5vw] 2xl:w-[1.5vw] fill-blue-700" />
                   </div>
                 </div>
               </div>
