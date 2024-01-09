@@ -2,6 +2,7 @@ import React from "react";
 import TodayData from './component/TodayData';
 import WeekData from './component/WeekData';
 import MonthData from './component/MonthData';
+import YearData from './component/YearData';
 import {
   Tabs,
   TabsContent,
@@ -32,7 +33,7 @@ function Admin() {
           <MonthData />
         </TabsContent>
         <TabsContent value="year">
-          <MonthData />
+          <YearData />
         </TabsContent>
       </Tabs>
 
