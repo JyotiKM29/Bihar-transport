@@ -176,11 +176,7 @@ export const YearAreaChartOptions = {
       "Nov",
       "Dec",
     ],
-    labels: {
-      formatter: function (val) {
-        return val.substring(0, 3);
-      },
-    },
+   
   },
 
   title: {
@@ -945,11 +941,11 @@ export const  YearStackRowOptions = {
       "Nov",
       "Dec",
     ],
-    labels: {
-      formatter: function (val) {
-        return val.substring(0, 3);
-      },
-    },
+    // labels: {
+    //   formatter: function (val) {
+    //     return val.substring(0, 3);
+    //   },
+    // },
   },
   yaxis: {
     title: {
