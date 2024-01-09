@@ -36,9 +36,17 @@ const MonthData = () => {
             />
           </div>
           <div className="rounded-3xl bg-white p-4 shadow-md">
-            <RadialBarChart />
+          <h2 className="text-lg text-left ">Invoice Completed</h2>
+          <RadialBarChart /></div>
+          <div className="rounded-3xl bg-white p-4 shadow-md flex flex-col items-center">
+            <h2 className="text-xl xl:text-3xl text-slate-500 ">Total Amounts</h2>
+            <div className=" flex-grow flex   flex-col justify-end ">
+
+            <p className="text-lg xl:text-2xl">Received - 40K</p>
+            <p className="text-lg xl:text-2xl  ">Balance - 90K</p>
+            </div>
           </div>
-          <div className="rounded-3xl bg-white p-4 shadow-md">row 3</div>
+
         </div>
         <div className="rounded-3xl bg-white p-4 shadow-md md:col-span-3 ">
           <BasicBarChart

@@ -81,11 +81,11 @@ export const WeekAreaChartOptions = {
 export const MonthAreaChartSeries = [
   {
     name: "Order Delivery",
-    data: [3, 6, 8, 10, 5, 9, 11],
+    data: [3, 6, 8, 10, 5, 9,3, 6, 8, 10,5, 6, 5, 11],
   },
   {
     name: "Pending Delivery",
-    data: [7, 3, 5, 6, 4, 8, 9],
+    data: [7, 3, 5, 6, 4,3, 6, 8,5, 6, 10, 5, 8, 9],
   },
 ];
 
@@ -137,11 +137,11 @@ export const MonthAreaChartOptions = {
 export const YearAreaChartSeries = [
   {
     name: "series1",
-    data: [3, 6, 8, 10, 5, 9, 11],
+    data: [3, 6, 8, 10, 5, 9, 11, 6, 8, 10, 5, 9],
   },
   {
     name: "series2",
-    data: [7, 3, 5, 6, 4, 8, 9],
+    data: [7, 3, 5, 6, 8, 10, 5, 9, 6, 4, 8, 9],
   },
 ];
 
@@ -161,7 +161,7 @@ export const YearAreaChartOptions = {
     show: false,
   },
   xaxis: {
-    type: "Month",
+    type:"category",
     categories: [
       "Jan",
       "Feb",
@@ -289,7 +289,7 @@ export const WeekBarChartOptions = {
 export const MonthBarChartSeries = [
   {
     name: "Inflation",
-    data: [2.3, 3.1, 4.0, 10.1, 4.0,2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 2.3, 3.1, 4.0, 10.1, 4.0, 3.6],
+    data: [2.3, 3.1, 4.0, 10.1, 4.0,2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 2.3, 3.1, 4.0, 10.1],
   },
 ];
 
@@ -399,7 +399,7 @@ export const YearBarChartOptions = {
   },
 
   xaxis: {
-    type: "Month",
+    type: "category",
     categories: [
       "Jan",
       "Feb",
@@ -542,15 +542,15 @@ export const WeekStackColumnOptions = {
 export const MonthStackColumnSeries = [
   {
     name: "Pending Order",
-    data: [44, 55, 41, 67, 22, 43],
+    data: [44, 55, 41, 67, 22, 43 ,13, 23, 20, 8, 13, 15, 21],
   },
   {
     name: "Dispatch Order",
-    data: [13, 23, 20, 8, 13, 27],
+    data: [13, 23, 20, 8, 13, 27, 44, 55, 41, 67, 22, 43 ,13,11, 23],
   },
   {
     name: "Loory in campus",
-    data: [11, 17, 15, 15, 21, 14],
+    data: [11, 17, 15, 15, 21, 14 ,55, 41, 67, 22, 43 ,13, 23, 20, 8],
   },
 
 ];
@@ -619,15 +619,15 @@ export const MonthStackColumnOptions = {
 export const YearStackColumnSeries = [
   {
     name: "Pending Order",
-    data: [44, 55, 41, 67, 22, 43],
+    data: [44, 55, 41, 67, 22, 43,11, 17, 15, 15, 21, 14],
   },
   {
     name: "Dispatch Order",
-    data: [13, 23, 20, 8, 13, 27],
+    data: [13, 23, 20, 8, 13, 27,44, 55, 41, 67, 22, 43],
   },
   {
     name: "Loory in campus",
-    data: [11, 17, 15, 15, 21, 14],
+    data: [11, 17, 15, 15, 21, 14,13, 23, 20, 8, 13, 27],
   },
 
 ];
@@ -673,7 +673,7 @@ export const YearStackColumnOptions = {
   },
   xaxis: {
   
-    type: "Month",
+    type: "category",
     categories: [
       "Jan",
       "Feb",
@@ -789,15 +789,15 @@ export const  WeekStackRowOptions = {
 export const MonthStackRowSeries = [
   {
     name: "Order Delivered",
-    data: [44, 55, 41, 37, 22, 43, 21],
+    data: [44, 55, 41, 37, 22, 43, 21 , 12, 17, 11, 9, 15, 11, 20 ,51],
   },
   {
     name: "Pending POD",
-    data: [53, 32, 33, 52, 13, 43, 32],
+    data: [53, 32, 33, 52, 13, 43, 32,44, 55, 41, 37, 22, 43, 21 , 12],
   },
   {
     name: "In Transit",
-    data: [12, 17, 11, 9, 15, 11, 20],
+    data: [12, 17, 11, 9, 15, 11, 20, 53, 32, 33, 52, 13, 43, 32,44],
   },
 
 ];
@@ -867,15 +867,15 @@ export const  MonthStackRowOptions = {
 export const YearStackRowSeries = [
   {
     name: "Order Delivered",
-    data: [44, 55, 41, 37, 22, 43, 21],
+    data: [44, 55, 41, 37, 22, 43, 21,53, 32, 33, 52, 13, 43, 32],
   },
   {
     name: "Pending POD",
-    data: [53, 32, 33, 52, 13, 43, 32],
+    data: [53, 32, 33, 52, 13, 43, 32,12, 17, 11, 9, 15, 11],
   },
   {
     name: "In Transit",
-    data: [12, 17, 11, 9, 15, 11, 20],
+    data: [12, 17, 11, 9, 15, 11, 20,44, 55, 41, 37, 22, 43],
   },
 
 ];
@@ -914,7 +914,7 @@ export const  YearStackRowOptions = {
     }
   },
   xaxis: {
-    type: "Month",
+    type: "category",
     categories: [
       "Jan",
       "Feb",
