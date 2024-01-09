@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react'
 
-const MonthData = () => {
+const YearData = () => {
   return (
-    <div className="w-full h-[90vh]">
-      <div className="w-full mb-4">
-        <h1 className="text-4xl">Monthly Dashboard</h1>
-      </div>
-      <div
+    <div className="h-[90vh] w-full">
+    <div className="mb-4 w-full">
+      <h1 className="text-4xl">Yearly Dashboard</h1>
+    </div>
+    <div
         className="grid  min-h-[95%] 
            w-full  grid-cols-1 grid-rows-4 gap-6 md:grid-cols-5 md:grid-rows-2"
       >
@@ -23,8 +23,8 @@ const MonthData = () => {
           div 1
         </div>
       </div>
-    </div>
-  );
-};
+  </div>
+  )
+}
 
-export default MonthData;
+export default YearData

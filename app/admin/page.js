@@ -10,13 +10,14 @@ import {
 } from "../components/ui/tabs";
 
 function Admin() {
-  // const shouldRenderChart = typeof window !== 'undefined'; // Check if window is defined
+
 
   return (
     <div className="w-full min-h-[95vh] ">
    
-      <Tabs defaultValue="Today" className="relative w-full min-h-full ">
+      <Tabs defaultValue="Week" className="relative w-full min-h-full ">
         <TabsList className="absolute right-0">
+          <TabsTrigger value="year">yearly</TabsTrigger>
           <TabsTrigger value="Month">Monthly</TabsTrigger>
           <TabsTrigger value="Week">Weeky</TabsTrigger>
           <TabsTrigger value="Today">Today</TabsTrigger>
@@ -28,6 +29,9 @@ function Admin() {
           <WeekData />
         </TabsContent>
         <TabsContent value="Month">
+          <MonthData />
+        </TabsContent>
+        <TabsContent value="year">
           <MonthData />
         </TabsContent>
       </Tabs>

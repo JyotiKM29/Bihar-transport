@@ -1,19 +1,42 @@
-import React from 'react'
+import React from "react";
+import StackedColumn from './Charts/StackedColumn'
+import StackedRow from './Charts/StackedRow'
+import BasicBarChart from './Charts/BasicBarChart'
+import AreaChart from './Charts/AreaChart'
+import RadialBarChart from './Charts/RadialBarChart'
+
 
 const WeekData = () => {
   return (
-    <div className="w-full h-[90vh]">
-       <div className="w-full mb-4">
-       <h1 className="text-4xl">Weekly Dashboard</h1>
-     </div>
-    <div
-    className="min-h xl:h-[95%] w-full grid
-  grid-cols-4  grid-rows-4 md:grid-rows-5
-   xl:grid-cols-5 xl:grid-rows-2 gap-6"
-  >
-  here </div>
-    </div>
-  )
-}
+    <div className="h-[90vh] w-full">
+      <div className="mb-4 w-full">
+        <h1 className="text-4xl">Weekly Dashboard</h1>
+      </div>
+      <div
+        className="grid  min-h-[95%] 
+           w-full  grid-cols-1 grid-rows-4 gap-6 md:grid-cols-5 md:grid-rows-2"
+      >
+        <div className="rounded-3xl bg-white p-4 shadow-md md:col-span-3 ">
+         <StackedColumn />
+        </div>
+        <div className="rounded-3xl bg-white p-4 shadow-md md:col-span-2 ">
+        <StackedRow />
+        </div>
+        <div className=" md:col-span-2 grid grid-cols-2 grid-row-2 gap-6">
+          
+          <div className="col-span-2 rounded-3xl bg-white p-4 shadow-md">
+          <AreaChart />
+          </div>
+          <div className="rounded-3xl bg-white p-4 shadow-md"><RadialBarChart /></div>
+          <div className="rounded-3xl bg-white p-4 shadow-md">row 3</div>
 
-export default WeekData
+        </div>
+        <div className="rounded-3xl bg-white p-4 shadow-md md:col-span-3 ">
+          <BasicBarChart />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default WeekData;
