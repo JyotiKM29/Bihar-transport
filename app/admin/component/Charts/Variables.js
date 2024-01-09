@@ -176,6 +176,11 @@ export const YearAreaChartOptions = {
       "Nov",
       "Dec",
     ],
+    labels: {
+      formatter: function (val) {
+        return val.substring(0, 3);
+      },
+    },
   },
 
   title: {
@@ -414,6 +419,12 @@ export const YearBarChartOptions = {
       "Nov",
       "Dec",
     ],
+
+    labels: {
+      formatter: function (val) {
+        return val.substring(0, 3);
+      },
+    },
     position: "top",
     axisBorder: {
       show: false,
@@ -688,6 +699,11 @@ export const YearStackColumnOptions = {
       "Nov",
       "Dec",
     ],
+    labels: {
+      formatter: function (val) {
+        return val.substring(0, 3);
+      },
+    },
   },
   legend: {
     position: "bottom",
@@ -931,7 +947,7 @@ export const  YearStackRowOptions = {
     ],
     labels: {
       formatter: function (val) {
-        return val + "K";
+        return val.substring(0, 3);
       },
     },
   },
