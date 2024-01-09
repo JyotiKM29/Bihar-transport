@@ -17,10 +17,7 @@ const StackedColumn = () => {
       name: "PRODUCT C",
       data: [11, 17, 15, 15, 21, 14],
     },
-    {
-      name: "PRODUCT D",
-      data: [21, 7, 25, 13, 22, 8],
-    },
+  
   ];
 
   const options = {
@@ -80,14 +77,24 @@ const StackedColumn = () => {
     fill: {
       opacity: 1,
     },
+
+    title: {
+      text: "Orders",
+       style: {
+              color: '#334155',
+              fontSize:'24px',
+              fontWeight:'500',
+            }
+    
+    },
   };
 
 
   return (
     <div id="chart" >
-      {console.log("helo")}
+      
       <ApexChart options={options} series={series} type="bar" height={350} />
-      {console.log("hello  miss")}
+      
     </div>
   );
 };

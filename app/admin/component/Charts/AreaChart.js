@@ -6,16 +6,16 @@ const AreaChart = () => {
   const series = [
     {
       name: "series1",
-      data: [31, 40, 28, 51, 42, 109, 100],
+      data: [3, 6, 8, 10, 5, 9, 11],
     },
     {
       name: "series2",
-      data: [11, 32, 45, 32, 34, 52, 41],
+      data: [7, 3, 5, 6, 4, 8, 9],
     },
   ];
   const options = {
     chart: {
-      height: 350,
+      height:"100%",
       type: "area",
     },
     dataLabels: {
@@ -23,6 +23,10 @@ const AreaChart = () => {
     },
     stroke: {
       curve: "smooth",
+    },
+
+    yaxis:{
+      show: false,
     },
     xaxis: {
       type: "datetime",
@@ -36,10 +40,31 @@ const AreaChart = () => {
         "2018-09-19T06:30:00.000Z",
       ],
     },
+
+    title: {
+      text: "Total Order",
+      style: {
+        color: '#334155',
+        fontSize:'24px',
+        fontWeight:'500',
+      }
+    },
     tooltip: {
+      xaxis:{
+        show: false,
+      },
+      axis:{
+        show: false,
+      },
       x: {
         format: "dd/MM/yy HH:mm",
       },
+    },
+    legend: {
+      show: false,
+      position: "top",
+      horizontalAlign: "left",
+      offsetX: 5,
     },
   };
 

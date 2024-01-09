@@ -18,14 +18,7 @@ function StackedRow() {
       name: "Tank Picture",
       data: [12, 17, 11, 9, 15, 11, 20],
     },
-    {
-      name: "Bucket Slope",
-      data: [9, 7, 5, 8, 6, 9, 4],
-    },
-    {
-      name: "Reborn Kid",
-      data: [25, 12, 19, 32, 25, 24, 10],
-    },
+  
   ];
 
   const options = {
@@ -54,7 +47,12 @@ function StackedRow() {
       colors: ["#fff"],
     },
     title: {
-      text: "Fiction Books Sales",
+      text: "Delivary Status",
+      style: {
+        color: '#334155',
+        fontSize:'24px',
+        fontWeight:'500',
+      }
     },
     xaxis: {
       categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014],
@@ -80,8 +78,8 @@ function StackedRow() {
       opacity: 1,
     },
     legend: {
-      position: "top",
-      horizontalAlign: "left",
+      position: "bottom",
+      horizontalAlign: "center",
       offsetX: 40,
     },
   };

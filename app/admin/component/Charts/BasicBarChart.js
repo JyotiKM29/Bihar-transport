@@ -12,6 +12,7 @@ const BasicBarChart = () => {
         }];
 
         const options = {
+         
           chart: {
             height: 350,
             type: 'bar',
@@ -35,6 +36,7 @@ const BasicBarChart = () => {
               colors: ["#304758"]
             }
           },
+
           
           xaxis: {
             categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
@@ -77,13 +79,18 @@ const BasicBarChart = () => {
           
           },
           title: {
-            text: 'Monthly Inflation in Argentina, 2002',
-            floating: true,
-            offsetY: 330,
-            align: 'center',
+            text: 'Total Amounts Recieved ',
             style: {
-              color: '#444'
+              color: '#334155',
+              fontSize:'24px',
+              fontWeight:'500',
             }
+            // floating: true,
+            // offsetY: 330,
+            // align: 'center',
+            // style: {
+            //   color: '#444'
+            // }
           }
         };
       
