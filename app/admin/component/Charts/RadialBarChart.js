@@ -59,7 +59,7 @@ const RadialBarChart = () => {
 
    
 
-  return   <div style={{ width: '120%', height: '120%' }}>
+  return   <div >
     <ApexChart type="radialBar" options={options} series={series} height={"100%"} width={"100%"} />
   </div>;
 };
