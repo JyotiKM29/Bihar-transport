@@ -11,8 +11,8 @@ export async function POST(req, res) {
     const existingUser = await user.findOne({ email });
 
     // console.log("admin", existingUser);
-
-    if (existingUser === null) {
+ 
+    if (!existingUser) {
       return Response.json({ msg: "you're not allowed" });
     }
 
