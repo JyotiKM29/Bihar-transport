@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { MdHome, MdAccountBalance } from "react-icons/md";
 import { FaTable, FaChartLine } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
+import { MdAccountCircle } from "react-icons/md";
 
 import Link from "next/link";
 import path from "path";
@@ -36,12 +37,12 @@ const Sidebar = () => {
     return (
       <>
         <Icon
-          className={`h-5 w-5 md:h-6 md:w-6 text-gray-400 ${
+          className={`h-5 w-5 text-gray-400 md:h-6 md:w-6 ${
             selected ? "fill-blue-700" : ""
           }`}
         />
         <p
-          className={`lg:hidden xl:block text-sm xl:text-md ${
+          className={`xl:text-md text-sm lg:hidden xl:block ${
             selected ? "text-slate-700" : "text-gray-500"
           }`}
         >
@@ -53,26 +54,26 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="flex justify-start items-center p-7 lg:p-8">
-        <h1 className="block lg:hidden xl:block font-bold text-md md:text-lg lg:text-xl tracking-wider">
+      <div className="flex items-center justify-start p-7 lg:p-8">
+        <h1 className="text-md block font-bold tracking-wider md:text-lg lg:hidden lg:text-xl xl:block">
           BIHAR
           <pre className="font-normal">TRANSPORT</pre>
         </h1>
-        <h1 className="hidden lg:block xl:hidden font-bold text-md md:text-lg lg:text-xl tracking-wider">
+        <h1 className="text-md hidden font-bold tracking-wider md:text-lg lg:block lg:text-xl xl:hidden">
           BT
         </h1>
       </div>
 
       <hr />
-      <div>
+      <div className="flex h-[86%] flex-col justify-between">
         <div className="flex flex-col lg:w-[12vw]">
           {iconData.map((item) => (
             <Link key={item.index} href={paths[item.index]}>
               <button
                 onClick={() => handleButtonClick(item)}
-                className={`flex items-center justify-start w-full px-6 py-4 gap-x-3 md:gap-x-6 hover:bg-blue-50 active:bg-blue-50 ${
+                className={`flex w-full items-center justify-start gap-x-3 px-6 py-4 hover:bg-blue-50 active:bg-blue-50  md:gap-x-6 ${
                   selectedButton === item.index
-                    ? "rounded-md border-r-4 lg:border-r-8 border-blue-700"
+                    ? "rounded-md border-r-4 border-blue-700 lg:border-r-8"
                     : ""
                 }`}
               >
@@ -84,6 +85,13 @@ const Sidebar = () => {
             </Link>
           ))}
         </div>
+        <button className="flex w-full  justify-between  p-4 ">
+          <div className="flex flex-col items-start">
+            <h2 className="text-md">Jyoti KM</h2>
+            <p className="text-sm text-gray-400">Admin</p>
+          </div>
+          <MdAccountCircle className="h-6 w-6 text-gray-400 md:h-8 md:w-8" />
+        </button>
       </div>
     </>
   );

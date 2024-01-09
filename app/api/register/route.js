@@ -36,7 +36,7 @@ export async function POST (req, res){
         
     } catch (error) {
       console.log(error);
-      return Response.json({status:400, msg: "error occurred", error: error.message });
+      return Response.json({msg: "error occurred while signup", error: error.message });
     }
   }  
  
