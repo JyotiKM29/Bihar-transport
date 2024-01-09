@@ -5,6 +5,7 @@ import { Progress } from "../../components/ui/progress";
 import { FiBarChart } from "react-icons/fi";
 import { FaClock } from "react-icons/fa";
 
+
 const TodayData = () => {
   return (
     <div className="h-[90vh] w-full">
@@ -31,11 +32,11 @@ const TodayData = () => {
               className="flex  h-full w-full  
           rounded-3xl bg-white p-4 shadow-md "
             >
-              <div className=" flex h-full w-2/5 flex-col justify-between p-4 xl:p-1 2xl:p-2">
-                <p className="text-2xl text-slate-400 xl:text-base 2xl:text-lg xl:text-wrap 2xl:text-wrap">
+              <div className=" flex h-full w-2/5 flex-col justify-between p-2 xl:p-1 2xl:p-2">
+                <p className="text-lg text-slate-400 xl:text-base 2xl:text-lg xl:text-wrap 2xl:text-wrap">
                   Pending Order
                 </p>
-                <h2 className="text-semiBold text-8xl lg:text-5xl ">10</h2>
+                <h2 className="text-semiBold text-6xl lg:text-5xl ">10</h2>
               </div>
               <div className=" h-full w-3/5 flex-grow-1 ">
                 <RadialBarChart />
