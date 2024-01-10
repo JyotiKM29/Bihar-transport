@@ -4,7 +4,7 @@ import connectDB from "../../middleware/connectDB";
 export async function POST(req, res) {
   try {
     await connectDB();
-    const { name, email, phone, password, ip, location } = await req.json();
+    const { name, email, password, ip, location } = await req.json();
     // console.log(email, password, ip, location);
 
     // Check for existing user with the same email
@@ -12,49 +12,69 @@ export async function POST(req, res) {
 
     // console.log("admin", existingUser);
 
-    if (existingUser === null) {
-      return Response.json({ msg: "you're not allowed" });
+    if (!existingUser) {
+      return Response.json({ message: "user does not exist" }, { status: 400 });
     }
 
     // Password failed
     if (existingUser.password !== password) {
-      return Response.json({ msg: "password doesn't match" });
+      return Response.json(
+        { message: "password doesn't match" },
+        { status: 400 },
+      );
     }
 
     // If user but not admin
     if (!existingUser.isAdmin) {
-      return Response.json({ msg: "ask owner to assign you as admin role" });
+      return Response.json(
+        { message: "ask owner to assign you as admin role" },
+        { status: 400 },
+      );
     }
 
     // Success cases
-   if (!Array.isArray(existingUser.loginHistory)) {
-       existingUser.loginHistory = [];
-       console.log("hey");
-   }
+    if (!Array.isArray(existingUser.loginHistory)) {
+      existingUser.loginHistory = [];
+      console.log("hey");
+    }
 
-   // Append the new login history entry
-   existingUser.loginHistory.push({ ip, location });
+    // Append the new login history entry
+    existingUser.loginHistory.push({ ip, location });
 
-   // Save the changes
-      const check = await existingUser.save();
+    // Save the changes
+    const check = await existingUser.save();
     //   if(check) console.log(check,"hey betu");
     // console.log("final user look like", existingUser);
 
     if (existingUser.isOwner) {
-      return Response.json({
-        status:"ok",
-        msg: "Thank you for visiting, sir",
-        user: existingUser,
-      });
+      return Response.json(
+        {
+          message: "Owner Validation Successful",
+          user: existingUser,
+        },
+        { status: 200 },
+      );
     }
 
-    return Response.json({status:"ok", msg: "welcome Admin", user: existingUser });
+    if (existingUser.isAdmin)
+      return Response.json(
+        {
+          message: "Admin Validation Successful",
+          user: existingUser,
+        },
+        { status: 200 },
+      );
+
+    return Response.json({
+      message: "no method for this request",
+      user: existingUser,
+    }, {status:404});
   } catch (error) {
     console.log("error at login api", error);
-    return Response.json({ msg: "error", error: error.message });
+    return Response.json({ message: "error", error: error.message },{status:400});
   }
 }
 
 export function GET(req, Response) {
-  return Response.json({ msg: "This method is not allowed here" });
+  return Response.json({ message: "This method is not allowed here" },{status:400});
 }

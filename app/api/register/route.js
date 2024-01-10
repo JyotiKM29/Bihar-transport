@@ -1,6 +1,8 @@
 
 import  connectDB  from '../../middleware/connectDB';
 import user from '../../models/usermodel'
+import { headers } from 'next/headers'
+ export const dynamic = 'force-dynamic' // defaults to auto
 
 export async function POST (req, res){
   
@@ -14,11 +16,15 @@ export async function POST (req, res){
       const User = await user.findOne({ email });
 
       if (User) {
-        return Response.json({
-          msg: "failed",
-          status:404,
-          message: "user already exists, please login"
-        });
+        return Response.json(
+          {
+            msg: "failed",
+            message: "user already exists, please login",
+          },
+          {
+            status: 404,
+          },
+        );
       }
 
 
@@ -32,17 +38,23 @@ export async function POST (req, res){
       const result = await dummy.save();
 
       console.log("data saved in database", result);
-        return Response.json({ status:"ok",message: "user added successfully", user:dummy });
+      return Response.json({ message: "user added successfully", user: dummy },{status:200});
         
     } catch (error) {
-      console.log(error);
-      return Response.json({msg: "error occurred while signup", error: error.message });
+      console.log(error);   
+      return Response.json(
+        { message: error.message},
+        { status: 400 },
+      );
+
+      // return Response.json({msg: "error occurred while signup", error: error.message });
     }
   }  
  
-export function GET (req, res) {
+export async function GET (requst) {
     
-    return Response.json({ msg: "this method is not allowed here" });
+  return Response.json({ message: "This method is not allowed here" }, { status: 400 });
+
 
   }
 
