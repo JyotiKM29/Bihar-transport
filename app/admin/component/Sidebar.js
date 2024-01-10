@@ -4,9 +4,10 @@ import { MdHome, MdAccountBalance } from "react-icons/md";
 import { FaTable, FaChartLine } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { MdAccountCircle } from "react-icons/md";
+import { useSelector } from "react-redux";
 
 import Link from "next/link";
-import path from "path";
+
 
 const iconData = [
   { index: 0, icon: MdHome, name: "Home", key: "house" },
@@ -25,6 +26,9 @@ const paths = [
 ];
 
 const Sidebar = () => {
+  const user = useSelector((state) => state.user.name);
+  
+
   const [selectedButton, setSelectedButton] = useState();
 
   const handleButtonClick = (item) => {
@@ -87,7 +91,9 @@ const Sidebar = () => {
         </div>
         <button className="flex w-full  justify-between  p-4 ">
           <div className="flex flex-col items-start">
-            <h2 className="text-md">Jyoti KM</h2>
+            <h2 className="text-md">
+            
+            {user}</h2>
             <p className="text-sm text-gray-400">Admin</p>
           </div>
           <MdAccountCircle className="h-6 w-6 text-gray-400 md:h-8 md:w-8" />
