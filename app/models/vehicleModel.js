@@ -4,21 +4,19 @@ import mongoose from "mongoose";
 const validateDriverProof = function (value) {
   return (
     Array.isArray(value) &&
-    value.length <= 2 &&
-    value.every((url) => typeof url === "string")
+    value.length === 2 &&
+    value.every((url) => typeof url === "string" && url.trim().length > 0)
   );
 };
-
 
 // Custom validator to ensure at most two URLs for proof fields
 const validateProof = function (value) {
   return (
     Array.isArray(value) &&
-    value.length <= 2 &&
-    value.every((url) => typeof url === "string")
+    value.length === 2 &&
+    value.every((url) => typeof url === "string" && url.trim().length > 0)
   );
 };
-
 
 // driver schema
 const driverSchema = new mongoose.Schema(
@@ -40,12 +38,12 @@ const driverSchema = new mongoose.Schema(
       type: [
         {
           type: String,
-          validate: {
-            validator: validateDriverProof,
-            message: "Proof array must contain exactly two URLs.",
-          },
         },
       ],
+      validate: {
+        validator: validateDriverProof,
+        message: "Proof array must contain exactly two URLs.",
+      },
     },
     remarks: { type: String },
   },
@@ -60,16 +58,19 @@ const bankSchema = new mongoose.Schema(
     accNo: { type: Number },
     ifscCode: { type: String },
     proof: {
-      type: String,
+      type: [
+        {
+          type: String,
+        },
+      ],
       validate: {
-        validator: validateProof,
-        message: "Proof must be a non-empty string (URL).",
+        validator: validateDriverProof,
+        message: "Proof array must contain exactly two URLs.",
       },
     },
   },
   { timestamps: true },
 );
-
 // owner information
 const ownerSchema = new mongoose.Schema(
   {
@@ -81,7 +82,7 @@ const ownerSchema = new mongoose.Schema(
     secondPhone: { type: Number },
     address: { type: String, required: true },
     rating: { type: Number, required: true },
-    withPhone: { type: Boolean, default: false },
+    withPhone: { type: Boolean, default: true },
     // Bank Details
     bank: [bankSchema],
     remarks: { type: String },
@@ -126,10 +127,17 @@ const vehicleSchema = new mongoose.Schema(
     // owner Details
     owner: [ownerSchema],
     driver: [driverSchema],
+    addedBy: [
+      {
+        // Details for owner or admin
+        name: { type: String, required: true },
+        adminId: { type: String, required: true },
+        // Add more fields as needed
+      }
+    ],
   },
   { timestamps: true },
 );
 
-const Vehicle = mongoose.model("Vehicle", vehicleSchema);
-
-export { Vehicle, driverSchema, bankSchema, ownerSchema };
+mongoose.models = [];
+export default mongoose.model("vehicle", vehicleSchema);
