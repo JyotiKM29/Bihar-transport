@@ -6,6 +6,7 @@ import { IoMdSettings } from "react-icons/io";
 import { MdAccountCircle } from "react-icons/md";
 import Link from "next/link";
 import { FaTruck } from "react-icons/fa";
+import { GoSignOut } from "react-icons/go";
 
 import {
   Accordion,
@@ -36,6 +37,8 @@ const paths = [
 
 const Sidebar = () => {
   const { user  } = useContext(UserContext);
+  const userName = user.name || "User Name";
+  const userFirstName = userName.split(' ')[0];
 
   const [selectedButton, setSelectedButton] = useState();
 
@@ -78,7 +81,7 @@ const Sidebar = () => {
       </div>
 
       <hr />
-      <div className="flex h-[86%] flex-col justify-between">
+      <div className="flex min-h-[87vh] flex-col justify-between">
         <div className="flex flex-col lg:w-[12vw]">
         {/* <Accordion type="multiple" collapsible>
           <AccordionItem value="item-1">
@@ -129,14 +132,25 @@ const Sidebar = () => {
           ))}
         </div>
      
-        <button className="flex w-full  justify-between  p-4 ">
+     <div className="flex flex-col ">
+
+     
+        <button className="flex w-full items-center justify-between  p-4 py-2 ">
           <div className="flex flex-col items-start">
-            <h2 className="text-md"> { user.name||"UserName"}</h2>
+            <h2 className="text-md text-left"> { userFirstName}</h2>
             <p className="text-sm text-gray-400">Admin</p>
             
           </div>
           <MdAccountCircle className="h-6 w-6 text-gray-400 md:h-8 md:w-8" />
         </button>
+        <button className="flex w-full items-center justify-between  p-4 py-2">
+          <h2 className="flex flex-col items-start">
+           Login
+          </h2>
+          <GoSignOut className="h-6 w-6 text-gray-400 md:h-8 md:w-8" />
+        </button>
+
+        </div>
       </div>
     </>
   );
