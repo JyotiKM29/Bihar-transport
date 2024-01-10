@@ -1,47 +1,51 @@
 "use client";
 import { Button } from "./components/ui/button";
-import React, { use, useState } from "react";
-import { FcGoogle } from "react-icons/fc";
-// import InputField from "./component/fields/InputField";
+import React, { useContext, useState } from "react";
 import { Input } from "./components/ui/input";
+import { UserContext } from "./context/UserContextProvider";
 
 import Link from "next/link";
 import { useToast } from "./components/ui/use-toast";
 import { useRouter } from "next/navigation";
 
 const SignIn = () => {
-  const token = process.env.ipToken;
-  
+  const { user, setUser } = useContext(UserContext);
+
   const router = useRouter();
   const { toast } = useToast();
-  const [email, setEmail] = useState(null);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+ 
 
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
-    
-
+  
     try {
-
-
-      
-     const response = await fetch("https://ipinfo.io?token=e5af198d08144e", {
-       method: "GET",
-       headers: {
-         "Content-Type": "application/json",
-       },
-     });
-
-
-      const data = await response.json();
-      console.log(data);
-
-      const ip = data.ip || null;
-      const location = data.city || null;
-      // console.log(ip, location);
-
+      let ip = null;
+      let location = null;
+  
+      try {
+        const response = await fetch("https://ipinfo.io?token=e5af198d08144e", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          ip = data.ip || null;
+          location = data.city || null;
+        } else {
+          console.log("IP Fetching failed");
+        }
+      } catch (error) {
+        console.error("Error fetching IP:", error.message);
+      }
+  
       const result = await fetch("/api/login", {
         method: "POST",
         headers: {
@@ -54,33 +58,27 @@ const SignIn = () => {
           location,
         }),
       });
-
-      console.log(result);
-         console.log(email, password);
-
+  
       const newResult = await result.json();
-
-     if (result.ok) {
-       setLoading(false);
-       displayToast("Successfully login ", "✅");
-       router.push("/admin");
-     } else {
-       setLoading(false);
-       console.log("Error:", newResult.message);
-       displayToast("Error", "❌", newResult.message);
-     }
-
-      // router.push("/admin")
-
-      console.log(newResult);
+  
+      if (result.ok) {
+        setLoading(false);
+        displayToast("Successfully login ", "✅");
+        const userDetail = newResult.user;
+        setUser(userDetail);
+        router.push("/admin");
+      } else {
+        setLoading(false);
+        console.error("Error:", newResult.message);
+        displayToast("Error", "❌", newResult.message);
+      }
     } catch (error) {
       setLoading(false);
       console.error("Error:", error.message);
       displayToast("Error", "❌", error.message);
     }
-    setLoading(false);
- 
   }
+  
 
   const displayToast = (title, action, description = "") => {
     toast({
@@ -104,25 +102,22 @@ const SignIn = () => {
 
         {/* Email */}
         <Input
-          variant="auth"
-          extra="mb-3"
-          label="Email*"
+          label="Email"
           placeholder="youremail@gmail.com"
           id="email"
           type="text"
+          required 
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
         {/* Password */}
         <Input
-          className="mt-3"
-          variant="auth"
-          extra="mb-3"
-          label="Password*"
+          label="Password"
           placeholder="password"
           id="password"
           type="password"
+          required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />

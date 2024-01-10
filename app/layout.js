@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Poppins } from "next/font/google";
 import { Toaster } from "./components/ui/toaster";
+import UserContextProvider from "./context/UserContextProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -16,17 +17,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
+    <UserContextProvider>
 
-   
-
-    <html lang="en">
-      <body className={poppins.className}>
-    
-        <main>{children}</main>
-
-        <Toaster />
-      </body>
-    </html>
+      <html lang="en">
+        <body className={poppins.className}>
+          <main>{children}</main>
+          <Toaster />
+        </body>
+      </html>
+    </UserContextProvider>
     
   );
 }

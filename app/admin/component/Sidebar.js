@@ -1,20 +1,28 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { MdHome, MdAccountBalance } from "react-icons/md";
 import { FaTable, FaChartLine } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { MdAccountCircle } from "react-icons/md";
-import { useSelector } from "react-redux";
-
 import Link from "next/link";
+import { FaTruck } from "react-icons/fa";
 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../../components/ui/accordion";
+import { UserContext } from "../../context/UserContextProvider";
 
 const iconData = [
   { index: 0, icon: MdHome, name: "Home", key: "house" },
   { index: 1, icon: FaTable, name: "Booking", key: "rxDashboard" },
-  { index: 2, icon: MdAccountBalance, name: "Account", key: "chartLine" },
-  { index: 3, icon: FaChartLine, name: "Reports", key: "table" },
-  { index: 4, icon: IoMdSettings, name: "Settings", key: "info" },
+  { index: 2, icon: FaTruck, name: "Vehicle", key: "vehicle" },
+
+  { index: 3, icon: MdAccountBalance, name: "Account", key: "chartLine" },
+  { index: 4, icon: FaChartLine, name: "Reports", key: "table" },
+  { index: 5, icon: IoMdSettings, name: "Settings", key: "info" },
 ];
 
 const paths = [
@@ -22,12 +30,12 @@ const paths = [
   "/admin/booking",
   "/admin/account",
   "/admin/report",
+  "/admin/transport",
   "/admin/settings",
 ];
 
 const Sidebar = () => {
-  const user = useSelector((state) => state.user.name);
-  
+  const { user  } = useContext(UserContext);
 
   const [selectedButton, setSelectedButton] = useState();
 
@@ -61,6 +69,7 @@ const Sidebar = () => {
       <div className="flex items-center justify-start p-7 lg:p-8">
         <h1 className="text-md block font-bold tracking-wider md:text-lg lg:hidden lg:text-xl xl:block">
           BIHAR
+         
           <pre className="font-normal">TRANSPORT</pre>
         </h1>
         <h1 className="text-md hidden font-bold tracking-wider md:text-lg lg:block lg:text-xl xl:hidden">
@@ -71,7 +80,37 @@ const Sidebar = () => {
       <hr />
       <div className="flex h-[86%] flex-col justify-between">
         <div className="flex flex-col lg:w-[12vw]">
+        {/* <Accordion type="multiple" collapsible>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Booking</AccordionTrigger>
+            <AccordionContent>
+              Personal Booking
+            </AccordionContent>
+            <AccordionContent>
+             General Booking
+            </AccordionContent>
+            <AccordionContent>
+             Company Booking
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+        <Accordion type="multiple" collapsible>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>Vehicle</AccordionTrigger>
+            <AccordionContent>
+            Vehicles Details
+            </AccordionContent>
+            <AccordionContent>
+             Owners Details
+            </AccordionContent>
+            <AccordionContent>
+            Drivers details
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion> */}
           {iconData.map((item) => (
+
+            
             <Link key={item.index} href={paths[item.index]}>
               <button
                 onClick={() => handleButtonClick(item)}
@@ -89,12 +128,12 @@ const Sidebar = () => {
             </Link>
           ))}
         </div>
+     
         <button className="flex w-full  justify-between  p-4 ">
           <div className="flex flex-col items-start">
-            <h2 className="text-md">
-            
-            {user}</h2>
+            <h2 className="text-md"> { user.name||"UserName"}</h2>
             <p className="text-sm text-gray-400">Admin</p>
+            
           </div>
           <MdAccountCircle className="h-6 w-6 text-gray-400 md:h-8 md:w-8" />
         </button>

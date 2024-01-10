@@ -1,22 +1,21 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useToast } from "../components/ui/use-toast";
 
-import InputField from "../components/InputField";
+import { Input, Label } from "../components/ui/input";
 
 import Link from "next/link";
-import { Toast } from "@radix-ui/react-toast";
 import { useRouter } from "next/navigation";
-
-// ...other imports
+import { UserContext } from "../context/UserContextProvider";
 
 const Signup = () => {
+  const { setUser } = useContext(UserContext);
   const router = useRouter();
   const { toast } = useToast();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [phone, setPhone] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -27,7 +26,7 @@ const Signup = () => {
     if (!name || !email || !phone || !password) {
       setLoading(false);
 
-      return displayToast('Fill all fields', '🥲');
+      return displayToast("Fill all fields", "🥲");
     }
 
     try {
@@ -39,24 +38,26 @@ const Signup = () => {
       if (response.ok) {
         // const data = await response.json();
         setLoading(false);
-        console.log('Data:', result);
-        displayToast('Successfully created, Please ask owner to assign you admin role. Then login', '✅');
+        console.log("Data:", result);
+        displayToast(
+          "Successfully created, Please ask owner to assign you admin role. Then login",
+          "✅",
+        );
         router.push("/");
-
       } else {
         setLoading(false);
-        console.error('Error occurred:', result.message);
-        displayToast('Error occurred', '❌', result.message);
+        console.error("Error occurred:", result.message);
+        displayToast("Error occurred", "❌", result.message);
       }
     } catch (error) {
       setLoading(false);
-      console.error('Error:', result.message);
-      displayToast('Error', '❌', result.message);
+      console.error("Error:", result.message);
+      displayToast("Error", "❌", result.message);
     }
     setLoading(false);
   };
 
-  const displayToast = (title, action, description = '') => {
+  const displayToast = (title, action, description = "") => {
     toast({
       title,
       action,
@@ -65,10 +66,10 @@ const Signup = () => {
   };
 
   const sendSignupRequest = async () => {
-    return fetch('api/register', {
-      method: 'POST',
+    return fetch("api/register", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         name,
@@ -80,80 +81,79 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex h-screen w-screen items-center justify-center px-4 bg-gradient-to-r from-sky-500 to-indigo-500">
+    <div className="flex h-screen w-screen items-center justify-center bg-gradient-to-r from-sky-500 to-indigo-500 px-4">
       {/* Sign in section */}
       <form
-        className="mt-[10vh] w-full flex-col items-center md:max-w-[420px] border py-4 px-8 md:py-8 md:px-16 rounded-3xl bg-white"
+        className="mt-[10vh] w-full flex-col items-center rounded-3xl border bg-white px-8 py-4 md:max-w-[420px] md:px-16 md:py-8"
         onSubmit={handleFormSubmit}
       >
-      <h4 className="mb-2.5 text-4xl font-bold text-navy-700 ">Sign Up</h4>
-           <p className="mb-4 ml-1 text-base text-gray-600">
-             create your account for sign in !
-           </p>
+        <h4 className="text-navy-700 mb-2.5 text-4xl font-bold ">Sign Up</h4>
+        <p className="mb-4 ml-1 text-base text-gray-600">
+          create your account for sign in !
+        </p>
 
-           {/* Name */}
-           <InputField
-             variant="auth"
-             extra="mb-3"
-             label="Name"
-             placeholder="Enter your name"
-             id="name"
-             type="text"
-             value={name}
-             onChange={(e) => setName(e.target.value)}
-           />
+        {/* Name */}
+        <Input
+          required
+          label="Name"
+          placeholder="Enter your name"
+          id="name"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
 
-           {/* Email */}
-           <InputField
-             variant="auth"
-             extra="mb-3"
-             label="Email"
-             placeholder="Enter your Email"
-             id="email"
-             type="text"
-             value={email}
-             onChange={(e) => setEmail(e.target.value)}
-           />
+        {/* Email */}
+        <Input
+          required
+          label="Email"
+          placeholder="Enter your Email"
+          id="email"
+          type="text"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-           {/* Password */}
-           <InputField
-             variant="auth"
-             extra="mb-3"
-             label="Password"
-             placeholder="Enter your password"
-             id="password"
-             type="password"
-             value={password}
-             onChange={(e) => setPassword(e.target.value)}
-           />
-           {/* Phone no*/}
-           <InputField
-             variant="auth"
-             extra="mb-3"
-             label="Phone no"
-             placeholder="Enter your phone no"
-             id="phone"
-             type="tel"
-             value={phone}
-             onChange={(e) => setPhone(e.target.value)}
-           />
-        
+        {/* Password */}
+     
+
+
+        <Input
+          required
+          label="Password"
+          placeholder="Enter your password"
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        {/* Phone no*/}
+        <Input
+          required
+          label="Phone no"
+          placeholder="Enter your phone no"
+          id="phone"
+          type="tel"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+
         <button
           className="linear mt-2 w-full rounded-xl bg-blue-500 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
           type="submit"
         >
-          Sign Up
+          {loading ? "Loading ..." : " Sign Up"}
         </button>
-        
+
         <div className="mt-4 flex items-center justify-center">
-          <span className="text-sm font-medium text-navy-700">
+          <span className="text-navy-700 text-sm font-medium">
             Already have an account?
           </span>
           <Link
             href="/"
-            className="ml-1 text-sm font-medium text-blue-500 hover:text-brand-600"
+            className="hover:text-brand-600 ml-1 text-sm font-medium text-blue-500"
           >
-         {loading ?"Loading ..." : " Sign In"}
+            Sign In
           </Link>
         </div>
       </form>
@@ -162,4 +162,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
