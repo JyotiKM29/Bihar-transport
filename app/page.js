@@ -25,8 +25,6 @@ const SignIn = () => {
 
     try {
 
-      //
-      console.log(token);
       
      const response = await fetch("https://ipinfo.io?token=e5af198d08144e", {
        method: "GET",
