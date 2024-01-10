@@ -127,6 +127,14 @@ const vehicleSchema = new mongoose.Schema(
     // owner Details
     owner: [ownerSchema],
     driver: [driverSchema],
+    addedBy: [
+      {
+        // Details for owner or admin
+        name: { type: String, required: true },
+        adminId: { type: String, required: true },
+        // Add more fields as needed
+      }
+    ],
   },
   { timestamps: true },
 );

@@ -1,6 +1,7 @@
 import { User } from 'lucide-react';
 import connectDB from '../../middleware/connectDB';
 import vehicle from '../../models/vehiclemodel';
+import user from '../../models/usermodel';
 
 export async function POST(req, res) {
   
@@ -31,61 +32,69 @@ export async function POST(req, res) {
             Remark,
             owner,
             driver,
+            adminId
         } = await req.json();
 
+        const admin = await user.findOne({ "_id": adminId });
+        if (admin && (admin.isAdmin || admin.isOwner)) {
 
-        const existingVehicle = await vehicle.findOne({ vehicleNo });
+             const existingVehicle = await vehicle.findOne({ vehicleNo });
+             if (existingVehicle) {
+               return Response.json(
+                 { message: "Vehicle already Exist" },
+                 { status: 400 },
+               );
+             }
 
-        if (existingVehicle) {
-            
+             const newVehicle = new vehicle({
+               vehicleNo,
+               registrationAuthority,
+               fuelName,
+               vehicleAge,
+               vehicleType,
+               vehicleClass,
+               vehicleLength,
+               passingCapacity,
+               maxCapacity,
+               lockedStatus,
+               chassisNo,
+               EngineNo,
+               fitnessValidUpTo,
+               taxPaidUpTo,
+               insurenceValidUpTo,
+               permitValidUpTo,
+               nationalPermit,
+               nationalPermitValidUpTo,
+               vehicleStatus,
+               rcPhoto,
+               Remark,
+               owner,
+               driver,
+                 addedBy: [{ name: admin.name, adminId: admin._id }],
+             });
 
-            return Response.json({ message: "Vehicle already Exist" },{status:400});
+             console.log(newVehicle);
 
+             const result = await newVehicle.save();
+
+             console.log("Vehicle added to the database:", result);
+
+             return Response.json(
+               {
+                 message: "Vehicle added successfully",
+                 vehicle: result,
+               },
+               { status: 200 },
+             );
+
+        }
+
+        else {
+            return Response.json({ message: "admin does not exist" }, { status: 400 });
         }
 
 
 
-
-
-        const newVehicle = new vehicle({
-            vehicleNo,
-            registrationAuthority,
-            fuelName,
-            vehicleAge,
-            vehicleType,
-            vehicleClass,
-            vehicleLength,
-            passingCapacity,
-            maxCapacity,
-            lockedStatus,
-            chassisNo,
-            EngineNo,
-            fitnessValidUpTo,
-            taxPaidUpTo,
-            insurenceValidUpTo,
-            permitValidUpTo,
-            nationalPermit,
-            nationalPermitValidUpTo,
-            vehicleStatus,
-            rcPhoto,
-            Remark,
-            owner,
-            driver,
-        });
-
-        console.log(newVehicle);
-
-        const result = await newVehicle.save();
-
-        console.log("Vehicle added to the database:", result);
-
-        return Response.json(
-            {
-                message: "Vehicle added successfully",
-                vehicle: result,
-            },
-            { status: 200 },
-        );
     } catch (error) {
         console.error("Error adding vehicle to the database:", error.message);
 
@@ -97,6 +106,7 @@ export async function POST(req, res) {
             { status: 404 },
         );
     }
+
 }
 
 export async function GET(req, res) {
