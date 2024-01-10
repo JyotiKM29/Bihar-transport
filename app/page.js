@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "./components/ui/button"
+import { Button } from "./components/ui/button";
 import React, { use, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 // import InputField from "./component/fields/InputField";
@@ -28,7 +28,7 @@ const SignIn = () => {
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       const data = await response.json();
@@ -84,13 +84,13 @@ const SignIn = () => {
   };
 
   return (
-    <div className=" flex h-screen w-screen items-center justify-center px-4  bg-gradient-to-r from-sky-500 to-indigo-500">
+    <div className=" flex h-screen w-screen items-center justify-center bg-gradient-to-r  from-sky-500 to-indigo-500 px-4">
       {/* Sign in section */}
       <form
-        className="mt-[10vh] w-full  flex-col items-center  md:max-w-[420px] border  py-4 px-8 md:py-8 md:px-12 rounded-3xl bg-white"
+        className="mt-[10vh] w-full  flex-col items-center  rounded-3xl border  bg-white px-8 py-4 md:max-w-[420px] md:px-12 md:py-8"
         onSubmit={handleSubmit}
       >
-        <h4 className="mb-2.5 text-4xl font-bold text-navy-700 ">Sign In</h4>
+        <h4 className="text-navy-700 mb-2.5 text-4xl font-bold ">Sign In</h4>
         <p className="mb-4 ml-1 text-base text-gray-600">
           Enter your email and password to sign in!
         </p>
@@ -109,7 +109,6 @@ const SignIn = () => {
 
         {/* Password */}
         <Input
-          
           className="mt-3"
           variant="auth"
           extra="mb-3"
@@ -123,7 +122,7 @@ const SignIn = () => {
         {/* Checkbox */}
         <div className="mb-4 flex items-center justify-end px-2">
           <Link
-            className="text-sm font-medium text-nowrap text-blue-500 hover:text-blue-600 "
+            className="text-nowrap text-sm font-medium text-blue-500 hover:text-blue-600 "
             href=" "
           >
             Forgot Password?
@@ -136,12 +135,12 @@ const SignIn = () => {
           {loading ? "Loading ..." : "Sign In"}
         </Button>
         <div className="mt-4 flex items-center justify-center">
-          <span className=" text-sm font-medium text-navy-700 ">
+          <span className=" text-navy-700 text-sm font-medium ">
             Not registered yet?
           </span>
           <Link
             href="/signup"
-            className="ml-1 text-sm font-medium text-blue-500 hover:text-brand-600 "
+            className="hover:text-brand-600 ml-1 text-sm font-medium text-blue-500 "
           >
             Create an account
           </Link>
