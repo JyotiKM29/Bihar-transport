@@ -10,6 +10,8 @@ import { useToast } from "./components/ui/use-toast";
 import { useRouter } from "next/navigation";
 
 const SignIn = () => {
+  const token = process.env.ipToken;
+  
   const router = useRouter();
   const { toast } = useToast();
   const [email, setEmail] = useState(null);
@@ -19,20 +21,22 @@ const SignIn = () => {
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
+    
 
     try {
-      const response = await fetch(
-        "https://ipinfo.io/152.58.119.235?token=e5af198d08144e",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      );
+
+
+      
+     const response = await fetch("https://ipinfo.io?token=e5af198d08144e", {
+       method: "GET",
+       headers: {
+         "Content-Type": "application/json",
+       },
+     });
+
 
       const data = await response.json();
-      // console.log(data);
+      console.log(data);
 
       const ip = data.ip || null;
       const location = data.city || null;
@@ -51,17 +55,20 @@ const SignIn = () => {
         }),
       });
 
+      console.log(result);
+         console.log(email, password);
+
       const newResult = await result.json();
 
-      if (newResult.status === "ok") {
-        setLoading(false);
-        displayToast("Successfully login ", "✅");
-        router.push("/admin");
-      } else {
-        setLoading(false);
-        console.log("hi", newResult.msg);
-        displayToast("Error", "❌", newResult.msg);
-      }
+     if (result.ok) {
+       setLoading(false);
+       displayToast("Successfully login ", "✅");
+       router.push("/admin");
+     } else {
+       setLoading(false);
+       console.log("Error:", newResult.message);
+       displayToast("Error", "❌", newResult.message);
+     }
 
       // router.push("/admin")
 
@@ -72,7 +79,7 @@ const SignIn = () => {
       displayToast("Error", "❌", error.message);
     }
     setLoading(false);
-    console.log(email, password);
+ 
   }
 
   const displayToast = (title, action, description = "") => {

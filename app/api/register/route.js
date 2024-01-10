@@ -16,15 +16,8 @@ export async function POST (req, res){
       const User = await user.findOne({ email });
 
       if (User) {
-        return Response.json(
-          {
-            msg: "failed",
-            message: "user already exists, please login",
-          },
-          {
-            status: 404,
-          },
-        );
+        return Response.json({
+            message: "user already exists, please login", },{status: 404});
       }
 
 

@@ -36,22 +36,22 @@ const Signup = () => {
       // console.log(response);
       console.log(result);
 
-      if (result.status ==='ok') {
+      if (response.ok) {
         // const data = await response.json();
         setLoading(false);
         console.log('Data:', result);
-        displayToast('Successfully Created', '✅');
-        router.push("/admin");
+        displayToast('Successfully created, Please ask owner to assign you admin role. Then login', '✅');
+        router.push("/");
 
       } else {
         setLoading(false);
-        console.error('Error occurred:', result.msg);
+        console.error('Error occurred:', result.message);
         displayToast('Error occurred', '❌', result.message);
       }
     } catch (error) {
       setLoading(false);
-      console.error('Error:', error.message);
-      displayToast('Error', '❌', error.message);
+      console.error('Error:', result.message);
+      displayToast('Error', '❌', result.message);
     }
     setLoading(false);
   };
