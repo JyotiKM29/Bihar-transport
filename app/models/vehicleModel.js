@@ -135,9 +135,23 @@ const vehicleSchema = new mongoose.Schema(
         // Add more fields as needed
       }
     ],
+
+    updatedBy: [
+      {
+        name: { type: String },
+        adminId: { String },
+        date:{type:Date}
+        
+      },
+    ],
+
   },
   { timestamps: true },
 );
+
+
+// Adding timestamps for each entry in the updatedBy array
+// vehicleSchema.path('updatedBy').schema.add({ timestamps: true });
 
 mongoose.models = [];
 export default mongoose.model("vehicle", vehicleSchema);
