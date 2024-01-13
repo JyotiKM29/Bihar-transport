@@ -38,6 +38,7 @@ export function DataTable({ columns, data }) {
 
   return (
     <div className="max-w max-h  bg-white" >
+{console.log('jyoti',data)}
       <div className="rounded-md border  mt-8">
         <Table>
           <TableHeader>
@@ -70,7 +71,35 @@ export function DataTable({ columns, data }) {
             ))}
           </TableHeader>
           <TableBody className='bg-grey-50'>
-            {table.getRowModel().rows?.length ? (
+  {table && table.getRowModel && table.getRowModel().rows && table.getRowModel().rows.length ? (
+    table.getRowModel().rows.map((row) => (
+      <TableRow
+        key={row.id}
+        data-state={row.getIsSelected() && "selected"}
+      >
+        {row.getVisibleCells().map((cell) => (
+          <TableCell key={cell.id}>
+            {flexRender(
+              cell.column.columnDef.cell,
+              cell.getContext(),
+            )}
+          </TableCell>
+        ))}
+      </TableRow>
+    ))
+  ) : (
+    <TableRow>
+      <TableCell
+        colSpan={columns.length}
+        className="h-24 text-center"
+      >
+        No results.
+      </TableCell>
+    </TableRow>
+  )}
+</TableBody>
+          {/* <TableBody className='bg-grey-50'>
+          {table && table.getRowModel() && table.getRowModel().rows && table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -96,7 +125,7 @@ export function DataTable({ columns, data }) {
                 </TableCell>
               </TableRow>
             )}
-          </TableBody>
+          </TableBody> */}
         </Table>
       </div>
       <div className="flex flex-col md:flex-row  items-center justify-end gap-3 py-4">
