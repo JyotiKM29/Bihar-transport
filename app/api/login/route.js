@@ -51,15 +51,16 @@ export async function POST(request,response) {
     const userId = check._id; // Example user ID
 const username = check.name; // Example username
 const role=check.IsOwner? "owner" : "admin"; // Example role
-const userDetails = `userId=${userId}&username=${username}&role=${role}`;
-
-// Set the cookie with user details
+    const userDetails = `userId=${userId}&username=${username}&role=${role}`;
+    
+    // setting cookie to set the header
 const cookie = serialize("auth", userDetails, {
   httpOnly: true,
-  secure: false,
+  secure: true, // Ensure the cookie is sent over HTTPS
   maxAge: 60 * 60 * 24 * 7, // 1 week
   path: "/",
 });
+
 
 
 
