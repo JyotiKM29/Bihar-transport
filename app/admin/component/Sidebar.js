@@ -10,6 +10,9 @@ import { GoSignOut } from "react-icons/go";
 import { UserContext } from "../../context/UserContextProvider";
 import { useRouter } from "next/navigation";
 
+import { useToast } from "../../components/ui/use-toast";
+
+
 const iconData = [
   { index: 0, icon: MdHome, name: "Home", key: "house" },
   { index: 1, icon: FaTable, name: "Booking", key: "rxDashboard" },
@@ -34,14 +37,58 @@ const Sidebar = () => {
   const { user, setUser } = useContext(UserContext);
   const userName = user?.name || "User Name";
   const userFirstName = userName.split(" ")[0];
-  const role = user ?.isOwner ? "Owner" : "Admin";
+  const role = user?.isOwner ? "Owner" : "Admin";
 
   const [selectedButton, setSelectedButton] = useState();
+   const { toast } = useToast();
 
   const handleButtonClick = (item) => {
     setSelectedButton(item.index);
     console.log(paths[item.index]);
   };
+
+  async function SignOut(event) {
+    event.preventDefault();
+    try {
+      console.log("signout called");
+    const response = await fetch('/api/signout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // Necessary to include cookies in the request
+    });
+      
+      const newResult = response.json();
+
+    if (response.ok) {
+      console.log('Signed out successfully');
+      displayToast("Successfully LogOut ", "✅");
+        localStorage.removeItem('userInfo');
+        console.log("cool");
+      // Redirect to the home page or perform other actions after sign out
+      router.push("/");
+    } else {
+      console.error('Failed to sign out');
+      displayToast("Error", "❌", newResult.message);
+
+    }
+  } catch (error) {
+      console.error('Error signing out:', error);
+       displayToast("Error", "❌", newResult.message);
+    }
+    
+  }
+  
+  
+  const displayToast = (title, action, description = "") => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
+
 
   const IconComponent = ({ item, selected }) => {
     const Icon = item.icon;
@@ -101,27 +148,19 @@ const Sidebar = () => {
           <button className="flex w-full items-center justify-between  p-4 py-2 ">
             <div className="flex flex-col items-start">
               <h2 className="text-md text-left"> {userFirstName}</h2>
-              <p className="text-sm text-gray-400">{role }</p>
+              <p className="text-sm text-gray-400">{role}</p>
             </div>
             <MdAccountCircle className="h-6 w-6 text-gray-400 md:h-8 md:w-8" />
           </button>
 
           <Link
-            href='/'
+            href="/"
             className="pointer flex w-full items-center  justify-between p-4 py-2"
-            onClick={() => {
-              console.log(user);
-              setUser({});
-              router('/');
-            }}
+            onClick={(event) => SignOut(event)}
           >
-        
             <h2 className="flex flex-col items-start">Log Out</h2>
-           
 
             <GoSignOut className="h-6 w-6 text-gray-400 md:h-8 md:w-8" />
-            
-            
           </Link>
         </div>
       </div>
