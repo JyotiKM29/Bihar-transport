@@ -136,21 +136,21 @@ export default function ProfileForm() {
   }
 
   return (
-    <div className="max-w max-h  bg-white px-6">
+    <div className="max-w max-h  bg-white px-0 ">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(MyHandleSubmit)}
           className="flex flex-col "
         >
-          <div className=" grid grid-col-1 grid-rows-3 xl:grid-rows-1  xl:grid-cols-3 xl:space-x-16 py-4 ">
-            <div className="row-span-1 md:column-span-1 space-y-2">
+          <div className="grid grid-col-1 grid-rows-3 xl:grid-rows-1  xl:grid-cols-3 xl:space-x-16 py-2 lg:py-4 ">
+            <div className="min-w-full row-span-1 md:column-span-1 -space-y-3 lg:space-y-2 ">
               <FormField
                 control={form.control}
                 name="orderNumber"
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Order ID :{" "}
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
@@ -169,7 +169,7 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Date :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
@@ -189,8 +189,8 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
-                        Vehicle Required Date :
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Vehicle Req Date :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
@@ -208,12 +208,12 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Consignor Name :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -232,7 +232,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -246,12 +246,12 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Loading Point :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -265,12 +265,12 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Consignee Name :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -285,12 +285,12 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Consignee Mobile Number :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -304,13 +304,13 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         {" "}
                         Unloading Points:
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -325,12 +325,12 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Way :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -339,19 +339,19 @@ export default function ProfileForm() {
                 }}
               />
             </div>
-            <div className="row-span-1 md:column-span-1 space-y-2">
+            <div className="row-span-1 md:column-span-1 -space-y-3 lg:space-y-2">
               <FormField
                 control={form.control}
                 name="material"
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Material :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -366,12 +366,12 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Quantity :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -386,12 +386,12 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         QuantityUnit :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -405,13 +405,13 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         {" "}
                         Vehicle Type:
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -425,12 +425,12 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Actual Weight :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -445,12 +445,12 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Charged Weight :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -464,12 +464,12 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Rate As Per :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -484,12 +484,12 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Rate :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -503,13 +503,13 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         {" "}
                         Rate Unit :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -524,12 +524,12 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Party Bhara :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -538,19 +538,19 @@ export default function ProfileForm() {
                 }}
               />
             </div>
-            <div className="row-span-1 md:column-span-1 space-y-2">
+            <div className="row-span-1 md:column-span-1 -space-y-3 lg:space-y-2">
               <FormField
                 control={form.control}
                 name="hideBhara"
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Hide Bhara :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -565,12 +565,12 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Payment Liability :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -584,13 +584,13 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         {" "}
                         Bill To:
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -605,12 +605,12 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Payment Term :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -624,7 +624,7 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Advance Amount :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
@@ -643,7 +643,7 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Balance Amount :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
@@ -662,13 +662,13 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         {" "}
                         Pay Mode:
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -682,13 +682,13 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         {" "}
                         Transaction Id:
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -702,13 +702,13 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         {" "}
                         Remarks:
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -722,13 +722,13 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         {" "}
                         Additional Charges:
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" {...field}  />
                         </FormControl>
                         <FormMessage />
                       </div>

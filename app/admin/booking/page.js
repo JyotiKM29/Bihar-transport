@@ -17,13 +17,14 @@ function page() {
        <Tabs defaultValue="personal" className="relative w-full min-h-full ">
         <TabsList className="absolute right-0">
           <TabsTrigger value="personal">
-       
-
           Personal
-      
           </TabsTrigger>
-          <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="company">Company</TabsTrigger>
+          <TabsTrigger value="general">
+          General
+          </TabsTrigger>
+          <TabsTrigger value="company">
+          Company
+          </TabsTrigger>
         
         </TabsList>
         <TabsContent value="personal">

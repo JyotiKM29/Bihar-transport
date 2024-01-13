@@ -9,8 +9,8 @@ import { FaClock } from "react-icons/fa";
 const TodayData = () => {
   return (
     <div className="h-[90vh] w-full">
-      <div className=" mb-4 w-full ">
-        <h1 className="text-4xl opacity-0 lg:opacity-100">Today Dashboard</h1>
+      <div className="h-8 mb-4 w-full ">
+      <h1 className="hidden text-4xl  lg:block">Today Dashboard</h1>
       </div>
       <div
         className="min-h grid w-full grid-cols-4

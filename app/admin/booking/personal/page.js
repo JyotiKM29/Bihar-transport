@@ -133,12 +133,12 @@ const PersonalBooking = () => {
 
   return (
     <div className="min-h-[90vh] w-full space-y-6">
-      <div className="  w-full ">
-        <h1 className="text-4xl opacity-0 lg:opacity-100">Personal Booking</h1>
+      <div className="h-8  w-full ">
+        <h1 className="hidden text-4xl  lg:block ">Personal Booking</h1>
       </div>
       <div
         className="min-h w-full 
-      space-y-4 rounded-2xl  bg-white px-6 
+      space-y-4 rounded-2xl  bg-white px-4 md:px-6 
      py-4 shadow-sm xl:h-[95%]"
       >
         <div className="flex w-full items-center justify-end gap-20 ">
