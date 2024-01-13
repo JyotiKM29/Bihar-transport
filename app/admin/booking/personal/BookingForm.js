@@ -103,6 +103,7 @@ export default function ProfileForm() {
   const [fromLocations, setFromLocations] = useState([]);
   const [toLocations, setToLocations] = useState([]);
   const { toast } = useToast();
+  const [isloading , setIsLoading] = useState()
 
   function addFromLocation(value) {
     form.setValue('adminId',user._id);
@@ -115,7 +116,6 @@ export default function ProfileForm() {
   }
 
   function deleteFromLocation(index) {
-   
     setFromLocations((prevLocations) => {
       const newLocations = prevLocations.filter((_, i) => i !== index);
       form.setValue("loadingPoints", newLocations);
@@ -138,48 +138,49 @@ export default function ProfileForm() {
       return newLocations;
     });
   }
+  const initialFormState = {
+    orderNumber: 0,
+    date: "",
+    vehicleRequiredDate: "",
+    consignorName: "",
+    consignorMobileNumber: "",
+    loadingPoints: "",
+    consigneeName: "",
+    consigneeMobileNumber: "",
+    unloadingPoints: "",
+    way: "",
+    material: "",
+    quantity: "",
+    quantityUnit: "",
+    vehicleType: "",
+    actualWeight: "",
+    chargedWeight: "",
+    rateAsPer: "",
+    rate: "",
+    rateUnit: "",
+    partyBhara: "",
+    hideBhara: "",
+    paymentLiability: "",
+    billTo: "",
+    paymentTerm: "",
+    advanceAmount: 0,
+    balanceAmount: 0,
+    payMode: "",
+    transactionId: "",
+    remarks: "",
+    additionalCharges: "",
+    adminId: '',
+  };
 
-  const form = useForm({
+  const { reset, ...form } = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      orderNumber: 0,
-      date: "",
-      vehicleRequiredDate: "",
-      consignorName: "",
-      consignorMobileNumber: "",
-      loadingPoints: "",
-      consigneeName: "",
-      consigneeMobileNumber: "",
-      unloadingPoints: "",
-      way: "",
-      material: "",
-      quantity: "",
-      quantityUnit: "",
-      vehicleType: "",
-      actualWeight: "",
-      chargedWeight: "",
-      rateAsPer: "",
-      rate: "",
-      rateUnit: "",
-      partyBhara: "",
-      hideBhara: "",
-      paymentLiability: "",
-      billTo: "",
-      paymentTerm: "",
-      advanceAmount: 0,
-      balanceAmount: 0,
-      payMode: "",
-      transactionId: "",
-      remarks: "",
-      additionalCharges: "",
-      adminId:'',
-    },
+    defaultValues: initialFormState,
   });
 
   async function MyHandleSubmit(value) {
-
+    setIsLoading(true);
     try {
-      
+     
     const response = await fetch('/api/createbooking', {
       method: 'POST',
       headers: {
@@ -192,18 +193,21 @@ export default function ProfileForm() {
   const newResult = await response.json();
 
   if(response.ok){
+    setIsLoading(false);
     displayToast("Successfully Booked, Click view Booking button to view the booking", "✅");
     const userDetail = newResult.user;
+    reset(initialFormState);
   }
 
   else{
     console.error("Error:", newResult.message);
     displayToast("Error", "❌", newResult.message);
+    setIsLoading(false);
   }
     } catch (error) {
       console.error("Error:", newResult.message);
     displayToast("Error", "❌", newResult.message);
-
+    setIsLoading(false);
     }
   }
 
@@ -352,7 +356,7 @@ const displayToast = (title, action, description = "") => {
 
                               <button
                                 className="min-w bg-grey-100 h-full  rounded-full"
-                                onClick={(i) => deleteFromLocation(i)}
+                                onClick={() => deleteFromLocation(i)}
                               >
                                 <GrClose />
                               </button>
@@ -463,7 +467,7 @@ const displayToast = (title, action, description = "") => {
 
                               <button
                                 className="min-w bg-grey-100 h-full  rounded-full"
-                                onClick={(i) => deleteToLocation(i)}
+                                onClick={() => deleteToLocation()}
                               >
                                 <GrClose />
                               </button>
@@ -926,7 +930,8 @@ const displayToast = (title, action, description = "") => {
             type="submit"
             className="mt-8 h-16 w-full self-center bg-black text-lg xl:w-1/3"
           >
-            Submit
+           {isloading ? "Loading...": "Submit"}
+           
           </Button>
         </form>
       </Form>
