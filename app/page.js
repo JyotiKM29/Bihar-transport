@@ -7,6 +7,7 @@ import { UserContext } from "./context/UserContextProvider";
 import Link from "next/link";
 import { useToast } from "./components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { serialize } from "cookie";
 
 const SignIn = () => {
   const { user, setUser } = useContext(UserContext);
@@ -51,6 +52,7 @@ const SignIn = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           email,
           password,
