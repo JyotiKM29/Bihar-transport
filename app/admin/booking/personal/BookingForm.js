@@ -1,5 +1,5 @@
 "use client";
-
+import { GrClose } from "react-icons/gr";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -14,23 +14,21 @@ import {
 import * as z from "zod";
 import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
+import { useContext, useState } from "react";
+import { UserContext } from "../../../context/UserContextProvider";
+import { useToast } from "../../../components/ui/use-toast";
 
-const location = z.object({
-  type:z.string(),
-  coordinates:z.coerce.number(),
-})
+
 
 const formSchema = z.object({
-  orderNumber: z.coerce.number({
-   message:"order ID is required"
-  }).positive(),
-  date: z.coerce.date(
-    {message:"Date is require"}
-  ),
-  vehicleRequiredDate:  z.coerce.date(
-    {message:"Date is require"}
-  ),
-  consignorName: z.string({message:"Field is required"}).min(3),
+  orderNumber: z.coerce
+    .number({
+      message: "order ID is required",
+    })
+    .positive(),
+  date: z.coerce.date({ message: "Date is require" }),
+  vehicleRequiredDate: z.coerce.date({ message: "Date is require" }),
+  consignorName: z.string({ message: "Field is required" }).min(3),
   consignorMobileNumber: z
     .string()
     .min(10, {
@@ -39,8 +37,8 @@ const formSchema = z.object({
     .max(10, {
       message: "Phone can't be more than 10 digits",
     }),
-  loadingPoints:z.string({message:"Field is required"}).min(3),
-  consigneeName:z.string({message:"Field is required"}).optional(),
+  loadingPoints: z.array(z.string()),
+  consigneeName: z.string({ message: "Field is required" }).optional(),
   consigneeMobileNumber: z
     .string()
     .min(10, {
@@ -49,50 +47,98 @@ const formSchema = z.object({
     .max(10, {
       message: "Phone can't be more than 10 digits",
     }),
-  unloadingPoints: z.string({message:"Field is required"}).min(3),
+  unloadingPoints: z.array(z.string()),
   way: z.string().optional(),
-  material: z.string({message:"Field is required"}).min(3),
-  quantity:  z.coerce.number({
-    message:"Quantity is required"
-   }).positive(),
-  quantityUnit: z.string({message:"Field is required"}).min(2),
-  vehicleType: z.string({message:"Field is required"}).min(3),
-  actualWeight: z.coerce.number({
-    message:"Field is required"
-   }).positive().optional(),
-  chargedWeight:  z.coerce.number({
-    message:"Field is required"
-   }).positive(),
-  rateAsPer:z.string({message:"Field is required"}).min(2),
-  rate:  z.coerce.number({
-    message:"Field is required"
-   }).positive(),
-  rateUnit: z.string({message:"Field is required"}).min(2),
-  partyBhara:  z.coerce.number({
-   message:"Field is required"
-  }).positive(),
-  hideBhara: z.coerce.boolean({
-    
-  }),
+  material: z.string({ message: "Field is required" }).min(3),
+  quantity: z.coerce
+    .number({
+      message: "Quantity is required",
+    })
+    .positive(),
+  quantityUnit: z.string({ message: "Field is required" }).min(2),
+  vehicleType: z.string({ message: "Field is required" }).min(3),
+  actualWeight: z.coerce
+    .number({
+      message: "Field is required",
+    })
+    .positive()
+    .optional(),
+  chargedWeight: z.coerce
+    .number({
+      message: "Field is required",
+    })
+    .positive(),
+  rateAsPer: z.string({ message: "Field is required" }).min(2),
+  rate: z.coerce
+    .number({
+      message: "Field is required",
+    })
+    .positive(),
+  rateUnit: z.string({ message: "Field is required" }).min(2),
+  partyBhara: z.coerce
+    .number({
+      message: "Field is required",
+    })
+    .positive(),
+  hideBhara: z.coerce.boolean({}),
   // paymentTerm:z.string().optional(),
-  paymentLiability: z.string({message:"Field is required"}).min(2),
-  billTo: z.string({message:"Field is required"}).min(2),
-  paymentTerm: z.string({message:"Field is required"}).min(2),
-  advanceAmount:z.coerce.number({
-    message:"order ID is required"
-   }),
-  balanceAmount:z.coerce.number({
-    message:"order ID is required"
-   }),
-  payMode: z.string({message:"Field is required"}).min(2),
-  transactionId: z.string({message:"Field is required"}).min(3),
-  remarks: z.string({message:"Field is required"}).min(2),
-  additionalCharges: z.string({message:"Field is required"}).min(2),
-  createdBy: z.string().optional(),
-  updatedBy: z.string().optional(),
+  paymentLiability: z.enum(["Consignor","Consignee", "Third Party", "Vehicle Owner"]),
+  billTo: z.string({ message: "Field is required" }).min(2),
+  paymentTerm: z.enum(["Advance", "Paid", "To Pay", "To be Billed"]),
+  advanceAmount: z.coerce.number({
+    message: "order ID is required",
+  }),
+  balanceAmount: z.coerce.number({
+    message: "order ID is required",
+  }),
+  payMode: z.string({ message: "Field is required" }).min(2),
+  transactionId: z.string({ message: "Field is required" }).min(3),
+  remarks: z.string({ message: "Field is required" }).min(2),
+  additionalCharges: z.string({ message: "Field is required" }).min(2),
+  adminId:z.string(),
 });
 
 export default function ProfileForm() {
+  const {user} = useContext(UserContext);
+  const [fromLocations, setFromLocations] = useState([]);
+  const [toLocations, setToLocations] = useState([]);
+  const { toast } = useToast();
+
+  function addFromLocation(value) {
+    form.setValue('adminId',user._id);
+    setFromLocations((prev) => {
+      const newLocations = [...prev, value];
+      form.setValue("loadingPoints", newLocations);
+      console.log(newLocations)
+      return newLocations;
+    });
+  }
+
+  function deleteFromLocation(index) {
+   
+    setFromLocations((prevLocations) => {
+      const newLocations = prevLocations.filter((_, i) => i !== index);
+      form.setValue("loadingPoints", newLocations);
+      return newLocations;
+    });
+  }
+  function addToLocation(value) {
+    setToLocations((prev) => {
+      const newLocations = [...prev, value];
+      form.setValue("unloadingPoints", newLocations);
+      console.log(newLocations)
+      return newLocations;
+    });
+  }
+
+  function deleteToLocation(index) {
+    setToLocations((prevLocations) => {
+      const newLocations = prevLocations.filter((_, i) => i !== index);
+      form.setValue("unloadingPoints", newLocations);
+      return newLocations;
+    });
+  }
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -126,14 +172,48 @@ export default function ProfileForm() {
       transactionId: "",
       remarks: "",
       additionalCharges: "",
-      createdBy: "",
-      updatedBy: "",
+      adminId:'',
     },
   });
 
-  function MyHandleSubmit(value) {
-    console.log(value);
+  async function MyHandleSubmit(value) {
+
+    try {
+      
+    const response = await fetch('/api/createbooking', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(value),  
+    });
+  // console.log(response);
+
+  const newResult = await response.json();
+
+  if(response.ok){
+    displayToast("Successfully Booked, Click view Booking button to view the booking", "✅");
+    const userDetail = newResult.user;
   }
+
+  else{
+    console.error("Error:", newResult.message);
+    displayToast("Error", "❌", newResult.message);
+  }
+    } catch (error) {
+      console.error("Error:", newResult.message);
+    displayToast("Error", "❌", newResult.message);
+
+    }
+  }
+
+const displayToast = (title, action, description = "") => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
 
   return (
     <div className="max-w max-h  bg-white px-0 ">
@@ -142,8 +222,8 @@ export default function ProfileForm() {
           onSubmit={form.handleSubmit(MyHandleSubmit)}
           className="flex flex-col "
         >
-          <div className="grid grid-col-1 grid-rows-3 xl:grid-rows-1  xl:grid-cols-3 xl:space-x-16 py-2 lg:py-4 ">
-            <div className="min-w-full row-span-1 md:column-span-1 -space-y-3 lg:space-y-2 ">
+          <div className="grid-col-1 grid grid-rows-3 py-2  lg:py-4 xl:grid-cols-3 xl:grid-rows-1 xl:space-x-16 ">
+            <div className="md:column-span-1 row-span-1 min-w-full -space-y-3 lg:space-y-2 ">
               <FormField
                 control={form.control}
                 name="orderNumber"
@@ -213,7 +293,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -232,7 +312,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -245,32 +325,85 @@ export default function ProfileForm() {
                 name="loadingPoints"
                 render={({ field }) => {
                   return (
-                    <FormItem className="flex items-center justify-center gap-4">
+                    <FormItem className="min-w flex items-center justify-center gap-4 ">
                       <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Loading Point :
+                        Loading Points :
                       </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="text" {...field}  />
-                        </FormControl>
+                      <div className="flex w-full  flex-col">
+                        <div
+                          className=" 
+                         
+                              flex
+                            items-center gap-1   overflow-x-scroll rounded-md border  border-input px-3 py-0 text-sm  ring-offset-background active:outline-none  active:ring-2 
+                            active:ring-offset-1
+
+
+                         "
+                        >
+                          {fromLocations.map((location, i) => (
+                            <span
+                              key={i}
+                              className="flex h-8 items-center gap-1 rounded-lg  bg-blue-50 px-3 "
+                              style={{
+                                maxWidth: "100px",
+                              }}
+                            >
+                              <pre>{location}</pre>
+
+                              <button
+                                className="min-w bg-grey-100 h-full  rounded-full"
+                                onClick={(i) => deleteFromLocation(i)}
+                              >
+                                <GrClose />
+                              </button>
+                            </span>
+                          ))}
+                          <FormControl>
+                            <Input
+                              type="text"
+                              {...field}
+                              className="
+                           h-8 border-none outline-none
+                           ring-offset-white 
+                           focus-visible:ring-0
+                          "
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                  e.preventDefault();
+
+                                  const inputValue = e.target.value.trim();
+
+                                  if (inputValue !== "") {
+                                    addFromLocation(inputValue);
+                                  
+                                  
+                                   
+                                  }
+                                  e.target.value = "";
+                                }
+                              }}
+                            />
+                          </FormControl>
+                        </div>
+
                         <FormMessage />
                       </div>
                     </FormItem>
                   );
                 }}
               />
-              <FormField
+               <FormField
                 control={form.control}
                 name="consigneeName"
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
                       <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Consignee Name :
+                      consignee Name :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -290,7 +423,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -298,27 +431,78 @@ export default function ProfileForm() {
                   );
                 }}
               />
-              <FormField
+               <FormField
                 control={form.control}
                 name="unloadingPoints"
                 render={({ field }) => {
                   return (
-                    <FormItem className="flex items-center justify-center gap-4">
+                    <FormItem className="min-w flex items-center justify-center gap-4 ">
                       <FormLabel className="text-nowrap text-sm lg:text-base">
-                        {" "}
-                        Unloading Points:
+                        Unloading Points :
                       </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="text" {...field}  />
-                        </FormControl>
+                      <div className="flex w-full  flex-col">
+                        <div
+                          className=" 
+                         
+                              flex
+                            items-center gap-1   overflow-x-scroll rounded-md border  border-input px-3 py-0 text-sm  ring-offset-background active:outline-none  active:ring-2 
+                            active:ring-offset-1
+
+
+                         "
+                        >
+                          {toLocations.map((location, i) => (
+                            <span
+                              key={i}
+                              className="flex h-8 items-center gap-1 rounded-lg  bg-blue-50 px-3 "
+                              style={{
+                                maxWidth: "100px",
+                              }}
+                            >
+                              <pre>{location}</pre>
+
+                              <button
+                                className="min-w bg-grey-100 h-full  rounded-full"
+                                onClick={(i) => deleteToLocation(i)}
+                              >
+                                <GrClose />
+                              </button>
+                            </span>
+                          ))}
+                          <FormControl>
+                            <Input
+                              type="text"
+                              {...field}
+                              className="
+                           h-8 border-none outline-none
+                           ring-offset-white 
+                           focus-visible:ring-0
+                          "
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                  e.preventDefault();
+
+                                  const inputValue = e.target.value.trim();
+
+                                  if (inputValue !== "") {
+                                    addToLocation(inputValue);
+                                  
+                                  
+                                   
+                                  }
+                                  e.target.value = "";
+                                }
+                              }}
+                            />
+                          </FormControl>
+                        </div>
+
                         <FormMessage />
                       </div>
                     </FormItem>
                   );
                 }}
               />
-
               <FormField
                 control={form.control}
                 name="way"
@@ -330,7 +514,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -339,7 +523,7 @@ export default function ProfileForm() {
                 }}
               />
             </div>
-            <div className="row-span-1 md:column-span-1 -space-y-3 lg:space-y-2">
+            <div className="md:column-span-1 row-span-1 -space-y-3 lg:space-y-2">
               <FormField
                 control={form.control}
                 name="material"
@@ -351,7 +535,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -371,7 +555,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -391,7 +575,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -411,7 +595,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -430,7 +614,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -450,7 +634,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -469,7 +653,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -489,7 +673,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -509,7 +693,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -529,7 +713,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -538,7 +722,7 @@ export default function ProfileForm() {
                 }}
               />
             </div>
-            <div className="row-span-1 md:column-span-1 -space-y-3 lg:space-y-2">
+            <div className="md:column-span-1 row-span-1 -space-y-3 lg:space-y-2">
               <FormField
                 control={form.control}
                 name="hideBhara"
@@ -550,7 +734,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -570,7 +754,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -580,7 +764,7 @@ export default function ProfileForm() {
               />
               <FormField
                 control={form.control}
-                name=" billTo"
+                name="billTo"
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
@@ -590,7 +774,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -610,7 +794,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -668,7 +852,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -688,7 +872,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -708,7 +892,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -728,7 +912,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field}  />
+                          <Input type="text" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -740,7 +924,7 @@ export default function ProfileForm() {
           </div>
           <Button
             type="submit"
-            className="mt-8 h-16 w-full xl:w-1/3 self-center bg-black text-lg"
+            className="mt-8 h-16 w-full self-center bg-black text-lg xl:w-1/3"
           >
             Submit
           </Button>
@@ -749,7 +933,6 @@ export default function ProfileForm() {
     </div>
   );
 
-  //   function onSubmit(values) {
 
-  //   }
 }
+

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Input } from "../../../components/ui/input";
 import DataTableDemo from "./Table";
-import ProfileForm from "./BookingForm";
+import Form from "./BookingForm";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import {
@@ -13,11 +13,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu"
-
+import BookingForm from './BookingForm'
 
 
 const PersonalBooking = () => {
-  const [formValue, setFormValue] = useState(false);
+  const [formValue, setFormValue] = useState(true);
 
   const data = [
     {orderNumber : 21345 , vehicleRequiredDate : '24-1-2024' , consignorName : "Suraj Kumar" , consigneeName:"Jyoti Kumari", formModeTo:"delhi-truck-jalandhar",
@@ -138,7 +138,7 @@ const PersonalBooking = () => {
       </div>
       <div
         className="min-h w-full 
-      space-y-4 rounded-2xl  bg-white px-4 md:px-6 
+      space-y-2 rounded-2xl  bg-white px-4 md:px-6 
      py-4 shadow-sm xl:h-[95%]"
       >
         <div className="flex w-full items-center justify-end gap-20 ">
@@ -146,11 +146,11 @@ const PersonalBooking = () => {
             className="font-semiBold rounded-lg bg-blue-700 p-2 px-6 text-lg text-white"
             onClick={() => setFormValue(!formValue)}
           >
-            New
+            {formValue ?  "View Bookings" : "New Booking" }
           </button>
           
         </div>
-        {formValue && <ProfileForm />}
+        {formValue && <BookingForm />}
      {/* { !formValue && <DataTableDemo /> } */}
 
      { !formValue && <DataTable columns={columns} data={data} />}

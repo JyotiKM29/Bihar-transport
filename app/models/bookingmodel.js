@@ -2,34 +2,34 @@
 
 import mongoose from "mongoose";
 
-const pointSchema = new mongoose.Schema({
-  type: {
-    type: String,
-    enum: ["Point"],
-    required: true,
-  },
-  coordinates: {
-    type: [Number],
-    required: true,
-  },
-});
+// const pointSchema = new mongoose.Schema({
+//   type: {
+//     type: String,
+//     enum: ["Point"],
+//     required: true,
+//   },
+//   coordinates: {
+//     type: [Number],
+//     required: true,
+//   },
+// });
 
-const loadingPointSchema = new mongoose.Schema({
-  location: { type: pointSchema},
-});
+// const loadingPointSchema = new mongoose.Schema({
+//   location: { type: String},
+// });
 
-const unloadingPointSchema = new mongoose.Schema({
-  location: { type: pointSchema },
-});
+// const unloadingPointSchema = new mongoose.Schema({
+//   location: { type: String },
+// });
 
 // Add 2dsphere index to enable spatial queries
-loadingPointSchema.index({ "location.coordinates": "2dsphere" });
-unloadingPointSchema.index({ "location.coordinates": "2dsphere" });
+// loadingPointSchema.index({ "location.coordinates": "2dsphere" });
+// unloadingPointSchema.index({ "location.coordinates": "2dsphere" });
 
-const additionalChargeSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  amount: { type: Number, required: true },
-});
+// const additionalChargeSchema = new mongoose.Schema({
+//   name: { type: String, required: true },
+//   amount: { type: Number, required: true },
+// });
 
 const bookingSchema = new mongoose.Schema(
   {
@@ -38,10 +38,18 @@ const bookingSchema = new mongoose.Schema(
     vehicleRequiredDate: { type: Date, default: Date.now },
     consignorName: { type: String, required: true },
     consignorMobileNumber: { type: String },
-    loadingPoints: { type: [loadingPointSchema], default: [] },
+    loadingPoints: [
+      {
+        type: String,
+      },
+    ],
     consigneeName: { type: String },
     consigneeMobileNumber: { type: String },
-    unloadingPoints: { type: [unloadingPointSchema], default: [] },
+    unloadingPoints: [
+      {
+        type: String,
+      },
+    ],
     way: { type: String, default: "One Way" },
     material: { type: String, required: true },
     quantity: { type: Number, required: true },
@@ -68,7 +76,7 @@ const bookingSchema = new mongoose.Schema(
     payMode: { type: String },
     transactionId: { type: String },
     remarks: { type: String },
-    additionalCharges: { type: [additionalChargeSchema], default: [] },
+    additionalCharges: { type: String },
     createdBy: {
       name: { type: String },
       adminId: { type: String },

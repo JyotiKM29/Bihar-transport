@@ -37,8 +37,8 @@ export function DataTable({ columns, data }) {
   });
 
   return (
-    <div>
-      <div className="rounded-md border">
+    <div className="max-w max-h  bg-white" >
+      <div className="rounded-md border  mt-8">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
