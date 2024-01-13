@@ -1,6 +1,6 @@
 // import { User } from "lucide-react";
 import connectDB from "../../../middleware/connectDB";
-import vehicle from "../../../models/vehiclemodel";
+import vehicle from "../../../models/vehicleModel";
 import user from "../../../models/usermodel";
 // import Booking from "../../../models/bookingmodel";
 

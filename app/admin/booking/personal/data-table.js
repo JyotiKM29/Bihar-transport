@@ -99,12 +99,12 @@ export function DataTable({ columns, data }) {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex flex-col md:flex-row  items-center justify-end gap-3 py-4">
         <div className="flex flex-1 items-center gap-4 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
           <span className="flex items-center gap-1">
-            | Go to page:
+            <span className="text-nowrap">| Go to page:</span>
             <input
               type="number"
               defaultValue={table.getState().pagination.pageIndex + 1}

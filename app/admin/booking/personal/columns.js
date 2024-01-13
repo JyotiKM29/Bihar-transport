@@ -118,6 +118,7 @@ export const columns = [
             </DropdownMenuItem> */}
             <DropdownMenuSeparator />
             <DropdownMenuItem>View Detail</DropdownMenuItem>
+            <DropdownMenuItem>Print Data</DropdownMenuItem>
             <DropdownMenuItem>Update Data</DropdownMenuItem>
             <DropdownMenuItem>Delete Data</DropdownMenuItem>
           </DropdownMenuContent>
