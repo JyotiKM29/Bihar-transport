@@ -1,4 +1,4 @@
-import { User } from "lucide-react";
+// import { User } from "lucide-react";
 import connectDB from "../../middleware/connectDB";
 import vehicle from "../../models/vehiclemodel";
 import user from "../../models/usermodel";
