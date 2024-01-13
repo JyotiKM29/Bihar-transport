@@ -65,7 +65,9 @@ const SignIn = () => {
         setLoading(false);
         displayToast("Successfully login ", "✅");
         const userDetail = newResult.user;
+        localStorage.setItem('userInfo', JSON.stringify(userDetail));
         setUser(userDetail);
+
         router.push("/admin");
       } else {
         setLoading(false);

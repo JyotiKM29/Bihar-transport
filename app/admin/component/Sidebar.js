@@ -36,9 +36,9 @@ const paths = [
 ];
 
 const Sidebar = () => {
-  const { user  } = useContext(UserContext);
-  const userName = user.name || "User Name";
-  const userFirstName = userName.split(' ')[0];
+  const { user } = useContext(UserContext);
+  const userName = user?.name || "User Name";
+  const userFirstName = userName.split(" ")[0];
 
   const [selectedButton, setSelectedButton] = useState();
 
@@ -72,7 +72,6 @@ const Sidebar = () => {
       <div className="flex items-center justify-start p-7 lg:p-8">
         <h1 className="text-md block font-bold tracking-wider md:text-lg lg:hidden lg:text-xl xl:block">
           BIHAR
-         
           <pre className="font-normal">TRANSPORT</pre>
         </h1>
         <h1 className="text-md hidden font-bold tracking-wider md:text-lg lg:block lg:text-xl xl:hidden">
@@ -83,37 +82,8 @@ const Sidebar = () => {
       <hr />
       <div className="flex min-h-[87vh] flex-col justify-between">
         <div className="flex flex-col lg:w-[12vw]">
-        {/* <Accordion type="multiple" collapsible>
-          <AccordionItem value="item-1">
-            <AccordionTrigger>Booking</AccordionTrigger>
-            <AccordionContent>
-              Personal Booking
-            </AccordionContent>
-            <AccordionContent>
-             General Booking
-            </AccordionContent>
-            <AccordionContent>
-             Company Booking
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-        <Accordion type="multiple" collapsible>
-          <AccordionItem value="item-2">
-            <AccordionTrigger>Vehicle</AccordionTrigger>
-            <AccordionContent>
-            Vehicles Details
-            </AccordionContent>
-            <AccordionContent>
-             Owners Details
-            </AccordionContent>
-            <AccordionContent>
-            Drivers details
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion> */}
+         
           {iconData.map((item) => (
-
-            
             <Link key={item.index} href={paths[item.index]}>
               <button
                 onClick={() => handleButtonClick(item)}
@@ -131,25 +101,19 @@ const Sidebar = () => {
             </Link>
           ))}
         </div>
-     
-     <div className="flex flex-col ">
 
-     
-        <button className="flex w-full items-center justify-between  p-4 py-2 ">
-          <div className="flex flex-col items-start">
-            <h2 className="text-md text-left"> { userFirstName}</h2>
-            <p className="text-sm text-gray-400">Admin</p>
-            
-          </div>
-          <MdAccountCircle className="h-6 w-6 text-gray-400 md:h-8 md:w-8" />
-        </button>
-        <button className="flex w-full items-center justify-between  p-4 py-2">
-          <h2 className="flex flex-col items-start">
-           Login
-          </h2>
-          <GoSignOut className="h-6 w-6 text-gray-400 md:h-8 md:w-8" />
-        </button>
-
+        <div className="flex flex-col ">
+          <button className="flex w-full items-center justify-between  p-4 py-2 ">
+            <div className="flex flex-col items-start">
+              <h2 className="text-md text-left"> {userFirstName}</h2>
+              <p className="text-sm text-gray-400">Admin</p>
+            </div>
+            <MdAccountCircle className="h-6 w-6 text-gray-400 md:h-8 md:w-8" />
+          </button>
+          <button className="flex w-full items-center justify-between  p-4 py-2">
+            <h2 className="flex flex-col items-start">Log Out</h2>
+            <GoSignOut className="h-6 w-6 text-gray-400 md:h-8 md:w-8" />
+          </button>
         </div>
       </div>
     </>

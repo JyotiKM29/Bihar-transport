@@ -15,11 +15,11 @@ const pointSchema = new mongoose.Schema({
 });
 
 const loadingPointSchema = new mongoose.Schema({
-  location: { type: pointSchema, required: true },
+  location: { type: pointSchema},
 });
 
 const unloadingPointSchema = new mongoose.Schema({
-  location: { type: pointSchema, required: true },
+  location: { type: pointSchema },
 });
 
 // Add 2dsphere index to enable spatial queries
