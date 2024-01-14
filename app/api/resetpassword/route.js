@@ -7,7 +7,6 @@ export async function POST(req, res) {
     try {
         
         await connectDB();
-
         const { resetToken, newPassword, confirmPassword } = await req.json();
 
          if (!resetToken) {
