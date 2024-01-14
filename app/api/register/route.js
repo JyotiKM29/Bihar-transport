@@ -2,7 +2,10 @@
 import  connectDB  from '../../middleware/connectDB';
 import user from '../../models/usermodel'
 import { headers } from 'next/headers'
- export const dynamic = 'force-dynamic' // defaults to auto
+import nodemailer from 'nodemailer'
+import jwt from 'jsonwebtoken'
+export const dynamic = 'force-dynamic' // defaults to auto
+
 
 export async function POST (req, res){
   
@@ -21,14 +24,59 @@ export async function POST (req, res){
       }
 
 
+       const issuedAt = new Date();
+       const expiresIn = 3600; // 1 hour in seconds
+       const expiresAt = new Date(issuedAt.getTime() + expiresIn * 1000);
+       console.log("expire time", expiresAt);
+
+       const token = jwt.sign(
+         { email: email, issuedAt, expiresAt },
+         process.env.secret,
+         { expiresIn: expiresIn },
+       );
+
+
+
+
+
+
+
       let dummy = new user({
         name,
         email,
         password,
-        phone
+        phone,
+        emailToken: token,
+        emailTokenIssuedAt: issuedAt,
+        emailTokenExpiresAt:expiresAt
       });
 
       const result = await dummy.save();
+
+
+       const transporter = nodemailer.createTransport({
+         host: "smtp.gmail.com",
+         port: 465,
+         secure: true,
+         auth: {
+           // TODO: replace `user` and `pass` values from <https://forwardemail.net>
+           user: process.env.user,
+           pass: process.env.pass,
+         },
+       });
+
+       const info = await transporter.sendMail({
+         from: '"Suraj Pandey from Bihar Transport 👻" <surajjbhardwaj@gmail.com>', // sender address
+         to: result.email, // list of receivers
+         subject: "Forget Password Email ✔", // Subject line
+         text: "", // plain text body
+         html: `<p>Hello ${result.name} </p> <p> here is your link to verify the email </p> https://bihar-transport.vercel.app/emailVerify/${result.emailToken} `, // html body
+       });
+
+       console.log("Message sent: %s", info.messageId);
+
+
+
 
       console.log("data saved in database", result);
       return Response.json({ message: "user added successfully", user: dummy },{status:200});

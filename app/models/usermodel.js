@@ -33,16 +33,19 @@ const userSchema = new mongoose.Schema(
       minlength: [6, "Password must be at least 6 characters long"],
     },
     isemailVerified: { type: Boolean, default: false },
+    emailToken: { type: String, default: null },
+    emailTokenIssuedAt: { type: Date, default: null },
+    emailTokenExpiresAt: { type: Date, default: null },
     isphoneVerified: { type: Boolean, default: false },
     isAdmin: { type: Boolean, default: false },
-    adminDetails:[adminSchema],
+    adminDetails: [adminSchema],
     isOwner: { type: Boolean, default: false },
     resetToken: { type: String, default: null },
     resetTokenIssuedAt: { type: Date, default: null },
     resetTokenExpiresAt: { type: Date, default: null },
     loginHistory: [loginHistorySchema], // Array to store login history
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 mongoose.models = {};
