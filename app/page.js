@@ -7,7 +7,8 @@ import { UserContext } from "./context/UserContextProvider";
 import Link from "next/link";
 import { useToast } from "./components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { serialize } from "cookie";
+// import { serialize } from "cookie";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const SignIn = () => {
   const { user, setUser } = useContext(UserContext);
@@ -95,6 +96,7 @@ const SignIn = () => {
   return (
     <div className=" flex h-screen w-screen items-center justify-center bg-gradient-to-r  from-sky-500 to-indigo-500 px-4">
       {/* Sign in section */}
+      <SpeedInsights />
       <form
         className="mt-[10vh] w-full  flex-col items-center  rounded-3xl border  bg-white px-8 py-4 md:max-w-[420px] md:px-12 md:py-8"
         onSubmit={handleSubmit}
@@ -110,7 +112,7 @@ const SignIn = () => {
           placeholder="youremail@gmail.com"
           id="email"
           type="text"
-          required 
+          required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />

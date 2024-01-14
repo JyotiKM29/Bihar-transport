@@ -2,6 +2,8 @@ import user from "../../models/usermodel";
 import connectDB from "../../middleware/connectDB";
 import { NextResponse } from "next/server";
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer'
+
 
 export async function POST(req, res) {
     try {
@@ -34,7 +36,7 @@ export async function POST(req, res) {
       const expiresAt = new Date(issuedAt.getTime() + expiresIn * 1000);
       console.log("expire time", expiresAt);
 
-      const token = await jwt.sign(
+      const token = jwt.sign(
         { email: existinguser.email, issuedAt, expiresAt },
         process.env.secret,
         { expiresIn: expiresIn }
@@ -45,6 +47,30 @@ export async function POST(req, res) {
       existinguser.resetTokenIssuedAt = issuedAt;
       existinguser.resetTokenExpiresAt = expiresAt;
       await existinguser.save();
+
+      // emailreq
+
+      const transporter = nodemailer.createTranspor({
+        host: "smtp.gmail.com",
+        port: 465,
+  
+        secure: true,
+  
+  auth: {
+    // TODO: replace `user` and `pass` values from <https://forwardemail.net>
+    user: "REPLACE-WITH-YOUR-ALIAS@YOURDOMAIN.COM",
+    pass: "REPLACE-WITH-YOUR-GENERATED-PASSWORD",
+
+      })
+
+
+
+
+
+
+
+
+
 
     return Response.json({ User:existinguser, message: "Admin found" ,
             status: 200, 
