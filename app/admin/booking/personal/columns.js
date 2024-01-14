@@ -1,7 +1,6 @@
 "use client"
 
 import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons"
-import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "../../../components/ui/button"
 import { Checkbox } from "../../../components/ui/checkbox"
 import {
@@ -14,19 +13,6 @@ import {
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu"
 import { Input } from "../../../components/ui/input"
-
-
-
-// type Booking = {
-//     firstName: string;
-//     lastName: string;
-//     age: number;
-//     visits: number;
-//     progress: number;
-//     status: 'relationship' | 'complicated' | 'single';
-//     subRows?: Person[];
-//   };
-
 
 export const columns = [
     {
@@ -70,31 +56,38 @@ export const columns = [
     header: "Consignee",
   },
   {
-    accessorKey:'formModeTo',
-    header:"From-Mode-To"
+    accessorKey:'loadingPoints',
+
+    header: "From"
   },
+  {
+    accessorKey:'unloadingPoints',
+
+    header: "To"
+  },
+  
  
   {
     accessorKey:"actualWeight",
     header: "Weight",
   },
   {
-    accessorKey:"quantity",
-    header: "quantity",
+    accessorKey:"createdBy.name",
+    header: "Created By",
   },
 //   {
 //     accessorKey:"ContNo",
 //     header: "ContNo",
 //   },
-  {
-    accessorKey:"vehicleno",
-    header:"Vehicle No",
-  },
-  {
-    accessorKey:"status",
-    header: "status",
-    footer: props => props.column.id,
-  },
+  // {
+  //   accessorKey:"vehicleno",
+  //   header:"Vehicle No",
+  // },
+  // {
+  //   accessorKey:"status",
+  //   header: "status",
+  //   footer: props => props.column.id,
+  // },
   {
     id: "actions",
     enableHiding: false,

@@ -1,135 +1,34 @@
 "use client";
-import React, { useState } from "react";
-import { Input } from "../../../components/ui/input";
-import DataTableDemo from "./Table";
-import ProfileForm from "./BookingForm";
+import React, { useContext, useEffect, useState } from "react";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../../../components/ui/dropdown-menu"
-
-
+import BookingForm from "./BookingForm";
+import { UserContext } from "../../../context/UserContextProvider";
 
 const PersonalBooking = () => {
-  const [formValue, setFormValue] = useState(false);
+  const [formValue, setFormValue] = useState(true);
+  // const [loading , setLoading] = useState(false);
 
-  const data = [
-    {orderNumber : 21345 , vehicleRequiredDate : '24-1-2024' , consignorName : "Suraj Kumar" , consigneeName:"Jyoti Kumari", formModeTo:"delhi-truck-jalandhar",
-    actualWeight: "100Kg",
-    quantity: 300,
-    ContNo: "23456789",
-    status:'pending',
-    vehicleno:'FGF324564',
-    
-    
-    },
-    {orderNumber : 21345 , vehicleRequiredDate : '24-1-2024' , consignorName : "niraj Kumar" , consigneeName:"Jyoti Kumari", formModeTo:"delhi-truck-jalandhar",
-    actualWeight: "100Kg",
-    quantity: 300,
-    ContNo: "23456789",
-    vehicleno:'FGF324564',
-    status:'pending'
-    
-    
-    },
-    {orderNumber : 21345 , vehicleRequiredDate : '24-1-2024' , consignorName : "ronak Kumar" , consigneeName:"Jyoti Kumari", formModeTo:"delhi-truck-jalandhar",
-    actualWeight: "100Kg",
-    quantity: 300,
-    ContNo: "23456789",
-    vehicleno:'FGF324564',
-    status:'pending'
-    
-    
-    },
-    {orderNumber : 21345 , vehicleRequiredDate : '24-1-2024' , consignorName : "aanchaal Kumar" , consigneeName:"Jyoti Kumari", formModeTo:"delhi-truck-jalandhar",
-    actualWeight: "100Kg",
-    quantity: 300,
-    ContNo: "23456789",
-    vehicleno:'FGF324564',
-    status:'pending'
-    
-    
-    },
-    {orderNumber : 21345 , vehicleRequiredDate : '24-1-2024' , consignorName : "Suraj Kumar" , consigneeName:"Jyoti Kumari", formModeTo:"delhi-truck-jalandhar",
-    actualWeight: "100Kg",
-    quantity: 300,
-    ContNo: "23456789",
-    status:'pending',
-    vehicleno:'FGF324564',
-    
-    
-    },
-    {orderNumber : 21345 , vehicleRequiredDate : '24-1-2024' , consignorName : "niraj Kumar" , consigneeName:"Jyoti Kumari", formModeTo:"delhi-truck-jalandhar",
-    actualWeight: "100Kg",
-    quantity: 300,
-    ContNo: "23456789",
-    vehicleno:'FGF324564',
-    status:'pending'
-    
-    
-    },
-    {orderNumber : 21345 , vehicleRequiredDate : '24-1-2024' , consignorName : "ronak Kumar" , consigneeName:"Jyoti Kumari", formModeTo:"delhi-truck-jalandhar",
-    actualWeight: "100Kg",
-    quantity: 300,
-    ContNo: "23456789",
-    vehicleno:'FGF324564',
-    status:'pending'
-    
-    
-    },
-    {orderNumber : 21345 , vehicleRequiredDate : '24-1-2024' , consignorName : "aanchaal Kumar" , consigneeName:"Jyoti Kumari", formModeTo:"delhi-truck-jalandhar",
-    actualWeight: "100Kg",
-    quantity: 300,
-    ContNo: "23456789",
-    vehicleno:'FGF324564',
-    status:'pending'
-    
-    
-    },
-    {orderNumber : 21345 , vehicleRequiredDate : '24-1-2024' , consignorName : "Suraj Kumar" , consigneeName:"Jyoti Kumari", formModeTo:"delhi-truck-jalandhar",
-    actualWeight: "100Kg",
-    quantity: 300,
-    ContNo: "23456789",
-    status:'pending',
-    vehicleno:'FGF324564',
-    
-    
-    },
-    {orderNumber : 21345 , vehicleRequiredDate : '24-1-2024' , consignorName : "niraj Kumar" , consigneeName:"Jyoti Kumari", formModeTo:"delhi-truck-jalandhar",
-    actualWeight: "100Kg",
-    quantity: 300,
-    ContNo: "23456789",
-    vehicleno:'FGF324564',
-    status:'pending'
-    
-    
-    },
-    {orderNumber : 21345 , vehicleRequiredDate : '24-1-2024' , consignorName : "ronak Kumar" , consigneeName:"Jyoti Kumari", formModeTo:"delhi-truck-jalandhar",
-    actualWeight: "100Kg",
-    quantity: 300,
-    ContNo: "23456789",
-    vehicleno:'FGF324564',
-    status:'pending'
-    
-    
-    },
-    {orderNumber : 21345 , vehicleRequiredDate : '24-1-2024' , consignorName : "aanchaal Kumar" , consigneeName:"Jyoti Kumari", formModeTo:"delhi-truck-jalandhar",
-    actualWeight: "100Kg",
-    quantity: 300,
-    ContNo: "23456789",
-    vehicleno:'FGF324564',
-    status:'pending'
-    
-    
+  const { user } = useContext(UserContext);
+
+  const [data, setData] = useState(null);
+
+  const userId = user?._id;
+
+  useEffect(() => {
+    if (userId) {
+      fetch(`/api/getbooking/${userId}`, {
+        method: "GET",
+      })
+        .then((response) => response.json())
+        .then((data) => setData(data))
+        .catch((error) => console.error("Error:", error));
     }
+  }, [userId]);
   
-  ];
+  // setLoading(false);
+
+  console.log(data);
 
   return (
     <div className="min-h-[90vh] w-full space-y-6">
@@ -138,22 +37,20 @@ const PersonalBooking = () => {
       </div>
       <div
         className="min-h w-full 
-      space-y-4 rounded-2xl  bg-white px-4 md:px-6 
-     py-4 shadow-sm xl:h-[95%]"
+      space-y-2 rounded-2xl  bg-white px-4 py-4 
+     shadow-sm md:px-6 xl:h-[95%]"
       >
         <div className="flex w-full items-center justify-end gap-20 ">
           <button
             className="font-semiBold rounded-lg bg-blue-700 p-2 px-6 text-lg text-white"
             onClick={() => setFormValue(!formValue)}
           >
-            New
+            {formValue ? "View Bookings" : "New Booking"}
           </button>
-          
         </div>
-        {formValue && <ProfileForm />}
-     {/* { !formValue && <DataTableDemo /> } */}
+        {formValue && <BookingForm />}
 
-     { !formValue && <DataTable columns={columns} data={data} />}
+        { !formValue && <DataTable columns={columns} data={data?.data} />}
       </div>
     </div>
   );
