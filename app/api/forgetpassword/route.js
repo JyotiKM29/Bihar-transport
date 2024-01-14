@@ -1,3 +1,5 @@
+"use Strict"
+
 import user from "../../models/usermodel";
 import connectDB from "../../middleware/connectDB";
 import { NextResponse } from "next/server";
@@ -50,28 +52,27 @@ export async function POST(req, res) {
 
       // emailreq
 
-      const transporter = nodemailer.createTranspor({
+      const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 465,
-  
         secure: true,
-  
-  auth: {
-    // TODO: replace `user` and `pass` values from <https://forwardemail.net>
-    user: "REPLACE-WITH-YOUR-ALIAS@YOURDOMAIN.COM",
-    pass: "REPLACE-WITH-YOUR-GENERATED-PASSWORD",
+        auth: {
+          // TODO: replace `user` and `pass` values from <https://forwardemail.net>
+          user: process.env.user,
+          pass: process.env.pass,
+        },
+        });
+      
+    const info = await transporter.sendMail({
+      from: '"Suraj Pandey from Bihar Transport 👻" <surajjbhardwaj@gmail.com>', // sender address
+      to: existinguser.email, // list of receivers
+      subject: "Forget Password Email ✔", // Subject line
+      text: "", // plain text body
+      html: `<p>Hello ${existinguser.name} </p> <p> here is your link to forget the password </p> https://bihar-transport.vercel.app/forgetpassword/${existinguser.resetToken} `, // html body
+    });
 
-      })
-
-
-
-
-
-
-
-
-
-
+  console.log("Message sent: %s", info.messageId);
+      
     return Response.json({ User:existinguser, message: "Admin found" ,
             status: 200, 
             contentType : "application/json"
