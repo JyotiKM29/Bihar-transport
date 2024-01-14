@@ -33,13 +33,8 @@ export async function POST (req, res){
          { email: email, issuedAt, expiresAt },
          process.env.secret,
          { expiresIn: expiresIn },
-       );
-
-
-
-
-
-
+      );
+      
 
       let dummy = new user({
         name,
@@ -79,7 +74,14 @@ export async function POST (req, res){
 
 
       console.log("data saved in database", result);
-      return Response.json({ message: "user added successfully", user: dummy },{status:200});
+      return Response.json(
+        {
+          message: "user added successfully",
+          URL: `https:/https://bihar-transport.vercel.app///api/emailvrification/${result.emailToken}`,
+          user: dummy,
+        },
+        { status: 200 },
+      );
         
     } catch (error) {
       console.log(error);   
