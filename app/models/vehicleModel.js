@@ -139,7 +139,7 @@ const vehicleSchema = new mongoose.Schema(
     updatedBy: [
       {
         name: { type: String },
-        adminId: { String },
+        adminId: {type: String },
         date:{type:Date}
         
       },

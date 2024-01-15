@@ -82,11 +82,11 @@ const bookingSchema = new mongoose.Schema(
       adminId: { type: String },
       date: { type: Date, default: Date.now },
     },
-    updatedBy: {
+    updatedBy: [{
       name: { type: String },
       adminId: { type: String },
       date: { type: Date },
-    },
+    }],
   },
   { timestamps: true },
 );

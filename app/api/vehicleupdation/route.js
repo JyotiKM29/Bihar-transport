@@ -7,7 +7,7 @@ export async function PUT(req, res) {
   try {
     await connectDB();
 
-  const { _id, adminId,  fieldsToUpdate, updatedBy } = await req.json();
+  const { _id, adminId,  fieldsToUpdate } = await req.json();
 
     const admin = await user.findOne({ _id: adminId });
     if (admin && (admin.isAdmin || admin.isOwner)) {
@@ -25,14 +25,14 @@ export async function PUT(req, res) {
         existingVehicle[field] = fieldsToUpdate[field];
       });
 
-      existingVehicle.updatedBy = [
-        {
-          adminId: adminId,
-          name: admin.name,
-          date: date
-        },
-      ];
-
+      if (!existingVehicle.updatedBy) {
+        existingVehicle.updatedBy = []; // Initialize if not present
+      }
+      existingVehicle.updatedBy.push({
+        name: admin.name,
+        adminId: admin._id.toString(),
+        date: date,
+      });
       const updatedVehicle = await existingVehicle.save();
 
       // console.log(updatedVehicle);
