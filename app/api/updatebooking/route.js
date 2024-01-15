@@ -22,13 +22,14 @@ export async function PUT(req, res) {
         existingBooking[field] = fieldsToUpdate[field];
       });
 
-      existingBooking.updatedBy = [
-        {
-          adminId: adminId,
-          name: admin.name,
-          date: date,
-        },
-      ];
+       if (!existingBooking.updatedBy) {
+         existingBooking.updatedBy = []; // Initialize if not present
+       }
+       existingBooking.updatedBy.push({
+         name: admin.name,
+         adminId: admin._id.toString(),
+         date: date,
+       });
 
       const updatedBooking = await existingBooking.save();
 
