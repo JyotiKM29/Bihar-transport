@@ -106,7 +106,6 @@ const vehicleSchema = new mongoose.Schema(
     vehicleLength: { type: String, required: true },
     passingCapacity: { type: String, required: true },
     maxCapacity: { type: String, required: true },
-    lockedStatus: { type: String, required: true },
     chassisNo: { type: String, required: true },
     EngineNo: { type: String, required: true },
     fitnessValidUpTo: { type: Date, required: true },
@@ -115,7 +114,7 @@ const vehicleSchema = new mongoose.Schema(
     permitValidUpTo: { type: Date, required: true },
     nationalPermit: { type: Boolean, required: true },
     nationalPermitValidUpTo: { type: Date, required: true },
-    vehicleStatus: { type: String, required: true },
+    allotmentStatus: { type: String, required: true },
     rcPhoto: {
       type: String,
       validate: {
@@ -124,6 +123,13 @@ const vehicleSchema = new mongoose.Schema(
       },
     },
     Remark: { type: String, required: true },
+    bookedBy: [
+      {
+        bookingID: { type: String },
+        bookingOwner: { type: String },
+        date: { type: Date },
+      },
+    ],
     // owner Details
     owner: [ownerSchema],
     driver: [driverSchema],
@@ -133,18 +139,16 @@ const vehicleSchema = new mongoose.Schema(
         name: { type: String, required: true },
         adminId: { type: String, required: true },
         // Add more fields as needed
-      }
+      },
     ],
 
     updatedBy: [
       {
         name: { type: String },
-        adminId: {type: String },
-        date:{type:Date}
-        
+        adminId: { type: String },
+        date: { type: Date },
       },
     ],
-
   },
   { timestamps: true },
 );
