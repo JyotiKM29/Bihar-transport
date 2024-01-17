@@ -1,7 +1,9 @@
 import user from "../../models/usermodel";
+import connectDB from "../../middleware/connectDB";
 
 export async function POST(req, res) {
-  try {
+    try {
+        await connectDB();
     const { ownerId, adminId } = await req.json();
 
     // check if owner exists
