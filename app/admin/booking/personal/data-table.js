@@ -71,7 +71,7 @@ export function DataTable({ columns, data }) {
             ))}
           </TableHeader>
           <TableBody className='bg-grey-50'>
-  {table && table.getRowModel && table.getRowModel().rows && table.getRowModel().rows.length ? (
+  {table && table.getRowModel && table.getRowModel().rows && table.getRowModel().rows?.length ? (
     table.getRowModel().rows.map((row) => (
       <TableRow
         key={row.id}

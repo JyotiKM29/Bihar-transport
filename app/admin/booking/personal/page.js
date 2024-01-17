@@ -7,7 +7,7 @@ import { UserContext } from "../../../context/UserContextProvider";
 
 const PersonalBooking = () => {
   const [formValue, setFormValue] = useState(true);
-  // const [loading , setLoading] = useState(false);
+  const [loading , setLoading] = useState(false);
 
   const { user } = useContext(UserContext);
 
@@ -16,17 +16,33 @@ const PersonalBooking = () => {
   const userId = user?._id;
 
   useEffect(() => {
-    if (userId) {
-      fetch(`/api/getbooking/${userId}`, {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => setData(data))
-        .catch((error) => console.error("Error:", error));
-    }
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        if (userId) {
+          const response = await fetch(`/api/getbooking/${userId}`, {
+            method: "GET",
+          });
+  
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+  
+          const data = await response.json();
+
+          setLoading(false);
+        
+          setData(data);
+        }
+      } catch (error) {
+        setLoading(false);
+        console.error("Error:", error);
+      }
+    };
+  
+    fetchData();
   }, [userId]);
   
-  // setLoading(false);
 
   console.log(data);
 
@@ -50,7 +66,9 @@ const PersonalBooking = () => {
         </div>
         {formValue && <BookingForm />}
 
-        { !formValue && <DataTable columns={columns} data={data?.data} />}
+       {loading ? (<div className="max-w max-h  bg-white"><h2
+       className="text-xl"
+       >Loading...</h2></div>) :  (!formValue && <DataTable columns={columns} data={data?.data} />)}
       </div>
     </div>
   );

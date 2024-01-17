@@ -5,14 +5,13 @@ import { Button } from "../../../components/ui/button"
 import { Checkbox } from "../../../components/ui/checkbox"
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu"
-import { Input } from "../../../components/ui/input"
+import Link from "next/link"
 
 export const columns = [
     {
@@ -110,7 +109,11 @@ export const columns = [
               Copy payment ID
             </DropdownMenuItem> */}
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View Detail</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={`/admin/booking/personal/id:${data._id}`}>
+              View Detail
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem>Print Data</DropdownMenuItem>
             <DropdownMenuItem>Update Data</DropdownMenuItem>
             <DropdownMenuItem>Delete Data</DropdownMenuItem>
