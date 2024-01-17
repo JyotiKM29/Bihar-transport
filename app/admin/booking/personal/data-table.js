@@ -38,7 +38,7 @@ export function DataTable({ columns, data }) {
 
   return (
     <div className="max-w max-h  bg-white" >
-{console.log('jyoti',data)}
+
       <div className="rounded-md border  mt-8">
         <Table>
           <TableHeader>
@@ -70,8 +70,8 @@ export function DataTable({ columns, data }) {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody className='bg-grey-50'>
-  {table && table.getRowModel && table.getRowModel().rows && table.getRowModel().rows?.length ? (
+          {/* <TableBody className='bg-grey-50'>
+  {table && table.getRowModel && table?.getRowModel().rows && table?.getRowModel().rows?.length ? (
     table.getRowModel().rows.map((row) => (
       <TableRow
         key={row.id}
@@ -97,8 +97,8 @@ export function DataTable({ columns, data }) {
       </TableCell>
     </TableRow>
   )}
-</TableBody>
-          {/* <TableBody className='bg-grey-50'>
+</TableBody> */}
+          <TableBody className='bg-grey-50'>
           {table && table.getRowModel() && table.getRowModel().rows && table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
@@ -125,7 +125,7 @@ export function DataTable({ columns, data }) {
                 </TableCell>
               </TableRow>
             )}
-          </TableBody> */}
+          </TableBody>
         </Table>
       </div>
       <div className="flex flex-col md:flex-row  items-center justify-end gap-3 py-4">

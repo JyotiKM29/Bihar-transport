@@ -7,7 +7,7 @@ import { UserContext } from "../../../context/UserContextProvider";
 
 const PersonalBooking = () => {
   const [formValue, setFormValue] = useState(true);
-  const [loading , setLoading] = useState(false);
+  const [loading , setLoading] = useState(true);
 
   const { user } = useContext(UserContext);
 
@@ -17,7 +17,7 @@ const PersonalBooking = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+    
       try {
         if (userId) {
           const response = await fetch(`/api/getbooking/${userId}`, {

@@ -1,6 +1,6 @@
 "use client"
 
-import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons"
+import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Button } from "../../../components/ui/button"
 import { Checkbox } from "../../../components/ui/checkbox"
 import {
@@ -14,7 +14,8 @@ import {
 import Link from "next/link"
 
 export const columns = [
-    {
+
+    {     
         id: "select",
         header: ({ table }) => (
           <Checkbox
@@ -74,25 +75,13 @@ export const columns = [
     accessorKey:"createdBy.name",
     header: "Created By",
   },
-//   {
-//     accessorKey:"ContNo",
-//     header: "ContNo",
-//   },
-  // {
-  //   accessorKey:"vehicleno",
-  //   header:"Vehicle No",
-  // },
-  // {
-  //   accessorKey:"status",
-  //   header: "status",
-  //   footer: props => props.column.id,
-  // },
+
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original
-
+     
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -103,14 +92,9 @@ export const columns = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {/* <DropdownMenuItem
-            //   onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem> */}
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link href={`/admin/booking/personal/id:${data._id}`}>
+            <Link href={`/admin/booking/personal/${row.original._id}`}>
               View Detail
               </Link>
             </DropdownMenuItem>
