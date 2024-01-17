@@ -1,5 +1,4 @@
 
-
-const access_token = process.env.access_token;;
+const access_token = process.env.access_token;
 
 
