@@ -77,6 +77,11 @@ const bookingSchema = new mongoose.Schema(
     transactionId: { type: String },
     remarks: { type: String },
     additionalCharges: { type: String },
+    allotedVehicle: [{
+      vehicleId: { type: String },
+      vehicleOwner: { type: String },
+      date:{type:Date},
+    }],
     createdBy: {
       name: { type: String },
       adminId: { type: String },
