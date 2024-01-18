@@ -1,7 +1,7 @@
 import React from 'react'
 import { useToast } from "./ui/use-toast";
 
-const displayToast = ({title, action, description = ""}) => {
+const DisplayToast = ({title, action, description = ""}) => {
     const { toast } = useToast();
   return (
   
@@ -15,4 +15,4 @@ const displayToast = ({title, action, description = ""}) => {
   )
 }
 
-export default displayToast
+export default DisplayToast

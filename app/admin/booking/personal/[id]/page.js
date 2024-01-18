@@ -1,10 +1,9 @@
 'use client'
-
 import { useEffect, useState } from "react";
 import FieldComponent from './FieldComponent'
 import { Button } from "../../../../components/ui/button";
 
-const page = ({params}) => {
+const BookingDetails = ({params}) => {
   const [booking , setBooking] = useState(null);
   const [loading , setLoading] = useState(false);
 
@@ -91,4 +90,4 @@ const page = ({params}) => {
   
 }
 
-export default page
+export default BookingDetails
