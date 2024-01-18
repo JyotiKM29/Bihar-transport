@@ -68,7 +68,7 @@ export async function POST(req, res) {
       to: existinguser.email, // list of receivers
       subject: "Forget Password Email ✔", // Subject line
       text: "", // plain text body
-      html: `<p>Hello ${existinguser.name} </p> <p> here is your link to forget the password </p> http://localhost:3000/forget-password/${existinguser.resetToken} `, // html body
+      html: `<p>Hello ${existinguser.name} </p> <p> here is your link to forget the password </p> https://bihar-transport.vercel.app/forget-password/${existinguser.resetToken} `, // html body
     });
 
   console.log("Message sent: %s", info.messageId);
