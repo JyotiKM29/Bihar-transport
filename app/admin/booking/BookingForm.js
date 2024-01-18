@@ -9,14 +9,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../components/ui/form";
+} from "../../components/ui/form";
 
 import * as z from "zod";
-import { Input } from "../../../components/ui/input";
-import { Button } from "../../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
 import { useContext, useState } from "react";
-import { UserContext } from "../../../context/UserContextProvider";
-import { useToast } from "../../../components/ui/use-toast";
+import { UserContext } from "../../context/UserContextProvider";
+import { useToast } from "../../components/ui/use-toast";
 
 
 
@@ -940,4 +940,3 @@ const displayToast = (title, action, description = "") => {
 
 
 }
-

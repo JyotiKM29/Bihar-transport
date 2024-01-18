@@ -1,8 +1,8 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import { columns } from "./columns";
-import { DataTable } from "./data-table";
-import BookingForm from "./BookingForm";
+import { columns } from "./../columns";
+import { DataTable } from ".././data-table";
+import BookingForm from "./../BookingForm";
 import { UserContext } from "../../../context/UserContextProvider";
 
 const PersonalBooking = () => {
