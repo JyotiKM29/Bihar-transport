@@ -6,8 +6,11 @@ import connectDB from "../../middleware/connectDB";
 export async function PUT(req, res) {
   try {
     await connectDB();
+    console.log("yes");
 
     const { _id, adminId, fieldsToUpdate } = await req.json();
+
+    console.log(_id, adminId, fieldsToUpdate);
 
     const admin = await user.findOne({ _id: adminId });
     if (admin && (admin.isAdmin || admin.isOwner)) {
