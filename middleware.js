@@ -16,6 +16,9 @@ export function middleware(req) {
 
   // Determine if the user is on the home page (login page)
   const isHomePage = req.nextUrl.pathname === "/";
+  const forgetPage = req.nextUrl.pathname.startsWith("/forget-password") || req.nextUrl.pathname.startsWith("/forgetpassword")
+
+  if(forgetPage && (!authCookie || authCookie)) return NextResponse.next();
 
   // Determine if the user is trying to access an admin route
   const isAdminRoute = req.nextUrl.pathname.startsWith("/admin/");

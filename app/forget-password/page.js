@@ -1,21 +1,20 @@
 "use client";
-import { Button } from "./components/ui/button";
-import React, { useContext, useState } from "react";
-import { Input } from "./components/ui/input";
-import { UserContext } from "./context/UserContextProvider";
+import { Button } from "./../components/ui/button";
+import React, {  useState } from "react";
+import { Input } from "./../components/ui/input";
+
 
 import Link from "next/link";
-import { useToast } from "./components/ui/use-toast";
+import { useToast } from "./../components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-const SignIn = () => {
-  const { user, setUser } = useContext(UserContext);
+const ForgetPassword = () => {
+  
 
   const router = useRouter();
   const { toast } = useToast();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
  
@@ -25,29 +24,8 @@ const SignIn = () => {
     setLoading(true);
   
     try {
-      let ip = null;
-      let location = null;
-  
-      try {
-        const response = await fetch("https://ipinfo.io?token=e5af198d08144e", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-  
-        if (response.ok) {
-          const data = await response.json();
-          ip = data.ip || null;
-          location = data.city || null;
-        } else {
-          console.log("IP Fetching failed");
-        }
-      } catch (error) {
-        console.error("Error fetching IP:", error.message);
-      }
-  
-      const result = await fetch("/api/login", {
+      
+      const result = await fetch("/api/forgetpassword", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,9 +33,6 @@ const SignIn = () => {
         credentials: "include",
         body: JSON.stringify({
           email,
-          password,
-          ip,
-          location,
         }),
       });
   
@@ -65,12 +40,11 @@ const SignIn = () => {
   
       if (result.ok) {
         setLoading(false);
-        displayToast("Successfully login ", "✅");
-        const userDetail = newResult.user;
-        localStorage.setItem('userInfo', JSON.stringify(userDetail));
-        setUser(userDetail);
+        displayToast("Reset password sent on your mail! ", "✅");
+        
+       
 
-        router.push("/admin");
+        router.push("/");
       } else {
         setLoading(false);
         console.error("Error:", newResult.message);
@@ -79,7 +53,7 @@ const SignIn = () => {
     } catch (error) {
       setLoading(false);
       console.error("Error:", error.message);
-      displayToast("Error", "❌", error.message);
+      displayToast("fail to Updated password", "❌", error.message);
     }
   }
   
@@ -100,9 +74,9 @@ const SignIn = () => {
         className="mt-[10vh] w-full  flex-col items-center  rounded-3xl border  bg-white px-8 py-4 md:max-w-[420px] md:px-12 md:py-8"
         onSubmit={handleSubmit}
       >
-        <h4 className="text-navy-700 mb-2.5 text-4xl font-bold ">Sign In</h4>
+        <h4 className="text-navy-700 mb-2.5 text-4xl font-bold ">Forget password</h4>
         <p className="mb-4 ml-1 text-base text-gray-600">
-          Enter your email and password to sign in!
+         Please, Enter your email here
         </p>
 
         {/* Email */}
@@ -116,30 +90,14 @@ const SignIn = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        {/* Password */}
-        <Input
-          label="Password"
-          placeholder="password"
-          id="password"
-          type="password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {/* Checkbox */}
-        <div className="mb-4 flex items-center justify-end px-2">
-          <Link
-            className="text-nowrap text-sm font-medium text-blue-500 hover:text-blue-600 "
-            href="/forget-password"
-          >
-            Forgot Password?
-          </Link>
-        </div>
+        
+      
+     
         <Button
           className="linear mt-2 w-full rounded-xl bg-blue-500 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
           type="submit"
         >
-          {loading ? "Loading ..." : "Sign In"}
+          {loading ? "Loading ..." : "Forget Password"}
         </Button>
         <div className="mt-4 flex items-center justify-center">
           <span className=" text-navy-700 text-sm font-medium ">
@@ -157,4 +115,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default ForgetPassword;
