@@ -1,9 +1,14 @@
 "use client";
+import  { useToast }  from '../../../../components/ui/use-toast';
+import { useRouter } from "next/navigation";
+import { IoIosArrowBack } from "react-icons/io";
+import { MdEdit } from "react-icons/md";
 import { useEffect, useState } from "react";
 import FieldComponent from "./FieldComponent";
 import { Button } from "../../../../components/ui/button";
 
 const BookingDetails = ({ params }) => {
+  const router = useRouter();
   const [bookingDetails, setBookingDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [editBooking , setEditBooking] = useState(false);
@@ -18,28 +23,53 @@ const BookingDetails = ({ params }) => {
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
-          setLoading(false);
+     
         }
 
         const data = await response.json();
         setLoading(false);
         setBookingDetails(data);
+        displayToast("Fetch Booking Detail Succesfully ", "✅");
 
         console.log("data", data);
       } catch (error) {
         setLoading(false);
         console.error("Error:", error);
+        displayToast("Error in Fetching Data", "❌", error.message);
       }
     };
     fetchData();
   }, [params.id]);
 
+
+  const displayToast = (title, action, description = "") => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
+
+  const handleGoBack = () => {
+    router.back();
+  };
+
   return (
     <div className="min-h-[90vh] w-full rounded-2xl bg-white px-6 py-4 shadow-sm ">
       <div className="flex items-center justify-between">
         <h1 className="mb-6 text-4xl">Booking Details: </h1>
-        <div>
-        <Button onClick={()=> setEditBooking(!editBooking)} className="text-lg px-8">Edit</Button>
+        <div className="space-x-2 flex items-center justify-between">
+        <Button  className="px-4 space-x-2" onClick={handleGoBack}>
+        
+        <IoIosArrowBack className=" fill-white" />
+        <pre className="text-base">Back</pre>
+       
+        
+        </Button>
+        <Button onClick={()=> setEditBooking(!editBooking)} className="px-4 space-x-2">
+        <pre className="text-base">Edit</pre>
+        <MdEdit className="h-8 fill-white" />
+        </Button>
         </div>
        
       </div>
@@ -69,6 +99,7 @@ const BookingDetails = ({ params }) => {
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="vehicleRequiredDate"
+            type='date'
           />
           <FieldComponent
             label={"consignorName:"}

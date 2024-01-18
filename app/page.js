@@ -7,7 +7,6 @@ import { UserContext } from "./context/UserContextProvider";
 import Link from "next/link";
 import { useToast } from "./components/ui/use-toast";
 import { useRouter } from "next/navigation";
-// import { serialize } from "cookie";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const SignIn = () => {

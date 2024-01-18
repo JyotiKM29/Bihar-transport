@@ -53,7 +53,7 @@ export async function PUT(req, res) {
 
     return Response.json(
       {
-        message: "Error updating booking in the database",
+        message: "Please check your input",
         error: error.message,
       },
       { status: 400 },
