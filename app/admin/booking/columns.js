@@ -23,12 +23,16 @@ import {
 } from "../../components/ui/dialog"
 
 import Link from "next/link"
+// import { useContext } from "react"
+// import { UserContext } from "../../context/UserContextProvider"
+
 
 
 async function deleteData(id) {
   try {
-    const response = await fetch(`/api/deletebooking/${id}`, {
+      const response = await fetch(`/api/deletebooking`, {
       method: 'DELETE',
+      body: JSON.stringify({ _id:id, adminId:user.Id}),
     });
 
     if (!response.ok) {
