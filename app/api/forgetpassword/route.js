@@ -3,7 +3,6 @@
 import user from "../../models/usermodel";
 import connectDB from "../../middleware/connectDB";
 import { NextResponse } from "next/server";
-import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer'
 
 
@@ -38,18 +37,16 @@ export async function POST(req, res) {
       const expiresAt = new Date(issuedAt.getTime() + expiresIn * 1000);
       console.log("expire time", expiresAt);
 
-      const token = jwt.sign(
-        { email: existinguser.email, issuedAt, expiresAt },
-        process.env.secret,
-        { expiresIn: expiresIn }
-      );
+      const OTP = Math.floor(100000 + Math.random() * 900000);
+      console.log("OTP", OTP);
 
       // Store the token and related information in the user document
-      existinguser.resetToken = token;
+      existinguser.resetToken = OTP;
       existinguser.resetTokenIssuedAt = issuedAt;
       existinguser.resetTokenExpiresAt = expiresAt;
       await existinguser.save();
 
+      console.log(OTP);
       // emailreq
 
       const transporter = nodemailer.createTransport({
@@ -64,13 +61,13 @@ export async function POST(req, res) {
         });
       
     const info = await transporter.sendMail({
-      from: '"Suraj Pandey from Bihar Transport 👻" <surajjbhardwaj@gmail.com>', // sender address
+      from: '"Suraj Pandey from Bihar Transport" <surajjbhardwaj@gmail.com>', // sender address
       to: existinguser.email, // list of receivers
-      subject: "Forget Password Email ✔", // Subject line
+      subject: "Forget Password OTP for bihar Transport ✔", // Subject line
       text: "", // plain text body
-      html: `<p>Hello ${existinguser.name} </p> <p> here is your link to forget the password </p> https://bihar-transport.vercel.app/forget-password/${existinguser.resetToken} `, // html body
+      html: `<p>Hello ${existinguser.name} </p> <p> here is your OTP : ${existinguser.resetToken} </p> <p> Note: Otp will be valid for next 1 hours only. </p> `// html body
     });
-
+ console.log(OTP);
   console.log("Message sent: %s", info.messageId);
       
     return Response.json({ User:existinguser, message: "Admin found" ,
