@@ -1,23 +1,21 @@
 "use client";
-import { Button } from "./../../components/ui/button";
+import { Button } from "../../components/ui/button";
 import React, {  useState } from "react";
-import { Input } from "./../../components/ui/input";
-
-
-import Link from "next/link";
-import { useToast } from "./../../components/ui/use-toast";
+import { Input } from "../../components/ui/input";
+import { useToast } from "../../components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
+
 const ResetPassword = ({params}) => {
-  const resetToken = params.resetToken;
+  const resetToken = params.otp;
   const router = useRouter();
   const { toast } = useToast();
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
- 
+  console.log('love',resetToken)
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
@@ -26,6 +24,7 @@ const ResetPassword = ({params}) => {
         displayToast("Password don't Match", "❌" );
         return ;
     }
+    console.log(resetToken)
 
     try {
     const result = await fetch("/api/resetpassword",
@@ -36,17 +35,19 @@ const ResetPassword = ({params}) => {
         },
         credentials: "include",
         body: JSON.stringify({
-          newPassword,
           resetToken,
+          newPassword,
+         
           confirmPassword,
         }),
       });
 
       const newResult = await result.json();
+      console.log(newResult)
   
       if (result.ok) {
         setLoading(false);
-        displayToast("Reset password sent on your mail! ", "✅");
+        displayToast("Password Updated ", "✅");
         
        
 

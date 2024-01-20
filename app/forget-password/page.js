@@ -44,7 +44,7 @@ const ForgetPassword = () => {
         
        
 
-        router.push("/");
+        router.push("/forget-password/otp-verification");
       } else {
         setLoading(false);
         console.error("Error:", newResult.message);
@@ -68,7 +68,7 @@ const ForgetPassword = () => {
 
   return (
     <div className=" flex h-screen w-screen items-center justify-center bg-gradient-to-r  from-sky-500 to-indigo-500 px-4">
-      {/* Sign in section */}
+      
       <SpeedInsights />
       <form
         className="mt-[10vh] w-full  flex-col items-center  rounded-3xl border  bg-white px-8 py-4 md:max-w-[420px] md:px-12 md:py-8"
