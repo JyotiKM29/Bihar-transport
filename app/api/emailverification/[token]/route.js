@@ -23,6 +23,7 @@ export async function GET(req, context) {
         );
       } else {
         console.log("hey");
+        User.emailToken = null;
         User.isemailVerified = true;
         User.emailTokenExpiresAt = new Date();
 

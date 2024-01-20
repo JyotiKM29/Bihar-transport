@@ -28,11 +28,7 @@ export async function POST(req, res) {
       const expiresAt = new Date(issuedAt.getTime() + expiresIn * 1000);
       console.log("expire time", expiresAt);
 
-      const token = jwt.sign(
-        { email: email, issuedAt, expiresAt },
-        process.env.secret,
-        { expiresIn: expiresIn },
-      );
+      const token = Math.floor(100000 + Math.random() * 900000);
 
       User.emailToken = token;
       user.emailTokenIssuedAt = issuedAt;

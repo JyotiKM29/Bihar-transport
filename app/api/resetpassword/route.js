@@ -34,6 +34,7 @@ export async function POST(req, res) {
       // Update the user's password and reset token expiration time
       existingUser.password = newPassword;
       existingUser.resetTokenExpiresAt = new Date();
+      existingUser.resetToken = null;
       const result = await existingUser.save();
 
       return Response.json({

@@ -29,11 +29,7 @@ export async function POST (req, res){
        const expiresAt = new Date(issuedAt.getTime() + expiresIn * 1000);
        console.log("expire time", expiresAt);
 
-       const token = jwt.sign(
-         { email: email, issuedAt, expiresAt },
-         process.env.secret,
-         { expiresIn: expiresIn },
-      );
+       const token = Math.floor(100000 + Math.random() * 900000);
       
 
       let dummy = new user({
@@ -61,11 +57,11 @@ export async function POST (req, res){
        });
 
        const info = await transporter.sendMail({
-         from: '"Suraj Pandey from Bihar Transport 👻" <surajjbhardwaj@gmail.com>', // sender address
+         from: '"Suraj Pandey from Bihar Transport" <surajjbhardwaj@gmail.com>', // sender address
          to: result.email, // list of receivers
-         subject: "Forget Password Email ✔", // Subject line
+         subject: "OTP for Email Verification ✔", // Subject line
          text: "", // plain text body
-         html: `<p>Hello ${result.name} </p> <p> here is your link to verify the email </p> https://bihar-transport.vercel.app/emailVerify/${result.emailToken} `, // html body
+         html: `<p>Hello ${result.name} </p> <p> here is your OTP to verify the email </p> ${result.emailToken} `, // html body
        });
 
        console.log("Message sent: %s", info.messageId);
@@ -77,7 +73,7 @@ export async function POST (req, res){
       return Response.json(
         {
           message: "user added successfully",
-          URL: `https:/https://bihar-transport.vercel.app///api/emailvrification/${result.emailToken}`,
+          OTP: `${result.emailToken}`,
           user: dummy,
         },
         { status: 200 },
