@@ -38,27 +38,28 @@ const FieldForm = ({ form, nameValue, label, type = 'text' , fileNumber = 1  }) 
   };
 
   return (
-    <div>
+    <div >
       <FormField
+     
         control={form.control}
         name={nameValue}
         render={({ field }) => (
-          <FormItem className="flex items-center justify-center gap-4">
+          <FormItem className="flex items-center justify-center gap-4 ">
             <FormLabel className="text-nowrap text-sm lg:text-base">{label}:</FormLabel>
-            <div className="flex flex-1 flex-col">
+            <div className="flex flex-1 flex-col ">
               <FormControl>
                 {type === 'checkbox' ? (
                   <div className='h-10 flex items-center'>
                     <Checkbox {...field} checked={field.value} className='h-6 w-6' />
                   </div>
                 ) : type === 'file' ? (
-                  <>
+                  <div >
                     <label className='text-[12px] -mb-1 flex text-slate-500'>
-                     <pre> Select number of files to upload </pre>
-                      <input type='number' min='1' value={fileCount} onChange={(e) => setFileCount(e.target.value)} />
+                     <p> Select number of files to upload 2 </p>
+                      {/* <input type='number' min='1' value={fileCount} onChange={(e) => setFileCount(e.target.value)} /> */}
                     </label>
-                    <Input type='file' onChange={onFileChange} multiple />
-                  </>
+                    <Input    type='file' onChange={onFileChange} multiple />
+                  </div>
                 ) : (
                   <Input type={type} {...field} />
                 )}

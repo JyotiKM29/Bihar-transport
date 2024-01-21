@@ -282,8 +282,8 @@ const RegistrationForm = () => {
     <FieldForm form={form} nameValue="driver.proof" label="Driver Proof" type="file" fileNumber={2} />
 
 
-    <div className="col-span-full flex justify-center mt-8">
-  <Button type="submit" className="h-16 bg-black text-lg xl:w-1/3">
+    <div className="col-span-full flex  md:justify-center mt-8">
+  <Button type="submit" className="h-16 bg-black text-lg w-full xl:w-1/3">
     {isloading ? "Loading..." : "Submit"}
   </Button>
 </div>
