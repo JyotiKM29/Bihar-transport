@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
 import { useEffect, useState } from "react";
-import FieldComponent from "./../FieldComponent";
+import FieldComponent from "../../FieldComponent";
 import { Button } from "../../../../components/ui/button";
 
 const BookingDetails = ({ params }) => {

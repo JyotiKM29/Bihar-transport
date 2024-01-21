@@ -6,8 +6,8 @@ import {
   TabsTrigger,
 } from "../../components/ui/tabs";
 
-import Registration from './Registration/page';
-import Allocation from './Allocation/page';
+import Registration from './registration/page';
+import Allocation from './allocation/page';
 
 
 function Vehicle() {
