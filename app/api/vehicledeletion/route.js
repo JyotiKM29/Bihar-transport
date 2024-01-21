@@ -1,6 +1,6 @@
 import { User } from "lucide-react";
 import connectDB from "../../middleware/connectDB";
-import vehicle from "../../models/vehicleModel";
+import vehicle from "../../models/vehiclemodel";
 import user from "../../models/usermodel";
 
 export async function DELETE(req, res) {

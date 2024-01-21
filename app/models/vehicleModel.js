@@ -114,6 +114,7 @@ const vehicleSchema = new mongoose.Schema(
     permitValidUpTo: { type: Date, required: true },
     nationalPermit: { type: Boolean },
     nationalPermitValidUpTo: { type: Date, required: true },
+
     allotmentStatus: { type:Boolean, default:false},
     rcPhoto:  {
       type: [
@@ -121,6 +122,7 @@ const vehicleSchema = new mongoose.Schema(
           type: String,
         },
       ],
+
       validate: {
         validator: validateDriverProof,
         message: "Proof array must contain exactly two URLs.",
