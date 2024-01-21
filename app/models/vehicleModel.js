@@ -114,7 +114,7 @@ const vehicleSchema = new mongoose.Schema(
     permitValidUpTo: { type: Date, required: true },
     nationalPermit: { type: Boolean, required: true },
     nationalPermitValidUpTo: { type: Date, required: true },
-    allotmentStatus: { type: String, required: true },
+    allotmentStatus: { type: Boolean, default:false },
     rcPhoto: {
       type: String,
       validate: {
