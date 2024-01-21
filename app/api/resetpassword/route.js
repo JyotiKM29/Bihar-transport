@@ -10,25 +10,24 @@ export async function POST(req, res) {
         const { resetToken, newPassword, confirmPassword } = await req.json();
 
          if (!resetToken) {
-        return Response.json({status:400, msg: "Reset token is not valid" });
+        return Response.json({message: "Reset token is not valid" },{status:400});
       }
 
       const existingUser = await user.findOne({ resetToken });
 
       if (!existingUser) {
-        return Response.json({status:400, msg: "Reset token is not valid" });
+        return Response.json({message: "Reset token is not valid" },{status:400});
       }
 
       if (existingUser.resetTokenExpiresAt < Date()) {
           return NextResponse.json({
-            status:400,
-          msg: "Reset token expired. Please create another token again.",
-        });
+          message: "Reset token expired. Please create another token again.",
+        },{status:400});
       }
 
       if (newPassword !== confirmPassword) {
         return Response
-          .json({ staus:400, msg: "Confirm password and password are not matching" });
+          .json({message: "Confirm password and password are not matching" },{status:400});
       }
 
       // Update the user's password and reset token expiration time
@@ -39,14 +38,14 @@ export async function POST(req, res) {
 
       return Response.json({
         user: result,
-        msg: "Password changed successfully",
+        message: "Password changed successfully",
         status: "success",
-      });
+      },{status:200});
         
     } catch (error) {
         
         console.log(error);
-        return Response.json({ msg: "error", error: error.messsage });
+        return Response.json({ message: "error", error: error.messsage },{status:400});
 
     }
 

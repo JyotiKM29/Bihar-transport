@@ -2,7 +2,7 @@ import connectDB from "../../middleware/connectDB";
 import Booking from "../../models/bookingmodel";
 import user from "../../models/usermodel";
 
-export async function DELETE(req, response) {
+export async function DELETE(req, res) {
   try {
     const { adminId, _id } = await req.json();
     await connectDB();
@@ -11,20 +11,20 @@ export async function DELETE(req, response) {
     if (admin.isAdmin || admin.isOwner) {
       const booking = await Booking.findById(_id);
       if (!booking) {
-        return response.json({ message: "Booking not found" }, { staus: 400 });
+        return Response.json({ message: "Booking not found" }, { staus: 400 });
       }
 
       await Booking.findByIdAndDelete(_id);
-      return response.json(
+      return Response.json(
         { message: "Booking deleted successfully" },
         { status: 200 },
       );
     } else {
-      return response.json({ message: "Admin not found" }, { status: 400 });
+      return Response.json({ message: "Admin not found" }, { status: 400 });
     }
   } catch (error) {
     console.log(error);
-    return response.json({ message: error.message }, { status: 400 });
+    return Response.json({ message: error.message }, { status: 400 });
   }
 }
 

@@ -178,40 +178,41 @@ export function DataTable({ columns, data }) {
 }
 
 function Filter({ column, table }) {
-  const firstValue = table
-    .getPreFilteredRowModel()
-    .flatRows[0]?.getValue(column.id);
-
+  const firstValue = table.getPreFilteredRowModel().flatRows[0]?.getValue(column.id);
   const columnFilterValue = column.getFilterValue();
 
-  return typeof firstValue === "number" ? (
-    <div className="flex space-x-2">
+ if (typeof firstValue === "number") {
+    return (
+      <div className="flex space-x-2">
+        <Input
+          type="number"
+          value={columnFilterValue?.[0] ?? ""}
+          onChange={(e) =>
+            column.setFilterValue((old) => [e.target.value, old?.[1]])
+          }
+          placeholder="min"
+          className="h-8 w-14 rounded border shadow"
+        />
+        <Input
+          type="number"
+          value={columnFilterValue?.[1] ?? ""}
+          onChange={(e) =>
+            column.setFilterValue((old) => [old?.[0], e.target.value])
+          }
+          placeholder="max"
+          className="h-8 w-14 rounded border shadow"
+        />
+      </div>
+    );
+  } else {
+    return (
       <Input
-        type="number"
-        value={columnFilterValue?.[0] ?? ""}
-        onChange={(e) =>
-          column.setFilterValue((old) => [e.target.value, old?.[1]])
-        }
-        placeholder="min"
-        className="h-8 w-14 rounded border shadow"
+        type="text"
+        value={columnFilterValue ?? ""}
+        onChange={(e) => column.setFilterValue(e.target.value)}
+        placeholder="search..."
+        className="h-8 w-full rounded border shadow"
       />
-      <Input
-        type="number"
-        value={columnFilterValue?.[1] ?? ""}
-        onChange={(e) =>
-          column.setFilterValue((old) => [old?.[0], e.target.value])
-        }
-        placeholder="max"
-        className="h-8 w-14 rounded border shadow"
-      />
-    </div>
-  ) : (
-    <Input
-      type="text"
-      value={columnFilterValue ?? ""}
-      onChange={(e) => column.setFilterValue(e.target.value)}
-      placeholder="search..."
-      className="h-8 w-full rounded border shadow"
-    />
-  );
+    );
+  }
 }

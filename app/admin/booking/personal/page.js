@@ -1,6 +1,7 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import { columns } from "./../columns";
+// import { columns } from "../ColumnHeader";
+import ColumnHeader from '../ColumnHeader';
 import { DataTable } from ".././data-table";
 import BookingForm from "./../BookingForm";
 import { UserContext } from "../../../context/UserContextProvider";
@@ -12,6 +13,8 @@ const PersonalBooking = () => {
   const { user } = useContext(UserContext);
 
   const [data, setData] = useState(null);
+  const columns = ColumnHeader();
+
 
   const userId = user?._id;
 
@@ -41,10 +44,10 @@ const PersonalBooking = () => {
     };
   
     fetchData();
-  }, [userId]);
+  }, [userId ,formValue]);
   
 
-  console.log(data);
+  
 
   return (
     <div className="min-h-[90vh] w-full space-y-6">
