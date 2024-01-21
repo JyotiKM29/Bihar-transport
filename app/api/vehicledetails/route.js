@@ -1,6 +1,6 @@
 import user from "../../models/usermodel";
 import connectDB from "../../middleware/connectDB";
-import vehicle from "../../models/vehiclemodel";
+import vehicle from "../../models/vehicleModel";
 
 export async function POST(req, res) {        
     try {
