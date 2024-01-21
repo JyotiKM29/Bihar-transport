@@ -32,7 +32,7 @@ const EmailVerification = () => {
   
       if (result.ok) {
         setLoading(false);
-        displayToast("email verified Successfully ", "✅");
+        displayToast("email verified Successfully ", "✅", "Please, Ask Owner to assign Admin Role ");
   
         router.push("/");
       } else {

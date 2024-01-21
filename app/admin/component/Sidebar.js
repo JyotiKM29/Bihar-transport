@@ -26,9 +26,9 @@ const iconData = [
 const paths = [
   "/admin",
   "/admin/booking",
+  "/admin/vehicle",
   "/admin/account",
   "/admin/report",
-  "/admin/transport",
   "/admin/settings",
 ];
 

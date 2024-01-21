@@ -86,10 +86,10 @@ const formSchema = z.object({
   billTo: z.string({ message: "Field is required" }).min(2),
   paymentTerm: z.enum(["Advance", "Paid", "To Pay", "To be Billed"]),
   advanceAmount: z.coerce.number({
-    message: "order ID is required",
+    message: "Field is required",
   }),
   balanceAmount: z.coerce.number({
-    message: "order ID is required",
+    message: "Field is required",
   }),
   payMode: z.string({ message: "Field is required" }).min(2),
   transactionId: z.string({ message: "Field is required" }).min(3),

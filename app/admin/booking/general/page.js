@@ -1,6 +1,6 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import { columns } from "../ColumnHeader";
+import ColumnHeader from '../ColumnHeader';
 import { DataTable } from "./../data-table";
 import BookingForm from "./../BookingForm";
 import { UserContext } from "../../../context/UserContextProvider";
@@ -8,10 +8,12 @@ import { UserContext } from "../../../context/UserContextProvider";
 const GeneralBooking = () => {
   const [formValue, setFormValue] = useState(true);
   const [loading , setLoading] = useState(true);
+  const columns = ColumnHeader();
 
   const { user } = useContext(UserContext);
 
   const [data, setData] = useState(null);
+
 
   const userId = user?._id;
 
