@@ -137,8 +137,8 @@ const vehicleSchema = new mongoose.Schema(
       },
     ],
     // owner Details
-    owner: [ownerSchema],
-    driver: [driverSchema],
+    owner: ownerSchema,
+    driver: driverSchema,
     addedBy: [
       {
         // Details for owner or admin

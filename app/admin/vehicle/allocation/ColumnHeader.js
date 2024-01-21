@@ -44,7 +44,7 @@ export default function ColumnHeader() {
       console.log(user);
        console.log("id:", id);
        try {
-         const response = await fetch(`/api/deletebooking`, {
+         const response = await fetch(`/api/vehicledeletion`, {
            method: "DELETE",
            body: JSON.stringify({ _id: id, adminId: user._id }),
          });
@@ -82,8 +82,12 @@ export default function ColumnHeader() {
         enableHiding: false,
       },
     {
-        accessorKey: "driver.name",
+        accessorKey: "vehicleNo",
         header: "vehicle No",
+    },
+    {
+        accessorKey: "driver.name",
+        header: "vehicle Name",
     },
     {
         accessorKey: "allotmentStatus",
@@ -120,7 +124,7 @@ export default function ColumnHeader() {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Link href={`/admin/booking/personal/${row.original._id}`}>
+                  <Link href={`/admin/vehicle/allocation/${row.original._id}`}>
                     View Detail
                   </Link>
                 </DropdownMenuItem>
