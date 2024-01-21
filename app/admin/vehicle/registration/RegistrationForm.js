@@ -2,13 +2,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form } from "../../../components/ui/form";
-
-import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
 import { useContext, useState } from "react";
 import * as z from "zod";
 import { useToast } from "../../../components/ui/use-toast";
 import FieldForm from "../FieldForm";
+import { UserContext } from "../../../context/UserContextProvider";
 
 const driverSchema = z.object({
   licenseNo: z.string({ message: "License No is required" }),
@@ -44,7 +43,7 @@ const driverSchema = z.object({
   }),
   smartPhone: z.coerce.boolean({ message: "Smartphone status is required" }),
   owner: z.coerce.boolean({ message: "Owner status is required" }),
-  proof: z.string({ message: "Proof is required" }).min(3),
+  proof:  z.array(z.string().url()),
 });
 
 const bankSchema = z.object({
@@ -60,7 +59,7 @@ const bankSchema = z.object({
     })
     .positive(),
   ifscCode: z.string({ message: "IFSC Code is required" }).min(3),
-  proof: z.string({ message: "Proof is required" }).min(3),
+  proof:  z.array(z.string().url()),
 });
 
 const ownerSchema = z.object({
@@ -109,15 +108,15 @@ const formSchema = z.object({
   vehicleType: z.string({ message: "Vehicle Type is required" }).min(3),
   vehicleClass: z.string({ message: "Vehicle Class is required" }).min(3),
   vehicleLength: z.string({ message: "Vehicle Length is required" }).min(3),
-  passingCapacity: z.string({ message: "Passing Capacity is required" }).min(3),
-  maxCapacity: z.string({ message: "Max Capacity is required" }).min(3),
+  passingCapacity: z.string({ message: "Passing Capacity is required" }),
+  maxCapacity: z.string({ message: "Max Capacity is required" }),
   chassisNo: z.string({ message: "Chassis No is required" }).min(3),
   EngineNo: z.string({ message: "Engine No is required" }).min(3),
   fitnessValidUpTo: z.coerce.date({
     message: "Fitness Valid Up To date is required",
   }),
   taxPaidUpTo: z.coerce.date({ message: "Tax Paid Up To date is required" }),
-  insuranceValidUpTo: z.coerce.date({
+  insurenceValidUpTo: z.coerce.date({
     message: "Insurance Valid Up To date is required",
   }),
   permitValidUpTo: z.coerce.date({
@@ -129,14 +128,16 @@ const formSchema = z.object({
   nationalPermitValidUpTo: z.coerce.date({
     message: "National Permit Valid Up To date is required",
   }),
-  allotmentStatus: z.string({ message: "Allotment Status is required" }).min(3),
-  rcPhoto: z.string({ message: "RC Photo is required" }).min(3),
+  rcPhoto:  z.array(z.string().url()),
   Remark: z.string({ message: "Remark is required" }).min(3),
   owner: ownerSchema,
   driver: driverSchema,
+  adminId : z.string(),
 });
 
 const RegistrationForm = () => {
+  const {toast} = useToast();
+  const {user} = useContext(UserContext);
   const [isloading, setIsLoading] = useState();
 
   const initialFormState = {
@@ -153,15 +154,16 @@ const RegistrationForm = () => {
     EngineNo: "",
     fitnessValidUpTo: null,
     taxPaidUpTo: null,
-    insuranceValidUpTo: null,
+    insurenceValidUpTo: null,
     permitValidUpTo: null,
-    nationalPermit: null,
+    nationalPermit: false,
     nationalPermitValidUpTo: null,
-    allotmentStatus: "",
+  
     rcPhoto: "",
     Remark: "",
     owner: {},
     driver: {},
+    adminId: '',
   };
 
   const { reset, ...form } = useForm({
@@ -170,8 +172,44 @@ const RegistrationForm = () => {
   });
 
   async function MyHandleSubmit() {
+    form.setValue('adminId',user._id);
     const values = form.getValues();
     console.log(values);
+
+    try {
+     
+      const response = await fetch('/api/vehicleregistration', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),  
+      });
+    console.log(response);
+  
+    const newResult = await response.json();
+    
+  
+    if(response.ok){
+      setIsLoading(false);
+      displayToast("Successfully Booked, Click view Booking button to view the booking", "✅");
+      const userDetail = newResult.user;
+      reset(initialFormState);
+    }
+  
+    else{
+      console.error("Error:", newResult.message);
+      displayToast("Error", "❌", newResult.message);
+      setIsLoading(false);
+    }
+      } catch (error) {
+        console.error("Error:", newResult.message);
+      displayToast("Error", "❌", newResult.message);
+      setIsLoading(false);
+      }
+
+
+
   }
 
   const displayToast = (title, action, description = "") => {
@@ -200,12 +238,12 @@ const RegistrationForm = () => {
     <FieldForm form={form} nameValue="EngineNo" label="Engine No" type="text" />
     <FieldForm form={form} nameValue="fitnessValidUpTo" label="Fitness Valid Up To" type="date" />
     <FieldForm form={form} nameValue="taxPaidUpTo" label="Tax Paid Up To" type="date" />
-    <FieldForm form={form} nameValue="insuranceValidUpTo" label="Insurance Valid Up To" type="date" />
+    <FieldForm form={form} nameValue="insurenceValidUpTo" label="Insurance Valid Up To" type="date" />
     <FieldForm form={form} nameValue="permitValidUpTo" label="Permit Valid Up To" type="date" />
     <FieldForm form={form} nameValue="nationalPermit" label="National Permit" type="checkbox" />
     <FieldForm form={form} nameValue="nationalPermitValidUpTo" label="National Permit Valid Up To" type="date" />
-    <FieldForm form={form} nameValue="allotmentStatus" label="Allotment Status" type="text" />
-    <FieldForm form={form} nameValue="rcPhoto" label="RC Photo" type="text" />
+   
+    <FieldForm form={form} nameValue="rcPhoto" label="RC Photo" type="file" fileNumber={2}/>
     <FieldForm form={form} nameValue="Remark" label="Remark" type="text" />
     {/* Add fields for owner and driver here */}
     
@@ -224,7 +262,7 @@ const RegistrationForm = () => {
     <FieldForm form={form} nameValue="owner.bank.name" label="Owner Bank Name" type="text" />
     <FieldForm form={form} nameValue="owner.bank.accNo" label="Owner Bank Account No" type="number" />
     <FieldForm form={form} nameValue="owner.bank.ifscCode" label="Owner Bank IFSC Code" type="text" />
-    <FieldForm form={form} nameValue="owner.bank.proof" label="Owner Bank Proof" type="text" />
+    <FieldForm form={form} nameValue="owner.bank.proof" label="Owner Bank Proof" type="file" fileNumber={2}/>
     <FieldForm form={form} nameValue="owner.remarks" label="Owner Remarks" type="text" />
 
     <h2 className="col-span-full text-2xl text-center font-bold mb-6 mt-3">Driver Details</h2>
@@ -241,11 +279,11 @@ const RegistrationForm = () => {
     <FieldForm form={form} nameValue="driver.rating" label="Driver Rating" type="number" />
     <FieldForm form={form} nameValue="driver.smartPhone" label="Driver Has Smartphone" type="checkbox" />
     <FieldForm form={form} nameValue="driver.owner" label="Driver Is Owner" type="checkbox" />
-    <FieldForm form={form} nameValue="driver.proof" label="Driver Proof" type="text" />
+    <FieldForm form={form} nameValue="driver.proof" label="Driver Proof" type="file" fileNumber={2} />
 
 
-    <div className="col-span-full flex justify-center mt-8">
-  <Button type="submit" className="h-16 bg-black text-lg xl:w-1/3">
+    <div className="col-span-full flex  md:justify-center mt-8">
+  <Button type="submit" className="h-16 bg-black text-lg w-full xl:w-1/3">
     {isloading ? "Loading..." : "Submit"}
   </Button>
 </div>

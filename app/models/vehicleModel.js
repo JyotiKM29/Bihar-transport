@@ -112,14 +112,20 @@ const vehicleSchema = new mongoose.Schema(
     taxPaidUpTo: { type: Date, required: true },
     insurenceValidUpTo: { type: Date, required: true },
     permitValidUpTo: { type: Date, required: true },
-    nationalPermit: { type: Boolean, required: true },
+    nationalPermit: { type: Boolean },
     nationalPermitValidUpTo: { type: Date, required: true },
-    allotmentStatus: { type: Boolean, default:false },
-    rcPhoto: {
-      type: String,
+
+    allotmentStatus: { type:Boolean, default:false},
+    rcPhoto:  {
+      type: [
+        {
+          type: String,
+        },
+      ],
+
       validate: {
-        validator: validateRcPhoto,
-        message: "rcPhoto must be a non-empty string (URL).",
+        validator: validateDriverProof,
+        message: "Proof array must contain exactly two URLs.",
       },
     },
     Remark: { type: String, required: true },
