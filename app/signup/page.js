@@ -40,10 +40,10 @@ const Signup = () => {
         setLoading(false);
         console.log("Data:", result);
         displayToast(
-          "Successfully created, Please ask owner to assign you admin role. Then login",
+          "Please verify your email ",
           "✅",
         );
-        router.push("/");
+        router.push("/email-verification");
       } else {
         setLoading(false);
         console.error("Error occurred:", result.message);

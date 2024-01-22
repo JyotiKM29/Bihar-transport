@@ -19,22 +19,20 @@ const EmailVerification = () => {
     setLoading(true);
   
     try {
-      const result = await fetch("/api/forgetpassword", {
-        method: "POST",
+      const result = await fetch(`/api/emailverification/${otp}`, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({
-         otp,
-        }),
+        
       });
   
       const newResult = await result.json();
   
       if (result.ok) {
         setLoading(false);
-        displayToast("email verified Successfully ", "✅");
+        displayToast("email verified Successfully ", "✅", "Please, Ask Owner to assign Admin Role ");
   
         router.push("/");
       } else {

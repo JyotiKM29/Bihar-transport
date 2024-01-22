@@ -1,10 +1,9 @@
 "use client";
-import  { useToast }  from '../../../../components/ui/use-toast';
 import { useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
 import { useEffect, useState } from "react";
-import FieldComponent from "./FieldComponent";
+import FieldComponent from "../../FieldComponent";
 import { Button } from "../../../../components/ui/button";
 
 const BookingDetails = ({ params }) => {
@@ -92,7 +91,7 @@ const BookingDetails = ({ params }) => {
        </div>
        
           <FieldComponent
-            label={"vehicleRequiredDate"}
+            label={"Vehicle Required Date"}
             value={new Date(
               bookingDetails?.booking?.vehicleRequiredDate,
             ).toLocaleDateString()}
@@ -102,69 +101,69 @@ const BookingDetails = ({ params }) => {
             type='date'
           />
           <FieldComponent
-            label={"consignorName:"}
+            label={"Consignor Name"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="consignorName"  value={bookingDetails?.booking?.consignorName}
           />
           <FieldComponent
-            label={"consignorMobileNumber:"}
+            label={"Consignor Mobile No"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="consignorMobileNumber"
               value={bookingDetails?.booking?.consignorMobileNumber}
           />
           <FieldComponent
-            label={"loadingPoints:"}
+            label={"Loading Points"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="loadingPoints"  value={bookingDetails?.booking?.loadingPoints?.join(',')}
           />
           <FieldComponent
-            label={"consigneeName :"}
+            label={"Consignee Name "}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="consigneeName"  value={bookingDetails?.booking?.consigneeName}
           />
           <FieldComponent
-            label={"consigneeMobileNumber :"}
+            label={"Consignee Mobile No"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="consigneeMobileNumber"  value={bookingDetails?.booking?.consigneeMobileNumber}
           />
           <FieldComponent
-            label={"unloadingPoints:"}
+            label={"Unloading Points"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="unloadingPoints"  value={bookingDetails?.booking?.unloadingPoints?.join(', ')}
             
           />  
-          <FieldComponent label={"way:"} value={bookingDetails?.booking?.way} show={editBooking}
+          <FieldComponent label={"Way"} value={bookingDetails?.booking?.way} show={editBooking}
           tableId={bookingDetails?.booking?._id}
             identifier="way"
           />
 
           <FieldComponent
-            label={"material:"}
+            label={"Material"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="material"  value={bookingDetails?.booking?.material}
           />
           <FieldComponent
-            label={"quantity:"}
+            label={"Quantity"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="quantity"  value={bookingDetails?.booking?.quantity}
           />
       
           <FieldComponent
-            label={"quantityUnit :"}
+            label={"Quantity Unit "}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="quantityUnit"  value={bookingDetails?.booking?.quantityUnit}
           />
           <FieldComponent
-            label={"vehicleType:"}
+            label={"Vehicle Type"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="vehicleType"  
@@ -175,96 +174,96 @@ const BookingDetails = ({ params }) => {
 
         
           <FieldComponent
-            label={"actualWeight:"}
+            label={"Actual Weight"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="actualWeight"  value={bookingDetails?.booking?.actualWeight}
           />
 
           <FieldComponent
-            label={"rateAsPer:"}
+            label={"Rate As Per"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="rateAsPer"  value={bookingDetails?.booking?.rateAsPer}
           />
           <FieldComponent
-            label={"rate:"}
+            label={"Rate"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="rate"  value={bookingDetails?.booking?.rate}
           />
           <FieldComponent
-            label={"rateUnit :"}
+            label={"RateUnit"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="rateUnit"  value={bookingDetails?.booking?.rateUnit}
           />
 
           <FieldComponent
-            label={"partyBhara:"}
+            label={"Party Bhara"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="partyBhara"  value={bookingDetails?.booking?.partyBhara}
           />
 
           <FieldComponent
-            label={"paymentLiability:"}
+            label={"Payment Liability"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="paymentLiability"  value={bookingDetails?.booking?.paymentLiability}
           />
 
           <FieldComponent
-            label={"billTo:"}
+            label={"Bill To"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="billTo"  value={bookingDetails?.booking?.billTo}
           />
 
           <FieldComponent
-            label={"paymentTerm :"}
+            label={"Payment Term "}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="paymentTerm"  value={bookingDetails?.booking?.paymentTerm}
           />
           <FieldComponent
-            label={"advanceAmount:"}
+            label={"Advance Amount"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="advanceAmount"  value={bookingDetails?.booking?.advanceAmount}
           />
           <FieldComponent
-            label={"balanceAmount:"}
+            label={"Balance Amount"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="balanceAmount"  value={bookingDetails?.booking?.balanceAmount}
           />
           <FieldComponent
-            label={"payMode:"}
+            label={"Pay Mode"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="payMode"  value={bookingDetails?.booking?.payMode}
           />
           <FieldComponent
-            label={"transactionId:"}
+            label={"Transaction Id"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="transactionId"  value={bookingDetails?.booking?.transactionId}
           />
           <FieldComponent
-            label={"remarks:"}
+            label={"Remarks"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="remarks"  value={bookingDetails?.booking?.remarks}
           />
           <FieldComponent
-            label={"additionalCharges:"}
+            label={"Additional Charges"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="additionalCharges" value={bookingDetails?.booking?.additionalCharges}
           />
           <FieldComponent
-            label={"allotedVehicle:"}
+            label={"Alloted Vehicle"}
             show={editBooking}
             tableId={bookingDetails?.booking?._id}
             identifier="allotedVehicle"  

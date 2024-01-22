@@ -19,7 +19,7 @@ const OtpVerification = () => {
     setLoading(true);
   
     try {
-      const result = await fetch("/api/forgetpassword", {
+      const result = await fetch("/api/passwordotpmatch", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,14 +29,17 @@ const OtpVerification = () => {
          otp,
         }),
       });
-  
+       
       const newResult = await result.json();
-  
+      console.log(newResult);
       if (result.ok) {
         setLoading(false);
         displayToast("OTP verified Successfully ", "✅");
+
+        router.push(`/forget-password/${otp}`);
   
-        router.push("/");
+  
+        
       } else {
         setLoading(false);
         console.error("Error:", newResult.message);

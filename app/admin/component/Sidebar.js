@@ -26,9 +26,9 @@ const iconData = [
 const paths = [
   "/admin",
   "/admin/booking",
+  "/admin/vehicle",
   "/admin/account",
   "/admin/report",
-  "/admin/transport",
   "/admin/settings",
 ];
 
@@ -146,10 +146,10 @@ const Sidebar = () => {
 
         <div className="flex flex-col ">
           <button className="flex w-full items-center justify-between  p-4 py-2 ">
-            <div className="flex flex-col items-start">
+            <Link href='/admin/master-settings'className="flex flex-col items-start">
               <h2 className="text-md text-left"> {userFirstName}</h2>
               <p className="text-sm text-gray-400">{role}</p>
-            </div>
+            </Link>
             <MdAccountCircle className="h-6 w-6 text-gray-400 md:h-8 md:w-8" />
           </button>
 
