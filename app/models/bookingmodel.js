@@ -77,21 +77,35 @@ const bookingSchema = new mongoose.Schema(
     transactionId: { type: String },
     remarks: { type: String },
     additionalCharges: { type: String },
-    allotedVehicle: [{
-      vehicleId: { type: String },
-      vehicleOwner: { type: String },
-      date:{type:Date},
-    }],
+    status: {
+      type: String,
+      default: "Pending",
+      enum: ["Pending", "Initialized", "on the way", "delevered", "cancelled"],
+    },
+    isUrgent: { type: Boolean, default: false },
+    allotedVehicle: [
+      {
+        vehicleId: { type: String },
+        vehicleOwner: { type: String },
+        vehicleDriver: { type: String},
+        vehicleNo: { type: String},
+        vehicleDriverPhone: { type: Number},
+        vehicleOwnerPhone: { type: Number},
+        date: { type: Date },
+      },
+    ],
     createdBy: {
       name: { type: String },
       adminId: { type: String },
       date: { type: Date, default: Date.now },
     },
-    updatedBy: [{
-      name: { type: String },
-      adminId: { type: String },
-      date: { type: Date },
-    }],
+    updatedBy: [
+      {
+        name: { type: String },
+        adminId: { type: String },
+        date: { type: Date },
+      },
+    ],
   },
   { timestamps: true },
 );
