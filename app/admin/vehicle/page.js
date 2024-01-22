@@ -16,10 +16,10 @@ function Vehicle() {
        <Tabs defaultValue="registration" className="relative w-full min-h-full ">
         <TabsList className="absolute right-0">
           <TabsTrigger value="registration">
-          registration
+          Registration
           </TabsTrigger>
           <TabsTrigger value="allocation">
-          allocation
+          Vehicle Allocation
           </TabsTrigger>
          
         

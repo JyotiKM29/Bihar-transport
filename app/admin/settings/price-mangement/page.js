@@ -9,7 +9,7 @@ const PriceMangement = () => {
         w-full  flex-col  gap-3 space-y-2 rounded-2xl 
          bg-white px-4 py-4 shadow-md md:p-6 xl:h-[95%]"
       >
-        <h1 className="hidden text-3xl text-center lg:block ">Price Mangement</h1>
+        <h1 className="text-2xl xl:text-3xl text-center lg:block ">Price Mangement</h1>
         <Button>Price Setting  </Button>
         <Button> Account wise Price Setting </Button>  
         {/* //(Upload Price Setting From Excel) */}

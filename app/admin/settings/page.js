@@ -7,9 +7,9 @@ import OtherSetting from './other-setting/page'
 
 const page = () => {
   return (
-    <div className="w-full h-full rounded-2xl  bg-white p-6 shadow-sm ">
-    <h5 className='text-center text-lg mb-8'>Search report from below filters :</h5>
-    <div className='grid grid-cols-3 gap-6'>
+    <div className="w-full min-h-[90vh] rounded-2xl  bg-white p-6 shadow-sm ">
+    <h5 className='text-center text-base md:text-lg mb-8'>Set settings from below Details:</h5>
+    <div className='grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6'>
      <MasterSetting />
      <VehicleSetting />
      <PriceMangement />
