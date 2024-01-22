@@ -5,11 +5,9 @@ const orderSchema = new mongoose.Schema({
     booking: {
         id: { type: String, required: true },
         date: { type: Date, required: true },
-        time: { type: String, required: true },
         client: {
             name: { type: String, required: true },
             phone: { type: Number, required: true },
-            address: { type: String, required: true },
         },
 
         loadingPoints: [
@@ -25,7 +23,6 @@ const orderSchema = new mongoose.Schema({
     },
     vehicle: {
         id: { type: String, required: true },
-        type: { type: String, required: true },
         number: { type: String, required: true },
         driver: {
             name: { type: String, required: true },
@@ -39,17 +36,21 @@ const orderSchema = new mongoose.Schema({
     payment: {
         mode: { type: String, required: true },
         amount: { type: Number, required: true },
+        advance: { type: Number, default: 0 },
+        balance: { type: Number },
     },
 
     status: { type: String, required: true },
+    isDelevered: { type: Boolean, default: false },
+    isUrgent: { type: Boolean, default: false },
     createdBY: {
         id: { type: String, required: true },
         name: { type: String, required: true },
         date: { type: Date },
     },
     updatedBY: {
-        id: { type: String, required: true },
-        name: { type: String, required: true },
+        id: { type: String, },
+        name: { type: String,},
         date: { type: Date },
     },
 }, { timestamps: true });

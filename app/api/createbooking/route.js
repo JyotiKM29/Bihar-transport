@@ -39,6 +39,7 @@ export async function POST(req, res) {
       transactionId,
       remarks,
       additionalCharges,
+      isUrgent,
     } = await req.json();
 
     const admin = await user.findOne({ _id: adminId });
@@ -76,12 +77,19 @@ export async function POST(req, res) {
         payMode,
         transactionId,
         remarks,
-        additionalCharges,
         createdBy: {
           name: admin.name,
           adminId,
         },
       });
+
+      if (isUrgent) {
+        newBooking.isUrgent = true;
+      }
+
+      if (additionalCharges) {
+        newBooking.additionalCharges = additionalCharges;
+      }
 
       // Save the new booking
       const savedBooking = await newBooking.save();
