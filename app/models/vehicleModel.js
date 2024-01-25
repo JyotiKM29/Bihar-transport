@@ -133,6 +133,7 @@ const vehicleSchema = new mongoose.Schema(
       {
         bookingID: { type: String },
         bookingOwner: { type: String },
+        status:{type:String},
         date: { type: Date },
       },
     ],

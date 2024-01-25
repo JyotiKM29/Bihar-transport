@@ -105,6 +105,7 @@ export async function POST(req, res) {
           bookingID: bookingId,
           bookingOwner: existingBooking.consignorName,
           date: Date.now(),
+          status:"Initialized",
         });
 
         existingBooking.status = "Initialized";
