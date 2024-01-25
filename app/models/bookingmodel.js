@@ -80,17 +80,17 @@ const bookingSchema = new mongoose.Schema(
     status: {
       type: String,
       default: "Pending",
-      enum: ["Pending", "Initialized", "on the way", "delevered", "cancelled"],
+      enum: ["Pending", "Initialized", "Dispatched", "In Transit", "delevered", "cancelled"],
     },
     isUrgent: { type: Boolean, default: false },
     allotedVehicle: [
       {
         vehicleId: { type: String },
         vehicleOwner: { type: String },
-        vehicleDriver: { type: String},
-        vehicleNo: { type: String},
-        vehicleDriverPhone: { type: Number},
-        vehicleOwnerPhone: { type: Number},
+        vehicleDriver: { type: String },
+        vehicleNo: { type: String },
+        vehicleDriverPhone: { type: Number },
+        vehicleOwnerPhone: { type: Number },
         date: { type: Date },
       },
     ],
