@@ -141,6 +141,39 @@ export default function ProfileForm() {
   const { toast } = useToast();
   const [isloading , setIsLoading] = useState()
 
+  const { reset, ...form } = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: initialFormState,
+  });
+
+  function calPartyBhara(quantity, rate){
+    const total = quantity * rate;
+    const gst = 0.18;
+    return total * gst + total;
+  }
+
+  function calBalanceAmount(advanceAmount ,partyBhara ){
+     return partyBhara - advanceAmount;
+  }
+
+  const rate = form.watch('rate', 0);
+  const quantity = form.watch('quantity', 0);
+  const advanceAmount = form.watch('advanceAmount',0)
+
+  const partyBhara = calPartyBhara(quantity, rate);
+  const balanceAmount = calBalanceAmount(advanceAmount ,partyBhara )
+  
+  useEffect(() => {
+    
+    form.setValue('partyBhara', partyBhara);
+  }, [quantity, rate]);
+
+  useEffect(() => {
+    
+    form.setValue('balanceAmount',balanceAmount);
+  }, [partyBhara, advanceAmount]);
+
+
 
   function addFromLocation(value) {
     form.setValue('adminId',user._id);
@@ -180,10 +213,6 @@ export default function ProfileForm() {
   }
  
 
-  const { reset, ...form } = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: initialFormState,
-  });
 
  
 
