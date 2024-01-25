@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from "../../components/ui/form";
 
+
 import * as z from "zod";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
@@ -49,7 +50,7 @@ const formSchema = z.object({
       message: "Phone can't be more than 10 digits",
     }),
   unloadingPoints: z.array(z.string()),
-  way: z.string().optional(),
+  way: z.enum(["one way" ,"two way" , "return"]),
   material: z.string({ message: "Field is required" }).min(3),
   quantity: z.coerce
     .number({
@@ -84,7 +85,7 @@ const formSchema = z.object({
   hideBhara: z.coerce.boolean({}),
   // paymentTerm:z.string().optional(),
   paymentLiability: z.enum(["Consignor","Consignee", "Third Party", "Vehicle Owner"]),
-  billTo: z.string({ message: "Field is required" }).min(2),
+  billTo: z.string({ message: "Field is required" }),
   paymentTerm: z.enum(["Advance", "Paid", "To Pay", "To be Billed"]),
   advanceAmount: z.coerce.number({
     message: "Field is required",
@@ -528,7 +529,13 @@ const displayToast = (title, action, description = "") => {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                        <select {...field} className="h-10 bg-slate-50 border rounded-md">
+              <option value="">Select Way</option>
+              <option value="one way">one way</option>
+              <option value="two way">two way</option>
+              <option value="return">return</option>
+             
+            </select>
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -585,11 +592,26 @@ const displayToast = (title, action, description = "") => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
                       <FormLabel className="text-nowrap text-sm lg:text-base">
-                        QuantityUnit :
+                        Quantity Unit :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                        <select {...field} className="h-10 bg-slate-50 border rounded-md">
+              <option value="">Select Quantity Unity</option>
+              <option value="Kg">Kg (Kilo gram)</option>
+              <option value="g">g (gram) </option>
+              <option value="Km">Km (Kilo meter)</option>
+              <option value="Km2">Km&sup2;</option>
+              <option value="m">m </option>
+              <option value="m2">m&sup2;</option>
+              <option value="tons">tons</option>
+              <option value="pounds">pounds</option>
+              <option value="L">L (liters)</option>
+              <option value="m3">m³</option>
+              
+              
+
+            </select>
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -667,7 +689,13 @@ const displayToast = (title, action, description = "") => {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                        <select {...field} className="h-10 bg-slate-50 border rounded-md">
+              <option value="">Select Rate as Per</option>
+              <option value="Weight">Weight </option>
+              <option value="Length">Length </option>
+              <option value="Third Volume">Volume</option>
+              
+            </select>
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -707,7 +735,13 @@ const displayToast = (title, action, description = "") => {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                        <select {...field} className="h-10 bg-slate-50 border rounded-md">
+              <option value="">Select Rate Unit</option>
+              <option value="Weight">Weight </option>
+              <option value="Length">Length </option>
+              <option value="Third Volume">Volume</option>
+              
+            </select>
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -770,7 +804,13 @@ const displayToast = (title, action, description = "") => {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                        <select {...field} className="h-10 bg-slate-50 border rounded-md">
+              <option value="">Select Payment Liability</option>
+              <option value="Consignor">Consignor</option>
+              <option value="Consignee">Consignee</option>
+              <option value="Third Party">Third Party</option>
+              <option value="Vehicle Owner">Vehicle Owner</option>
+            </select>
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -799,25 +839,31 @@ const displayToast = (title, action, description = "") => {
                 }}
               />
 
-              <FormField
-                control={form.control}
-                name="paymentTerm"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Payment Term :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="text" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
+<FormField
+  control={form.control}
+  name="paymentTerm"
+  render={({ field }) => {
+    return (
+      <FormItem className="flex items-center justify-center gap-4">
+        <FormLabel className="text-nowrap text-sm lg:text-base">
+          Payment Term :
+        </FormLabel>
+        <div className="flex flex-1 flex-col ">
+          <FormControl>
+          <select {...field} className="h-10 bg-slate-50 border rounded-md">
+              <option value="">Select a payment term</option>
+              <option value="Advance">Advance</option>
+              <option value="Paid">Paid</option>
+              <option value="To Pay">To Pay</option>
+              <option value="To be Billed">To be Billed</option>
+            </select>
+          </FormControl>
+          <FormMessage />
+        </div>
+      </FormItem>
+    );
+  }}
+/>
               <FormField
                 control={form.control}
                 name="advanceAmount"
