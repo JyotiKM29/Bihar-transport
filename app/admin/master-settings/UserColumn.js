@@ -25,6 +25,7 @@ import {
 import Link from "next/link"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../context/UserContextProvider"
+import { useToast } from "../../components/ui/use-toast"
 
 
 
@@ -35,8 +36,34 @@ import { UserContext } from "../../context/UserContextProvider"
 export default function ColumnHeader() {
   const { user } = useContext(UserContext);
   const [columns, setColumns] = useState([]);
-
+  const {toast} = useToast();
   
+   async function handleAuthorize(userID){
+    try {
+      const response =await fetch('/api/authorize',{
+        method: "POST",
+          body: JSON.stringify({ _id: user._id, id: userID }),
+      })
+      displayToast(" Assigned Admin Role", "✅");
+      console.log(response); 
+      if (!response.ok) {
+        displayToast("Error", "❌", error.message);
+        throw new Error(`Error: ${response.status}`);
+      }
+    } catch (error) {
+      displayToast("Error", "❌", error);
+      console.error(`An error occurred: ${error}`);
+    }
+     
+   }
+
+   const displayToast = (title, action, description = "") => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
   
 
   useEffect(() => {
@@ -112,7 +139,12 @@ export default function ColumnHeader() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+               <DropdownMenuItem>
+               <button onClick={()=>handleAuthorize(row.original._id)}>
+               Make Admin
+               </button>
               
+               </DropdownMenuItem>
               
              
               <DropdownMenuItem>
