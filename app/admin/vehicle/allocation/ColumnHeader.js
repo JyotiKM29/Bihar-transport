@@ -83,11 +83,11 @@ export default function ColumnHeader() {
       },
     {
         accessorKey: "vehicleNo",
-        header: "vehicle No",
+        header: "Vehicle No",
     },
     {
         accessorKey: "driver.name",
-        header: "vehicle Name",
+        header: "Driver Name",
     },
     {
         accessorKey: "allotmentStatus",
