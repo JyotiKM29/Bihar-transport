@@ -104,7 +104,7 @@ export default function ColumnHeader() {
     },
     {
         accessorKey: "registrationAuthority",
-        header: " registrationAuthority",
+        header: " Registration Authority",
     },
 
   

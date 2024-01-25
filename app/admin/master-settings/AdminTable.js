@@ -19,9 +19,10 @@ const AdminTable = () => {
         
           try {
             if (userId) {
-              const response = await fetch(`/api/getbooking/${userId}`, {
+              const response = await fetch(`/api/getadmin/${userId}`, {
                 method: "GET",
               });
+              console.log(response)
       
               if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -30,8 +31,10 @@ const AdminTable = () => {
               const data = await response.json();
     
               setLoading(false);
+           
             
               setData(data);
+              console.log(data)
             }
           } catch (error) {
             setLoading(false);
@@ -45,7 +48,9 @@ const AdminTable = () => {
       return (
         <div className="min-h h-[94vh] w-full space-y-6">
          
-           {loading ? 'Loading.....' : <DataTable columns={columns} data={data?.data} />}
+           {loading ? 'Loading.....' :'table'}
+            {/* <DataTable columns={columns} data={data?.data} /> */}
+            
            
         
         </div>

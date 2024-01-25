@@ -45,7 +45,7 @@ const orderSchema = new mongoose.Schema({
     isUrgent: { type: Boolean, default: false },
     createdBY: {
         id: { type: String, required: true },
-        name: { type: String, required: true },
+        name: { type: String },
         date: { type: Date },
     },
     updatedBY: {
