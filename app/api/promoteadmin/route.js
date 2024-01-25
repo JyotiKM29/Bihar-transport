@@ -21,11 +21,12 @@ export async function POST(req, res) {
     }
 
     if (!owner.isOwner) {
-      return Response.json({
-        message: "You're not allowed to authorize anyone",
-        status: 400,
-        contentType: "application/json",
-      });
+      return Response.json(
+        {
+          message: "You're not allowed to authorize anyone",
+        },
+        { status: 400 },
+      );
     }
 
     // if admin
@@ -34,9 +35,8 @@ export async function POST(req, res) {
     if (!Admin) {
       return Response.json({
         message: "User does not exist",
-        status: 400,
         contentType: "application/json",
-      });
+      }, { status: 400 });
       }
       
       Admin.isOwner = true;
@@ -44,14 +44,14 @@ export async function POST(req, res) {
       Admin.adminDetails.push({ assignedBy: owner.name });
       await Admin.save();
 
-      return Response.json({ msg: "Admin Authorized", Admin, status: 200 });
+    return Response.json({ msg: "Admin Authorized" }, { status: 200 });
     
   } catch (error) {
     console.log("error at forget password api route", error);
-    return Response.json({ msg: error.message, status: 404 });
+    return Response.json({ msg: error.message }, { status: 404 });
   }
 }
 
 export function GET(req) {
-  return Response.json({ msg: "this method is not allowed", status: 400 });
+  return Response.json({ msg: "this method is not allowed" }, { status: 400 });
 }
