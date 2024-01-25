@@ -1,6 +1,6 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import ColumnHeader from './ColumnHeader';
+import ColumnHeader from './AdminColumn';
 import { DataTable } from "./data-table";
 import { UserContext } from "../../context/UserContextProvider";
 
