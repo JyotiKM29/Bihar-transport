@@ -37,14 +37,14 @@ const bookingSchema = new mongoose.Schema(
     date: { type: Date, default: Date.now },
     vehicleRequiredDate: { type: Date, default: Date.now },
     consignorName: { type: String, required: true },
-    consignorMobileNumber: { type: String },
+    consignorMobileNumber: { type: Number },
     loadingPoints: [
       {
         type: String,
       },
     ],
     consigneeName: { type: String },
-    consigneeMobileNumber: { type: String },
+    consigneeMobileNumber: { type: Number },
     unloadingPoints: [
       {
         type: String,

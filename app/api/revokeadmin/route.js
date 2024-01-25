@@ -9,7 +9,7 @@ export async function POST(req, res) {
     // check if owner exists
 
     const owner = await user.findById(ownerId);
-    if (!owner) {
+    if (!owner || !owner.isOwner) { 
       return Response.json(
         { message: "Owner not found" },
         {

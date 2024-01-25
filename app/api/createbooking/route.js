@@ -42,6 +42,14 @@ export async function POST(req, res) {
       isUrgent,
     } = await req.json();
 
+    const existingBooking = await Booking.findOne({ orderNumber });
+    if (existingBooking) {
+      return Response.json(
+        { message: "Booking already exists" },
+        { status: 400 },
+      );
+    }
+
     const admin = await user.findOne({ _id: adminId });
     if (admin && (admin.isAdmin || admin.isOwner)) {
    
