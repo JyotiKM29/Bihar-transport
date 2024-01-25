@@ -96,7 +96,9 @@ const formSchema = z.object({
   payMode: z.string({ message: "Field is required" }).min(2),
   transactionId: z.string({ message: "Field is required" }).min(3),
   remarks: z.string({ message: "Field is required" }).min(2),
-  additionalCharges: z.string({ message: "Field is required" }).min(2),
+  additionalCharges:z.coerce.number({
+    message: "Field is required",
+  }),
   adminId:z.string(),
 });
 
@@ -121,7 +123,7 @@ export default function ProfileForm() {
     rateAsPer: "",
     rate: "",
     rateUnit: "",
-    partyBhara: "" ,
+    partyBhara: 0 ,
     hideBhara: "",
     paymentLiability: "",
     billTo: "",
@@ -131,7 +133,7 @@ export default function ProfileForm() {
     payMode: "",
     transactionId: "",
     remarks: "",
-    additionalCharges: "",
+    additionalCharges: 0,
     adminId: '',
   }; 
 
@@ -146,11 +148,13 @@ export default function ProfileForm() {
     defaultValues: initialFormState,
   });
 
-  function calPartyBhara(quantity, rate){
-    const total = quantity * rate;
+  function calPartyBhara(quantity, rate, additionalCharges) {
+    const total = Number(quantity) * Number(rate);
     const gst = 0.18;
-    return total * gst + total;
+    const totalWithGst = total * gst;
+    return totalWithGst + total + Number(additionalCharges);
   }
+  
 
   function calBalanceAmount(advanceAmount ,partyBhara ){
      return partyBhara - advanceAmount;
@@ -159,19 +163,21 @@ export default function ProfileForm() {
   const rate = form.watch('rate', 0);
   const quantity = form.watch('quantity', 0);
   const advanceAmount = form.watch('advanceAmount',0)
+  const additionalCharges = form.watch('additionalCharges',0)
 
-  const partyBhara = calPartyBhara(quantity, rate);
+  const partyBhara = calPartyBhara(quantity, rate ,additionalCharges);
   const balanceAmount = calBalanceAmount(advanceAmount ,partyBhara )
+
   
   useEffect(() => {
     
     form.setValue('partyBhara', partyBhara);
-  }, [quantity, rate]);
+  }, [quantity, rate,additionalCharges]);
 
   useEffect(() => {
     
     form.setValue('balanceAmount',balanceAmount);
-  }, [partyBhara, advanceAmount]);
+  }, [partyBhara, advanceAmount,additionalCharges]);
 
 
 
@@ -790,7 +796,7 @@ const displayToast = (title, action, description = "") => {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" 
+                          <Input type="number" 
                         
                           {...field} />
                         </FormControl>
@@ -1003,7 +1009,7 @@ const displayToast = (title, action, description = "") => {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="number" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
