@@ -29,7 +29,7 @@ export async function POST(request,response) {
     }
 
     // If user but not admin
-    if (!existingUser.isAdmin) {
+    if (!existingUser.isAdmin && !existingUser.isOwner) {
       return Response.json(
         { message: "ask owner to assign you as admin role" },
         { status: 400 },
@@ -50,7 +50,7 @@ export async function POST(request,response) {
 
     const userId = check._id; // Example user ID
 const username = check.name; // Example username
-const role=check.IsOwner? "owner" : "admin"; // Example role
+const role=check.isOwner? "owner" : "admin"; // Example role
     const userDetails = `userId=${userId}&username=${username}&role=${role}`;
     
     // setting cookie to set the header
