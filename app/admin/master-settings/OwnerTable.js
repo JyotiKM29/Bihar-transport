@@ -5,7 +5,7 @@ import { DataTable } from "./data-table";
 import { UserContext } from "../../context/UserContextProvider";
 
 
-const AdminTable = () => {
+const OwnerTable = () => {
     const [loading , setLoading] = useState(true);
 
     const { user } = useContext(UserContext);
@@ -45,13 +45,12 @@ const AdminTable = () => {
         fetchData();
       }, [userId ]);
 
-
-      const AdminData = data && data.users.filter((user)=>user.isAdmin === true && user.isOwner === false);
+      const UserData = data && data.users.filter((user)=>( user.isOwner === true ));
 
       return (
         <div className="min-h-[90vh] w-full space-y-6">
         <div className="h-8  w-full ">
-          <h1 className="hidden text-4xl  lg:block ">Admins</h1>
+          <h1 className="hidden text-4xl  lg:block ">Owners</h1>
         </div>
         <div
           className="min-h w-full 
@@ -59,7 +58,7 @@ const AdminTable = () => {
        shadow-sm md:px-6 xl:h-[95%]"
         >
          
-           {loading ? 'Loading.....' : <DataTable columns={columns} data={AdminData} />}
+           {loading ? 'Loading.....' : <DataTable columns={columns} data={UserData} />}
            
             
            
@@ -69,4 +68,4 @@ const AdminTable = () => {
       )
 }
 
-export default AdminTable
+export default OwnerTable

@@ -28,5 +28,4 @@ export async function GET(req, context) {
 
 export function POST(req, context) {
     return Response.json({ message: "Method not allowed" },{staus:400});
-}   
-
+}
