@@ -16,12 +16,12 @@ function Admin() {
   return (
     <div className="w-full min-h-[95vh] ">
    
-      <Tabs defaultValue="Week" className="relative w-full min-h-full ">
+      <Tabs defaultValue="Today" className="relative w-full min-h-full ">
         <TabsList className="absolute right-0">
           <TabsTrigger value="year">yearly</TabsTrigger>
           <TabsTrigger value="Month">Monthly</TabsTrigger>
           <TabsTrigger value="Week">Weeky</TabsTrigger>
-          <TabsTrigger value="Today">Today</TabsTrigger>
+          <TabsTrigger value="Today">Over All</TabsTrigger>
         </TabsList>
         <TabsContent value="Today">
           <TodayData />

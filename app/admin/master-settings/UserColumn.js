@@ -47,11 +47,11 @@ export default function ColumnHeader() {
       displayToast(" Assigned Admin Role", "✅");
       console.log(response); 
       if (!response.ok) {
-        displayToast("Error", "❌", error.message);
+        displayToast("Failed to Assign Role", "❌", error.message);
         throw new Error(`Error: ${response.status}`);
       }
     } catch (error) {
-      displayToast("Error", "❌", error);
+      displayToast("Server Error", "❌", error);
       console.error(`An error occurred: ${error}`);
     }
      
@@ -71,16 +71,19 @@ export default function ColumnHeader() {
       console.log(user);
        console.log("id:", id);
        try {
-         const response = await fetch(`/api/vehicledeletion`, {
+         const response = await fetch(`/api/deAuthorize`, {
            method: "DELETE",
-           body: JSON.stringify({ _id: id, adminId: user._id }),
+           body: JSON.stringify({ _id: user._id, id :id }),
          });
-         console.log(response)
+         displayToast("Successfully Deleted", "✅");
+         console.log(await response.json())
    
          if (!response.ok) {
+          displayToast("Failed to Delete", "❌", error.message);
            throw new Error(`HTTP error! status: ${response.status}`);
          }
        } catch (error) {
+        displayToast("Server Error", "❌", error);
          console.error("There was a problem with the delete request.", error);
        }
      }

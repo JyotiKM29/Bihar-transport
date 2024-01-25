@@ -30,30 +30,30 @@ export default function ColumnHeader() {
       displayToast("Successfully Removed ", "✅");
       console.log(response);
       if (!response.ok) {
-        displayToast("Error", "❌", error.message);
+        displayToast("Failed to remove", "❌");
         throw new Error(`Error: ${response.status}`);
       }
     } catch (error) {
-      displayToast("Error", "❌", error);
+      displayToast("Error", "❌");
       console.error(`An error occurred: ${error}`);
     }
   }
 
   async function handleMakeOwner(userID){
     try {
-      const response = await fetch(`/api/revokeadmin`, {
+      const response = await fetch(`/api/promoteadmin`, {
         method: "POST",
-        body: JSON.stringify({ ownerId: user._id, adminId: userID }),
+        body: JSON.stringify({ _id: user._id, id: userID }),
       });
 
-      displayToast("Successfully Removed ", "✅");
+      displayToast("Assign Owner Role ", "✅");
       console.log(response);
       if (!response.ok) {
-        displayToast("Error", "❌", error.message);
+        displayToast("Failed to Make Owner", "❌");
         throw new Error(`Error: ${response.status}`);
       }
     } catch (error) {
-      displayToast("Error", "❌", error);
+      displayToast("Error", "❌");
       console.error(`An error occurred: ${error}`);
     }
 

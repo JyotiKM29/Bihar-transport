@@ -3,9 +3,11 @@
 import dynamic from "next/dynamic";
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-const RadialBarChart = () => {
+const RadialBarChart = (
+  {value}
+) => {
    
-    const  series = [70];
+    const  series = [value];
 
     const options = {
       chart: {

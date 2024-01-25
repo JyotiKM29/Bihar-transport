@@ -61,7 +61,7 @@ const Allocation = ({ params }) => {
             body: JSON.stringify({
               vehicleNo,
               adminId: userId,
-              OrderNo: params.bookingId,
+              orderNo: params.bookingId,
             }),
           });
       
