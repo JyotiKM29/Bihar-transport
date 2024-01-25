@@ -1,6 +1,6 @@
 import vehicle from "../../models/vehicleModel";
 import Booking from "../../models/bookingmodel";
-import Order from "../../models/ordermodel";
+import Order from "../../models/orderModel";
 import connectDB from "../../middleware/connectDB";
 import user from "../../models/usermodel";
 
