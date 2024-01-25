@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { UserContext } from "../context/UserContextProvider";
 
 const Signup = () => {
+  const [hide , setHide] = useState(true)
   const { setUser } = useContext(UserContext);
   const router = useRouter();
   const { toast } = useToast();
@@ -117,16 +118,24 @@ const Signup = () => {
         {/* Password */}
      
 
+        <div className="relative flex ">
 
-        <Input
+      
+<Input
           required
           label="Password"
           placeholder="Enter your password"
           id="password"
-          type="password"
+          type={hide?'password':'text'}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+
+<span className="absolute top-1/2 transform -translate-y-1/2 right-2"
+onClick={()=>setHide(!hide)}
+> {hide ? "Show" : "Hide"}</span>
+</div>
+        
         {/* Phone no*/}
         <Input
           required
