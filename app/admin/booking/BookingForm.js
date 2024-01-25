@@ -14,9 +14,10 @@ import {
 import * as z from "zod";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
-import { useContext, useState } from "react";
+import { useContext, useState  , useEffect} from "react";
 import { UserContext } from "../../context/UserContextProvider";
 import { useToast } from "../../components/ui/use-toast";
+
 
 
 
@@ -99,11 +100,46 @@ const formSchema = z.object({
 });
 
 export default function ProfileForm() {
+  const initialFormState = {
+    orderNumber: generateUniqueId(),
+    date: "",
+    vehicleRequiredDate: "",
+    consignorName: "",
+    consignorMobileNumber: "",
+    loadingPoints: "",
+    consigneeName: "",
+    consigneeMobileNumber: "",
+    unloadingPoints: "",
+    way: "",
+    material: "",
+    quantity: "",
+    quantityUnit: "",
+    vehicleType: "",
+    actualWeight: "",
+    chargedWeight: "",
+    rateAsPer: "",
+    rate: "",
+    rateUnit: "",
+    partyBhara: "" ,
+    hideBhara: "",
+    paymentLiability: "",
+    billTo: "",
+    paymentTerm: "",
+    advanceAmount: 0,
+    balanceAmount: 0,
+    payMode: "",
+    transactionId: "",
+    remarks: "",
+    additionalCharges: "",
+    adminId: '',
+  }; 
+
   const {user} = useContext(UserContext);
   const [fromLocations, setFromLocations] = useState([]);
   const [toLocations, setToLocations] = useState([]);
   const { toast } = useToast();
   const [isloading , setIsLoading] = useState()
+
 
   function addFromLocation(value) {
     form.setValue('adminId',user._id);
@@ -130,6 +166,9 @@ export default function ProfileForm() {
       return newLocations;
     });
   }
+  function generateUniqueId() {
+    return Math.floor(100000 + Math.random() * 900000);
+  }
 
   function deleteToLocation(index) {
     setToLocations((prevLocations) => {
@@ -138,46 +177,17 @@ export default function ProfileForm() {
       return newLocations;
     });
   }
-  const initialFormState = {
-    orderNumber: 0,
-    date: "",
-    vehicleRequiredDate: "",
-    consignorName: "",
-    consignorMobileNumber: "",
-    loadingPoints: "",
-    consigneeName: "",
-    consigneeMobileNumber: "",
-    unloadingPoints: "",
-    way: "",
-    material: "",
-    quantity: "",
-    quantityUnit: "",
-    vehicleType: "",
-    actualWeight: "",
-    chargedWeight: "",
-    rateAsPer: "",
-    rate: "",
-    rateUnit: "",
-    partyBhara: "",
-    hideBhara: "",
-    paymentLiability: "",
-    billTo: "",
-    paymentTerm: "",
-    advanceAmount: 0,
-    balanceAmount: 0,
-    payMode: "",
-    transactionId: "",
-    remarks: "",
-    additionalCharges: "",
-    adminId: '',
-  };
+ 
 
   const { reset, ...form } = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: initialFormState,
   });
 
-  async function MyHandleSubmit(value) {
+ 
+
+  async function MyHandleSubmit(value ) {
+  
     setIsLoading(true);
     try {
      
@@ -717,7 +727,9 @@ const displayToast = (title, action, description = "") => {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" 
+                        
+                          {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>

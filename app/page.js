@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const SignIn = () => {
+  const [hide , setHide] = useState(true)
   const { user, setUser } = useContext(UserContext);
 
   const router = useRouter();
@@ -117,15 +118,22 @@ const SignIn = () => {
         />
 
         {/* Password */}
+        <div className="relative flex ">
+
+      
         <Input
           label="Password"
           placeholder="password"
           id="password"
-          type="password"
+          type={hide ? "password":'text'}
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <span className="absolute top-1/2 transform -translate-y-1/2 right-2"
+        onClick={()=>setHide(!hide)}
+        > {hide ? "Show" : "Hide"}</span>
+        </div>
         {/* Checkbox */}
         <div className="mb-4 flex items-center justify-end px-2">
           <Link
