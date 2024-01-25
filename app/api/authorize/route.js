@@ -9,24 +9,6 @@ export async function POST(req, res) {
     const { _id,id } = await req.json();
 
     const owner = await user.findOne({ _id });
-
-      // if (!owner.isOwner && owner.isAdmin) {
-      //     console.log("cool",owner);
-      // return Response.json({
-      //   message: "You're not allowed here",
-      //   status: 400,
-      //   contentType: "application/json",
-      // });
-      // }
-      
-
-      // if ((owner.isAdmin) & (!owner.isOwner)) {
-      //   return Response.json({
-      //     message: "You're not allowed to authorize anyone",
-      //     status: 400,
-      //     contentType: "application/json",
-      //   });   
-      // }
       
     if (!owner) {
       return Response.json(

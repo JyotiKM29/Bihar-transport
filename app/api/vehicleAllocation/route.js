@@ -9,19 +9,19 @@ export async function POST(req, res) {
 
     try {
         await connectDB();
-        const { bookingId, vehicleId, adminId } = await req.json();
+        const { orderNo, vehicleNo, adminId } = await req.json();
 
         const admin = await user.findById(adminId);
         if (!admin) {
             return Response.json({ message: "Admin not found" }, { status: 404 });
         }
 
-        const existingVehicle = await vehicle.findById(vehicleId);
+        const existingVehicle = await vehicle.findOne({vehicleNo:vehicleNo});
 
         if (!existingVehicle) {
             return Response.json({ message: "Vehicle not found" }, { status: 404 });
         }
-        const existingBooking = await Booking.findById(bookingId);
+        const existingBooking = await Booking.findOne({orderNumber:orderNo});
 
         if (!existingBooking) {
             return Response.json({ message: "Booking not found" }, { status: 404 });
@@ -35,9 +35,14 @@ export async function POST(req, res) {
             );
         }
 
-        if (existingBooking.allotedVehicle.length > 0) {
-            
-            return Response.json({ message: "Booking is already alloted" }, { status: 400 });
+        if (
+          existingBooking.allotedVehicle.length && existingBooking.allotedVehicle
+            .length > 0
+        ) {
+          return Response.json(
+            { message: "Booking is already alloted" },
+            { status: 400 },
+          );
         };
 
 
@@ -57,7 +62,7 @@ export async function POST(req, res) {
 
         const newOrder = new Order({
           booking: {
-            id: bookingId,
+            id: existingBooking._id,
             date: existingBooking.vehicleRequiredDate,
             client: {
               name: existingBooking.consignorName,
@@ -67,7 +72,7 @@ export async function POST(req, res) {
             unloadingPoints: existingBooking.unloadingPoints,
           },
           vehicle: {
-            id: vehicleId,
+            id: existingVehicle._id,
             number: existingVehicle.vehicleNo,
             driver: {
               name: existingVehicle.driver.name,
@@ -102,7 +107,7 @@ export async function POST(req, res) {
         existingVehicle.allotmentStatus = true;
 
         existingVehicle.bookedBy.push({
-          bookingID: bookingId,
+          bookingID: existingBooking._id,
           bookingOwner: existingBooking.consignorName,
           date: Date.now(),
           status:"Initialized",
@@ -110,7 +115,7 @@ export async function POST(req, res) {
 
         existingBooking.status = "Initialized";
         existingBooking.allotedVehicle.push({
-          vehicleId: vehicleId,
+          vehicleId: existingVehicle._id,
             vehicleOwner: existingVehicle.owner.name,
             vehicleDriver: existingVehicle.driver.name,
             vehicleNo: existingVehicle.vehicleNo,
