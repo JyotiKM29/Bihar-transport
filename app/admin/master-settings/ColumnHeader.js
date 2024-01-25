@@ -82,66 +82,72 @@ export default function ColumnHeader() {
         enableHiding: false,
       },
 
-      // Booking Id , Consignee NAme , Status (payment)
-      // Due ammount , paid Account , Total , invoice , Mobile
     {
-        accessorKey: "orderNumber",
-        header: "Booking ID",
+        accessorKey: "name",
+        header: "Name",
     },
     {
-        accessorKey: "consigneeName",
-        header: "Consignee Name",
+        accessorKey: "email",
+        header: "Email",
     },
     {
-        accessorKey: "consigneeMobileNumber",
-        header: "consignee Mobile No",
+        accessorKey: "isemailVerified",
+        header: "Email Verified",
     },
     {
-        accessorKey: "paymentclear",
-        header: "Payment Status",
+        accessorKey: "phone",
+        header: "Phone No",
     },
 
     {
-        accessorKey: "advanceAmount",
-        header: "Paid Amount",
-    },
-    {
-        accessorKey: "balanceAmount",
-        header: " Due Amount",
-    },
-    {
-        accessorKey: "partyBhara",
-        header: "Total Amount",
-    },
-
-  
-      {
-        id: "actions",
-        enableHiding: false,
-        cell: ({ row }) => {
-          return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
-                  <DotsHorizontalIcon className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                <Link href={`/admin/booking/personal/${row.original._id}`}>
-                    View Detail
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>Print Data</DropdownMenuItem>
-               
-              </DropdownMenuContent>
-            </DropdownMenu>
-          );
-        },
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <DotsHorizontalIcon className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              
+              
+             
+              <DropdownMenuItem>
+                <Dialog>
+                  <DialogTrigger onClick={(e) => e.stopPropagation()}>
+                    Delete Data
+                  </DialogTrigger>
+                  <DialogContent className="flex flex-col justify-center">
+                    <DialogHeader>
+                      <DialogTitle>Confirm Delete ?</DialogTitle>
+                    </DialogHeader>
+                    <DialogDescription>
+                      This data row will delete permanently from the database
+                      and you cannot access it again.
+                    </DialogDescription>
+                    <DialogFooter>
+                      <Button
+                        type="submit"
+                        onClick={() => {
+                          deleteData(row.original._id, user);
+                        }}
+                      >
+                        Confirm
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
       },
+    },
+  
+     
     ]);
   }, [user]);
 

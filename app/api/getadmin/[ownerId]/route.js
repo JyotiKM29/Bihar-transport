@@ -10,14 +10,14 @@ export async function GET(req, context) {
     const { params } = context;
 
     // check if owner exists
-    const owner = await user.findById(params.ownerId);
+        const owner = await user.findOne({ _id: params.ownerId });
 
     if (!owner.isOwner) {
       return Response.json({ message: "Owner not found" }, { staus: 400 });
     }
 
-    const users = await user.find();
-    return Response.json({ admin }, { staus: 200 });
+    const users = await user.find({}, { password: 0, loginHistory: 0 });
+    return Response.json({ users }, { staus: 200 });
     } catch (error) {
         
         console.log(error);
@@ -28,5 +28,4 @@ export async function GET(req, context) {
 
 export function POST(req, context) {
     return Response.json({ message: "Method not allowed" },{staus:400});
-}   
-
+}
