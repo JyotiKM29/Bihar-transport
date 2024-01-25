@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { DotsHorizontalIcon } from "@radix-ui/react-icons"
-import { Button } from "../../components/ui/button"
-import { Checkbox } from "../../components/ui/checkbox"
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { Button } from "../../components/ui/button";
+import { Checkbox } from "../../components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,8 +10,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+} from "../../components/ui/dropdown-menu";
 
-} from "../../components/ui/dropdown-menu"
 import {
   Dialog,
   DialogContent,
@@ -20,45 +20,44 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../components/ui/dialog"
+} from "../../components/ui/dialog";
 
-import Link from "next/link"
-import { useContext, useEffect, useState } from "react"
-import { UserContext } from "../../context/UserContextProvider"
-
-
-
-
-
+import Link from "next/link";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../context/UserContextProvider";
+import { Input } from "../../components/ui/input";
 
 export default function ColumnHeader() {
   const { user } = useContext(UserContext);
   const [columns, setColumns] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [vehicleIds, setVehicleIds] = useState([]);
+  const [vehicleData, setVehicleData] = useState();
 
-  
-  
+  const [searchInput, setSearchInput] = useState("");
+
 
   useEffect(() => {
     async function deleteData(id) {
       console.log(user);
-       console.log("id:", id);
-       try {
-         const response = await fetch(`/api/deletebooking`, {
-           method: "DELETE",
-           body: JSON.stringify({ _id: id, adminId: user._id }),
-         });
-         console.log(response)
-   
-         if (!response.ok) {
-           throw new Error(`HTTP error! status: ${response.status}`);
-         }
-       } catch (error) {
-         console.error("There was a problem with the delete request.", error);
-       }
-     }
+      console.log("id:", id);
+      try {
+        const response = await fetch(`/api/deletebooking`, {
+          method: "DELETE",
+          body: JSON.stringify({ _id: id, adminId: user._id }),
+        });
+        console.log(response);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+      } catch (error) {
+        console.error("There was a problem with the delete request.", error);
+      }
+    }
 
     setColumns([
-      {     
+      {
         id: "select",
         header: ({ table }) => (
           <Checkbox
@@ -66,7 +65,9 @@ export default function ColumnHeader() {
               table.getIsAllPageRowsSelected() ||
               (table.getIsSomePageRowsSelected() && "indeterminate")
             }
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
             aria-label="Select all"
           />
         ),
@@ -80,49 +81,48 @@ export default function ColumnHeader() {
         enableSorting: false,
         enableHiding: false,
       },
-    {
+      {
         accessorKey: "orderNumber",
         header: "Order Id",
-    },
-
-    {
-      accessorKey: "vehicleRequiredDate",
-      header: "Date Req",
-      cell: ({ row }) => {
-        const date = new Date(row.original.vehicleRequiredDate);
-        return date.toLocaleDateString();
       },
-    },
-    
-  {
-    accessorKey:"consignorName",
-    header: "Consignor",
-  },
 
-  {
-    accessorKey:"consigneeName",
-    header: "Consignee",
-  },
-  {
-    accessorKey:'loadingPoints',
+      {
+        accessorKey: "vehicleRequiredDate",
+        header: "Date Req",
+        cell: ({ row }) => {
+          const date = new Date(row.original.vehicleRequiredDate);
+          return date.toLocaleDateString();
+        },
+      },
 
-    header: "From"
-  },
-  {
-    accessorKey:'unloadingPoints',
+      {
+        accessorKey: "consignorName",
+        header: "Consignor",
+      },
 
-    header: "To"
-  },
-  
- 
-  {
-    accessorKey:"actualWeight",
-    header: "Weight",
-  },
-  {
-    accessorKey:"createdBy.name",
-    header: "Created By",
-  },
+      {
+        accessorKey: "status",
+        header: "status",
+      },
+      {
+        accessorKey: "loadingPoints",
+
+        header: "From",
+      },
+      {
+        accessorKey: "unloadingPoints",
+
+        header: "To",
+      },
+
+      {
+        accessorKey: "actualWeight",
+        header: "Weight",
+      },
+      {
+        accessorKey: "createdBy.name",
+        header: "Created By",
+      },
       {
         id: "actions",
         enableHiding: false,
@@ -143,7 +143,15 @@ export default function ColumnHeader() {
                     View Detail
                   </Link>
                 </DropdownMenuItem>
+
                 <DropdownMenuItem>Print Data</DropdownMenuItem>
+                <DropdownMenuItem>
+                <Link 
+               href={`/admin/booking/${row.original.orderNumber}`}
+                >
+                   Allocation Vehicle
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Dialog>
                     <DialogTrigger onClick={(e) => e.stopPropagation()}>
@@ -154,15 +162,17 @@ export default function ColumnHeader() {
                         <DialogTitle>Confirm Delete ?</DialogTitle>
                       </DialogHeader>
                       <DialogDescription>
-                        This data row will delete permanently from the database and you cannot access it again.
+                        This data row will delete permanently from the database
+                        and you cannot access it again.
                       </DialogDescription>
                       <DialogFooter>
-                        <Button type="submit" onClick={() => {
-    
-    deleteData(row.original._id, user);
-  }}>
+                        <Button
+                          type="submit"
+                          onClick={() => {
+                            deleteData(row.original._id, user);
+                          }}
+                        >
                           Confirm
-                      
                         </Button>
                       </DialogFooter>
                     </DialogContent>
@@ -178,6 +188,4 @@ export default function ColumnHeader() {
 
   return columns;
 }
-
-
 
