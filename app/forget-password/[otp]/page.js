@@ -8,6 +8,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 
 
 const ResetPassword = ({params}) => {
+  const [hide , setHide] = useState(true)
   const resetToken = params.otp;
   const router = useRouter();
   const { toast } = useToast();
@@ -15,7 +16,7 @@ const ResetPassword = ({params}) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  console.log('love',resetToken)
+  // console.log('love',resetToken)
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
@@ -88,26 +89,43 @@ const ResetPassword = ({params}) => {
       <p className="mb-4 ml-1 text-base text-gray-600">
        Please, Enter your email here
       </p>
- {/* Password */}
-       <Input
+
+
+      <div className="relative flex ">
+      <Input
           label="Password"
           placeholder="password"
          
-          type="password"
+          type={hide ? "password" : "text"}
           required
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
         />
- {/* Confirm password */}
+          <span
+            className="absolute right-2 top-1/2 -translate-y-1/2 transform"
+            onClick={() => setHide(!hide)}
+          >
+            {hide ? "Show" : "Hide"}
+          </span>
+        </div>
+        <div className="relative flex ">
         <Input
           label="Confirm Password"
           placeholder="confirm password"
          
-          type="password"
+          type={hide ? "password" : "text"}
           required
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
+          <span
+            className="absolute right-2 top-1/2 -translate-y-1/2 transform"
+            onClick={() => setHide(!hide)}
+          >
+            {hide ? "Show" : "Hide"}
+          </span>
+        </div>
+      
 
       
     

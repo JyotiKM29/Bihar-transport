@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const SignIn = () => {
-  const [hide , setHide] = useState(true)
+  const [hide, setHide] = useState(true);
   const { user, setUser } = useContext(UserContext);
 
   const router = useRouter();
@@ -19,16 +19,14 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
- 
-
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
-  
+
     try {
       let ip = null;
       let location = null;
-  
+
       try {
         const response = await fetch("https://ipinfo.io?token=e5af198d08144e", {
           method: "GET",
@@ -36,7 +34,7 @@ const SignIn = () => {
             "Content-Type": "application/json",
           },
         });
-  
+
         if (response.ok) {
           const data = await response.json();
           ip = data.ip || null;
@@ -47,7 +45,7 @@ const SignIn = () => {
       } catch (error) {
         console.error("Error fetching IP:", error.message);
       }
-  
+
       const result = await fetch("/api/login", {
         method: "POST",
         headers: {
@@ -61,14 +59,14 @@ const SignIn = () => {
           location,
         }),
       });
-  
+
       const newResult = await result.json();
-  
+
       if (result.ok) {
         setLoading(false);
         displayToast("Successfully login ", "✅");
         const userDetail = newResult.user;
-        localStorage.setItem('userInfo', JSON.stringify(userDetail));
+        localStorage.setItem("userInfo", JSON.stringify(userDetail));
         setUser(userDetail);
 
         router.push("/admin");
@@ -83,7 +81,6 @@ const SignIn = () => {
       displayToast("Error", "❌", error.message);
     }
   }
-  
 
   const displayToast = (title, action, description = "") => {
     toast({
@@ -119,20 +116,21 @@ const SignIn = () => {
 
         {/* Password */}
         <div className="relative flex ">
-
-      
-        <Input
-          label="Password"
-          placeholder="password"
-          id="password"
-          type={hide ? "password":'text'}
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <span className="absolute top-1/2 transform -translate-y-1/2 right-2"
-        onClick={()=>setHide(!hide)}
-        > {hide ? "Show" : "Hide"}</span>
+          <Input
+            label="Password"
+            placeholder="password"
+            id="password"
+            type={hide ? "password" : "text"}
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <span
+            className="absolute right-2 top-1/2 -translate-y-1/2 transform"
+            onClick={() => setHide(!hide)}
+          >
+            {hide ? "Show" : "Hide"}
+          </span>
         </div>
         {/* Checkbox */}
         <div className="mb-4 flex items-center justify-end px-2">
