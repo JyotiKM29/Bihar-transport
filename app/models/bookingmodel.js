@@ -94,6 +94,7 @@ const bookingSchema = new mongoose.Schema(
         date: { type: Date },
       },
     ],
+    invoice:[],
     createdBy: {
       name: { type: String },
       adminId: { type: String },
