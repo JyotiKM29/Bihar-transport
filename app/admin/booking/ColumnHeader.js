@@ -144,7 +144,14 @@ export default function ColumnHeader() {
                   </Link>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem>Print Data</DropdownMenuItem>
+               
+                <DropdownMenuItem>
+                <Link 
+               href={`/admin/booking/sendInvoice/${row.original._id}`}
+                >
+                   Send Invoice
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem>
                 <Link 
                href={`/admin/booking/${row.original.orderNumber}`}
