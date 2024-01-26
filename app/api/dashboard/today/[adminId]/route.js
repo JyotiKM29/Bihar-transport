@@ -56,7 +56,7 @@ export async function GET(req, context) {
       (item) => item.status === "delevered",
     ).length;
     data.pendingPOD = booking.filter(
-      (item) => item.status === "Pending",
+      (item) => item.balanceAmount !== 0,
     ).length;
 
     data.invoice = booking.length;

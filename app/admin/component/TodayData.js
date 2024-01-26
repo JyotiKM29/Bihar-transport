@@ -49,7 +49,8 @@ const TodayData = () => {
   const orderDilevered = Math.round((data.orderDelivered / data.totalOrder) * 100);
   const pendingPOD = Math.round((data.pendingPOD / data.totalOrder) * 100);
   const invoice = Math.round((data.invoice / data.totalOrder) * 100);
-  const pendingInvoice = Math.round((data.pendingPOD / data.totalOrder) * 100);
+  const pendingInvoice = Math.round((data.pendingInvoice / data.totalOrder) * 100);
+  const generatedInvoice = Math.round((data.generatedInvoice / data.totalOrder) * 100);
 
   
 
@@ -248,14 +249,14 @@ const TodayData = () => {
               </div>
               <div className="flex  h-full w-full  flex-col justify-between rounded-3xl bg-white p-4 shadow-md lg:px-6 lg:py-4">
                 <div className=" flex w-full justify-between ">
-                  <h2 className="text-4xl md:text-6xl"> 3</h2>
+                  <h2 className="text-4xl md:text-6xl">{data.generatedInvoice}</h2>
                   <div>
                     <h4 className="text-lg text-slate-400">Generated Invoice</h4>
-                    <h2 className="text-right text-lg text-blue-700">10%</h2>
+                      <h2 className="text-right text-lg text-blue-700">{generatedInvoice}%</h2>
                   </div>
                 </div>
 
-                <Progress value={10} />
+                <Progress value={pendingInvoice} />
               </div>
             </div>
             <div className="grid  w-full grid-rows-2 gap-6 md:w-3/5">
