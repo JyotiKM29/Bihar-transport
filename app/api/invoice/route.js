@@ -163,14 +163,8 @@ export async function POST(req, res) {
       const info = await transport.sendMail(mailOptions);
       log("Message sent: %s", info.messageId);
       // Ensure existingBooking.invoice is initialized as an array
-      existingBooking.invoice = existingBooking.invoice || [];
-
-      // Then push the new object into the array
-      existingBooking.invoice.push({
-        sentOn: email,
-        name: name,
-        // ... (other properties)
-      });
+        existingBooking.invoice = existingBooking.invoice || [];
+        log(existingBooking.invoice);
 
       existingBooking.invoice.push(
         {
@@ -191,11 +185,12 @@ export async function POST(req, res) {
           timestamps: Date.now(),
         },
       );
-
-      existingBooking.save();
+log(existingBooking.invoice)
+        const savedBooking = await existingBooking.save();
+        log(savedBooking);
 
       return Response.json(
-        { message: "Invoice sent to the email" },
+        { message: "Invoice sent to the email", savedBooking },
         { status: 200 },
       );
     } catch (error) {

@@ -4,6 +4,7 @@ import Vehicle from "../../../../models/vehicleModel";
 import Order from "../../../../models/orderModel";
 import connnectDB from "../../../../middleware/connectDB";
 import { log } from "console";
+import { exists } from "fs";
 
 export async function GET(req, context) {
   try {
@@ -27,6 +28,7 @@ export async function GET(req, context) {
       ewayWayBillExpiry: 0,
       invoice: 0,
       pendingInvoice: 0,
+      generatedInvoice:0,
       advanceAmount: 0,
       totalAmount: 0,
       advanceBooking: 0,
@@ -56,10 +58,16 @@ export async function GET(req, context) {
     data.pendingPOD = booking.filter(
       (item) => item.status === "Pending",
     ).length;
-    data.invoice = booking.filter((item) => item.status === "Pending").length;
-    data.pendingInvoice = booking.filter(
-      (item) => item.status === "Pending",
-    ).length;
+
+    data.invoice = booking.length;
+data.generatedInvoice = await Booking.find({
+  $and: [
+    { invoice: { $exists: true } },
+    { $expr: { $gt: [{ $size: "$invoice" }, 0] } },
+  ],
+}).countDocuments();
+    
+    data.pendingInvoice = booking.length - data.generatedInvoice;
 
     booking.forEach((item) => {
       data.advanceAmount += item.advanceAmount;
