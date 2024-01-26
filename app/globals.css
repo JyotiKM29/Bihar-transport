@@ -70,3 +70,42 @@ input[type=number]::-webkit-outer-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+
+/* For Webkit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 6px; 
+  height: 6px;
+
+  
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f100;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(111, 143, 210);
+  border-radius: 8px;
+
+}
+
+/* For Firefox */
+scrollbar-width: thin;
+scrollbar-color: #888 #f1f1f1;
+
+/* For Internet Explorer and Edge */
+-ms-overflow-style: none; /* Hide the default scrollbar */
+scrollbar-width: thin;
+scrollbar-color: #888 #f1f1f1;
+
+/* Add this style for Edge legacy (before Chromium-based) */
+* {
+  scrollbar-3dlight-color: #f1f1f1;
+  scrollbar-arrow-color: #888;
+  scrollbar-base-color: #f1f1f1;
+  scrollbar-darkshadow-color: #f1f1f1;
+  scrollbar-face-color: #888;
+  scrollbar-highlight-color: #888;
+  scrollbar-shadow-color: #f1f1f1;
+}
