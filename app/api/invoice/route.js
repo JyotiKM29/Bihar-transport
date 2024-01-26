@@ -14,7 +14,7 @@ export async function POST(req, res) {
 
       // check if admin exists
       const admin = await user.findOne({ _id: adminId });
-      if (!admin.isAdmin) {
+      if (!admin.isAdmin && !admin.isOwner) {
         return Response.json({ message: "Admin not found" }, { status: 400 });
       }
 

@@ -32,8 +32,10 @@ const FieldComponent = ({ label, value, show, identifier, tableId , type = 'text
   async function handleUpdate(e) {
     e.preventDefault();
 
+    console.log(tableId)
+
     try {
-      const response = await fetch("api/vehicleupdation", {
+      const response = await fetch("/api/vehicleupdation", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -78,7 +80,7 @@ const FieldComponent = ({ label, value, show, identifier, tableId , type = 'text
                     </div>
                   ) : (
                     <>
-                      <Image src={url} height={20} width={20} className='h-20 w-20' alt='img' />
+                      <Image  src={url} height={20} width={20} className='h-20 w-20' alt='img' />
                       <a href={url} download>
                         <button>Download</button>
                       </a>
