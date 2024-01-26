@@ -22,24 +22,22 @@ export async function DELETE(req, res) {
 
     if (!owner.isOwner) {
       return Response.json({
-        message: "You're not allowed to authorize anyone",
-        status: 400,
-        contentType: "application/json",
-      });
+        message: "You're not allowed to authorize anyone"
+      },{status: 400});
     }
 
     // if admin
 
     const Admin = await user.findByIdAndDelete(id); 
 
-      return Response.json({ msg: "Successfully Deleted", Admin, status: 200 });
+    return Response.json({ msg: "Successfully Deleted" }, { status: 200 });
     }
    catch (error) {
     console.log("error at forget password api route", error);
-    return Response.json({ msg: error.message, status: 404 });
+    return Response.json({ msg: error.message},{status: 404});
   }
 }
 
 export function GET(req) {
-  return Response.json({ msg: "this method is not allowed", status: 400 });
+  return Response.json({ msg: "this method is not allowed"},{status: 400});
 }
