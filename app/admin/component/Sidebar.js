@@ -112,7 +112,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="flex items-center justify-start p-7 lg:p-8">
+      <div className="flex items-center justify-start p-7 lg:p-8 ">
         <h1 className="text-md block font-bold tracking-wider md:text-lg lg:hidden lg:text-xl xl:block">
           BIHAR
           <pre className="font-normal">TRANSPORT</pre>
@@ -123,13 +123,13 @@ const Sidebar = () => {
       </div>
 
       <hr />
-      <div className="flex min-h-[87vh] flex-col justify-between">
-        <div className="flex flex-col lg:w-[12vw]">
+      <div className="flex min-h-[87vh] flex-col justify-between ">
+        <div className="flex flex-col lg:w-[13vw]">
           {iconData.map((item) => (
             <Link key={item.index} href={paths[item.index]}>
               <button
                 onClick={() => handleButtonClick(item)}
-                className={`flex w-full items-center justify-start gap-x-3 px-6 py-4 hover:bg-blue-50 active:bg-blue-50  md:gap-x-6 ${
+                className={`flex  w-full  items-center justify-start gap-x-3 px-6 py-4 hover:bg-blue-50 active:bg-blue-50  md:gap-x-6 ${
                   selectedButton === item.index
                     ? "rounded-md border-r-4 border-blue-700 lg:border-r-8"
                     : ""
