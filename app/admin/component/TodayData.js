@@ -8,37 +8,39 @@ import { FaClock } from "react-icons/fa";
 import { UserContext } from "../../context/UserContextProvider";
 
 const TodayData = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { user } = useContext(UserContext);
   const [data, setData] = useState([]);
 
-  async function handleData() {
-    try {
-      setLoading(true);
-      const response = await fetch(`api/dashboard/today/${user._id}`);
-      const result = await response.json();
+ 
 
-      console.log(result);
-      setData(result.data);
-      console.log(data);
-
-      if (response.ok) {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`api/dashboard/today/${user._id}`);
+        const result = await response.json();
+  
+        console.log(result);
+        setData(result.data);
+        console.log(data);
+  
+        if (response.ok) {
+          setLoading(false);
+        } else {
+          console.log("Error while fetching data");
+        }
+      } catch (error) {
         setLoading(false);
-        console.log("Error while fetching data");
+        console.log(error);
       }
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
-  }
+    };
+  
+    fetchData();
+  }, [user?._id]);
+  
 
-  useEffect(() => {
-    handleData();
-  }, []);
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+ 
 
   const pendingOrder = Math.round((data.pendingOrder / data.totalOrder) * 100);
   const dispatchedOrder = Math.round((data.orderDispatched / data.totalOrder) * 100);
