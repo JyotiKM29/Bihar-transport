@@ -262,7 +262,7 @@ const TodayData = () => {
             <div className="grid  w-full grid-rows-2 gap-6 md:w-3/5">
               <div className="flex rounded-3xl border bg-white p-4 shadow-md   lg:p-7">
                 <div className="flex h-full w-2/3 flex-col justify-between">
-                  <p className="text-xl text-slate-400">Balance Amount</p>
+                  <p className="text-xl text-slate-400">Advance Amount</p>
                   <h2 className="text-4xl 2xl:text-6xl">
                     {data.advanceAmount}
                   </h2>
