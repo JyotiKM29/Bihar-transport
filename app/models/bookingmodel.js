@@ -31,6 +31,15 @@ import mongoose from "mongoose";
 //   amount: { type: Number, required: true },
 // });
 
+const additionalChargeSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  rate: { type: Number, },
+  qty: { type: Number, default: 1 },
+  amount: { type: Number, required: true },
+  enabled: { type: Boolean, default: true },
+});
+
+
 const bookingSchema = new mongoose.Schema(
   {
     orderNumber: { type: Number, required: true },
@@ -76,11 +85,22 @@ const bookingSchema = new mongoose.Schema(
     payMode: { type: String },
     transactionId: { type: String },
     remarks: { type: String },
-    additionalCharges: { type: String },
+    // additionalCharges: { type: String },
+    additionalCharges: {
+      enabled: { type: Boolean, default: false },
+      charges: [additionalChargeSchema],
+    },
     status: {
-      type: String,
+      type: String, 
       default: "Pending",
-      enum: ["Pending", "Initialized", "Dispatched", "In Transit", "delevered", "cancelled"],
+      enum: [
+        "Pending",
+        "Initialized",
+        "Dispatched",
+        "In Transit",
+        "delevered",
+        "cancelled",
+      ],
     },
     isUrgent: { type: Boolean, default: false },
     allotedVehicle: [
@@ -94,7 +114,7 @@ const bookingSchema = new mongoose.Schema(
         date: { type: Date },
       },
     ],
-    invoice:[],
+    invoice: [],
     createdBy: {
       name: { type: String },
       adminId: { type: String },
