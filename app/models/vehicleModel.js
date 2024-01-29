@@ -95,6 +95,56 @@ const validateRcPhoto = function (value) {
   return typeof value === "string" && value.trim().length > 0;
 };
 
+
+const allotmentSchema = new mongoose.Schema(
+  {
+    bookingId:{type:String,required:true},
+    vehicleType: { type: String, required: true },
+    ownerDetails: {
+      ownerName: { type: String, required: true },
+      ownerMobNo: { type: Number, required: true },
+    },
+    arrangedBy: { type: String, required: true },
+    transporterDetails: {
+      personName: { type: String },
+      transporterMobNo: { type: Number },
+    },
+    ledgerBalance: { type: String }, // Assuming it can be both debit or credit
+
+    rateAsPer: {
+      type: String,
+      enum: ["fixed", "weight", "distance"],
+      required: true,
+    },
+    rate: { type: String }, // Show only if rateAsPer is not "fixed"
+    driverBhara: { type: Number },
+    commission: { type: Number },
+    netBhara: { type: Number }, // Calculated as (Driver Bhara - Commission)
+
+    paymentLiability: {
+      type: String,
+      enum: ["Consignor", "Consignee", "Third Party"],
+      required: true,
+    },
+    billTo: {
+      type: String,
+      enum: ["Consignor", "Consignee", "Third Party"],
+      required: function () {
+        return this.paymentLiability === "Third Party";
+      },
+    },
+    ledgerBalanceParty: { type: String }, // Assuming it can be both debit or credit
+
+    remarks: { type: String },
+  },
+  { _id: false }, // To exclude this subdocument from having its own _id
+);
+
+
+
+
+
+
 const vehicleSchema = new mongoose.Schema(
   {
     vehicleNo: { type: String, required: true },
@@ -115,8 +165,8 @@ const vehicleSchema = new mongoose.Schema(
     nationalPermit: { type: Boolean },
     nationalPermitValidUpTo: { type: Date, required: true },
 
-    allotmentStatus: { type:Boolean, default:false},
-    rcPhoto:  {
+    allotmentStatus: { type: Boolean, default: false },
+    rcPhoto: {
       type: [
         {
           type: String,
@@ -129,14 +179,7 @@ const vehicleSchema = new mongoose.Schema(
       },
     },
     Remark: { type: String, required: true },
-    bookedBy: [
-      {
-        bookingID: { type: String },
-        bookingOwner: { type: String },
-        status:{type:String},
-        date: { type: Date },
-      },
-    ],
+    bookedBy: [allotmentSchema],
     // owner Details
     owner: ownerSchema,
     driver: driverSchema,
