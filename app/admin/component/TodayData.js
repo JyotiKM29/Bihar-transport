@@ -42,15 +42,15 @@ const TodayData = () => {
 
  
 
-  const pendingOrder = Math.round((data.pendingOrder / data.totalOrder) * 100);
-  const dispatchedOrder = Math.round((data.orderDispatched / data.totalOrder) * 100);
-  const lorryInCampus = Math.round((data.lorryInCampus / data.totalOrder) * 100);
-  const inTransit = Math.round((data.inTransit / data.totalOrder) * 100);
-  const orderDilevered = Math.round((data.orderDelivered / data.totalOrder) * 100);
-  const pendingPOD = Math.round((data.pendingPOD / data.totalOrder) * 100);
-  const invoice = Math.round((data.invoice / data.totalOrder) * 100);
-  const pendingInvoice = Math.round((data.pendingInvoice / data.totalOrder) * 100);
-  const generatedInvoice = Math.round((data.generatedInvoice / data.totalOrder) * 100);
+  const pendingOrder = Math.round((data?.pendingOrder / data?.totalOrder) * 100);
+  const dispatchedOrder = Math.round((data?.orderDispatched / data?.totalOrder) * 100);
+  const lorryInCampus = Math.round((data?.lorryInCampus / data?.totalOrder) * 100);
+  const inTransit = Math.round((data?.inTransit / data?.totalOrder) * 100);
+  const orderDilevered = Math.round((data?.orderDelivered / data?.totalOrder) * 100);
+  const pendingPOD = Math.round((data?.pendingPOD / data?.totalOrder) * 100);
+  const invoice = Math.round((data?.invoice / data?.totalOrder) * 100);
+  const pendingInvoice = Math.round((data?.pendingInvoice / data?.totalOrder) * 100);
+  const generatedInvoice = Math.round((data?.generatedInvoice / data?.totalOrder) * 100);
 
   
 
@@ -85,7 +85,7 @@ const TodayData = () => {
                   Pending Order
                 </p>
                 <h2 className="text-semiBold text-6xl lg:text-5xl ">
-                  {data.pendingOrder}
+                  {data?.pendingOrder}
                 </h2>
               </div>
               <div className=" flex-grow-1 h-full w-3/5 ">
@@ -101,7 +101,7 @@ const TodayData = () => {
                   Dispatched Order
                 </p>
                 <h2 className="text-semiBold text-6xl lg:text-5xl ">
-                  {data.orderDispatched}
+                  {data?.orderDispatched}
                 </h2>
               </div>
               <div className=" flex-grow-1 h-full w-3/5 ">
@@ -117,7 +117,7 @@ const TodayData = () => {
                   Lorry In Campus
                 </p>
                 <h2 className="text-semiBold text-6xl lg:text-5xl ">
-                  {data.lorryInCampus}
+                  {data?.lorryInCampus}
                 </h2>
               </div>
               <div className=" flex-grow-1 h-full w-3/5 ">
@@ -133,7 +133,7 @@ const TodayData = () => {
                   In Transit
                 </p>
                 <h2 className="text-semiBold text-6xl lg:text-5xl ">
-                  {data.inTransit}
+                  {data?.inTransit}
                 </h2>
               </div>
               <div className=" flex-grow-1 h-full w-3/5 ">
@@ -149,7 +149,7 @@ const TodayData = () => {
                   Order Delivered
                 </p>
                 <h2 className="text-semiBold text-6xl lg:text-5xl ">
-                  {data.orderDelivered}
+                  {data?.orderDelivered}
                 </h2>
               </div>
               <div className=" flex-grow-1 h-full w-3/5 ">
@@ -165,7 +165,7 @@ const TodayData = () => {
                   Pending POD
                 </p>
                 <h2 className="text-semiBold text-6xl lg:text-5xl ">
-                  {data.pendingPOD}
+                  {data?.pendingPOD}
                 </h2>
               </div>
               <div className=" flex-grow-1 h-full w-3/5 ">
@@ -184,7 +184,7 @@ const TodayData = () => {
             <div className="flex flex-col justify-between rounded-3xl border bg-gradient-to-t from-[#0906b7] to-blue-500 p-4 text-white shadow-md lg:p-7">
               <p className="text-2xl font-light">Total Order</p>
               <h4 className="font-semiBold  text-center text-8xl xl:text-7xl">
-                {data.totalOrder}
+                {data?.totalOrder}
               </h4>
               <FiBarChart className="relative h-12 w-12 self-end" />
             </div>
@@ -198,7 +198,7 @@ const TodayData = () => {
               </div>
 
               <h4 className="text-bold text-center text-8xl  xl:text-6xl">
-                {data.ewayWayBillExpiry}
+                {data?.ewayWayBillExpiry}
               </h4>
 
               <FaClock className="h-12  self-end fill-blue-700" size={20} />
@@ -210,7 +210,7 @@ const TodayData = () => {
                 className="self-end text-7xl xl:text-5xl"
                 style={{ fontWeight: "300" }}
               >
-                <span style={{ fontWeight: "500" }}>{data.advanceBooking}</span>
+                <span style={{ fontWeight: "500" }}>{data?.advanceBooking}</span>
                 /10
               </h4>
             </div>
@@ -224,7 +224,7 @@ const TodayData = () => {
             <div className=" grid w-full grid-rows-3 gap-6  md:w-2/5">
               <div className="flex  h-full w-full  flex-col justify-between rounded-3xl bg-white p-4 shadow-md lg:px-6 lg:py-4">
                 <div className=" flex w-full justify-between ">
-                  <h2 className="text-4xl md:text-6xl">{data.invoice}</h2>
+                  <h2 className="text-4xl md:text-6xl">{data?.invoice}</h2>
                   <div>
                     <h4 className="text-lg text-slate-400">Invoice</h4>
                     <h2 className="text-right text-lg text-blue-700">
@@ -237,7 +237,7 @@ const TodayData = () => {
               <div className="flex  h-full w-full  flex-col justify-between rounded-3xl bg-white p-4 shadow-md lg:px-6 lg:py-4">
                 <div className=" flex w-full justify-between ">
                   <h2 className="text-4xl md:text-6xl">
-                    {data.pendingInvoice}
+                    {data?.pendingInvoice}
                   </h2>
                   <div>
                     <h4 className="text-lg text-slate-400">Pending Invoice</h4>
@@ -249,7 +249,7 @@ const TodayData = () => {
               </div>
               <div className="flex  h-full w-full  flex-col justify-between rounded-3xl bg-white p-4 shadow-md lg:px-6 lg:py-4">
                 <div className=" flex w-full justify-between ">
-                  <h2 className="text-4xl md:text-6xl">{data.generatedInvoice}</h2>
+                  <h2 className="text-4xl md:text-6xl">{data?.generatedInvoice}</h2>
                   <div>
                     <h4 className="text-lg text-slate-400">Generated Invoice</h4>
                       <h2 className="text-right text-lg text-blue-700">{generatedInvoice}%</h2>
@@ -264,7 +264,7 @@ const TodayData = () => {
                 <div className="flex h-full w-2/3 flex-col justify-between">
                   <p className="text-xl text-slate-400">Advance Amount</p>
                   <h2 className="text-4xl 2xl:text-6xl">
-                    {data.advanceAmount}
+                    {data?.advanceAmount}
                   </h2>
                 </div>
                 <div className="flex h-full w-1/3 items-center justify-center">
@@ -279,7 +279,7 @@ const TodayData = () => {
               <div className="flex rounded-3xl border bg-white p-4 shadow-md   lg:p-7">
                 <div className="flex h-full w-2/3 flex-col justify-between">
                   <p className="text-xl text-slate-400">Total Amount</p>
-                  <h2 className="text-4xl 2xl:text-6xl">{data.totalAmount}</h2>
+                  <h2 className="text-4xl 2xl:text-6xl">{data?.totalAmount}</h2>
                 </div>
                 <div className="flex h-full w-1/3 items-center justify-center">
                   <div className="flex h-[20vw] w-[20vw] items-center  justify-center rounded-full border bg-blue-100 md:h-[15vw] md:w-[15vw] xl:h-[8vw] xl:w-[8vw] 2xl:h-[6vw] 2xl:w-[6vw]">
