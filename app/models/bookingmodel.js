@@ -31,9 +31,17 @@ import mongoose from "mongoose";
 //   amount: { type: Number, required: true },
 // });
 
+// const additionalChargeSchema = new mongoose.Schema({
+//   name: { type: String, required: true },
+//   rate: { type: Number, },
+//   qty: { type: Number, default: 1 },
+//   amount: { type: Number, required: true },
+//   enabled: { type: Boolean, default: true },
+// });
+
 const additionalChargeSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  rate: { type: Number, },
+  rate: { type: Number },
   qty: { type: Number, default: 1 },
   amount: { type: Number, required: true },
   enabled: { type: Boolean, default: true },
