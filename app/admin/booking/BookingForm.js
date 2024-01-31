@@ -1,7 +1,8 @@
 "use client";
-import { GrClose } from "react-icons/gr";
 import { zodResolver } from "@hookform/resolvers/zod";
+import FieldForm from "./FieldForm";
 import { useForm } from "react-hook-form";
+import LocationAdd from "./LocationAdd";
 import {
   Form,
   FormControl,
@@ -10,13 +11,26 @@ import {
   FormLabel,
   FormMessage,
 } from "../../components/ui/form";
-
+import SearchInput from "./SearchInput";
 import * as z from "zod";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../context/UserContextProvider";
 import { useToast } from "../../components/ui/use-toast";
+
+const chargersSchema = z.object({
+  name: z.string(),
+  amount: z.number(),
+  rate: z.number(),
+  qty: z.number(),
+});
+
+const additionalChargeSchema = z.object({
+  enabled: z.boolean(),
+  totalCharge: z.number(),
+  chargers: z.array(chargersSchema),
+});
 
 const formSchema = z.object({
   orderNumber: z.coerce
@@ -26,25 +40,12 @@ const formSchema = z.object({
     .positive(),
   date: z.coerce.date({ message: "Date is require" }),
   vehicleRequiredDate: z.coerce.date({ message: "Date is require" }),
-  consignorName: z.string({ message: "Field is required" }).min(3),
-  consignorMobileNumber: z
-    .string()
-    .min(10, {
-      message: "Phone must of 10 digits",
-    })
-    .max(10, {
-      message: "Phone can't be more than 10 digits",
-    }),
+  consignorName: z.string({ message: "Field is required" }),
+  consignorMobileNumber: z.coerce.number(),
   loadingPoints: z.array(z.string()),
   consigneeName: z.string({ message: "Field is required" }).optional(),
-  consigneeMobileNumber: z
-    .string()
-    .min(10, {
-      message: "Phone must of 10 digits",
-    })
-    .max(10, {
-      message: "Phone can't be more than 10 digits",
-    }),
+  consigneeMobileNumber: z.coerce.number(),
+
   unloadingPoints: z.array(z.string()),
   way: z.enum(["one way", "two way", "return"]),
   material: z.string({ message: "Field is required" }).min(3),
@@ -53,7 +54,7 @@ const formSchema = z.object({
       message: "Quantity is required",
     })
     .positive(),
-  quantityUnit: z.string({ message: "Field is required" }).min(2),
+  quantityUnit: z.string({ message: "Field is required" }),
   vehicleType: z.string({ message: "Field is required" }).min(3),
   actualWeight: z.coerce
     .number({
@@ -97,22 +98,20 @@ const formSchema = z.object({
   payMode: z.string({ message: "Field is required" }).min(2),
   transactionId: z.string({ message: "Field is required" }).min(3),
   remarks: z.string({ message: "Field is required" }).min(2),
-  additionalCharges: z.coerce.number({
-    message: "Field is required",
-  }),
+  additionalCharges: additionalChargeSchema.totalCharge,
   adminId: z.string(),
 });
 
 export default function ProfileForm() {
   const initialFormState = {
     orderNumber: generateUniqueId(),
-    date: "",
-    vehicleRequiredDate: "",
+    date: new Date().toISOString().split("T")[0],
+    vehicleRequiredDate: new Date().toISOString().split("T")[0],
     consignorName: "",
-    consignorMobileNumber: "",
+    consignorMobileNumber: 0,
     loadingPoints: "",
     consigneeName: "",
-    consigneeMobileNumber: "",
+    consigneeMobileNumber: 0,
     unloadingPoints: "",
     way: "",
     material: "",
@@ -138,11 +137,11 @@ export default function ProfileForm() {
     adminId: "",
   };
 
-  const [searchTerm, setSearchTerm] = useState();
-  const [searchResult, setSearchResult] = useState();
+  const [showAddChargeForm, setShowAddChargeForm] = useState(false);
+  const [showAdditional, setShowAdditional] = useState(false);
+  const [chargers, setChargers] = useState();
+
   const { user } = useContext(UserContext);
-  const [fromLocations, setFromLocations] = useState([]);
-  const [toLocations, setToLocations] = useState([]);
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
 
@@ -151,61 +150,46 @@ export default function ProfileForm() {
     defaultValues: initialFormState,
   });
 
-  async function fetchData(value) {
-    try {
-      const res = await fetch(`/api/getbooking/${user._id}`);
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-      const result = await res.json();
-      console.log(result);
-  
-      if (result && Array.isArray(result.data)) {
-        const results = result.data.filter((booking) => {
-          // Make sure to use the correct property names based on your data structure
-          const consigneeName = booking.consigneeName;
-          
-          return (
-            value &&
-            consigneeName &&
-            consigneeName.toLowerCase().includes(value.toLowerCase())
-          );
-        });
-        setSearchResult(results);
-        console.log(searchResult);
-      } else {
-        console.log('Result is not an array or is undefined');
-      }
-    } catch (error) {
-      console.log('Fetch failed', error);
-    }
-  };
-  
-  
-
-  function handleChange(value) {
-    setSearchTerm(value);
-    fetchData(value);
-  }
-
   function calPartyBhara(quantity, rate, additionalCharges) {
     const total = Number(quantity) * Number(rate);
     const gst = 0.18;
     const totalWithGst = total * gst;
     return totalWithGst + total + Number(additionalCharges);
   }
-
   function calBalanceAmount(advanceAmount, partyBhara) {
     return partyBhara - advanceAmount;
   }
 
+  function calChargeAmount(chargeQty, chargeRate) {
+    return chargeQty * chargeRate;
+  }
+
+  function calTotalChargers(chargers) {
+    const total = chargers?.reduce((acc, curr) => acc + curr.amount, 0);
+    //  console.log('total',total);
+    return Number(total);
+  }
+
+  const chargeRate = form.watch("additionalCharges.chargers.rate", 0);
+  const chargeQty = form.watch("additionalCharges.chargers.qty", 0);
   const rate = form.watch("rate", 0);
   const quantity = form.watch("quantity", 0);
   const advanceAmount = form.watch("advanceAmount", 0);
-  const additionalCharges = form.watch("additionalCharges", 0);
+  const additionalCharges = form.watch("additionalCharges.totalCharge", 0);
+
+  // const chargersAmount = form.watch("additionalCharges.totalCharge",0);
+
+  const chargeAmount = calChargeAmount(chargeQty, chargeRate);
 
   const partyBhara = calPartyBhara(quantity, rate, additionalCharges);
   const balanceAmount = calBalanceAmount(advanceAmount, partyBhara);
+
+  const totalCharge = calTotalChargers(chargers);
+
+  useEffect(() => {
+    form.setValue("additionalCharges.chargers.amount", chargeAmount);
+    form.setValue("additionalCharges.totalCharge", totalCharge);
+  }, [chargeRate, chargeQty, totalCharge]);
 
   useEffect(() => {
     form.setValue("partyBhara", partyBhara);
@@ -215,44 +199,59 @@ export default function ProfileForm() {
     form.setValue("balanceAmount", balanceAmount);
   }, [partyBhara, advanceAmount, additionalCharges]);
 
-  function addFromLocation(value) {
-    form.setValue("adminId", user._id);
-    setFromLocations((prev) => {
-      const newLocations = [...prev, value];
-      form.setValue("loadingPoints", newLocations);
-      console.log(newLocations);
-      return newLocations;
-    });
-  }
-
-  function deleteFromLocation(index) {
-    setFromLocations((prevLocations) => {
-      const newLocations = prevLocations.filter((_, i) => i !== index);
-      form.setValue("loadingPoints", newLocations);
-      return newLocations;
-    });
-  }
-  function addToLocation(value) {
-    setToLocations((prev) => {
-      const newLocations = [...prev, value];
-      form.setValue("unloadingPoints", newLocations);
-      console.log(newLocations);
-      return newLocations;
-    });
-  }
   function generateUniqueId() {
     return Math.floor(100000 + Math.random() * 900000);
   }
+  const handleAddCharger = () => {
+    console.log("hi");
+    const newCharger = {
+      name: form.getValues("additionalCharges.chargers.name"),
+      rate: form.getValues("additionalCharges.chargers.rate"),
+      qty: form.getValues("additionalCharges.chargers.qty"),
+      amount: form.getValues("additionalCharges.chargers.amount"),
+    };
 
-  function deleteToLocation(index) {
-    setToLocations((prevLocations) => {
-      const newLocations = prevLocations.filter((_, i) => i !== index);
-      form.setValue("unloadingPoints", newLocations);
-      return newLocations;
+    const currentChargers = Array.isArray(
+      form.getValues("additionalCharges.chargers"),
+    )
+      ? form.getValues("additionalCharges.chargers")
+      : [];
+
+    console.log("love", currentChargers);
+
+    form.setValue("additionalCharges.chargers", [
+      ...currentChargers,
+      newCharger,
+    ]);
+
+    console.log("hi 4");
+
+    // Log the updated chargers array
+    console.log(
+      "Updated Chargers Array:",
+      form.getValues("additionalCharges.chargers"),
+    );
+
+    setChargers(form.getValues("additionalCharges.chargers"));
+
+    setShowAddChargeForm(false);
+
+    // Reset the form fields after adding a new charger
+    form.reset({
+      additionalCharges: {
+        ...form.getValues("additionalCharges"),
+        chargers: {
+          name: "",
+          rate: "",
+          qty: "",
+          amount: "",
+        },
+      },
     });
-  }
+  };
 
   async function MyHandleSubmit(value) {
+    console.log(value);
     setIsLoading(true);
     try {
       const response = await fetch("/api/createbooking", {
@@ -364,22 +363,15 @@ export default function ProfileForm() {
               <FormField
                 control={form.control}
                 name="consignorName"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Consignor Name :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="text" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
+                render={({ field }) => (
+                  <SearchInput
+                    form={form}
+                    field={field}
+                    personName="consignorName"
+                  />
+                )}
               />
+
               <FormField
                 control={form.control}
                 name="consignorMobileNumber"
@@ -391,7 +383,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" value={field.value} {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -404,108 +396,26 @@ export default function ProfileForm() {
                 name="loadingPoints"
                 render={({ field }) => {
                   return (
-                    <FormItem className="min-w flex items-center justify-center gap-4 ">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Loading Points :
-                      </FormLabel>
-                      <div className="flex w-full  flex-col">
-                        <div
-                          className=" 
-                         
-                              flex
-                            items-center gap-1   overflow-x-scroll rounded-md border  border-input px-3 py-0 text-sm  ring-offset-background active:outline-none  active:ring-2 
-                            active:ring-offset-1
-
-
-                         "
-                        >
-                          {fromLocations.map((location, i) => (
-                            <span
-                              key={i}
-                              className="flex h-8 items-center gap-1 rounded-lg  bg-blue-50 px-3 "
-                              style={{
-                                maxWidth: "100px",
-                              }}
-                            >
-                              <pre>{location}</pre>
-
-                              <button
-                                className="min-w bg-grey-100 h-full  rounded-full"
-                                onClick={() => deleteFromLocation(i)}
-                              >
-                                <GrClose />
-                              </button>
-                            </span>
-                          ))}
-                          <FormControl>
-                            <Input
-                              type="text"
-                              {...field}
-                              className="
-                           h-8 border-none outline-none
-                           ring-offset-white 
-                           focus-visible:ring-0
-                          "
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                  e.preventDefault();
-
-                                  const inputValue = e.target.value.trim();
-
-                                  if (inputValue !== "") {
-                                    addFromLocation(inputValue);
-                                  }
-                                  e.target.value = "";
-                                }
-                              }}
-                            />
-                          </FormControl>
-                        </div>
-
-                        <FormMessage />
-                      </div>
-                    </FormItem>
+                    <LocationAdd
+                      field={field}
+                      form={form}
+                      nameValue={"loadingPoints"}
+                      label="Loading Points"
+                    />
                   );
                 }}
               />
+
               <FormField
                 control={form.control}
                 name="consigneeName"
-                render={({ field }) => {
-                  return (
-                    <FormItem className=" flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        consignee Name :
-                      </FormLabel>
-                      <div className="relative flex flex-1 flex-col">
-                        <FormControl>
-                          {/* <Input type="text" {...field} /> */}
-                          <Input
-                            placeholder="Type to search..."
-                            value={searchTerm}
-                            onChange={(e) => handleChange(e.target.value)}
-                            
-                          />
-                        </FormControl>
-
-                        <FormMessage />
-                        <div
-                          className="min-h  absolute
-                       top-12 overflow-y-scroll bg-slate-100 w-full rounded-sm"
-                        >
-                          {searchResult &&
-                            Array.isArray(searchResult) &&
-                            searchResult.length > 0 &&
-                            searchResult.map((result, id) => (
-                              <div key={id} className="hover:bg-slate-200 py-2 px-3 w-full" 
-                              
-                              >{result.consigneeName}</div>
-                            ))}
-                        </div>
-                      </div>
-                    </FormItem>
-                  );
-                }}
+                render={({ field }) => (
+                  <SearchInput
+                    form={form}
+                    field={field}
+                    personName="consigneeName"
+                  />
+                )}
               />
 
               <FormField
@@ -519,7 +429,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="text" value={field.value} {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -532,67 +442,12 @@ export default function ProfileForm() {
                 name="unloadingPoints"
                 render={({ field }) => {
                   return (
-                    <FormItem className="min-w flex items-center justify-center gap-4 ">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Unloading Points :
-                      </FormLabel>
-                      <div className="flex w-full  flex-col">
-                        <div
-                          className=" 
-                         
-                              flex
-                            items-center gap-1   overflow-x-scroll rounded-md border  border-input px-3 py-0 text-sm  ring-offset-background active:outline-none  active:ring-2 
-                            active:ring-offset-1
-
-
-                         "
-                        >
-                          {toLocations.map((location, i) => (
-                            <span
-                              key={i}
-                              className="flex h-8 items-center gap-1 rounded-lg  bg-blue-50 px-3 "
-                              style={{
-                                maxWidth: "100px",
-                              }}
-                            >
-                              <pre>{location}</pre>
-
-                              <button
-                                className="min-w bg-grey-100 h-full  rounded-full"
-                                onClick={() => deleteToLocation()}
-                              >
-                                <GrClose />
-                              </button>
-                            </span>
-                          ))}
-                          <FormControl>
-                            <Input
-                              type="text"
-                              {...field}
-                              className="
-                           h-8 border-none outline-none
-                           ring-offset-white 
-                           focus-visible:ring-0
-                          "
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                  e.preventDefault();
-
-                                  const inputValue = e.target.value.trim();
-
-                                  if (inputValue !== "") {
-                                    addToLocation(inputValue);
-                                  }
-                                  e.target.value = "";
-                                }
-                              }}
-                            />
-                          </FormControl>
-                        </div>
-
-                        <FormMessage />
-                      </div>
-                    </FormItem>
+                    <LocationAdd
+                      field={field}
+                      form={form}
+                      nameValue={"unloadingPoints"}
+                      label="Unloading Points"
+                    />
                   );
                 }}
               />
@@ -923,7 +778,7 @@ export default function ProfileForm() {
                   );
                 }}
               />
-
+              {/*  Payment Term  */}
               <FormField
                 control={form.control}
                 name="paymentTerm"
@@ -1050,26 +905,176 @@ export default function ProfileForm() {
                   );
                 }}
               />
-              <FormField
-                control={form.control}
-                name="additionalCharges"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        {" "}
-                        Additional Charges:
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="number" {...field} />
-                        </FormControl>
-                        <FormMessage />
+              {/* additional Charges */}
+              {showAdditional ? (
+                <div>
+                  <div className="flex items-center gap-4">
+                    <FormField
+                      control={form.control}
+                      name="additionalCharges.totalCharge"
+                      render={({ field }) => {
+                        return (
+                          <FormItem className="flex items-center justify-center gap-4">
+                            <FormLabel className="text-nowrap text-sm lg:text-base">
+                              Additional Charges:
+                            </FormLabel>
+                            <div className="flex flex-1 flex-col">
+                              <FormControl>
+                                <Input
+                                  type="number"
+                                  value={field.value}
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </div>
+                          </FormItem>
+                        );
+                      }}
+                    />
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        setShowAdditional(!showAdditional);
+                        // form.setValue("additionalCharges.enabled", true);
+                      }}
+                    >
+                      Close
+                    </Button>
+                  </div>
+                  {chargers && chargers?.length > 0 && (
+                    <table className="w-full border mx-2 my-4">
+                      <thead>
+                        <tr className="w-full border bg-slate-50">
+                          <th>Name</th>
+                          <th>Qty</th>
+                          <th>Rate</th>
+                          <th>Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {chargers.map((items, i) => (
+                          <tr key={i} className="w-full text-center ">
+                            <td>{items.name}</td>
+                            <td>{items.qty}</td>
+                            <td>{items.rate}</td>
+                            <td>{items.amount}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+
+                  <div className="flex  flex-col items-center gap-3">
+                    <p className="font-semibold ">
+                      Please , Select Additional Charge
+                    </p>
+                    <div className="flex items-center gap-6">
+
+                  
+                    <select
+                      onChange={(e) =>
+                        form.setValue(
+                          "additionalCharges.chargers.name",
+                          e.target.value,
+                        )
+                      }
+                      className="h-10 rounded-md border bg-slate-50 px-2"
+                    >
+                      <option value="Select Charges">Select Charges</option>
+                      <option value="Detention Charge">
+                        Detention Charge
+                      </option>
+                      <option value="Pickup Charge">Pickup Charge</option>
+                      <option value="Packing Charge">Packing Charge</option>
+                      <option value="loading Charge">loading Charge</option>
+                      <option value="unloading Charge">
+                        unloading Charge
+                      </option>
+                      <option value="Other Charge">Other Charge</option>
+                    </select>
+                    <Button
+                      variant="secondary"
+                      // disabled={form.values?.additionalCharges.chargers.name === 'Select Charger'}
+                      onClick={() => {
+                        setShowAddChargeForm(!showAddChargeForm);
+                      }}
+                    >
+                      Add charger
+                    </Button>
+                    </div>
+                  </div>
+                  {showAddChargeForm && (
+                    <>
+                      <div className="flex xl:flex-col  gap-3 xl:gap-0">
+                        {/* <h2 className="text-nowrap">
+                          
+                          {additionalCharges.chargers?.name}:
+                        </h2> */}
+                        <FieldForm
+                          form={form}
+                          name="additionalCharges.chargers.rate"
+                          label="Rate"
+                          type="number"
+                        />
+                        <FieldForm
+                          form={form}
+                          name="additionalCharges.chargers.qty"
+                          label="Qty"
+                          type="number"
+                        />
+                        <FieldForm
+                          form={form}
+                          name="additionalCharges.chargers.amount"
+                          label="Amount"
+                          type="number"
+                        />
+
+                        <Button variant="outline" onClick={handleAddCharger}>
+                          Add{" "}
+                        </Button>
                       </div>
-                    </FormItem>
-                  );
-                }}
-              />
+                    </>
+                  )}
+                </div>
+              ) : (
+                <div>
+                  {additionalCharges.enabled === true && (
+                    <FormField
+                      control={form.control}
+                      name="additionalCharges.totalCharge"
+                      render={({ field }) => {
+                        return (
+                          <FormItem className="flex items-center justify-center gap-4">
+                            <FormLabel className="text-nowrap text-sm lg:text-base">
+                              Additional Charges:
+                            </FormLabel>
+                            <div className="flex flex-1 flex-col">
+                              <FormControl>
+                                <Input
+                                  type="number"
+                                  value={field.value}
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </div>
+                          </FormItem>
+                        );
+                      }}
+                    />
+                  )}
+
+                  <Button
+                    onClick={() => {
+                      setShowAdditional(!showAdditional);
+                      form.setValue("additionalCharges.enabled", true);
+                    }}
+                  >
+                    Add Additional Charges
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
           <Button

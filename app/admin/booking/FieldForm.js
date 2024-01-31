@@ -20,15 +20,13 @@ const FieldForm = ({
   label,
   type,
   options,
-  addLocation,
-  deleteLocation,
 }) => {
-  const [Locations, setLocations] = useState([]);
-  const { control } = useForm();
+ 
+  
   return (
     <div>
     <FormField
-      control={control}
+      control={form.control}
       name={name}
       render={({ field }) => {
         return (
@@ -49,48 +47,10 @@ const FieldForm = ({
                       </option>
                     ))}
                   </select>
-                ) : type === "location" ? 
-                (
-                    <div className="flex w-full flex-col">
-                     
-                      {Locations.map((location, i) => (
-                        <span
-                          key={i}
-                          className="flex h-8 items-center gap-1 rounded-lg bg-blue-50 px-3"
-                          style={{
-                            maxWidth: "100px",
-                          }}
-                        >
-                          <pre>{location}</pre>
-                          <Button
-                            variant="ghost"
-                            onClick={() => deleteLocation(i)}
-                            className="min-w bg-grey-100 h-full rounded-full"
-                          >
-                            Remove
-                          </Button>
-                        </span>
-                      ))}
-                      <FormControl>
-                        <Input
-                          type="text"
-                          {...field}
-                          className="h-8 border-none outline-none ring-offset-white focus-visible:ring-0"
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                              e.preventDefault();
-                              const inputValue = e.target.value.trim();
-                              if (inputValue !== "") {
-                                addLocation(inputValue);
-                              }
-                              e.target.value = "";
-                            }
-                          }}
-                        />
-                      </FormControl>
-                    </div>
-                  ) : (
-                  <Input type={type} {...field} />
+                ) : (
+                  <Input type={type} 
+                  
+                  {...field} />
                 )}
               </FormControl>
             </div>
