@@ -40,7 +40,7 @@ export async function GET(req, context) {
     await connectDB();
 
     const admin = await userModel.findOne({ _id: params.adminId });
-    if (!admin || !admin.isAdmin || !admin.isOwner) {
+    if (!admin || !admin.isAdmin && !admin.isOwner) {
       return Response.json({
         message:"Admin Not found",
       },{status:404});
