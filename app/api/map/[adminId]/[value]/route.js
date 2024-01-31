@@ -3,13 +3,14 @@ import userModel from "../../../../models/usermodel";
 import connectDB from "../../../../middleware/connectDB";
 import { log } from 'console';
 
+
 const refreshToken = async () => {
   try {
     const params = new URLSearchParams();
     params.append("grant_type", "client_credentials");
     params.append("client_id", process.env.ClientID);
     params.append("client_secret", process.env.ClientSecret);
-    const response = await fetch(
+    const result = await fetch(
       `https://outpost.mappls.com/api/security/oauth/token`,
       {
         method: "POST",
@@ -20,7 +21,7 @@ const refreshToken = async () => {
       },
     );
 
-    const data = await response.json();
+    const data = await result.json();
     console.log("refresh data",data);
     return data;
   } catch (error) {
@@ -40,12 +41,9 @@ export async function GET(req, context) {
 
     const admin = await userModel.findOne({ _id: params.adminId });
     if (!admin || !admin.isAdmin || !admin.isOwner) {
-      return response = {
-        body: {
-          message: "Admin not found",
-        },
-        status: 404,
-      };
+      return Response.json({
+        message:"Admin Not found",
+      },{status:404});
     }
 
     const map = await Map.findOne();
@@ -54,7 +52,7 @@ export async function GET(req, context) {
 
     if (!map) {
       const data = await refreshToken();
-      log("data",data);
+      // log("data",data);
       const newMap = new Map({
         access_token : data,
       });
@@ -71,7 +69,7 @@ export async function GET(req, context) {
     console.log(access_token);
 
     async function fetchDataWithRetry(tries = 3) {
-      const response = await fetch(
+      const result = await fetch(
         `https://atlas.mapmyindia.com/api/places/textsearch/json?query=${params.value}`,
         {
           method: "GET",
@@ -81,7 +79,7 @@ export async function GET(req, context) {
         },
       );
 
-      const data = await response.json();
+      const data = await result.json();
 
       if (data.error && data.error === "invalid_token" && tries > 0) {
         const newToken = await refreshToken();
@@ -105,7 +103,7 @@ export async function GET(req, context) {
   }
 }
 
-export function POST() {
+export function POST(req,res) {
   return Response.json({
     
     message: "this method is not allowed",
