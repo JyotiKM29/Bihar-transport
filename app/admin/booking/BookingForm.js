@@ -11,16 +11,12 @@ import {
   FormMessage,
 } from "../../components/ui/form";
 
-
 import * as z from "zod";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
-import { useContext, useState  , useEffect} from "react";
+import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../context/UserContextProvider";
 import { useToast } from "../../components/ui/use-toast";
-
-
-
 
 const formSchema = z.object({
   orderNumber: z.coerce
@@ -50,7 +46,7 @@ const formSchema = z.object({
       message: "Phone can't be more than 10 digits",
     }),
   unloadingPoints: z.array(z.string()),
-  way: z.enum(["one way" ,"two way" , "return"]),
+  way: z.enum(["one way", "two way", "return"]),
   material: z.string({ message: "Field is required" }).min(3),
   quantity: z.coerce
     .number({
@@ -84,7 +80,12 @@ const formSchema = z.object({
     .positive(),
   hideBhara: z.coerce.boolean({}),
   // paymentTerm:z.string().optional(),
-  paymentLiability: z.enum(["Consignor","Consignee", "Third Party", "Vehicle Owner"]),
+  paymentLiability: z.enum([
+    "Consignor",
+    "Consignee",
+    "Third Party",
+    "Vehicle Owner",
+  ]),
   billTo: z.string({ message: "Field is required" }),
   paymentTerm: z.enum(["Advance", "Paid", "To Pay", "To be Billed"]),
   advanceAmount: z.coerce.number({
@@ -96,10 +97,10 @@ const formSchema = z.object({
   payMode: z.string({ message: "Field is required" }).min(2),
   transactionId: z.string({ message: "Field is required" }).min(3),
   remarks: z.string({ message: "Field is required" }).min(2),
-  additionalCharges:z.coerce.number({
+  additionalCharges: z.coerce.number({
     message: "Field is required",
   }),
-  adminId:z.string(),
+  adminId: z.string(),
 });
 
 export default function ProfileForm() {
@@ -123,7 +124,7 @@ export default function ProfileForm() {
     rateAsPer: "",
     rate: "",
     rateUnit: "",
-    partyBhara: 0 ,
+    partyBhara: 0,
     hideBhara: "",
     paymentLiability: "",
     billTo: "",
@@ -134,19 +135,58 @@ export default function ProfileForm() {
     transactionId: "",
     remarks: "",
     additionalCharges: 0,
-    adminId: '',
-  }; 
+    adminId: "",
+  };
 
-  const {user} = useContext(UserContext);
+  const [searchTerm, setSearchTerm] = useState();
+  const [searchResult, setSearchResult] = useState();
+  const { user } = useContext(UserContext);
   const [fromLocations, setFromLocations] = useState([]);
   const [toLocations, setToLocations] = useState([]);
   const { toast } = useToast();
-  const [isloading , setIsLoading] = useState()
+  const [isloading, setIsLoading] = useState();
 
   const { reset, ...form } = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: initialFormState,
   });
+
+  async function fetchData(value) {
+    try {
+      const res = await fetch(`/api/getbooking/${user._id}`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const result = await res.json();
+      console.log(result);
+  
+      if (result && Array.isArray(result.data)) {
+        const results = result.data.filter((booking) => {
+          // Make sure to use the correct property names based on your data structure
+          const consigneeName = booking.consigneeName;
+          
+          return (
+            value &&
+            consigneeName &&
+            consigneeName.toLowerCase().includes(value.toLowerCase())
+          );
+        });
+        setSearchResult(results);
+        console.log(searchResult);
+      } else {
+        console.log('Result is not an array or is undefined');
+      }
+    } catch (error) {
+      console.log('Fetch failed', error);
+    }
+  };
+  
+  
+
+  function handleChange(value) {
+    setSearchTerm(value);
+    fetchData(value);
+  }
 
   function calPartyBhara(quantity, rate, additionalCharges) {
     const total = Number(quantity) * Number(rate);
@@ -154,39 +194,33 @@ export default function ProfileForm() {
     const totalWithGst = total * gst;
     return totalWithGst + total + Number(additionalCharges);
   }
-  
 
-  function calBalanceAmount(advanceAmount ,partyBhara ){
-     return partyBhara - advanceAmount;
+  function calBalanceAmount(advanceAmount, partyBhara) {
+    return partyBhara - advanceAmount;
   }
 
-  const rate = form.watch('rate', 0);
-  const quantity = form.watch('quantity', 0);
-  const advanceAmount = form.watch('advanceAmount',0)
-  const additionalCharges = form.watch('additionalCharges',0)
+  const rate = form.watch("rate", 0);
+  const quantity = form.watch("quantity", 0);
+  const advanceAmount = form.watch("advanceAmount", 0);
+  const additionalCharges = form.watch("additionalCharges", 0);
 
-  const partyBhara = calPartyBhara(quantity, rate ,additionalCharges);
-  const balanceAmount = calBalanceAmount(advanceAmount ,partyBhara )
-
-  
-  useEffect(() => {
-    
-    form.setValue('partyBhara', partyBhara);
-  }, [quantity, rate,additionalCharges]);
+  const partyBhara = calPartyBhara(quantity, rate, additionalCharges);
+  const balanceAmount = calBalanceAmount(advanceAmount, partyBhara);
 
   useEffect(() => {
-    
-    form.setValue('balanceAmount',balanceAmount);
-  }, [partyBhara, advanceAmount,additionalCharges]);
+    form.setValue("partyBhara", partyBhara);
+  }, [quantity, rate, additionalCharges]);
 
-
+  useEffect(() => {
+    form.setValue("balanceAmount", balanceAmount);
+  }, [partyBhara, advanceAmount, additionalCharges]);
 
   function addFromLocation(value) {
-    form.setValue('adminId',user._id);
+    form.setValue("adminId", user._id);
     setFromLocations((prev) => {
       const newLocations = [...prev, value];
       form.setValue("loadingPoints", newLocations);
-      console.log(newLocations)
+      console.log(newLocations);
       return newLocations;
     });
   }
@@ -202,7 +236,7 @@ export default function ProfileForm() {
     setToLocations((prev) => {
       const newLocations = [...prev, value];
       form.setValue("unloadingPoints", newLocations);
-      console.log(newLocations)
+      console.log(newLocations);
       return newLocations;
     });
   }
@@ -217,47 +251,42 @@ export default function ProfileForm() {
       return newLocations;
     });
   }
- 
 
-
- 
-
-  async function MyHandleSubmit(value ) {
-  
+  async function MyHandleSubmit(value) {
     setIsLoading(true);
     try {
-     
-    const response = await fetch('/api/createbooking', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(value),  
-    });
-  // console.log(response);
+      const response = await fetch("/api/createbooking", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(value),
+      });
+      // console.log(response);
 
-  const newResult = await response.json();
+      const newResult = await response.json();
 
-  if(response.ok){
-    setIsLoading(false);
-    displayToast("Successfully Booked, Click view Booking button to view the booking", "✅");
-    const userDetail = newResult.user;
-    reset(initialFormState);
-  }
-
-  else{
-    console.error("Error:", newResult.message);
-    displayToast("Error", "❌", newResult.message);
-    setIsLoading(false);
-  }
+      if (response.ok) {
+        setIsLoading(false);
+        displayToast(
+          "Successfully Booked, Click view Booking button to view the booking",
+          "✅",
+        );
+        const userDetail = newResult.user;
+        reset(initialFormState);
+      } else {
+        console.error("Error:", newResult.message);
+        displayToast("Error", "❌", newResult.message);
+        setIsLoading(false);
+      }
     } catch (error) {
       console.error("Error:", newResult.message);
-    displayToast("Error", "❌", newResult.message);
-    setIsLoading(false);
+      displayToast("Error", "❌", newResult.message);
+      setIsLoading(false);
     }
   }
 
-const displayToast = (title, action, description = "") => {
+  const displayToast = (title, action, description = "") => {
     toast({
       title,
       action,
@@ -425,9 +454,6 @@ const displayToast = (title, action, description = "") => {
 
                                   if (inputValue !== "") {
                                     addFromLocation(inputValue);
-                                  
-                                  
-                                   
                                   }
                                   e.target.value = "";
                                 }
@@ -442,20 +468,40 @@ const displayToast = (title, action, description = "") => {
                   );
                 }}
               />
-               <FormField
+              <FormField
                 control={form.control}
                 name="consigneeName"
                 render={({ field }) => {
                   return (
-                    <FormItem className="flex items-center justify-center gap-4">
+                    <FormItem className=" flex items-center justify-center gap-4">
                       <FormLabel className="text-nowrap text-sm lg:text-base">
-                      consignee Name :
+                        consignee Name :
                       </FormLabel>
-                      <div className="flex flex-1 flex-col">
+                      <div className="relative flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          {/* <Input type="text" {...field} /> */}
+                          <Input
+                            placeholder="Type to search..."
+                            value={searchTerm}
+                            onChange={(e) => handleChange(e.target.value)}
+                            
+                          />
                         </FormControl>
+
                         <FormMessage />
+                        <div
+                          className="min-h  absolute
+                       top-12 overflow-y-scroll bg-slate-100 w-full rounded-sm"
+                        >
+                          {searchResult &&
+                            Array.isArray(searchResult) &&
+                            searchResult.length > 0 &&
+                            searchResult.map((result, id) => (
+                              <div key={id} className="hover:bg-slate-200 py-2 px-3 w-full" 
+                              
+                              >{result.consigneeName}</div>
+                            ))}
+                        </div>
                       </div>
                     </FormItem>
                   );
@@ -481,7 +527,7 @@ const displayToast = (title, action, description = "") => {
                   );
                 }}
               />
-               <FormField
+              <FormField
                 control={form.control}
                 name="unloadingPoints"
                 render={({ field }) => {
@@ -536,9 +582,6 @@ const displayToast = (title, action, description = "") => {
 
                                   if (inputValue !== "") {
                                     addToLocation(inputValue);
-                                  
-                                  
-                                   
                                   }
                                   e.target.value = "";
                                 }
@@ -564,13 +607,15 @@ const displayToast = (title, action, description = "") => {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                        <select {...field} className="h-10 bg-slate-50 border rounded-md">
-              <option value="">Select Way</option>
-              <option value="one way">one way</option>
-              <option value="two way">two way</option>
-              <option value="return">return</option>
-             
-            </select>
+                          <select
+                            {...field}
+                            className="h-10 rounded-md border bg-slate-50"
+                          >
+                            <option value="">Select Way</option>
+                            <option value="one way">one way</option>
+                            <option value="two way">two way</option>
+                            <option value="return">return</option>
+                          </select>
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -631,22 +676,22 @@ const displayToast = (title, action, description = "") => {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                        <select {...field} className="h-10 bg-slate-50 border rounded-md">
-              <option value="">Select Quantity Unity</option>
-              <option value="Kg">Kg (Kilo gram)</option>
-              <option value="g">g (gram) </option>
-              <option value="Km">Km (Kilo meter)</option>
-              <option value="Km2">Km&sup2;</option>
-              <option value="m">m </option>
-              <option value="m2">m&sup2;</option>
-              <option value="tons">tons</option>
-              <option value="pounds">pounds</option>
-              <option value="L">L (liters)</option>
-              <option value="m3">m³</option>
-              
-              
-
-            </select>
+                          <select
+                            {...field}
+                            className="h-10 rounded-md border bg-slate-50"
+                          >
+                            <option value="">Select Quantity Unity</option>
+                            <option value="Kg">Kg (Kilo gram)</option>
+                            <option value="g">g (gram) </option>
+                            <option value="Km">Km (Kilo meter)</option>
+                            <option value="Km2">Km&sup2;</option>
+                            <option value="m">m </option>
+                            <option value="m2">m&sup2;</option>
+                            <option value="tons">tons</option>
+                            <option value="pounds">pounds</option>
+                            <option value="L">L (liters)</option>
+                            <option value="m3">m³</option>
+                          </select>
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -724,13 +769,15 @@ const displayToast = (title, action, description = "") => {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                        <select {...field} className="h-10 bg-slate-50 border rounded-md">
-              <option value="">Select Rate as Per</option>
-              <option value="Weight">Weight </option>
-              <option value="Length">Length </option>
-              <option value="Third Volume">Volume</option>
-              
-            </select>
+                          <select
+                            {...field}
+                            className="h-10 rounded-md border bg-slate-50"
+                          >
+                            <option value="">Select Rate as Per</option>
+                            <option value="Weight">Weight </option>
+                            <option value="Length">Length </option>
+                            <option value="Third Volume">Volume</option>
+                          </select>
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -770,13 +817,15 @@ const displayToast = (title, action, description = "") => {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                        <select {...field} className="h-10 bg-slate-50 border rounded-md">
-              <option value="">Select Rate Unit</option>
-              <option value="Weight">Weight </option>
-              <option value="Length">Length </option>
-              <option value="Third Volume">Volume</option>
-              
-            </select>
+                          <select
+                            {...field}
+                            className="h-10 rounded-md border bg-slate-50"
+                          >
+                            <option value="">Select Rate Unit</option>
+                            <option value="Weight">Weight </option>
+                            <option value="Length">Length </option>
+                            <option value="Third Volume">Volume</option>
+                          </select>
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -796,9 +845,7 @@ const displayToast = (title, action, description = "") => {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="number" 
-                        
-                          {...field} />
+                          <Input type="number" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -839,13 +886,16 @@ const displayToast = (title, action, description = "") => {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                        <select {...field} className="h-10 bg-slate-50 border rounded-md">
-              <option value="">Select Payment Liability</option>
-              <option value="Consignor">Consignor</option>
-              <option value="Consignee">Consignee</option>
-              <option value="Third Party">Third Party</option>
-              <option value="Vehicle Owner">Vehicle Owner</option>
-            </select>
+                          <select
+                            {...field}
+                            className="h-10 rounded-md border bg-slate-50"
+                          >
+                            <option value="">Select Payment Liability</option>
+                            <option value="Consignor">Consignor</option>
+                            <option value="Consignee">Consignee</option>
+                            <option value="Third Party">Third Party</option>
+                            <option value="Vehicle Owner">Vehicle Owner</option>
+                          </select>
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -874,31 +924,34 @@ const displayToast = (title, action, description = "") => {
                 }}
               />
 
-<FormField
-  control={form.control}
-  name="paymentTerm"
-  render={({ field }) => {
-    return (
-      <FormItem className="flex items-center justify-center gap-4">
-        <FormLabel className="text-nowrap text-sm lg:text-base">
-          Payment Term :
-        </FormLabel>
-        <div className="flex flex-1 flex-col ">
-          <FormControl>
-          <select {...field} className="h-10 bg-slate-50 border rounded-md">
-              <option value="">Select a payment term</option>
-              <option value="Advance">Advance</option>
-              <option value="Paid">Paid</option>
-              <option value="To Pay">To Pay</option>
-              <option value="To be Billed">To be Billed</option>
-            </select>
-          </FormControl>
-          <FormMessage />
-        </div>
-      </FormItem>
-    );
-  }}
-/>
+              <FormField
+                control={form.control}
+                name="paymentTerm"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Payment Term :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col ">
+                        <FormControl>
+                          <select
+                            {...field}
+                            className="h-10 rounded-md border bg-slate-50"
+                          >
+                            <option value="">Select a payment term</option>
+                            <option value="Advance">Advance</option>
+                            <option value="Paid">Paid</option>
+                            <option value="To Pay">To Pay</option>
+                            <option value="To be Billed">To be Billed</option>
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
               <FormField
                 control={form.control}
                 name="advanceAmount"
@@ -1023,13 +1076,10 @@ const displayToast = (title, action, description = "") => {
             type="submit"
             className="mt-8 h-16 w-full self-center bg-black text-lg xl:w-1/3"
           >
-           {isloading ? "Loading...": "Submit"}
-           
+            {isloading ? "Loading..." : "Submit"}
           </Button>
         </form>
       </Form>
     </div>
   );
-
-
 }
