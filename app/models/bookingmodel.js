@@ -97,6 +97,7 @@ const bookingSchema = new mongoose.Schema(
     additionalCharges: {
       enabled: { type: Boolean, default: false },
       charges: [additionalChargeSchema],
+      totalCharges: { type: Number },
     },
     status: {
       type: String, 
