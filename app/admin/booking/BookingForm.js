@@ -313,7 +313,7 @@ export default function ProfileForm() {
       }
     } catch (error) {
       console.error("Error:", error);
-      displayToast("Error", "❌", newResult.message);
+      displayToast("Error while sending data", "❌", newResult.message);
       setIsLoading(false);
     }
   }
