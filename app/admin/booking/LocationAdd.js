@@ -14,6 +14,7 @@ import { Input } from "../../components/ui/input";
 
 const LocationAdd = ({ form, field, label, nameValue }) => {
     const [Locations, setLocations] = useState([]);
+    const [inputValue, setInputValue] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const { user } = useContext(UserContext);
   
@@ -35,31 +36,35 @@ const LocationAdd = ({ form, field, label, nameValue }) => {
       });
     }
   
+    
     async function fetchLocation(value) {
+      console.log(user._id);
       try {
-        const token = "673c3b0b-466c-40a6-b8f3-ec4fd640aa8c";
+       
         console.log("value here", value);
-        const res = await fetch(`https://atlas.mapmyindia.com/api/places/textsearch/json?query=${value}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log(res);
-        if (!res.ok) {
-          console.log(res.message);
+
+
+        const response = await fetch(`/api/map/${user._id}/${value}`);
+        console.log('response :',response);
+
+
+        const result = await response.json();
+        console.log('Result',result);
+      
+        if (!response.ok) {
+          // console.log("error at: ",result.message);
           throw new Error(`HTTP error! status: ${res.status}`);
+          
         }
-        const result = await res.json();
-        console.log(result);
   
       } catch (error) {
-        console.log(error);
+        console.log(error.message);
       }
     }
-  
-    function handleChange(inputValue) { // Accept inputValue as a parameter
-      setSearchTerm(inputValue); // Update searchTerm
-      fetchLocation(inputValue);
+
+    function handleChange(e) {
+      setInputValue(e.target.value);
+      fetchLocation(e.target.value);
     }
   
     return (
@@ -101,18 +106,22 @@ const LocationAdd = ({ form, field, label, nameValue }) => {
                   ring-offset-white 
                   focus-visible:ring-0
                 "
-                // onChange={(e) => handleChange(e.target.value)}  
+    //             onChange={(e) => {
+    //   handleChange(e.target.value);
+    // }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
-  
+                   
                     let inputValue = e.target.value.trim();
   
                     if (inputValue !== "") {
+                      // fetchLocation(inputValue);
                       addLocation(inputValue);
                       form.setValue(nameValue, "");
+                      e.target.value = "";
                     }
-                    e.target.value = "";
+                   
                   }
                 }}
               />
