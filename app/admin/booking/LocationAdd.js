@@ -1,129 +1,174 @@
-'use client'
-import React, { useContext, useState } from 'react'
+"use client";
+import React, { useContext, useEffect, useState } from "react";
 import { GrClose } from "react-icons/gr";
 import {
-    FormControl,
-    FormItem,
-    FormLabel,
-    FormMessage,
-  } from "../../components/ui/form";
+  FormControl,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../components/ui/form";
 
-  import { UserContext } from "../../context/UserContextProvider";
+import { UserContext } from "../../context/UserContextProvider";
 import { Input } from "../../components/ui/input";
 
-
 const LocationAdd = ({ form, field, label, nameValue }) => {
-    const [Locations, setLocations] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const { user } = useContext(UserContext);
-  
-    function addLocation(value) {
-      form.setValue("adminId", user._id);
-      setLocations((prev) => {
-        const newLocations = [...prev, value];
-        form.setValue(nameValue, newLocations);
-        console.log(newLocations);
-        return newLocations;
-      });
-    }
-  
-    function deleteLocation(index) {
-      setLocations((prevLocations) => {
-        const newLocations = prevLocations.filter((_, i) => i !== index);
-        form.setValue(nameValue, newLocations);
-        return newLocations;
-      });
-    }
-  
-    async function fetchLocation(value) {
-      try {
-        const token = "673c3b0b-466c-40a6-b8f3-ec4fd640aa8c";
-        console.log("value here", value);
-        const res = await fetch(`https://atlas.mapmyindia.com/api/places/textsearch/json?query=${value}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log(res);
-        if (!res.ok) {
-          console.log(res.message);
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        const result = await res.json();
-        console.log(result);
-  
-      } catch (error) {
-        console.log(error);
+  const [Locations, setLocations] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
+  const { user } = useContext(UserContext);
+
+  function addLocation(value) {
+    form.setValue("adminId", user._id);
+    setLocations((prev) => {
+      const newLocations = [...prev, value];
+      form.setValue(nameValue, newLocations);
+      console.log(newLocations);
+      return newLocations;
+    });
+  }
+
+  function deleteLocation(index) {
+    setLocations((prevLocations) => {
+      const newLocations = prevLocations.filter((_, i) => i !== index);
+      form.setValue(nameValue, newLocations);
+      return newLocations;
+    });
+  }
+
+  async function fetchLocation(value) {
+    console.log(user._id);
+    try {
+      console.log("value here :", value);
+
+      const response = await fetch(`/api/map/${user._id}/${value}`);
+      // console.log("response :", response);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
       }
+      const result = await response.json();
+      // console.log("Result", result);
+      //------------ after getting result
+      const suggestedLocations = result.result.suggestedLocations;
+
+      if (result && Array.isArray(suggestedLocations)) {
+        const results = suggestedLocations.filter((location) => {
+          const lowerCaseValue = value.toLowerCase();
+          const lowerCasePlaceName = location.placeName.toLowerCase();
+          const lowerCasePlaceAddress = location.placeAddress.toLowerCase();
+
+          
+          return (
+             lowerCasePlaceName.includes(lowerCaseValue) ||
+            lowerCasePlaceAddress.includes(lowerCaseValue)
+          );
+        });
+
+        setSearchResult(results);
+        console.log("Result:" ,searchResult);
+      } else {
+        console.log("No suggested locations found");
+        setSearchResult([{"placeAddress":value}]);
+        console.log(searchResult);
+      }
+    } catch (error) {
+      console.log(error.message);
     }
-  
-    function handleChange(inputValue) { // Accept inputValue as a parameter
-      setSearchTerm(inputValue); // Update searchTerm
-      fetchLocation(inputValue);
-    }
-  
-    return (
-      <FormItem className="min-w flex items-center justify-center gap-4 ">
-        <FormLabel className="text-nowrap text-sm lg:text-base">
-          {label} :
-        </FormLabel>
-        <div className="flex w-full  flex-col">
-          <div
-            id="box"
-            className=" 
-              flex
-              items-center gap-1   overflow-x-scroll rounded-md border  border-input px-3 py-0 text-sm  ring-offset-background active:outline-none  active:ring-2 
-              active:ring-offset-1
-            "
-          >
-            {Locations.map((location, i) => (
-              <span
-                key={i}
-                className="flex h-8 items-center gap-1 rounded-lg  bg-blue-50 px-3 "
-              >
-                <pre>{location}</pre>
-  
-                <button
-                  className="min-w bg-grey-100 h-full  rounded-full"
-                  onClick={() => deleteLocation(i)}
-                >
-                  <GrClose />
-                </button>
-              </span>
-            ))}
-            <FormControl>
-              <Input
-                type="text"
-                value={field.value}
-                {...field}
-                className="
-                  h-8 border-none outline-none
-                  ring-offset-white 
-                  focus-visible:ring-0
-                "
-                // onChange={(e) => handleChange(e.target.value)}  
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-  
-                    let inputValue = e.target.value.trim();
-  
-                    if (inputValue !== "") {
-                      addLocation(inputValue);
-                      form.setValue(nameValue, "");
-                    }
-                    e.target.value = "";
+  }
+
+  useEffect(() => {
+    // Log the updated searchResult state
+    console.log("Result:", searchResult);
+  }, [searchResult]); 
+
+  function handleChange(e) {
+    e.preventDefault();
+    const value = e.target.value;
+    form.setValue(field.name, value);
+    setSearchTerm(value);
+    fetchLocation(value);
+  }
+
+  return (
+    <FormItem className="min-w flex items-center justify-center gap-4 ">
+      <FormLabel className="self-start pt-6 text-nowrap text-sm lg:text-base">
+        {label} :
+      </FormLabel>
+      <div className="relative flex w-full  flex-col">
+        <FormControl>
+          <Input
+            type="text"
+            value={field.value}
+            {...field}
+           
+            onChange={(e) => {
+              handleChange(e);
+            }}
+
+            // onKeyDown={(e) => {
+            //   if (e.key === "Enter") {
+            //     e.preventDefault();
+
+            //     let inputValue = e.target.value.trim();
+
+            //     if (inputValue !== "") {
+            //       // fetchLocation(inputValue);
+            //       addLocation(inputValue);
+            //       form.setValue(nameValue, "");
+            //       e.target.value = "";
+            //     }
+
+            //   }
+            // }}
+          />
+        </FormControl>
+
+        <FormMessage />
+        <div className="min-h  z-20 absolute top-12 w-full overflow-y-scroll rounded-sm bg-slate-100">
+          {searchResult &&
+            Array.isArray(searchResult) &&
+            searchResult.length > 0 &&
+            searchResult.map((result, id) => (
+              <div
+                key={id}
+                className="w-full cursor-pointer px-3 py-2 hover:bg-slate-200"
+                onClick={
+                  () => {addLocation(result.placeAddress)
+                    setSearchResult([])
                   }
-                }}
-              />
-            </FormControl>
-          </div>
-  
-          <FormMessage />
+                }
+              >
+                
+                {result.placeAddress} ,{result.placeName}
+              </div>
+            ))}
         </div>
-      </FormItem>
-    );
-  };
-  
-  export default LocationAdd;
-  
+        {Locations.length > 0 && (
+  <div
+    id="box"
+    className="flex h-14 items-center gap-1 overflow-x-scroll rounded-md border border-input px-3 py-0 text-sm ring-offset-background active:outline-none active:ring-2 active:ring-offset-1  pt-1"
+  >
+    {Locations.map((location, i) => (
+      <span
+        key={i}
+        className="flex h-8 items-center gap-1 rounded-lg bg-blue-50 px-3"
+      >
+        <pre>{location}</pre>
+
+        <button
+          className="min-w bg-grey-100 h-full rounded-full"
+          onClick={() => deleteLocation(i)}
+        >
+          <GrClose />
+        </button>
+      </span>
+    ))}
+  </div>
+)}
+
+      </div>
+    </FormItem>
+  );
+};
+
+export default LocationAdd;

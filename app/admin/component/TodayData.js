@@ -51,6 +51,8 @@ const TodayData = () => {
   const invoice = Math.round((data?.invoice / data?.totalOrder) * 100);
   const pendingInvoice = Math.round((data?.pendingInvoice / data?.totalOrder) * 100);
   const generatedInvoice = Math.round((data?.generatedInvoice / data?.totalOrder) * 100);
+  const totalAmount = Math.round((data?.totalAmount)/1000)
+  const advanceAmount = Math.round((data?.advanceAmount)/1000)
 
   
 
@@ -264,7 +266,7 @@ const TodayData = () => {
                 <div className="flex h-full w-2/3 flex-col justify-between">
                   <p className="text-xl text-slate-400">Advance Amount</p>
                   <h2 className="text-4xl 2xl:text-6xl">
-                    {data?.advanceAmount}
+                    {advanceAmount}K
                   </h2>
                 </div>
                 <div className="flex h-full w-1/3 items-center justify-center">
@@ -279,7 +281,7 @@ const TodayData = () => {
               <div className="flex rounded-3xl border bg-white p-4 shadow-md   lg:p-7">
                 <div className="flex h-full w-2/3 flex-col justify-between">
                   <p className="text-xl text-slate-400">Total Amount</p>
-                  <h2 className="text-4xl 2xl:text-6xl">{data?.totalAmount}</h2>
+                  <h2 className="text-4xl 2xl:text-6xl">{totalAmount}K</h2>
                 </div>
                 <div className="flex h-full w-1/3 items-center justify-center">
                   <div className="flex h-[20vw] w-[20vw] items-center  justify-center rounded-full border bg-blue-100 md:h-[15vw] md:w-[15vw] xl:h-[8vw] xl:w-[8vw] 2xl:h-[6vw] 2xl:w-[6vw]">
