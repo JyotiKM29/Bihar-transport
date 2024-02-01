@@ -14,20 +14,32 @@ import GeneralBooking  from './general/page'
 function page() {
   return (
     <div className="w-full min-h-[95vh] ">
-       <Tabs defaultValue="personal" className="relative w-full min-h-full ">
+       <Tabs defaultValue="Booking" className="relative w-full min-h-full ">
         <TabsList className="absolute right-0">
-          <TabsTrigger value="personal">
-          Personal
+          <TabsTrigger value="Booking">
+           New Booking
           </TabsTrigger>
-          <TabsTrigger value="general">
-          General
+          <TabsTrigger value="Pending">
+          Pending Booking
           </TabsTrigger>
-          <TabsTrigger value="company">
-          Company
+          <TabsTrigger value="Confirm">
+           Confirm Booking
+          </TabsTrigger>
+          <TabsTrigger value="Intilize">
+           Intilize Booking
+          </TabsTrigger>
+          <TabsTrigger value="Dispatch">
+           Dispatch Booking
+          </TabsTrigger>
+          <TabsTrigger value="Delivered">
+           Delivered Booking
+          </TabsTrigger>
+          <TabsTrigger value="Cancelled">
+           Cancelled Booking
           </TabsTrigger>
         
         </TabsList>
-        <TabsContent value="personal">
+        {/* <TabsContent value="personal">
           <PersonalBooking  />
         </TabsContent>
         <TabsContent value="general">
@@ -35,7 +47,29 @@ function page() {
         </TabsContent>
         <TabsContent value="company">
         <CompanyBooking  />
-        </TabsContent>
+        </TabsContent> */}
+        <TabsContent value="Booking">
+        <PersonalBooking  />
+          </TabsContent>
+          <TabsContent value="Pending">
+          Pending Booking
+          </TabsContent>
+          <TabsContent value="Confirm">
+           Confirm Booking
+          </TabsContent>
+          <TabsContent value="Intilize">
+           Intilize Booking
+          </TabsContent>
+          <TabsContent value="Dispatch">
+           Dispatch Booking
+          </TabsContent>
+          <TabsContent value="Delivered">
+           Delivered Booking
+          </TabsContent>
+          <TabsContent value="Cancelled">
+           Cancelled Booking
+          </TabsContent>
+        
       
         </Tabs>
     </div>
