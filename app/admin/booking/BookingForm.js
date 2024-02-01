@@ -21,9 +21,9 @@ import { useToast } from "../../components/ui/use-toast";
 
 const chargersSchema = z.object({
   name: z.string(),
-  amount: z.number(),
-  rate: z.number().positive(),
-  qty: z.number().positive(),
+  amount: z.coerce.number(),
+  rate: z.coerce.number().positive(),
+  qty: z.coerce.number().positive(),
 });
 
 const additionalChargeSchema = z.object({
@@ -98,7 +98,7 @@ const formSchema = z.object({
   payMode: z.string({ message: "Field is required" }).min(2),
   transactionId: z.string({ message: "Field is required" }).min(3),
   remarks: z.string({ message: "Field is required" }).min(2),
-  additionalCharges: additionalChargeSchema.totalCharge,
+  additionalCharges: additionalChargeSchema,
   adminId: z.string(),
 });
 
@@ -109,40 +109,43 @@ export default function ProfileForm() {
     vehicleRequiredDate: new Date().toISOString().split("T")[0],
     consignorName: "",
     consignorMobileNumber: 0,
-    loadingPoints: "",
+    loadingPoints: [""], 
     consigneeName: "",
     consigneeMobileNumber: 0,
-    unloadingPoints: "",
+    unloadingPoints: [""], 
     way: "",
     material: "",
-    quantity: "",
+    quantity: 0, 
     quantityUnit: "",
     vehicleType: "",
-    actualWeight: "",
-    chargedWeight: "",
+    actualWeight: 0,
+    chargedWeight: 0, 
     rateAsPer: "",
-    rate: "",
+    rate: 0,
     rateUnit: "",
-    partyBhara: 0,
-    hideBhara: "",
+    partyBhara: 0, 
+    hideBhara: false, 
     paymentLiability: "",
     billTo: "",
     paymentTerm: "",
-    advanceAmount: 0,
+    advanceAmount: 0, 
     balanceAmount: 0,
     payMode: "",
     transactionId: "",
     remarks: "",
-    additionalCharges: 0,
+    additionalCharges: {
+      enabled: false, 
+      totalCharge: 0, 
+      chargers: [], 
+    },
     adminId: "",
   };
 
   const [showAddChargeForm, setShowAddChargeForm] = useState(false);
   const [showAdditional, setShowAdditional] = useState(false);
-  const [showButton , setShowButton] = useState(false);
-  const [chargers, setChargers] = useState();
+  const [showButton, setShowButton] = useState(false);
+  const [chargers, setChargers] = useState([]);
 
-  const { user } = useContext(UserContext);
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
 
@@ -162,12 +165,16 @@ export default function ProfileForm() {
   }
 
   function calChargeAmount(chargeQty, chargeRate) {
-    return chargeQty * chargeRate;
+    const qty = Number(chargeQty) || 0;
+    const rate = Number(chargeRate) || 0;
+    return qty * rate;
   }
 
   function calTotalChargers(chargers) {
-    const total = chargers?.reduce((acc, curr) => acc + curr.amount, 0);
-    //  console.log('total',total);
+    const total = Array.isArray(chargers)
+      ? chargers?.reduce((acc, curr) => acc + curr.amount, 0)
+      : 0;
+
     return Number(total);
   }
 
@@ -178,7 +185,7 @@ export default function ProfileForm() {
   const advanceAmount = form.watch("advanceAmount", 0);
   const additionalCharges = form.watch("additionalCharges.totalCharge", 0);
 
-  // const chargersAmount = form.watch("additionalCharges.totalCharge",0);
+  // const chargersAmount = form.watch("additionalCharges.chargers.amount",0);
 
   const chargeAmount = calChargeAmount(chargeQty, chargeRate);
 
@@ -187,10 +194,16 @@ export default function ProfileForm() {
 
   const totalCharge = calTotalChargers(chargers);
 
+  // useEffect(()=>{
+  //   form.setValue("additionalCharges.chargers", [
+  //     ...chargers
+  //   ]);
+  //  },[chargers ,form])
+
   useEffect(() => {
     form.setValue("additionalCharges.chargers.amount", chargeAmount);
     form.setValue("additionalCharges.totalCharge", totalCharge);
-  }, [chargeRate, chargeQty, totalCharge]);
+  }, [chargeRate, chargeQty, chargers, totalCharge]);
 
   useEffect(() => {
     form.setValue("partyBhara", partyBhara);
@@ -203,10 +216,10 @@ export default function ProfileForm() {
   function generateUniqueId() {
     return Math.floor(100000 + Math.random() * 900000);
   }
-  const handleAddCharger = () => {
 
-   
-    console.log("hi");
+  const handleAddCharger = (e) => {
+    e.stopPropagation();
+
     const newCharger = {
       name: form.getValues("additionalCharges.chargers.name"),
       rate: form.getValues("additionalCharges.chargers.rate"),
@@ -214,59 +227,64 @@ export default function ProfileForm() {
       amount: form.getValues("additionalCharges.chargers.amount"),
     };
 
-    if ( !newCharger.rate || !newCharger.qty || newCharger.name === 'Select Charges' ) {
-      displayToast("Error", "❌", "fill in all fields before adding a charger.");
-    
+    if (
+      !newCharger.rate ||
+      !newCharger.qty ||
+      newCharger.name === "Select Charges"
+    ) {
+      displayToast(
+        "Error",
+        "❌",
+        "fill in all fields before adding a charger.",
+      );
+
       return;
     }
 
-    const currentChargers = Array.isArray(
-      form.getValues("additionalCharges.chargers"),
-    )
+    // If the validation is successful, proceed to add the charger
+    const currentChargers = form.getValues("additionalCharges.chargers")
       ? form.getValues("additionalCharges.chargers")
       : [];
 
-    console.log("love", currentChargers);
+    setChargers([...currentChargers, newCharger]);
 
-    form.setValue("additionalCharges.chargers", [
-      ...currentChargers,
-      newCharger,
-    ]);
+    console.log("Updated Chargers Array:", form.getValues("additionalCharges"));
 
-    console.log("hi 4");
+    console.log("love");
+    form.setValue("additionalCharges.enabled", true);
+    setShowButton(true);
 
-    // Log the updated chargers array
     console.log(
-      "Updated Chargers Array:",
-      form.getValues("additionalCharges.chargers"),
+      "Total Charges :",
+      form.getValues("additionalCharges.totalCharge"),
     );
-
-    // console.log('love')
-    form.setValue('additionalCharges.enabled', true);
-    setShowButton(true)
-    // console.log('value',form.getValues("additionalCharges.enabled") )
-
-    setChargers(form.getValues("additionalCharges.chargers"));
 
     setShowAddChargeForm(false);
 
     // Reset the form fields after adding a new charger
-    reset({
-      additionalCharges: {
-        ...form.getValues("additionalCharges"),
-        chargers: {
-          name: "",
-          rate: "",
-          qty: "",
-          amount: "",
-        },
-      },
-    });
-
+    // reset({
+    //   additionalCharges: {
+    //     ...form.getValues("additionalCharges"),
+    //     chargers: {
+    //       name: "",
+    //       rate: 0,
+    //       qty: 0,
+    //       amount: 0,
+    //     },
+    //   },
+    // });
   };
 
+  // console.log('chargers outside : ',chargers);
+
+  // console.log(form.getValues("additionalCharges"))
+
   async function MyHandleSubmit(value) {
+    form.setValue("additionalCharges.chargers", chargers);
+
+    console.log("hey");
     console.log(value);
+
     setIsLoading(true);
     try {
       const response = await fetch("/api/createbooking", {
@@ -286,16 +304,16 @@ export default function ProfileForm() {
           "Successfully Booked, Click view Booking button to view the booking",
           "✅",
         );
-        const userDetail = newResult.user;
-        reset(initialFormState);
+        // const userDetail = newResult.user;
+        await reset(initialFormState);
       } else {
         console.error("Error:", newResult.message);
         displayToast("Error", "❌", newResult.message);
         setIsLoading(false);
       }
     } catch (error) {
-      console.error("Error:", newResult.message);
-      displayToast("Error", "❌", newResult.message);
+      console.error("Error:", error);
+      displayToast("Error while sending data", "❌", newResult.message);
       setIsLoading(false);
     }
   }
@@ -528,49 +546,45 @@ export default function ProfileForm() {
                         <FormControl>
                           <Input type="text" {...field} />
                         </FormControl>
-                        
+
                         <FormMessage />
                       </div>
                       <FormField
-                     
-                control={form.control}
-                name="quantityUnit"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="absolute  top-1 right-0   flex items-center justify-center gap-4">
-                      
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <select
-                            {...field}
-                            className="h-11 rounded-md border bg-slate-50"
-                          >
-                            <option value=""> Quantity Unity</option>
-                            <option value="Kg">Kg (Kilo gram)</option>
-                            <option value="g">g (gram) </option>
-                            <option value="Km">Km (Kilo meter)</option>
-                            <option value="Km2">Km&sup2;</option>
-                            <option value="m">m </option>
-                            <option value="m2">m&sup2;</option>
-                            <option value="tons">tons</option>
-                            <option value="pounds">pounds</option>
-                            <option value="L">L (liters)</option>
-                            <option value="m3">m³</option>
-                          </select>
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-                     
+                        control={form.control}
+                        name="quantityUnit"
+                        render={({ field }) => {
+                          return (
+                            <FormItem className="absolute  right-0 top-1   flex items-center justify-center gap-4">
+                              <div className="flex flex-1 flex-col">
+                                <FormControl>
+                                  <select
+                                    {...field}
+                                    className="h-11 rounded-md border bg-slate-50"
+                                  >
+                                    <option value=""> Quantity Unity</option>
+                                    <option value="Kg">Kg (Kilo gram)</option>
+                                    <option value="g">g (gram) </option>
+                                    <option value="Km">Km (Kilo meter)</option>
+                                    <option value="Km2">Km&sup2;</option>
+                                    <option value="m">m </option>
+                                    <option value="m2">m&sup2;</option>
+                                    <option value="tons">tons</option>
+                                    <option value="pounds">pounds</option>
+                                    <option value="L">L (liters)</option>
+                                    <option value="m3">m³</option>
+                                  </select>
+                                </FormControl>
+                                <FormMessage />
+                              </div>
+                            </FormItem>
+                          );
+                        }}
+                      />
                     </FormItem>
                   );
                 }}
               />
 
-              
               <FormField
                 control={form.control}
                 name="vehicleType"
@@ -716,11 +730,12 @@ export default function ProfileForm() {
                         Party Bhara :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
-                      
                         <FormControl>
-                          <Input type="number"  {...field} readOnly />
+                          <Input type="number" {...field} readOnly />
                         </FormControl>
-                        <p className="text-[12px] text-slate-700 -mt-2">Party bhara is Total Amount + 18% gst</p>
+                        <p className="-mt-2 text-[12px] text-slate-700">
+                          Party bhara is Total Amount + 18% gst
+                        </p>
                         <FormMessage />
                       </div>
                     </FormItem>
@@ -856,7 +871,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="number" {...field} readOnly/>
+                          <Input type="number" {...field} readOnly />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -927,188 +942,211 @@ export default function ProfileForm() {
               {/* additional Charges */}
 
               {showAdditional ? (
-  <div>
-    <div className="flex flex-col items-center ">
-      <FormField
-        control={form.control}
-        name="additionalCharges.totalCharge"
-        render={({ field }) => {
-          return (
-            <FormItem className="flex items-center justify-center gap-4">
-              <FormLabel className="text-nowrap text-sm lg:text-base">
-                Additional Charges:
-              </FormLabel>
-              <div className="flex flex-1 flex-col">
-                <FormControl>
-                  <Input
-                    type="number"
-                    value={field.value}
-                    {...field}
-                    readOnly
-                  />
-                </FormControl>
-                <FormMessage />
-              </div>
-            </FormItem>
-          );
-        }}
-      />
-      <div className="flex gap-4 items-center">
-        <Button
-          variant="secondary"
-          onClick={() => {
-            form.setValue("additionalCharges.chargers", null);
-            setChargers(null);
-          }}
-        >
-          Reset
-        </Button>
-        <Button
-          variant="secondary"
-          onClick={() => {
-            setShowAdditional(!showAdditional);
-            // form.setValue("additionalCharges.enabled", true);
-          }}
-        >
-          Close
-        </Button>
-      </div>
-    </div>
-    {chargers && chargers?.length > 0 && (
-      <table className="w-full border mx-2 my-4">
-        <thead>
-          <tr className="w-full border bg-slate-50">
-            <th>Name</th>
-            <th>Qty</th>
-            <th>Rate</th>
-            <th>Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          {chargers.map((items, i) => (
-            <tr key={i} className="w-full text-center ">
-              <td>{items.name}</td>
-              <td>{items.qty}</td>
-              <td>{items.rate}</td>
-              <td>{items.amount}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    )}
+                <div>
+                  <div className="flex flex-col items-center ">
+                    <FormField
+                      control={form.control}
+                      name="additionalCharges.totalCharge"
+                      render={({ field }) => {
+                        const totalCharge = isNaN(field.value)
+                          ? 0
+                          : field.value;
+                        return (
+                          <FormItem className="flex items-center justify-center gap-4">
+                            <FormLabel className="text-nowrap text-sm lg:text-base">
+                              Additional Charges:
+                            </FormLabel>
+                            <div className="flex flex-1 flex-col">
+                              <FormControl>
+                                <Input
+                                  type="number"
+                                  value={field.value}
+                                  {...field}
+                                  readOnly
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </div>
+                          </FormItem>
+                        );
+                      }}
+                    />
+                    <div className="flex items-center gap-4">
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          form.setValue("additionalCharges.chargers", []);
+                          setChargers([]);
+                        }}
+                      >
+                        Reset
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowAdditional(!showAdditional);
+                          // form.setValue("additionalCharges.enabled", true);
+                        }}
+                      >
+                        Close
+                      </Button>
+                    </div>
+                  </div>
+                  {chargers && chargers?.length > 0 && (
+                    <table className="mx-2 my-4 w-full border">
+                      <thead>
+                        <tr className="w-full border bg-slate-50">
+                          <th>Name</th>
+                          <th>Qty</th>
+                          <th>Rate</th>
+                          <th>Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {chargers.map((items, i) => (
+                          <tr key={i} className="w-full text-center ">
+                            <td>{items.name}</td>
+                            <td>{items.qty}</td>
+                            <td>{items.rate}</td>
+                            <td>{items.amount}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
 
-    <div className="flex flex-col items-center gap-3">
-      <p className="font-semibold mt-2">Please , Select Additional Charge</p>
-      <div className="flex items-center gap-6">
-        <select
-          onChange={(e) =>
-            form.setValue(
-              "additionalCharges.chargers.name",
-              e.target.value,
-            )
-          }
-          className="h-10 rounded-md border bg-slate-50 px-2"
-        >
-          <option value="Select Charges">Select Charges</option>
-          <option value="Detention Charge">Detention Charge</option>
-          <option value="Pickup Charge">Pickup Charge</option>
-          <option value="Packing Charge">Packing Charge</option>
-          <option value="loading Charge">loading Charge</option>
-          <option value="unloading Charge">unloading Charge</option>
-          <option value="Other Charge">Other Charge</option>
-        </select>
-        <Button
-          variant="secondary"
-          onClick={() => {
-            setShowAddChargeForm(!showAddChargeForm);
-          }}
-        >
-          Add charger
-        </Button>
-      </div>
-    </div>
-    {showAddChargeForm && (
-      <div className="flex flex-col  ">
-        <FieldForm
-          form={form}
-          name="additionalCharges.chargers.rate"
-          label="Rate"
-          type="number"
-        />
-        <FieldForm
-          form={form}
-          name="additionalCharges.chargers.qty"
-          label="Qty"
-          type="number"
-        />
-        <FieldForm
-          form={form}
-          name="additionalCharges.chargers.amount"
-          label="Amount"
-          type="number"
-        />
-        <Button variant="outline" onClick={handleAddCharger}>
-          Add additional Charge
-        </Button>
-      </div>
-    )}
-  </div>
-) : (
-  <div >
-    {showButton ? (
-      <div>
-
-      
-      <FormField
-        control={form.control}
-        name="additionalCharges.totalCharge"
-        render={({ field }) => {
-          return (
-            <FormItem className="flex items-center justify-center gap-4">
-              <FormLabel className="text-nowrap text-sm lg:text-base">
-                Additional Charges:
-              </FormLabel>
-              <div className="flex flex-1 flex-col">
-                <FormControl>
-                  <Input
-                    type="number"
-                    value={field.value}
-                    {...field}
-                    readOnly
-                  />
-                </FormControl>
-                <FormMessage />
-              </div>
-            </FormItem>
-          );
-        }}
-      />
-      <Button
-        onClick={() => {
-          setShowAdditional(!showAdditional);
-          form.setValue("additionalCharges.enabled", true);
-        }}
-        variant="outline"
-        className="w-full bg-slate-100"
-      >
-        update
-      </Button>
-      </div>
-    ) : (
-      <Button
-        onClick={() => {
-          setShowAdditional(!showAdditional);
-          form.setValue("additionalCharges.enabled", true);
-        }}
-        variant="outline"
-        className="w-full bg-slate-100"
-      >
-        Add Additional Charges
-      </Button>
-    )}
-  </div>
-)}
-
+                  <div className="flex flex-col items-center gap-3">
+                    <p className="mt-2 font-semibold">
+                      Please , Select Additional Charge
+                    </p>
+                    <div className="flex items-center gap-6">
+                      <select
+                        onChange={(e) =>
+                          form.setValue(
+                            "additionalCharges.chargers.name",
+                            e.target.value,
+                          )
+                        }
+                        className="h-10 rounded-md border bg-slate-50 px-2"
+                      >
+                        <option value="Select Charges">Select Charges</option>
+                        <option value="Detention Charge">
+                          Detention Charge
+                        </option>
+                        <option value="Pickup Charge">Pickup Charge</option>
+                        <option value="Packing Charge">Packing Charge</option>
+                        <option value="loading Charge">loading Charge</option>
+                        <option value="unloading Charge">
+                          unloading Charge
+                        </option>
+                        <option value="Other Charge">Other Charge</option>
+                      </select>
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowAddChargeForm(!showAddChargeForm);
+                        }}
+                      >
+                        Add charger
+                      </Button>
+                    </div>
+                  </div>
+                  {showAddChargeForm && (
+                    <div className="flex flex-col  ">
+                      <FieldForm
+                        form={form}
+                        name="additionalCharges.chargers.rate"
+                        label="Rate"
+                        type="number"
+                      />
+                      <FieldForm
+                        form={form}
+                        name="additionalCharges.chargers.qty"
+                        label="Qty"
+                        type="number"
+                      />
+                      <FieldForm
+                        form={form}
+                        name="additionalCharges.chargers.amount"
+                        label="Amount"
+                        type="number"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={(e) => handleAddCharger(e)}
+                      >
+                        Add additional Charge
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div>
+                  {showButton ? (
+                    <div>
+                      <FormField
+                        control={form.control}
+                        name="additionalCharges.totalCharge"
+                        render={({ field }) => {
+                          const totalCharge = isNaN(field.value)
+                            ? 0
+                            : field.value;
+                          return (
+                            <FormItem className="flex items-center justify-center gap-4">
+                              <FormLabel className="text-nowrap text-sm lg:text-base">
+                                Additional Charges:
+                              </FormLabel>
+                              <div className="flex flex-1 flex-col">
+                                <FormControl>
+                                  <Input
+                                    type="number"
+                                    value={field.value}
+                                    {...field}
+                                    readOnly
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </div>
+                            </FormItem>
+                          );
+                        }}
+                      />
+                      <Button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowAdditional(!showAdditional);
+                          form.setValue("additionalCharges.enabled", true);
+                        }}
+                        variant="outline"
+                        className="w-full bg-slate-100"
+                      >
+                        update
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button
+                      type="button"
+                      onClick={(e) => {
+                        e.nativeEvent.stopImmediatePropagation();
+                        setShowAdditional(!showAdditional);
+                        setShowButton(true);
+                        form.setValue("additionalCharges.enabled", true);
+                      }}
+                      variant="outline"
+                      className="w-full bg-slate-100"
+                    >
+                      Add Additional Charges
+                    </Button>
+                  )}
+                </div>
+              )}
             </div>
           </div>
           <Button
@@ -1122,3 +1160,5 @@ export default function ProfileForm() {
     </div>
   );
 }
+
+//  const validationResult = chargersSchema.safeParse(newCharger);
