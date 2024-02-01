@@ -53,6 +53,7 @@ const bookingSchema = new mongoose.Schema(
     orderNumber: { type: Number, required: true },
     date: { type: Date, default: Date.now },
     vehicleRequiredDate: { type: Date, default: Date.now },
+    bookingType:{type:String},
     consignorName: { type: String, required: true },
     consignorMobileNumber: { type: Number },
     loadingPoints: [
@@ -76,6 +77,7 @@ const bookingSchema = new mongoose.Schema(
     chargedWeight: { type: Number, required: true },
     rateAsPer: { type: String, default: "Fixed" },
     rate: { type: Number },
+    taxPercentage:{type:Number},
     rateUnit: { type: String },
     partyBhara: { type: Number, default: 0 },
     hideBhara: { type: Boolean, default: false },
@@ -96,8 +98,8 @@ const bookingSchema = new mongoose.Schema(
     // additionalCharges: { type: String },
     additionalCharges: {
       enabled: { type: Boolean, default: false },
-      charges: [additionalChargeSchema],
-      totalCharges: { type: Number },
+      chargers: [additionalChargeSchema],
+      totalCharge: { type: Number },
     },
     status: {
       type: String, 
