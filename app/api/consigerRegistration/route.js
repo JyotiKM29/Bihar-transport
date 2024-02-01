@@ -1,45 +1,63 @@
 import connectDB from "../../middleware/connectDB";
-import Consignor from "../../models/consignormodel";
-import User from "../../models/usermodel";
+import consigee from "../../models/consigermodel";
+import user from "../../models/usermodel";
 
-export default async function POST(req, res) {
+export async function POST(req, res) {
   try {
     await connectDB();
 
-      const { adminId, consignorData } = await req.json();
-    
+    const { adminId, type, consignorData } = await req.json();
+    console.log("Consignor Data:", consignorData);
+
     // Check if adminId is present
     if (!adminId) {
-      return Response.json({ message: "adminId is required" }, { status: 400 });
+      return Response.json(
+        {
+          message: "Admin ID not found",
+        },
+        { staus: 400 },
+      );
     }
-    
+
     // Check if an admin or owner exists
-    const adminOrOwner = await User.findOne({
+    const adminOrOwner = await user.findOne({
       _id: adminId,
       $or: [{ isAdmin: true }, { isOwner: true }],
     });
+
     if (!adminOrOwner) {
-      return Response.json(
-        { message: "Admin or owner does not exist" },
-        { status: 400 },
-      );
-      }
-      
-    // Check if the consignor already exists
-    const existingConsignor = await Consignor.findOne({
-      consignorName: consignorData.consignorName,
-    });
-    if (existingConsignor) {
-      return Response.json(
-        { message: "Consignor already exists" },
-        { status: 400 },
-      );
+     return Response.json(
+       {
+         message: "Admin or Owner not found",
+       },
+       { staus: 400 },
+     );
     }
 
+      // Check if the consignor already exists
+      const existingConsignor = await consigee.findOne(
+        { "personal.contactNo": consignorData.contactNo, type: "personal" },
+      );
+      
+      const company = await consigee.findOne(
+        { "company.gstin": consignorData.gstin, type: "company" },
+      );
+
+    if (existingConsignor || company) {
+     return Response.json(
+       {
+         message: "Consignor already exists",
+       },
+       { staus: 500 },
+     );
+    }
 
     // Create a new consignor with all the fields from the frontend
-    const newConsignor = new Consignor({
-      ...consignorData,
+    const newConsignor = new consigee({
+      type,
+      ...(type === "company"
+        ? { company: consignorData }
+        : { personal: consignorData }),
     });
 
     // Save the new consignor
@@ -47,22 +65,19 @@ export default async function POST(req, res) {
 
     console.log("Consignor Created:", savedConsignor);
 
-    return Response.json(
-      {
-        message: "Consignor creation successful",
-        consignor: savedConsignor,
-      },
-      { status: 200 },
-    );
+   return Response.json(
+     {
+       message: "Consignor created successfully",
+       consignor: savedConsignor,
+     },
+     { staus: 200 },
+   );
   } catch (error) {
     console.error("Error while creating consignor:", error.message);
 
-    return Response.json(
-      {
+      return Response.json({
         message: "Error creating consignor",
         error: error.message,
-      },
-      { status: 500 },
-    );
+      },{staus:500});
   }
 }
