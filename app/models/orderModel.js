@@ -48,7 +48,7 @@ const orderSchema = new mongoose.Schema({
         name: { type: String },
         date: { type: Date },
     },
-    updatedBY: {
+    updatedBy: {
         id: { type: String, },
         name: { type: String,},
         date: { type: Date },

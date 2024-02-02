@@ -1,6 +1,7 @@
 import user from "../../models/usermodel";
 import connectDB from "../../middleware/connectDB";
 import Booking from "../../models/bookingmodel";
+import order from "../../models/orderModel";
 
 export async function POST(req, res) {
     
@@ -16,27 +17,39 @@ export async function POST(req, res) {
         }
 
         const booking = await Booking.findOne({ _id: bookingId });
+        const exitingOrder = await order.findOne({ "booking.id": booking.orderId });
         if(booking.status === "confirmed"){
             return Response.json({ message: "Booking already confirmed" }, { status: 400 });
         }
 
         if (booking.status == 'Pending' && status === 'Confirmed') {
             booking.status = status;
+            exitingOrder.status = status;
+            exitingOrder.updatedBy.push({ name: admin.name, id: adminId, date: Date.now() });
             booking.updatedBy.push({ name: admin.name, adminId: adminId, date: Date.now() });
             await booking.save();
+            await exitingOrder.save();
             return Response.json({ message: `Booking ${status}` }, { status: 200 });
         }
 
        else if (booking.status == 'Pending' && status === 'Cancelled') {
             booking.status = status;
-            booking.updatedBy.push({ name: admin.name, adminId: adminId, date: Date.now() });
+            booking.updatedBy.push({
+              name: admin.name,
+              adminId: adminId,
+              date: Date.now(),
+            });
             await booking.save();
             return Response.json({ message: `Booking ${status}` }, { status: 200 });
         }
         else if (booking.status === 'Cancelled' && status === 'Restart') {
             
-            booking.status = "Pending";
-            booking.updatedBy.push({ name: admin.name, adminId: adminId, date: Date.now() });
+            booking.status = status;
+            booking.updatedBy.push({
+              name: admin.name,
+              adminId: adminId,
+              date: Date.now(),
+            });
             await booking.save();
             return Response.json({ message: `Booking ${status}` }, { status: 200 });
         }
@@ -47,7 +60,11 @@ export async function POST(req, res) {
 
         else if (booking.status === 'Confirmed' && status === 'Cancelled') {
             booking.status = status;
-            booking.updatedBy.push({ name: admin.name, adminId: adminId, date: Date.now() });
+            booking.updatedBy.push({
+              name: admin.name,
+              adminId: adminId,
+              date: Date.now(),
+            });
             await booking.save();
             return Response.json({ message: `Booking ${status}` }, { status: 200 });
         }
@@ -57,16 +74,39 @@ export async function POST(req, res) {
         }
         else if (booking.status === "Dispatched" && status === "In Transit") {
             booking.status = status;
-            booking.updatedBy.push({ name: admin.name, adminId: adminId, date: Date.now() });
+            exitingOrder.status = status;
+            exitingOrder.updatedBy.push({
+              name: admin.name,
+              id: adminId,
+              date: Date.now(),
+            });
+            booking.updatedBy.push({
+              name: admin.name,
+              adminId: adminId,
+              date: Date.now(),
+            });
             await booking.save();
+            await exitingOrder.save();
             return Response.json({ message: `Booking ${status}` }, { status: 200 });
         }
             
         else if (booking.status === "In Transit" && status === "Delivered") {
          
             booking.status = status;
-            booking.updatedBy.push({ name: admin.name, adminId: adminId, date: Date.now() });
+            exitingOrder.status = status;
+            exitingOrder.updatedBy.push({
+              name: admin.name,
+              id: adminId,
+              date: Date.now(),
+            });
+            booking.updatedBy.push({
+              name: admin.name,
+              adminId: adminId,
+              date: Date.now(),
+            });
+            exitingOrder.isDelevered = true;
             await booking.save();
+            await exitingOrder.save();
             return Response.json({ message: `Booking ${status}` }, { status: 200 });
             
         }
