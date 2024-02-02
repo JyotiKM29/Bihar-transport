@@ -53,6 +53,8 @@ const orderSchema = new mongoose.Schema({
         name: { type: String,},
         date: { type: Date },
     },
+    
+    isDeleted: { type: Boolean, default: false },
 }, { timestamps: true });
 
 mongoose.models = [];
