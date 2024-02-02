@@ -48,6 +48,66 @@ const additionalChargeSchema = new mongoose.Schema({
 });
 
 
+const dispatchChargeSchema = new mongoose.Schema({
+  chargesName: { type: String, required: true },
+  days: { type: Number, required: true },
+  rate: { type: Number, required: true },
+  amount: { type: Number, required: true },
+  remarks: { type: String },
+});
+
+const dispatchDetailsSchema = new mongoose.Schema({
+  billtyType: { type: String },
+  dispatchDate: { type: Date },
+  dispatchTime: { type: String },
+  totalFreight: { type: Number },
+  consignorInvoiceDetails: {
+    isPODCompulsory: { type: String },
+    consignorInvoiceDate: { type: Date },
+    consignorDeliveryNo: { type: String },
+    consignorInvoiceNo: { type: String },
+    valueOfGoods: { type: Number },
+    eWayBillDetails: {
+      eWayBillNo: { type: String },
+      eWayBillDate: { type: Date },
+      expDate: { type: Date },
+    },
+  },
+  dispatch: {
+    additionalRateForCompany: { type: Number },
+    chargesDetails: [dispatchChargeSchema],
+  },
+  ledgerBalanceOfParty: { type: String },
+  remarks: { type: String },
+});
+
+const dispatchAdditionalRateSchema = new mongoose.Schema({
+  chargesName: { type: String, required: true },
+  days: { type: Number, default: 1},
+  rate: { type: Number, default: 0},
+  amount: { type: Number,default: 0},
+  remarks: { type: String },
+});
+
+const dispatchAdditionalDetailsSchema = new mongoose.Schema({
+  deliveryType: { type: String },
+  manualLRNo: { type: String },
+  brokerCommission: { type: Number },
+  shippingRisk: { type: String },
+  insurance: {
+    isInsured: { type: Boolean },
+    insuranceProvider: { type: String },
+    policyNo: { type: String },
+    policyAmount: { type: Number },
+    claimAmount: { type: Number },
+    brokerDetails: {
+    type: String,
+    },
+  },
+});
+
+
+
 const bookingSchema = new mongoose.Schema(
   {
     orderNumber: { type: Number, required: true },
@@ -128,6 +188,12 @@ const bookingSchema = new mongoose.Schema(
       },
     ],
     invoice: [],
+    dispatch: {
+      isDispatched: { type: Boolean, default: false },
+      dispatchDetails: dispatchDetailsSchema,
+      dispatchAdditionalDetails: dispatchAdditionalDetailsSchema,
+      dispatchAdditionalRate: [dispatchAdditionalRateSchema],
+    },
     createdBy: {
       name: { type: String },
       adminId: { type: String },
