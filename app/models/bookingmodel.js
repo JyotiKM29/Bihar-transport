@@ -106,6 +106,7 @@ const bookingSchema = new mongoose.Schema(
       default: "Pending",
       enum: [
         "Pending",
+        "Confirmed",
         "Initialized",
         "Dispatched",
         "In Transit",

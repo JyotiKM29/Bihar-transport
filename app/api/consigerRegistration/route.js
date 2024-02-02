@@ -37,11 +37,15 @@ export async function POST(req, res) {
       // Check if the consignor already exists
       const existingConsignor = await consigee.findOne(
         { "personal.contactNo": consignorData.contactNo, type: "personal" },
-      );
+    );
+    
+    console.log("personal", existingConsignor)
       
       const company = await consigee.findOne(
         { "company.gstin": consignorData.gstin, type: "company" },
-      );
+    );
+    
+    console.log("company", company);
 
     if (existingConsignor || company) {
      return Response.json(
