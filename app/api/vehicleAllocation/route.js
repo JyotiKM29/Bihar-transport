@@ -67,7 +67,6 @@ export async function POST(req, res) {
     }
 
     // within 24 hrs
-
     if (existingBooking.vehicleRequiredDate < Date.now() + 86400000) {
       return Response.json(
         { message: "Booking should be urgent" },
@@ -126,21 +125,17 @@ export async function POST(req, res) {
         ownerMobNo: existingVehicle.owner.phone,
       },
       arrangedBy: arrangedBy,
-      transporterDetails: transporterDetails || {
-        personName: "Default Person Name Value",
-        transporterMobNo: 1234567890,
-      },
-      ledgerBalance: ledgerBalance || "Default Ledger Balance Value",
-      rateAsPer: rateAsPer || "Default Rate As Per Value",
-      rate: rate || "Default Rate Value",
-      driverBhara: driverBhara || 5000,
-      commission: commission || 250,
-      netBhara: netBhara || 4750,
-      paymentLiability: paymentLiability || "Default Payment Liability Value",
-      billTo: billTo || "Default Bill To Value",
-      ledgerBalanceParty:
-        ledgerBalanceParty || "Default Ledger Balance Party Value",
-      remarks: remarks || "Default Remarks Value",
+      transporterDetails: transporterDetails,
+      ledgerBalance: ledgerBalance,
+      rateAsPer: rateAsPer,
+      rate: rate,
+      driverBhara: driverBhara,
+      commission: commission,
+      netBhara: netBhara,
+      paymentLiability: paymentLiability,
+      billTo: billTo,
+      ledgerBalanceParty: ledgerBalanceParty,
+      remarks: remarks,
       date: Date.now(),
       status: "Initialized",
     });
@@ -155,6 +150,7 @@ export async function POST(req, res) {
       vehicleOwnerPhone: existingVehicle.owner.phone,
       date: Date.now(),
     });
+
     await existingVehicle.save();
     await existingBooking.save();
     const savedOrder = await newOrder.save();
