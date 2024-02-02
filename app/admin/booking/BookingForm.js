@@ -20,10 +20,18 @@ import { UserContext } from "../../context/UserContextProvider";
 import { useToast } from "../../components/ui/use-toast";
 
 const chargersSchema = z.object({
-  name: z.string(),
-  amount: z.coerce.number(),
-  rate: z.coerce.number().positive(),
-  qty: z.coerce.number().positive(),
+  name: z.string({ message: "Field is required" }),
+  amount: z.coerce.number({
+        message: "Field is required",
+       }),
+
+  rate: z.coerce.number({
+    message: "Field is required",
+   }),
+
+  qty: z.coerce.number({
+    message: "Field is required",
+   }),
 });
 
 const additionalChargeSchema = z.object({
@@ -40,6 +48,7 @@ const formSchema = z.object({
     .positive(),
   date: z.coerce.date({ message: "Date is require" }),
   vehicleRequiredDate: z.coerce.date({ message: "Date is require" }),
+  bookingType: z.enum(["personal", "general", "comapany"]),
   consignorName: z.string({ message: "Field is required" }),
   consignorMobileNumber: z.coerce.number(),
   loadingPoints: z.array(z.string()),
@@ -74,6 +83,9 @@ const formSchema = z.object({
     })
     .positive(),
   rateUnit: z.string({ message: "Field is required" }).min(2),
+  taxPercentage: z.coerce.number({
+    message: "Field is required",
+  }),
   partyBhara: z.coerce
     .number({
       message: "Field is required",
@@ -107,36 +119,38 @@ export default function ProfileForm() {
     orderNumber: generateUniqueId(),
     date: new Date().toISOString().split("T")[0],
     vehicleRequiredDate: new Date().toISOString().split("T")[0],
+    bookingType: "",
     consignorName: "",
     consignorMobileNumber: 0,
-    loadingPoints: [""], 
+    loadingPoints: [""],
     consigneeName: "",
     consigneeMobileNumber: 0,
-    unloadingPoints: [""], 
+    unloadingPoints: [""],
     way: "",
     material: "",
-    quantity: 0, 
+    quantity: 0,
     quantityUnit: "",
     vehicleType: "",
     actualWeight: 0,
-    chargedWeight: 0, 
+    chargedWeight: 0,
     rateAsPer: "",
     rate: 0,
     rateUnit: "",
-    partyBhara: 0, 
-    hideBhara: false, 
+    taxPercentage: 0,
+    partyBhara: 0,
+    hideBhara: false,
     paymentLiability: "",
     billTo: "",
     paymentTerm: "",
-    advanceAmount: 0, 
+    advanceAmount: 0,
     balanceAmount: 0,
     payMode: "",
     transactionId: "",
     remarks: "",
     additionalCharges: {
-      enabled: false, 
-      totalCharge: 0, 
-      chargers: [], 
+      enabled: false,
+      totalCharge: 0,
+      chargers: [],
     },
     adminId: "",
   };
@@ -154,10 +168,10 @@ export default function ProfileForm() {
     defaultValues: initialFormState,
   });
 
-  function calPartyBhara(quantity, rate, additionalCharges) {
+  function calPartyBhara(quantity, rate, additionalCharges, tax) {
     const total = Number(quantity) * Number(rate);
-    const gst = 0.18;
-    const totalWithGst = total * gst;
+    // const gst = tax ;
+    const totalWithGst = total * Number(tax);
     return totalWithGst + total + Number(additionalCharges);
   }
   function calBalanceAmount(advanceAmount, partyBhara) {
@@ -181,6 +195,7 @@ export default function ProfileForm() {
   const chargeRate = form.watch("additionalCharges.chargers.rate", 0);
   const chargeQty = form.watch("additionalCharges.chargers.qty", 0);
   const rate = form.watch("rate", 0);
+  const tax = form.watch("taxPercentage", 0);
   const quantity = form.watch("quantity", 0);
   const advanceAmount = form.watch("advanceAmount", 0);
   const additionalCharges = form.watch("additionalCharges.totalCharge", 0);
@@ -189,7 +204,7 @@ export default function ProfileForm() {
 
   const chargeAmount = calChargeAmount(chargeQty, chargeRate);
 
-  const partyBhara = calPartyBhara(quantity, rate, additionalCharges);
+  const partyBhara = calPartyBhara(quantity, rate, additionalCharges, tax);
   const balanceAmount = calBalanceAmount(advanceAmount, partyBhara);
 
   const totalCharge = calTotalChargers(chargers);
@@ -207,7 +222,7 @@ export default function ProfileForm() {
 
   useEffect(() => {
     form.setValue("partyBhara", partyBhara);
-  }, [quantity, rate, additionalCharges]);
+  }, [quantity, rate, additionalCharges, tax]);
 
   useEffect(() => {
     form.setValue("balanceAmount", balanceAmount);
@@ -241,12 +256,10 @@ export default function ProfileForm() {
       return;
     }
 
-    // If the validation is successful, proceed to add the charger
-    const currentChargers = form.getValues("additionalCharges.chargers")
-      ? form.getValues("additionalCharges.chargers")
-      : [];
+ 
 
-    setChargers([...currentChargers, newCharger]);
+    setChargers([...form.getValues("additionalCharges.chargers"), newCharger]);
+    form.setValue("additionalCharges.chargers" , [...form.getValues("additionalCharges.chargers"), newCharger]);
 
     console.log("Updated Chargers Array:", form.getValues("additionalCharges"));
 
@@ -393,6 +406,34 @@ export default function ProfileForm() {
                   );
                 }}
               />
+
+              {/* Booking Type  */}
+
+              <FormField
+                control={form.control}
+                name="bookingType"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Booking Type :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <select {...field}>
+                            <option value="">Select Booking Type</option>
+                            <option value="personal">Personal Booking </option>
+                            <option value="general">General Booking</option>
+                            <option value="comapany ">Comapany Booking</option>
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+
               <FormField
                 control={form.control}
                 name="consignorName"
@@ -484,6 +525,8 @@ export default function ProfileForm() {
                   );
                 }}
               />
+            </div>
+            <div className="md:column-span-1 row-span-1 -space-y-3 lg:space-y-2">
               <FormField
                 control={form.control}
                 name="way"
@@ -495,10 +538,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <select
-                            {...field}
-                            className="h-10 rounded-md border bg-slate-50"
-                          >
+                          <select {...field}>
                             <option value="">Select Way</option>
                             <option value="one way">one way</option>
                             <option value="two way">two way</option>
@@ -507,79 +547,6 @@ export default function ProfileForm() {
                         </FormControl>
                         <FormMessage />
                       </div>
-                    </FormItem>
-                  );
-                }}
-              />
-            </div>
-            <div className="md:column-span-1 row-span-1 -space-y-3 lg:space-y-2">
-              <FormField
-                control={form.control}
-                name="material"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Material :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="text" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-
-              <FormField
-                control={form.control}
-                name="quantity"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="relative flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Quantity :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="text" {...field} />
-                        </FormControl>
-
-                        <FormMessage />
-                      </div>
-                      <FormField
-                        control={form.control}
-                        name="quantityUnit"
-                        render={({ field }) => {
-                          return (
-                            <FormItem className="absolute  right-0 top-1   flex items-center justify-center gap-4">
-                              <div className="flex flex-1 flex-col">
-                                <FormControl>
-                                  <select
-                                    {...field}
-                                    className="h-11 rounded-md border bg-slate-50"
-                                  >
-                                    <option value=""> Quantity Unity</option>
-                                    <option value="Kg">Kg (Kilo gram)</option>
-                                    <option value="g">g (gram) </option>
-                                    <option value="Km">Km (Kilo meter)</option>
-                                    <option value="Km2">Km&sup2;</option>
-                                    <option value="m">m </option>
-                                    <option value="m2">m&sup2;</option>
-                                    <option value="tons">tons</option>
-                                    <option value="pounds">pounds</option>
-                                    <option value="L">L (liters)</option>
-                                    <option value="m3">m³</option>
-                                  </select>
-                                </FormControl>
-                                <FormMessage />
-                              </div>
-                            </FormItem>
-                          );
-                        }}
-                      />
                     </FormItem>
                   );
                 }}
@@ -594,6 +561,25 @@ export default function ProfileForm() {
                       <FormLabel className="text-nowrap text-sm lg:text-base">
                         {" "}
                         Vehicle Type:
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input type="text" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+              <FormField
+                control={form.control}
+                name="material"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Material :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
@@ -644,6 +630,7 @@ export default function ProfileForm() {
                   );
                 }}
               />
+
               <FormField
                 control={form.control}
                 name="rateAsPer"
@@ -655,10 +642,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <select
-                            {...field}
-                            className="h-10 rounded-md border bg-slate-50"
-                          >
+                          <select {...field}>
                             <option value="">Select Rate as Per</option>
                             <option value="Weight">Weight </option>
                             <option value="Length">Length </option>
@@ -672,45 +656,134 @@ export default function ProfileForm() {
                 }}
               />
 
+              <div className="flex w-full items-center gap-0">
+                <FormField
+                  control={form.control}
+                  name="quantity"
+                  render={({ field }) => {
+                    return (
+                      <FormItem className="flex items-center justify-center gap-4">
+                        <FormLabel className="text-nowrap text-sm lg:text-base">
+                          Quantity :
+                        </FormLabel>
+                        <div className="flex flex-1 flex-col">
+                          <FormControl>
+                            <Input
+                              type="text"
+                              {...field}
+                              className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
+                            />
+                          </FormControl>
+
+                          <FormMessage />
+                        </div>
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="quantityUnit"
+                  render={({ field }) => {
+                    return (
+                      <FormItem className="flex items-center justify-center ">
+                        <div className="flex flex-1 flex-col">
+                          <FormControl>
+                            <select
+                              {...field}
+                              className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                            >
+                              <option value=""> Quantity Unity</option>
+                              <option value="Kg">Kg (Kilo gram)</option>
+                              <option value="g">g (gram) </option>
+                              <option value="Km">Km (Kilo meter)</option>
+                              <option value="Km2">Km&sup2;</option>
+                              <option value="m">m </option>
+                              <option value="m2">m&sup2;</option>
+                              <option value="tons">tons</option>
+                              <option value="pounds">pounds</option>
+                              <option value="L">L (liters)</option>
+                              <option value="m3">m³</option>
+                            </select>
+                          </FormControl>
+                          <FormMessage />
+                        </div>
+                      </FormItem>
+                    );
+                  }}
+                />
+              </div>
+              <div className="flex items-center gap-0">
+                <FormField
+                  control={form.control}
+                  name="rate"
+                  render={({ field }) => {
+                    return (
+                      <FormItem className="flex items-center justify-center gap-4">
+                        <FormLabel className="text-nowrap text-sm lg:text-base">
+                          Rate :
+                        </FormLabel>
+                        <div className="flex flex-1 flex-col">
+                          <FormControl>
+                            <Input
+                              type="text"
+                              {...field}
+                              className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </div>
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="rateUnit"
+                  render={({ field }) => {
+                    return (
+                      <FormItem className="flex items-center justify-center ">
+                        <div className="flex flex-1 flex-col">
+                          <FormControl>
+                            <select
+                              {...field}
+                              className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                            >
+                              <option value="">Select Rate Unit</option>
+                              <option value="Weight">Weight </option>
+                              <option value="Length">Length </option>
+                              <option value="Third Volume">Volume</option>
+                            </select>
+                          </FormControl>
+                          <FormMessage />
+                        </div>
+                      </FormItem>
+                    );
+                  }}
+                />
+              </div>
+
+              {/* Tax Options */}
+
               <FormField
                 control={form.control}
-                name="rate"
+                name="taxPercentage"
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
                       <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Rate :
+                        Tax Percentage:
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-              <FormField
-                control={form.control}
-                name="rateUnit"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        {" "}
-                        Rate Unit :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <select
-                            {...field}
-                            className="h-10 rounded-md border bg-slate-50"
-                          >
-                            <option value="">Select Rate Unit</option>
-                            <option value="Weight">Weight </option>
-                            <option value="Length">Length </option>
-                            <option value="Third Volume">Volume</option>
+                          <select {...field}>
+                            <option value="">Select Tax Percentage</option>
+                            <option value="0.0">0%</option>
+                            <option value="0.02">2%</option>
+                            <option value="0.05 ">5%</option>
+                            <option value="0.08 ">8%</option>
+                            <option value="0.12 ">12%</option>
+                            <option value="0.18">18%</option>
                           </select>
                         </FormControl>
                         <FormMessage />
@@ -775,10 +848,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <select
-                            {...field}
-                            className="h-10 rounded-md border bg-slate-50"
-                          >
+                          <select {...field}>
                             <option value="">Select Payment Liability</option>
                             <option value="Consignor">Consignor</option>
                             <option value="Consignee">Consignee</option>
@@ -824,10 +894,7 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col ">
                         <FormControl>
-                          <select
-                            {...field}
-                            className="h-10 rounded-md border bg-slate-50"
-                          >
+                          <select {...field}>
                             <option value="">Select a payment term</option>
                             <option value="Advance">Advance</option>
                             <option value="Paid">Paid</option>
@@ -1031,7 +1098,6 @@ export default function ProfileForm() {
                             e.target.value,
                           )
                         }
-                        className="h-10 rounded-md border bg-slate-50 px-2"
                       >
                         <option value="Select Charges">Select Charges</option>
                         <option value="Detention Charge">
@@ -1059,24 +1125,64 @@ export default function ProfileForm() {
                   </div>
                   {showAddChargeForm && (
                     <div className="flex flex-col  ">
-                      <FieldForm
-                        form={form}
-                        name="additionalCharges.chargers.rate"
-                        label="Rate"
-                        type="number"
-                      />
-                      <FieldForm
-                        form={form}
-                        name="additionalCharges.chargers.qty"
-                        label="Qty"
-                        type="number"
-                      />
-                      <FieldForm
-                        form={form}
-                        name="additionalCharges.chargers.amount"
-                        label="Amount"
-                        type="number"
-                      />
+                    <FormField
+                control={form.control}
+                name="additionalCharges.chargers.rate"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                      Rate :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input type="number" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+                    <FormField
+                control={form.control}
+                name="additionalCharges.chargers.qty"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                      Quantity :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input type="number" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+                    <FormField
+                control={form.control}
+                name="additionalCharges.chargers.amount"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                      Amount :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input type="number" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+                    
                       <Button
                         type="button"
                         variant="outline"

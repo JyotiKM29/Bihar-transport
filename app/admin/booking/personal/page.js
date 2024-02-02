@@ -59,19 +59,12 @@ const PersonalBooking = () => {
       space-y-2 rounded-2xl  bg-white px-4 py-4 
      shadow-sm md:px-6 xl:h-[95%]"
       >
-        <div className="flex w-full items-center justify-end gap-20 ">
-          <button
-            className="font-semiBold rounded-lg bg-blue-700 p-2 px-6 text-lg text-white"
-            onClick={() => setFormValue(!formValue)}
-          >
-            {formValue ? "View Bookings" : "New Booking"}
-          </button>
-        </div>
-        {formValue && <BookingForm />}
+        
+         <BookingForm />
 
-       {loading ? (<div className="max-w max-h  bg-white"><h2
+       {/* {loading ? (<div className="max-w max-h  bg-white"><h2
        className="text-xl"
-       >Loading...</h2></div>) :  (!formValue && <DataTable columns={columns} data={data?.data} />)}
+       >Loading...</h2></div>) :  (!formValue && <DataTable columns={columns} data={data?.data} />)} */}
       </div>
     </div>
   );

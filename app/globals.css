@@ -58,6 +58,10 @@
     @apply bg-background text-foreground;
     overflow-x: hidden;
   }
+
+  select{
+    @apply h-10 flex  w-full rounded-md border border-input bg-slate-50  px-3 py-2 text-sm my-3 mb-3 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50;
+  }
 }
 
 
