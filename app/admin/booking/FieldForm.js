@@ -53,6 +53,7 @@ const FieldForm = ({
                   {...field} />
                 )}
               </FormControl>
+              <FormMessage />
             </div>
           </FormItem>
         );
