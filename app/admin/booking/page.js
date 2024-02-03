@@ -5,7 +5,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "../../components/ui/tabs";
-import PersonalBooking  from './personal/page'
+import NewBooking  from './newbooking/page'
 import CompanyBooking  from './company/page'
 import GeneralBooking  from './general/page'
 
@@ -39,17 +39,9 @@ function page() {
           </TabsTrigger>
         
         </TabsList>
-        {/* <TabsContent value="personal">
-          <PersonalBooking  />
-        </TabsContent>
-        <TabsContent value="general">
-        <GeneralBooking  />
-        </TabsContent>
-        <TabsContent value="company">
-        <CompanyBooking  />
-        </TabsContent> */}
+       
         <TabsContent value="Booking">
-        <PersonalBooking  />
+        <NewBooking  />
           </TabsContent>
           <TabsContent value="Pending">
           Pending Booking
