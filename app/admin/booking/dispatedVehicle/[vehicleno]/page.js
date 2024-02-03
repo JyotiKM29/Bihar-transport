@@ -56,7 +56,7 @@ const dispatchDetailsSchema= z.object({
   consignorInvoiceDetails:consignorInvoiceDetailsSchema,
   dispatch:z.object({
     additionalRateForCompany:z.coerce.number(),
-    chargesDetails:chargesDetailsSchema,
+    chargesDetails:z.array(chargesDetailsSchema),
   }),
   ledgerBalanceOfParty: z.string(),
   remarks: z.string(),
@@ -83,7 +83,7 @@ const DispatchVehicle = ({ params }) => {
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
 
-  // function
+
   const initialFormState = {
     // adminId: user?._id,
     // vehicleNo: undefined,
@@ -109,13 +109,13 @@ const DispatchVehicle = ({ params }) => {
         },
         dispatch:{
           additionalRateForCompany:undefined,
-          chargesDetails:{
-            chargesName: undefined,
+          chargesDetails:[
+           { chargesName: undefined,
             days:undefined,
             rate:undefined,
             amount:undefined,
-            remarks: undefined,
-          }
+            remarks: undefined,}
+          ]
         },
         ledgerBalanceOfParty:undefined ,
         remarks:undefined ,
@@ -128,6 +128,14 @@ const DispatchVehicle = ({ params }) => {
     defaultValues: initialFormState,
   });
 
+  
+
+
+  // functions
+  function calAmountofdispatchAdditionalCharge(){
+
+  }
+
   async function myhandleSubmit(value) {
     try {
       const res = formSchema.parse(value);
@@ -139,7 +147,7 @@ const DispatchVehicle = ({ params }) => {
 
   return (
     <div className="max-w max-h mt-14 rounded-md  bg-white px-4 py-4 shadow-md md:px-10 lg:my-4 lg:p-8 lg:px-20">
-      <h2 className="mb-6 text-3xl font-semibold"> Vehicle Allocation </h2>
+      <h2 className="mb-6 text-3xl font-semibold"> Dispatch Booking Form</h2>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(myhandleSubmit)}
@@ -149,7 +157,7 @@ const DispatchVehicle = ({ params }) => {
           <FieldForm
             form={form}
             name="bookingId"
-            label="bookingId"
+            label="Booking Id"
             type="text"
           /> 
 
@@ -158,79 +166,81 @@ const DispatchVehicle = ({ params }) => {
           <FieldForm
             form={form}
             name="dispatch.dispatchDetails.billtyType"
-            label="dispatchDetails.billtyType"
+            label="Billty Type"
             type="text"
           /> 
           <FieldForm
             form={form}
             name="dispatch.dispatchDetails.dispatchDate"
-            label="dispatchDetails.dispatchDate"
+            label="Dispatch Date"
             type="date"
           /> 
           <FieldForm
             form={form}
             name="dispatch.dispatchDetails.dispatchTime"
-            label="dispatchDetails.dispatchTime"
+            label="Dispatch Time"
             type="text"
           /> 
           <FieldForm
             form={form}
             name="dispatch.dispatchDetails.totalFreight"
-            label="dispatchDetails.totalFreight"
+            label="Total Freight"
             type="number"
           /> 
 
           {/* consignorInvoiceDetails */}
           <>
+            <h2 className="text-2xl text-center font-semibold mt-6">Consignor Invoice Details</h2>
           <FieldForm
             form={form}
             name="dispatch.dispatchDetails.consignorInvoiceDetails.isPODCompulsory"
-            label="consignorInvoiceDetails isPODCompulsory"
+            label="POD Compulsory (Yes/No)"
             type="text"
           /> 
           <FieldForm
             form={form}
             name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorInvoiceDate"
-            label="consignorInvoiceDetails consignorInvoiceDate"
+            label="Consignor - Invoice Date"
             type="date"
           /> 
           <FieldForm
             form={form}
             name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorDeliveryNo"
-            label="consignorInvoiceDetails consignorDeliveryNo"
+            label="Consignor - Delivery No"
             type="text"
           /> 
           <FieldForm
             form={form}
             name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorInvoiceNo"
-            label="consignorInvoiceDetails consignorInvoiceNo"
+            label="Consignor - Invoice No"
             type="text"
           /> 
           <FieldForm
             form={form}
             name="dispatch.dispatchDetails.consignorInvoiceDetails.valueOfGoods"
-            label="consignorInvoiceDetails valueOfGoods"
+            label="Value of Goods (Rs.)"
             type="number"
           /> 
 
           {/* eWayBillDetails */}
           <>
+          <h2 className="text-2xl text-center font-semibold mt-6">e-way Bill Details</h2>
           <FieldForm
             form={form}
             name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.eWayBillNo"
-            label="eWayBillDetails"
+            label="E-Way Bill No"
             type="text"
           />
           <FieldForm
             form={form}
             name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.eWayBillDate"
-            label="eWayBillDetails"
+            label="E-Way Bill Date"
             type="date"
           />
           <FieldForm
             form={form}
             name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.expDate"
-            label="eWayBillDetails"
+            label="Exp-Date "
             type="date"
           />
            </>
@@ -238,62 +248,64 @@ const DispatchVehicle = ({ params }) => {
 
           {/* dispatch Info  */}
           <>
-          <h2>dispatch Info</h2>
+          <h2 className="text-2xl text-center font-semibold mt-6">Additional Rate for Company</h2>
           <FieldForm
             form={form}
             name="dispatch.dispatchDetails.dispatch.additionalRateForCompany"
-            label="additionalRateForCompany"
+            label="Additional Rate for Company"
             type="number"
           />
           {/* dispatch Info =====> chargesDetails */}
           <>
-          <h2>dispatch Info  --- chargesDetails</h2>
+          <h2 className="text-xl text-center font-semibold mt-6">Additional Chargers Details</h2>
           <FieldForm
             form={form}
-            name="dispatch.dispatchDetails.dispatch.chargesDetails.chargesName"
-            label="chargesName"
+            name="dispatch.dispatchDetails.dispatch.chargesDetails[0].chargesName"
+            label="Charges Name"
             type="text"
           />
           <FieldForm
             form={form}
-            name="dispatch.dispatchDetails.dispatch.chargesDetails.days"
-            label="days"
+            name="dispatch.dispatchDetails.dispatch.chargesDetails[0].days"
+            label="Days"
             type="number"
           />
           <FieldForm
             form={form}
-            name="dispatch.dispatchDetails.dispatch.chargesDetails.rate"
-            label="rate"
+            name="dispatch.dispatchDetails.dispatch.chargesDetails[0].rate"
+            label="Rate"
             type="number"
           />
           <FieldForm
             form={form}
-            name="dispatch.dispatchDetails.dispatch.chargesDetails.amount"
-            label="amount"
+            name="dispatch.dispatchDetails.dispatch.chargesDetails[0].amount"
+            label="Amount"
             type="number"
           />
           <FieldForm
             form={form}
-            name="dispatch.dispatchDetails.dispatch.chargesDetails.remarks"
-            label="remarks"
+            name="dispatch.dispatchDetails.dispatch.chargesDetails[0].remarks"
+            label="Remarks"
             type="text"
           />
           </>
 
           </>
 
-          <FieldForm
+         <div className="mt-8">
+         <FieldForm
             form={form}
             name="dispatch.dispatchDetails.ledgerBalanceOfParty"
-            label="dispatchDetails.ledgerBalanceOfParty"
+            label="LedgerBalance of Party"
             type="text"
           /> 
           <FieldForm
             form={form}
             name="dispatch.dispatchDetails.remarks"
-            label="dispatchDetails.remarks"
+            label="Remarks"
             type="text"
           /> 
+         </div>
 
            
       
