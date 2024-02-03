@@ -178,13 +178,10 @@ const NewRegistration = () => {
 
   const type= form.watch('type');
 
-  useEffect(()=>{
-   
-  },[type])
+ 
 
-  async function myhandleSubmit(value, e) {
-    // console.log("hey !");
-    // console.log(value);
+  async function myhandleSubmit(value) {
+   
 
     try {
       const res = formSchema.parse(value);
