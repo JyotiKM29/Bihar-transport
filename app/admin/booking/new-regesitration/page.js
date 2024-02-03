@@ -153,7 +153,7 @@ const NewRegistration = () => {
       consignorName: "",
       contactNo: 0,
       address: "",
-      dob: undefined,
+      dob: new Date().toISOString().split("T")[0],
       gstin: "",
       officeNo: 0,
 

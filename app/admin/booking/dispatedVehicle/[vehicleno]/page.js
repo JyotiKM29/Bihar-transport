@@ -2,6 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import AdditionalChargers from './AdditionalChargers'
 import FieldForm from "../../FieldForm";
 import { Input } from "../../../../components/ui/input";
 import { Button } from "../../../../components/ui/button";
@@ -106,9 +107,10 @@ const dispatchAdditionalRateSchema = z.object({
 const formSchema = z.object({
   // adminId: z.string(),
   // vehicleNo: z.string(),
-  bookingId: z.string(),
+
+  // bookingId: z.string(),
   dispatch: z.object({
-    isDispatched: z.coerce.boolean(),
+    // isDispatched: z.coerce.boolean(),
     // dispatchDetails: dispatchDetailsSchema,
     // dispatchAdditionalDetails: dispatchAdditionalDetailsSchema,
     dispatchAdditionalRate: z.array(dispatchAdditionalRateSchema),
@@ -123,24 +125,24 @@ const DispatchVehicle = ({ params }) => {
   const initialFormState = {
     // adminId: user?._id,
     // vehicleNo: undefined,
-    bookingId: undefined,
+    // bookingId: undefined,
     dispatch: {
-      isDispatched: true,
+      // isDispatched: true,
       // dispatchDetails: {
       //   billtyType: undefined,
-      //   dispatchDate: undefined,
+      //   dispatchDate: new Date().toISOString().split("T")[0],
       //   dispatchTime: undefined,
       //   totalFreight: undefined,
       //   consignorInvoiceDetails: {
       //     isPODCompulsory: undefined,
-      //     consignorInvoiceDate: undefined,
+      //     consignorInvoiceDate: new Date().toISOString().split("T")[0],
       //     consignorDeliveryNo: undefined,
       //     consignorInvoiceNo: undefined,
       //     valueOfGoods: undefined,
       //     eWayBillDetails: {
       //       eWayBillNo: undefined,
-      //       eWayBillDate: undefined,
-      //       expDate: undefined,
+      //       eWayBillDate: new Date().toISOString().split("T")[0],
+      //       expDate: new Date().toISOString().split("T")[0],
       //     },
       //   },
       //   dispatch: {
@@ -216,6 +218,12 @@ const DispatchVehicle = ({ params }) => {
           onSubmit={form.handleSubmit(myhandleSubmit)}
           className="flex w-full max-w-xl flex-col gap-0"
         >
+
+
+
+
+
+
           <FieldForm
             form={form}
             name="bookingId"
@@ -223,9 +231,11 @@ const DispatchVehicle = ({ params }) => {
             type="text"
           />
 
+        
+
           {/* dispatchDetails */}
           <>
-            <div className="hidden">
+            <div >
               <>
                 <FieldForm
                   form={form}
@@ -328,40 +338,9 @@ const DispatchVehicle = ({ params }) => {
                 />
                 {/* dispatch Info =====> chargesDetails */}
                 <>
-                  <h2 className="mt-6 text-center text-xl font-semibold">
-                    Additional Chargers Details
-                  </h2>
-                  <FieldForm
-                    form={form}
-                    name="dispatch.dispatchDetails.dispatch.chargesDetails[0].chargesName"
-                    label="Charges Name"
-                    type="text"
-                  />
-                  <FieldForm
-                    form={form}
-                    name="dispatch.dispatchDetails.dispatch.chargesDetails[0].days"
-                    label="Days"
-                    type="number"
-                  />
-                  <FieldForm
-                    form={form}
-                    name="dispatch.dispatchDetails.dispatch.chargesDetails[0].rate"
-                    label="Rate"
-                    type="number"
-                  />
-                  <FieldForm
-                    form={form}
-                    name="dispatch.dispatchDetails.dispatch.chargesDetails[0].amount"
-                    label="Amount"
-                    type="number"
-                  />
-                  <FieldForm
-                    form={form}
-                    name="dispatch.dispatchDetails.dispatch.chargesDetails[0].remarks"
-                    label="Remarks"
-                    type="text"
-                  />
+                <AdditionalChargers form={form} nameValue="dispatch.dispatchDetails.dispatch.chargesDetails" />
                 </>
+                
               </>
 
               <div className="mt-8">
@@ -381,7 +360,7 @@ const DispatchVehicle = ({ params }) => {
             </div>
           </>
           {/* dispatchAdditionalDetails */}
-          <div className="hidden">
+          <div >
             <h2 className="mt-6 text-center text-2xl font-semibold">
               Additional Details
             </h2>
@@ -490,37 +469,10 @@ const DispatchVehicle = ({ params }) => {
           <h2 className="mt-6 text-center text-2xl font-semibold">
                   Additional Chargers for Vehicle hired 
                 </h2>
-            <FieldForm
-              form={form}
-              name="dispatch.dispatchAdditionalRate[0].chargesName"
-              label="chargesName"
-              type="text"
-            />
-            <FieldForm
-              form={form}
-              name="dispatch.dispatchAdditionalRate[0].days"
-              label="days"
-              type="number"
-            />
-            <FieldForm
-              form={form}
-              name="dispatch.dispatchAdditionalRate[0].rate"
-              label="rate"
-              type="number"
-            />
-            <FieldForm
-              form={form}
-              name="dispatch.dispatchAdditionalRate[0].amount"
-              label="amount"
-              type="number"
-            />
-            <FieldForm
-              form={form}
-              name="dispatch.dispatchAdditionalRate[0].remarks"
-              label="remarks"
-              type="text"
-            />
+                <AdditionalChargers form={form} nameValue="dispatch.dispatchAdditionalRate" />
           </div>
+
+         
 
           <Button type="submit">{isloading ? "Loading..." : " Submit"}</Button>
         </form>
