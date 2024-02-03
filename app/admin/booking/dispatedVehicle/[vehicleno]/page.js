@@ -26,11 +26,11 @@ import { UserContext } from "../../../../context/UserContextProvider";
 import { useToast } from "../../../../components/ui/use-toast";
 
 const chargesDetailsSchema = z.object({
-  chargesName: z.string(),
-  days: z.coerce.number(),
-  rate: z.coerce.number(),
-  amount: z.coerce.number(),
-  remarks: z.string(),
+  chargesName: z.string().optional(),
+  days: z.coerce.number().optional(),
+  rate: z.coerce.number().optional(),
+  amount: z.coerce.number().optional(),
+  remarks: z.string().optional(),
 });
 
 const eWayBillDetailsSchema = z.object({
@@ -97,22 +97,21 @@ const dispatchAdditionalDetailsSchema = z.object({
 
 // dispatchAdditionalRateSchema
 const dispatchAdditionalRateSchema = z.object({
-  chargesName: z.string(),
-  days: z.coerce.number(),
-  rate: z.coerce.number(),
-  amount: z.coerce.number(),
-  remarks: z.string(),
+  chargesName: z.string().optional(),
+  days: z.coerce.number().optional(),
+  rate: z.coerce.number().optional(),
+  amount: z.coerce.number().optional(),
+  remarks: z.string().optional(),
 });
 
 const formSchema = z.object({
-  // adminId: z.string(),
-  // vehicleNo: z.string(),
+  adminId: z.string(),
 
-  // bookingId: z.string(),
+  bookingId: z.string(),
   dispatch: z.object({
-    // isDispatched: z.coerce.boolean(),
-    // dispatchDetails: dispatchDetailsSchema,
-    // dispatchAdditionalDetails: dispatchAdditionalDetailsSchema,
+    isDispatched: z.coerce.boolean(),
+    dispatchDetails: dispatchDetailsSchema,
+    dispatchAdditionalDetails: dispatchAdditionalDetailsSchema,
     dispatchAdditionalRate: z.array(dispatchAdditionalRateSchema),
   }),
 });
@@ -122,60 +121,61 @@ const DispatchVehicle = ({ params }) => {
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
 
+
   const initialFormState = {
-    // adminId: user?._id,
+    adminId:'',
     // vehicleNo: undefined,
-    // bookingId: undefined,
+    bookingId: params?.vehicleno,
     dispatch: {
-      // isDispatched: true,
-      // dispatchDetails: {
-      //   billtyType: undefined,
-      //   dispatchDate: new Date().toISOString().split("T")[0],
-      //   dispatchTime: undefined,
-      //   totalFreight: undefined,
-      //   consignorInvoiceDetails: {
-      //     isPODCompulsory: undefined,
-      //     consignorInvoiceDate: new Date().toISOString().split("T")[0],
-      //     consignorDeliveryNo: undefined,
-      //     consignorInvoiceNo: undefined,
-      //     valueOfGoods: undefined,
-      //     eWayBillDetails: {
-      //       eWayBillNo: undefined,
-      //       eWayBillDate: new Date().toISOString().split("T")[0],
-      //       expDate: new Date().toISOString().split("T")[0],
-      //     },
-      //   },
-      //   dispatch: {
-      //     additionalRateForCompany: undefined,
-      //     chargesDetails: [
-      //       {
-      //         chargesName: undefined,
-      //         days: undefined,
-      //         rate: undefined,
-      //         amount: undefined,
-      //         remarks: undefined,
-      //       },
-      //     ],
-      //   },
-      //   ledgerBalanceOfParty: undefined,
-      //   remarks: undefined,
-      // },
+      isDispatched: true,
+      dispatchDetails: {
+        billtyType: undefined,
+        dispatchDate: new Date().toISOString().split("T")[0],
+        dispatchTime: undefined,
+        totalFreight: undefined,
+        consignorInvoiceDetails: {
+          isPODCompulsory: undefined,
+          consignorInvoiceDate: new Date().toISOString().split("T")[0],
+          consignorDeliveryNo: undefined,
+          consignorInvoiceNo: undefined,
+          valueOfGoods: undefined,
+          eWayBillDetails: {
+            eWayBillNo: undefined,
+            eWayBillDate: new Date().toISOString().split("T")[0],
+            expDate: new Date().toISOString().split("T")[0],
+          },
+        },
+        dispatch: {
+          additionalRateForCompany: undefined,
+          chargesDetails: [
+            {
+              chargesName: undefined,
+              days: undefined,
+              rate: undefined,
+              amount: undefined,
+              remarks: undefined,
+            },
+          ],
+        },
+        ledgerBalanceOfParty: undefined,
+        remarks: undefined,
+      },
 
-      // dispatchAdditionalDetails: {
-      //   deliveryType: undefined,
-      //   manualLRNo: undefined,
-      //   brokerCommission: undefined,
-      //   shippingRisk: undefined,
+      dispatchAdditionalDetails: {
+        deliveryType: undefined,
+        manualLRNo: undefined,
+        brokerCommission: undefined,
+        shippingRisk: undefined,
 
-      //   insurance: {
-      //     isInsured: undefined,
-      //     insuranceProvider: undefined,
-      //     policyNo: undefined,
-      //     policyAmount: undefined,
-      //     claimAmount: undefined,
-      //     brokerDetails: undefined,
-      //   },
-      // },
+        insurance: {
+          isInsured: undefined,
+          insuranceProvider: undefined,
+          policyNo: undefined,
+          policyAmount: undefined,
+          claimAmount: undefined,
+          brokerDetails: undefined,
+        },
+      },
 
       dispatchAdditionalRate: [
         {
@@ -198,20 +198,63 @@ const DispatchVehicle = ({ params }) => {
     "dispatch.dispatchAdditionalDetails.insurance.isInsured",
   );
 
-  // functions
-  function calAmountofdispatchAdditionalCharge() {}
+  
+    async function myhandleSubmit(value) {
+   
 
-  async function myhandleSubmit(value) {
-    try {
-      const res = formSchema.parse(value);
-      console.log("solved", res);
-    } catch (error) {
-      console.log("hi", error);
+      try {
+        const res = formSchema.parse(value);
+        console.log("solved", res);
+      } catch (error) {
+        console.log("hi", error);
+      }
+
+      // form.setValue('adminId', user?._id,)
+      value.adminId=user?._id;
+  
+      setIsLoading(true);
+  try {
+
+    const response = await fetch("/api/dispatchbooking", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(value),
+    });
+    console.log(response);
+  
+    const newResult = await response.json();
+  
+    if (response.ok) {
+      setIsLoading(false);
+      displayToast("Successfully dispatched", "✅");
+      // const userDetail = newResult.user;
+      form.reset(initialFormState);
+    } else {
+      console.error("Error:", newResult.message);
+      displayToast("Error", "❌", newResult.message);
+      setIsLoading(false);
     }
+  } catch (error) {
+    console.error("Error:", error);
+    displayToast("Error while sending data", "❌", newResult.message);
+    setIsLoading(false);
   }
+    }
+  
+    const displayToast = (title, action, description = "") => {
+      toast({
+        title,
+        action,
+        description,
+      });
+    };
 
   return (
-    <div className="max-w max-h mt-14 rounded-md  bg-white px-4 py-4 shadow-md md:px-10 lg:my-4 lg:p-8 lg:px-20">
+   
+
+<div className="max-w   w-full mt-14 rounded-md  bg-white px-4 py-4 shadow-md md:px-10 lg:my-4 lg:p-8 lg:px-20">
       <h2 className="mb-6 text-3xl font-semibold"> Dispatch Booking Form</h2>
       <Form {...form}>
         <form
@@ -224,13 +267,7 @@ const DispatchVehicle = ({ params }) => {
 
 
 
-          <FieldForm
-            form={form}
-            name="bookingId"
-            label="Booking Id"
-            type="text"
-          />
-
+         
         
 
           {/* dispatchDetails */}
@@ -474,10 +511,11 @@ const DispatchVehicle = ({ params }) => {
 
          
 
-          <Button type="submit">{isloading ? "Loading..." : " Submit"}</Button>
+          <Button type="submit" className='mt-8'>{isloading ? "Loading..." : " Submit"}</Button>
         </form>
       </Form>
     </div>
+    
   );
 };
 
