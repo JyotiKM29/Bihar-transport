@@ -12,26 +12,31 @@ const SearchInput = ({ form, field, personName }) => {
   const { user } = useContext(UserContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
-  const [isEdit , setEdit] = useState(false);
+  const [isEdit, setEdit] = useState(false);
 
   async function fetchData(value) {
     try {
-      const res = await fetch(`/api/getbooking/${user._id}`);
+      const res = await fetch(`/api/senderdata/${user._id}`);
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
       const result = await res.json();
-      // console.log(result);
+      // console.log('result my love',result);
 
-      if (result && Array.isArray(result.data)) {
-        const results = result.data.filter((booking) => {
-          const nameToSearch = booking[personName];
+      if (result && Array.isArray(result.newdata)) {
+        const results = result.newdata.filter((booking) => {
+          const consignorNameToSearch =
+            booking.type === "personal"
+              ? booking.personal?.consignorName
+              : booking.company?.consignorName;
+
           return (
             value &&
-            nameToSearch &&
-            nameToSearch.toLowerCase().includes(value.toLowerCase())
+            consignorNameToSearch &&
+            consignorNameToSearch.toLowerCase().includes(value.toLowerCase())
           );
         });
+
         setSearchResult(results.slice(0, 5));
       } else {
         console.log("Person not found");
@@ -68,26 +73,27 @@ const SearchInput = ({ form, field, personName }) => {
             value={field.value || searchTerm}
             onChange={(e) => handleChange(e.target.value)}
           />
-         
         </FormControl>
-        {isEdit && <div 
-        onClick={()=>
-        {
-          form.setValue(field.value  , searchTerm);
-          setEdit(false);
-
-        }}
-        className="absolute top-[.5rem] right-0 p-2 px-4 bg-slate-100 border rounded-md"
-        >Edit</div>}
+        {isEdit && (
+          <div
+            onClick={() => {
+              form.setValue(field.value, searchTerm);
+              setEdit(false);
+            }}
+            className="absolute right-0 top-[.5rem] rounded-md border bg-slate-100 p-2 px-4"
+          >
+            Edit
+          </div>
+        )}
         <FormMessage />
-       
+
         <div className="min-h absolute top-12 z-20 w-full overflow-y-scroll rounded-sm bg-slate-100">
           {searchResult.length === 0 && searchTerm && (
             <div
               className="w-full cursor-pointer px-3 py-2 hover:bg-slate-200"
               onClick={() => {
                 field.onChange(searchTerm);
-                 
+
                 setSearchTerm("");
                 setEdit(true);
               }}
@@ -103,23 +109,55 @@ const SearchInput = ({ form, field, personName }) => {
                 key={id}
                 className="w-full cursor-pointer px-3 py-2 hover:bg-slate-200"
                 onClick={() => {
-                  field.onChange(result[personName]);
+                  // field.onChange(result[personName]);
                   setSearchResult([]);
                   setSearchTerm("");
                   if (personName === "consignorName") {
-                    form.setValue(
-                      "consignorMobileNumber",
-                      result.consignorMobileNumber,
-                    );
+                    if (result?.type === "company") {
+                      form.setValue(
+                        "consignorMobileNumber",
+                        result?.company?.officeNo,
+                      );
+                      form.setValue(
+                        "consignorName",
+                        result?.company?.consignorName,
+                      );
+                    } else if (result?.type === "personal") {
+                      form.setValue(
+                        "consignorMobileNumber",
+                        result.personal.contactNo,
+                      );
+                      form.setValue(
+                        "consignorName",
+                        result.personal.consignorName,
+                      );
+                    }
                   } else {
-                    form.setValue(
-                      "consigneeMobileNumber",
-                      result.consigneeMobileNumber,
-                    );
+                    if (result?.type === "company") {
+                      form.setValue(
+                        "consigneeMobileNumber",
+                        result?.company?.officeNo,
+                      );
+                      form.setValue(
+                        "consigneeName",
+                        result?.company?.consignorName,
+                      );
+                    } else if (result?.type === "personal") {
+                      form.setValue(
+                        "consigneeMobileNumber",
+                        result.personal.contactNo,
+                      );
+                      form.setValue(
+                        "consigneeName",
+                        result.personal.consignorName,
+                      );
+                    }
+                   
                   }
                 }}
               >
-                {result[personName]}
+                {result?.type === "company" && result?.company.consignorName}
+                {result?.type === "personal" && result?.personal.consignorName}
               </div>
             ))}
         </div>

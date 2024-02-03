@@ -412,7 +412,7 @@ export default function ProfileForm() {
                 }}
               />
 
-<div>
+<div className="flex items-center gap-0">
 <FormField
                 control={form.control}
                 name="consignorName"
@@ -424,8 +424,8 @@ export default function ProfileForm() {
                   />
                 )}
               />
-              <Link href='/admin/booking/new-regesitration'>
-                 New Value
+              <Link href='/admin/booking/new-regesitration' className="border px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">
+                 Add New
               </Link>
 </div>
 

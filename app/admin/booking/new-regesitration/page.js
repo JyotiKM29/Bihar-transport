@@ -192,7 +192,44 @@ const NewRegistration = () => {
     } catch (error) {
       console.log("hi", error);
     }
+
+    setIsLoading(true);
+try {
+  const response = await fetch("/api/consigerRegistration", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(value),
+  });
+  console.log(response);
+
+  const newResult = await response.json();
+
+  if (response.ok) {
+    setIsLoading(false);
+    displayToast("Successfully registered", "✅");
+    // const userDetail = newResult.user;
+    form.reset(initialFormState);
+  } else {
+    console.error("Error:", newResult.message);
+    displayToast("Error", "❌", newResult.message);
+    setIsLoading(false);
   }
+} catch (error) {
+  console.error("Error:", error);
+  displayToast("Error while sending data", "❌", newResult.message);
+  setIsLoading(false);
+}
+  }
+
+  const displayToast = (title, action, description = "") => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
 
   return (
     <div className="mt-14 lg:my-4 max-w max-h  bg-white py-4 lg:p-8 px-4 md:px-10 lg:px-20 shadow-md rounded-md">
@@ -209,7 +246,7 @@ const NewRegistration = () => {
               return (
                 <FormItem className="flex items-center justify-center gap-4">
                   <FormLabel className="text-nowrap text-sm lg:text-base">
-                    Type :
+                    Type of Booking :
                   </FormLabel>
                   <Select
                     className="flex flex-1 flex-col"
@@ -234,7 +271,7 @@ const NewRegistration = () => {
           <FieldForm
             form={form}
             name="consignorData.consignorName"
-            label="consignorName"
+            label="Consignor Name"
             type="text"
           />
 
@@ -245,7 +282,7 @@ const NewRegistration = () => {
               return (
                 <FormItem className="flex items-center justify-center gap-4">
                   <FormLabel className="text-nowrap text-sm lg:text-base">
-                    email :
+                    Email :
                   </FormLabel>
                   <div className="flex flex-1 flex-col">
                     <FormControl>
@@ -263,19 +300,19 @@ const NewRegistration = () => {
           <FieldForm
             form={form}
             name="consignorData.contactNo"
-            label="contactNo"
+            label="Contact No"
             type="number"
           />
           <FieldForm
             form={form}
             name="consignorData.address"
-            label="address"
+            label="Address"
             type="text"
           />
           <FieldForm
             form={form}
             name="consignorData.dob"
-            label="dob"
+            label="DOB (Date of Birth)"
             type="date"
           />
      
@@ -286,79 +323,74 @@ const NewRegistration = () => {
           <FieldForm
             form={form}
             name="consignorData.gstin"
-            label="gstin"
+            label="Gstin"
             type="text"
           />
           <FieldForm
             form={form}
             name="consignorData.officeNo"
-            label="officeNo"
+            label="Office Phone No"
             type="number"
           />
            <FieldForm
                 form={form}
                 name="consignorData.gstinStatus"
-                label="gstinStatus"
+                label="Gstin Status"
                 type="text"
               />
               <FieldForm
                 form={form}
                 name="consignorData.principalPlaceOfBusiness"
-                label="principalPlaceOfBusiness"
+                label="Principal Place Of Business"
                 type="text"
               />
               <FieldForm
                 form={form}
                 name="consignorData.storeAddress"
-                label="storeAddress"
+                label="Store Address"
                 type="text"
               />
-              <FieldForm
-                form={form}
-                name="consignorData.officeNo"
-                label="officeNo"
-                type="text"
-              />
+          
               <FieldForm
                 form={form}
                 name="consignorData.creditLimit"
-                label="creditLimit"
+                label="Credit Limit"
                 type="number"
               />
               <FieldForm
                 form={form}
                 name="consignorData.defaultPaymentTerm"
-                label="defaultPaymentTerm"
+                label="Default Payment Term"
                 type="text"
               />
               <FieldForm
                 form={form}
                 name="consignorData.payableReceivable"
-                label="payableReceivable"
+                label="Payable Receivable"
                 type="text"
               />
               <FieldForm
                 form={form}
                 name="consignorData.accountGroup"
-                label="accountGroup"
+                label="Account Group"
                 type="text"
               />
               <FieldForm
                 form={form}
                 name="consignorData.openingBalance"
-                label="openingBalance"
-                type="text"
+                label="Opening Balance"
+                type="number"
               />
               <FieldForm
                 form={form}
                 name="consignorData.remarks"
-                label="remarks"
+                label="Remarks"
                 type="text"
               />
             </>
           )}
 
-          <Button type="submit">Submit</Button>
+          <Button type="submit">{isloading ? "Loading..." : " Submit"}</Button>
         </form>
       </Form>
     </div>
@@ -367,31 +399,4 @@ const NewRegistration = () => {
 
 export default NewRegistration;
 
-// setIsLoading(true);
-// try {
-//   const response = await fetch("/api/consigerRegistration", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(value),
-//   });
-//   console.log(response);
 
-//   const newResult = await response.json();
-
-//   if (response.ok) {
-//     setIsLoading(false);
-//     displayToast("Successfully registered", "✅");
-//     // const userDetail = newResult.user;
-//     form.reset(initialFormState);
-//   } else {
-//     console.error("Error:", newResult.message);
-//     displayToast("Error", "❌", newResult.message);
-//     setIsLoading(false);
-//   }
-// } catch (error) {
-//   console.error("Error:", error);
-//   displayToast("Error while sending data", "❌", newResult.message);
-//   setIsLoading(false);
-// }
