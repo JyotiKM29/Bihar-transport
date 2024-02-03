@@ -1,4 +1,5 @@
 "use client";
+import { FaPlus } from "react-icons/fa6";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import LocationAdd from "./LocationAdd";
@@ -17,6 +18,7 @@ import { Button } from "../../components/ui/button";
 import { useState, useEffect } from "react";
 import { useToast } from "../../components/ui/use-toast";
 import Link from "next/link";
+import { FiPlus } from "react-icons/fi";
 
 const chargersSchema = z.object({
   name: z.string({ message: "Field is required" }),
@@ -416,16 +418,19 @@ export default function ProfileForm() {
 <FormField
                 control={form.control}
                 name="consignorName"
+                
                 render={({ field }) => (
                   <SearchInput
+                 
                     form={form}
                     field={field}
                     personName="consignorName"
                   />
                 )}
               />
-              <Link href='/admin/booking/new-regesitration' className="border px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">
-                 Add New
+              <Link href='/admin/booking/new-regesitration' className="border h-10 text-base text-nowrap px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">
+              <FiPlus  className="h-full w-full"/>
+
               </Link>
 </div>
 

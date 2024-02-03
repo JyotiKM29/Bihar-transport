@@ -57,9 +57,7 @@ const ConfirmBooking = () => {
 
   return (
     <div className="min-h-[90vh] w-full space-y-6">
-      <div className="h-8  w-full ">
-        
-      </div>
+    
       <div
         className="min-h w-full 
       space-y-2 rounded-2xl  bg-white px-4 py-4 
