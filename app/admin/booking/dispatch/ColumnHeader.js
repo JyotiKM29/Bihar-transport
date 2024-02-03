@@ -1,8 +1,8 @@
 "use client";
 
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { Button } from "../../components/ui/button";
-import { Checkbox } from "../../components/ui/checkbox";
+import { Button } from "../../../components/ui/button";
+import { Checkbox } from "../../../components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu";
+} from "../../../components/ui/dropdown-menu";
 
 import {
   Dialog,
@@ -20,12 +20,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../components/ui/dialog";
+} from "../../../components/ui/dialog";
 
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../context/UserContextProvider";
-import { Input } from "../../components/ui/input";
+import { UserContext } from "../../../context/UserContextProvider";
+import { Input } from "../../../components/ui/input";
 
 export default function ColumnHeader() {
   const { user } = useContext(UserContext);
@@ -139,7 +139,7 @@ export default function ColumnHeader() {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Link href={`/admin/booking/pending-booking/${row.original._id}`}>
+                  <Link href={`/admin/booking/dispatch/${row.original._id}`}>
                     View Detail
                   </Link>
                 </DropdownMenuItem>

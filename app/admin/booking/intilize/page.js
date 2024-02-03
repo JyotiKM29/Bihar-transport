@@ -1,11 +1,11 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import ColumnHeader from '../ColumnHeader';
+import ColumnHeader from './ColumnHeader';
 import { DataTable } from "../data-table";
 import BookingForm from "../BookingForm";
 import { UserContext } from "../../../context/UserContextProvider";
 
-const DispatchBooking = () => {
+const IntilizeBooking = () => {
   const [formValue, setFormValue] = useState(true);
   const [loading , setLoading] = useState(true);
   const columns = ColumnHeader();
@@ -34,7 +34,7 @@ const DispatchBooking = () => {
   
           // Check if result.data is an array before applying filter
           const pendingOrders = Array.isArray(result.data) ? result.data.filter(
-            (order) => order.status === "Dispatched",
+            (order) => order.status === "Initialized",
           ) : [];
   
           console.log(pendingOrders);
@@ -66,7 +66,7 @@ const DispatchBooking = () => {
      shadow-sm md:px-6 xl:h-[95%]"
       >
         
-        <h1 className="hidden text-4xl  lg:block font-semibold">Dispatched Bookings</h1>
+        <h1 className="hidden text-4xl  lg:block font-semibold">Initialized Bookings</h1>
 
        {loading ? (<div className="max-w max-h  bg-white"><h2
        className="text-xl"
@@ -76,4 +76,4 @@ const DispatchBooking = () => {
   );
 };
 
-export default DispatchBooking;
+export default IntilizeBooking;

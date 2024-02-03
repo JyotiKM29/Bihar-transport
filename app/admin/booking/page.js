@@ -7,13 +7,13 @@ import {
 } from "../../components/ui/tabs";
 import NewBooking  from './new-booking/page'
 import CompanyBooking  from './company/page'
-import PendingBooking  from './pending-booking/page'
-import IntilizeBooking  from './intilize-booking/page'
-import ConfirmBooking  from './confirm-booking/page'
-import DispatchBooking  from './dispatch-booking/page'
-import IntransitBooking  from './intransit-booking/page'
-import DeliveredBooking  from './delivered-booking/page'
-import CancelledBooking  from './cancelled-booking/page'
+import PendingBooking  from './pending/page'
+import IntilizeBooking  from './intilize/page'
+import ConfirmBooking  from './confirm/page'
+import DispatchBooking  from './dispatch/page'
+import IntransitBooking  from './intransit/page'
+import DeliveredBooking  from './delivered/page'
+import CancelledBooking  from './cancelled/page'
 
 
 
