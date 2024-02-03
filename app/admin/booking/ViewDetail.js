@@ -272,8 +272,9 @@ const ViewDetail = ({  bookingDetails , heading}) => {
             {bookingDetails?.booking?.additionalCharges?.chargers?.map(
               (charger, index) => (
                 <div key={index}>
+                <h2 className="text-lg text-center font-semibold ">{`CHARGE ${index + 1}`}</h2>
                   <FieldComponent
-                    label={`Charger ${index + 1} Name`}
+                    label={` Name`}
                     value={charger.name}
                     show={editBooking}
                     tableId={bookingDetails?.booking?._id}
@@ -281,7 +282,7 @@ const ViewDetail = ({  bookingDetails , heading}) => {
                   />
 
                   <FieldComponent
-                    label={`Charger ${index + 1} Rate`}
+                    label={` Rate`}
                     value={charger.rate}
                     show={editBooking}
                     tableId={bookingDetails?.booking?._id}
@@ -289,7 +290,7 @@ const ViewDetail = ({  bookingDetails , heading}) => {
                   />
 
                   <FieldComponent
-                    label={`Charger ${index + 1} Quantity`}
+                    label={` Quantity`}
                     value={charger.qty}
                     show={editBooking}
                     tableId={bookingDetails?.booking?._id}
@@ -297,7 +298,7 @@ const ViewDetail = ({  bookingDetails , heading}) => {
                   />
 
                   <FieldComponent
-                    label={`Charger ${index + 1} Amount`}
+                    label={` Amount`}
                     value={charger.amount}
                     show={editBooking}
                     tableId={bookingDetails?.booking?._id}
@@ -367,33 +368,34 @@ const ViewDetail = ({  bookingDetails , heading}) => {
     <h2 className="font-semibold text-center text-2xl mt-8">Invoice detail :</h2>
     {bookingDetails?.booking?.invoice.map((invoice, index) => (
       <div key={index}>
+      <h2 className="text-lg text-center font-semibold ">{`INVOICE ${index + 1}`}</h2>
         <FieldComponent
-          label={`Invoice ${index + 1} Invoice ID`}
+          label={` Invoice ID`}
           value={invoice.invoiceId}
           tableId={bookingDetails?.booking?._id}
           identifier={`invoice.invoiceId`}
         />
         <FieldComponent
-          label={`Invoice ${index + 1} Invoice Date`}
+          label={` Invoice Date`}
           value={invoice.invoiceDate}
           tableId={bookingDetails?.booking?._id}
           identifier={`invoice.invoiceDate`}
         />
         <FieldComponent
-          label={`Invoice ${index + 1} Sent To Email`}
+          label={` Sent To Email`}
           value={invoice.sentOn}
           tableId={bookingDetails?.booking?._id}
           identifier={`invoice.sentOn`}
         />
         <FieldComponent
-          label={`Invoice ${index + 1} Sent to Name`}
+          label={` Sent to Name`}
           value={invoice.sentTo}
           tableId={bookingDetails?.booking?._id}
           identifier={`invoice.sentTo`}
         />
         {invoice.generatedBy && (
           <FieldComponent
-            label={`Invoice ${index + 1} Sended by Name`}
+            label={` Sended by Name`}
             value={invoice.generatedBy.name}
             tableId={bookingDetails?.booking?._id}
             identifier={`invoice.generatedBy.name`}

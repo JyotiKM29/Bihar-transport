@@ -6,7 +6,7 @@ import ViewDetail from '../../ViewDetail';
 
 const BookingDetails = ({ params }) => {
   const { toast } = useToast();
- 
+  const router = useRouter();
   const [bookingDetails, setBookingDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [editBooking, setEditBooking] = useState(false);
@@ -50,7 +50,7 @@ const BookingDetails = ({ params }) => {
   return (
     <div className="min-h-[90vh] w-full rounded-2xl bg-white px-6 py-4 shadow-sm ">
 
-      {loading ? 'Loading...':  <ViewDetail  bookingDetails={bookingDetails}  heading={"Dispatch Booking "}/>}
+      {loading ? 'Loading...':  <ViewDetail  bookingDetails={bookingDetails}  heading={"Cancelled Booking"}/>}
      
     </div>
   );
