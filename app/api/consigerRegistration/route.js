@@ -15,7 +15,7 @@ export async function POST(req, res) {
         {
           message: "Admin ID not found",
         },
-        { staus: 400 },
+        { status: 400 },
       );
     }
 
@@ -28,9 +28,9 @@ export async function POST(req, res) {
     if (!adminOrOwner) {
      return Response.json(
        {
-         message: "Admin or Owner not found",
+         message: "Admin or Owner not found"
        },
-       { staus: 400 },
+       { status: 400 },
      );
     }
 
@@ -48,11 +48,8 @@ export async function POST(req, res) {
     console.log("company", company);
 
     if (existingConsignor || company) {
-     return Response.json(
-       {
-         message: "Consignor already exists",
-       },
-       { staus: 500 },
+     return Response.json({message: "Consignor already exists"},
+       { status: 400 },
      );
     }
 
@@ -74,7 +71,7 @@ export async function POST(req, res) {
        message: "Consignor created successfully",
        consignor: savedConsignor,
      },
-     { staus: 200 },
+     { status: 200 },
    );
   } catch (error) {
     console.error("Error while creating consignor:", error.message);
@@ -82,6 +79,6 @@ export async function POST(req, res) {
       return Response.json({
         message: "Error creating consignor",
         error: error.message,
-      },{staus:500});
+      },{status:500});
   }
 }

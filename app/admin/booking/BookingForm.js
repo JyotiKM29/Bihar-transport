@@ -1,6 +1,5 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FieldForm from "./FieldForm";
 import { useForm } from "react-hook-form";
 import LocationAdd from "./LocationAdd";
 import {
@@ -15,9 +14,9 @@ import SearchInput from "./SearchInput";
 import * as z from "zod";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
-import { useContext, useState, useEffect } from "react";
-import { UserContext } from "../../context/UserContextProvider";
+import { useState, useEffect } from "react";
 import { useToast } from "../../components/ui/use-toast";
+import Link from "next/link";
 
 const chargersSchema = z.object({
   name: z.string({ message: "Field is required" }),
@@ -200,8 +199,6 @@ export default function ProfileForm() {
   const advanceAmount = form.watch("advanceAmount", 0);
   const additionalCharges = form.watch("additionalCharges.totalCharge", 0);
 
-  // const chargersAmount = form.watch("additionalCharges.chargers.amount",0);
-
   const chargeAmount = calChargeAmount(chargeQty, chargeRate);
 
   const partyBhara = calPartyBhara(quantity, rate, additionalCharges, tax);
@@ -209,11 +206,6 @@ export default function ProfileForm() {
 
   const totalCharge = calTotalChargers(chargers);
 
-  // useEffect(()=>{
-  //   form.setValue("additionalCharges.chargers", [
-  //     ...chargers
-  //   ]);
-  //  },[chargers ,form])
 
   useEffect(() => {
     form.setValue("additionalCharges.chargers.amount", chargeAmount);
@@ -274,23 +266,10 @@ export default function ProfileForm() {
 
     setShowAddChargeForm(false);
 
-    // Reset the form fields after adding a new charger
-    // reset({
-    //   additionalCharges: {
-    //     ...form.getValues("additionalCharges"),
-    //     chargers: {
-    //       name: "",
-    //       rate: 0,
-    //       qty: 0,
-    //       amount: 0,
-    //     },
-    //   },
-    // });
+   
   };
 
-  // console.log('chargers outside : ',chargers);
-
-  // console.log(form.getValues("additionalCharges"))
+  
 
   async function MyHandleSubmit(value) {
     form.setValue("additionalCharges.chargers", chargers);
@@ -307,7 +286,6 @@ export default function ProfileForm() {
         },
         body: JSON.stringify(value),
       });
-      // console.log(response);
 
       const newResult = await response.json();
 
@@ -317,7 +295,7 @@ export default function ProfileForm() {
           "Successfully Booked, Click view Booking button to view the booking",
           "✅",
         );
-        // const userDetail = newResult.user;
+       
         await reset(initialFormState);
       } else {
         console.error("Error:", newResult.message);
@@ -434,7 +412,8 @@ export default function ProfileForm() {
                 }}
               />
 
-              <FormField
+<div>
+<FormField
                 control={form.control}
                 name="consignorName"
                 render={({ field }) => (
@@ -445,6 +424,12 @@ export default function ProfileForm() {
                   />
                 )}
               />
+              <Link href='/admin/booking/new-regesitration'>
+                 New Value
+              </Link>
+</div>
+
+             
 
               <FormField
                 control={form.control}

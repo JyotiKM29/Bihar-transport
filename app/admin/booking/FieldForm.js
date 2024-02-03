@@ -1,30 +1,16 @@
-'use client'
+"use client";
 import React, { useState } from "react";
 import {
   FormItem,
   FormLabel,
   FormMessage,
   FormControl,
-
- 
   FormField,
 } from "../../components/ui/form";
 import { Input } from "../../components/ui/input";
-import { Button } from "../../components/ui/button";
-import { useForm } from "react-hook-form";
 
-
-const FieldForm = ({
-  form,
-  name,
-  label,
-  type,
-  options,
-}) => {
- 
-  
+const FieldForm = ({ form, name, label, type, options }) => {
   return (
-  
     <FormField
       control={form.control}
       name={name}
@@ -36,22 +22,7 @@ const FieldForm = ({
             </FormLabel>
             <div className="flex flex-1 flex-col">
               <FormControl>
-                {type === "select" ? (
-                  <select
-                    {...field}
-                    className="h-10 rounded-md border bg-slate-50"
-                  >
-                    {options.map((option, index) => (
-                      <option key={index} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <Input type={type} 
-                  
-                  {...field} />
-                )}
+                <Input value={field.value} type={type} {...field} />
               </FormControl>
               <FormMessage />
             </div>
@@ -59,7 +30,6 @@ const FieldForm = ({
         );
       }}
     />
-   
   );
 };
 
