@@ -7,7 +7,14 @@ import {
 } from "../../components/ui/tabs";
 import NewBooking  from './new-booking/page'
 import CompanyBooking  from './company/page'
-import PendingBooking  from './pending/page'
+import PendingBooking  from './pending-booking/page'
+import IntilizeBooking  from './intilize-booking/page'
+import ConfirmBooking  from './confirm-booking/page'
+import DispatchBooking  from './dispatch-booking/page'
+import IntransitBooking  from './intransit-booking/page'
+import DeliveredBooking  from './delivered-booking/page'
+import CancelledBooking  from './cancelled-booking/page'
+
 
 
 
@@ -20,22 +27,25 @@ function page() {
            New Booking
           </TabsTrigger>
           <TabsTrigger value="Pending">
-          Pending Booking
+          Pending Bookings
           </TabsTrigger>
           <TabsTrigger value="Confirm">
-           Confirm Booking
+           Confirm Bookings
           </TabsTrigger>
           <TabsTrigger value="Intilize">
-           Intilize Booking
+           Intilize Bookings
           </TabsTrigger>
           <TabsTrigger value="Dispatch">
-           Dispatch Booking
+           Dispatch Bookings
+          </TabsTrigger>
+          <TabsTrigger value="intransist">
+           In-Transist Bookings
           </TabsTrigger>
           <TabsTrigger value="Delivered">
-           Delivered Booking
+           Delivered Bookings
           </TabsTrigger>
           <TabsTrigger value="Cancelled">
-           Cancelled Booking
+           Cancelled Bookings
           </TabsTrigger>
         
         </TabsList>
@@ -47,19 +57,22 @@ function page() {
           <PendingBooking />
           </TabsContent>
           <TabsContent value="Confirm">
-           Confirm Booking
+          <ConfirmBooking />
           </TabsContent>
           <TabsContent value="Intilize">
-           Intilize Booking
+          <IntilizeBooking />
           </TabsContent>
           <TabsContent value="Dispatch">
-           Dispatch Booking
+          <DispatchBooking />
+          </TabsContent>
+          <TabsContent value="intransist">
+          <IntransitBooking />
           </TabsContent>
           <TabsContent value="Delivered">
-           Delivered Booking
+           <DeliveredBooking />
           </TabsContent>
           <TabsContent value="Cancelled">
-           Cancelled Booking
+           <CancelledBooking />
           </TabsContent>
         
       
