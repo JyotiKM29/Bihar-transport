@@ -5,9 +5,9 @@ import {
   TabsList,
   TabsTrigger,
 } from "../../components/ui/tabs";
-import NewBooking  from './newbooking/page'
+import NewBooking  from './new-booking/page'
 import CompanyBooking  from './company/page'
-import GeneralBooking  from './general/page'
+import PendingBooking  from './pending/page'
 
 
 
@@ -44,7 +44,7 @@ function page() {
         <NewBooking  />
           </TabsContent>
           <TabsContent value="Pending">
-          Pending Booking
+          <PendingBooking />
           </TabsContent>
           <TabsContent value="Confirm">
            Confirm Booking
