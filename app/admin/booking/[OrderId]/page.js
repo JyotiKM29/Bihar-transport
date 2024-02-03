@@ -95,13 +95,52 @@ const AllocateVehicle = ({ params }) => {
   }, [Commission, DriverBhara]);
 
   async function myhandleSubmit(value) {
+   
+
     try {
       const res = formSchema.parse(value);
       console.log("solved", res);
     } catch (error) {
       console.log("hi", error);
     }
+
+    setIsLoading(true);
+try {
+  const response = await fetch("/api/vehicleAllocation", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(value),
+  });
+  console.log(response);
+
+  const newResult = await response.json();
+
+  if (response.ok) {
+    setIsLoading(false);
+    displayToast("Successfully allocated vehicle", "✅");
+    // const userDetail = newResult.user;
+    form.reset(initialFormState);
+  } else {
+    console.error("Error:", newResult.message);
+    displayToast("Error", "❌", newResult.message);
+    setIsLoading(false);
   }
+} catch (error) {
+  console.error("Error:", error);
+  displayToast("Error while sending data", "❌", newResult.message);
+  setIsLoading(false);
+}
+  }
+
+  const displayToast = (title, action, description = "") => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
 
   return (
     <div className="max-w max-h mt-14 rounded-md  bg-white px-4 py-4 shadow-md md:px-10 lg:my-4 lg:p-8 lg:px-20">
