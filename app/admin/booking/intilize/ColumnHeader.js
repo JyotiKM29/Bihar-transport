@@ -154,9 +154,9 @@ export default function ColumnHeader() {
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                 <Link 
-               href={`/admin/booking/${row.original.orderNumber}`}
+               href={`/admin/booking/dispatedVehicle/${row.original._id}`}
                 >
-                   Allocation Vehicle
+                   Dispatch Vehicle
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
