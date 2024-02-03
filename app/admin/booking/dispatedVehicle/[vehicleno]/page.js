@@ -26,11 +26,11 @@ import { useToast } from "../../../../components/ui/use-toast";
 
 const chargesDetailsSchema = z.object({
   chargesName: z.string(),
-  days:z.coerce.number(),
-  rate:z.coerce.number(),
-  amount:z.coerce.number(),
+  days: z.coerce.number(),
+  rate: z.coerce.number(),
+  amount: z.coerce.number(),
   remarks: z.string(),
-})
+});
 
 const eWayBillDetailsSchema = z.object({
   eWayBillNo: z.string(),
@@ -38,7 +38,7 @@ const eWayBillDetailsSchema = z.object({
   expDate: z.coerce.date(),
 });
 
-const consignorInvoiceDetailsSchema= z.object({
+const consignorInvoiceDetailsSchema = z.object({
   isPODCompulsory: z.string(),
   consignorInvoiceDate: z.coerce.date(),
   consignorDeliveryNo: z.string(),
@@ -48,33 +48,58 @@ const consignorInvoiceDetailsSchema= z.object({
 });
 
 // ------dispatch details------
-const dispatchDetailsSchema= z.object({
+const dispatchDetailsSchema = z.object({
   billtyType: z.string(),
   dispatchDate: z.coerce.date(),
   dispatchTime: z.string(),
   totalFreight: z.coerce.number(),
-  consignorInvoiceDetails:consignorInvoiceDetailsSchema,
-  dispatch:z.object({
-    additionalRateForCompany:z.coerce.number(),
-    chargesDetails:z.array(chargesDetailsSchema),
+  consignorInvoiceDetails: consignorInvoiceDetailsSchema,
+  dispatch: z.object({
+    additionalRateForCompany: z.coerce.number(),
+    chargesDetails: z.array(chargesDetailsSchema),
   }),
   ledgerBalanceOfParty: z.string(),
   remarks: z.string(),
 });
 
+// dispatchAdditionalDetailsSchema
+const insuranceSchema = z.object({
+  isInsured: z.enum(["Yes","No"]),
+  insuranceProvider: z.string().optional(),
+  policyNo: z.string().optional(),
+  policyAmount: z.coerce.number().optional(),
+  claimAmount: z.coerce.number().optional(),
+  brokerDetails: z.string().optional(),
+}).refine(
+  (data) => {
+    if (data.isInsured === "Yes") {
+      return Boolean(data.insuranceProvider);
+    }
+    return true;
+  },
+  {
+    message: "insuranceProvider is  required.",
+    path: ["dispatch.dispatchAdditionalDetails.insurance.isInsured"],
+  },
+);
 
+const dispatchAdditionalDetailsSchema = z.object({
+  deliveryType: z.string(),
+  manualLRNo: z.string(),
+  brokerCommission: z.coerce.number(),
+  shippingRisk: z.string(),
 
+  insurance: insuranceSchema,
+});
 
 const formSchema = z.object({
   // adminId: z.string(),
   // vehicleNo: z.string(),
   bookingId: z.string(),
   dispatch: z.object({
-  isDispatched: z.coerce.boolean(),
-  dispatchDetails: dispatchDetailsSchema,
-  // consignorInvoiceDetails: consignorInvoiceDetailsSchema,
-
-  
+    isDispatched: z.coerce.boolean(),
+    // dispatchDetails: dispatchDetailsSchema,
+    dispatchAdditionalDetails: dispatchAdditionalDetailsSchema,
   }),
 });
 
@@ -83,44 +108,61 @@ const DispatchVehicle = ({ params }) => {
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
 
-
   const initialFormState = {
     // adminId: user?._id,
     // vehicleNo: undefined,
     bookingId: undefined,
-    dispatch:{
-      isDispatched :true,
-      dispatchDetails:{
-        billtyType: undefined,
-        dispatchDate:undefined,
-        dispatchTime: undefined,
-        totalFreight:undefined ,
-        consignorInvoiceDetails:{
-          isPODCompulsory: undefined,
-          consignorInvoiceDate: undefined,
-          consignorDeliveryNo: undefined,
-          consignorInvoiceNo: undefined,
-          valueOfGoods: undefined,
-          eWayBillDetails:{
-            eWayBillNo: undefined,
-            eWayBillDate: undefined,
-            expDate: undefined,
-          }
+    dispatch: {
+      isDispatched: true,
+      // dispatchDetails: {
+      //   billtyType: undefined,
+      //   dispatchDate: undefined,
+      //   dispatchTime: undefined,
+      //   totalFreight: undefined,
+      //   consignorInvoiceDetails: {
+      //     isPODCompulsory: undefined,
+      //     consignorInvoiceDate: undefined,
+      //     consignorDeliveryNo: undefined,
+      //     consignorInvoiceNo: undefined,
+      //     valueOfGoods: undefined,
+      //     eWayBillDetails: {
+      //       eWayBillNo: undefined,
+      //       eWayBillDate: undefined,
+      //       expDate: undefined,
+      //     },
+      //   },
+      //   dispatch: {
+      //     additionalRateForCompany: undefined,
+      //     chargesDetails: [
+      //       {
+      //         chargesName: undefined,
+      //         days: undefined,
+      //         rate: undefined,
+      //         amount: undefined,
+      //         remarks: undefined,
+      //       },
+      //     ],
+      //   },
+      //   ledgerBalanceOfParty: undefined,
+      //   remarks: undefined,
+      // },
+
+      dispatchAdditionalDetails: {
+        deliveryType: undefined,
+        manualLRNo: undefined,
+        brokerCommission: undefined,
+        shippingRisk: undefined,
+
+        insurance: {
+          isInsured: undefined,
+          insuranceProvider: undefined,
+          policyNo: undefined,
+          policyAmount: undefined,
+          claimAmount: undefined,
+          brokerDetails: undefined,
         },
-        dispatch:{
-          additionalRateForCompany:undefined,
-          chargesDetails:[
-           { chargesName: undefined,
-            days:undefined,
-            rate:undefined,
-            amount:undefined,
-            remarks: undefined,}
-          ]
-        },
-        ledgerBalanceOfParty:undefined ,
-        remarks:undefined ,
-      }
-    }
+      },
+    },
   };
 
   const form = useForm({
@@ -128,13 +170,10 @@ const DispatchVehicle = ({ params }) => {
     defaultValues: initialFormState,
   });
 
-  
-
+  const insurance = form.watch('dispatch.dispatchAdditionalDetails.insurance.isInsured')
 
   // functions
-  function calAmountofdispatchAdditionalCharge(){
-
-  }
+  function calAmountofdispatchAdditionalCharge() {}
 
   async function myhandleSubmit(value) {
     try {
@@ -153,165 +192,280 @@ const DispatchVehicle = ({ params }) => {
           onSubmit={form.handleSubmit(myhandleSubmit)}
           className="flex w-full max-w-xl flex-col gap-0"
         >
-          
           <FieldForm
             form={form}
             name="bookingId"
             label="Booking Id"
             type="text"
-          /> 
+          />
 
           {/* dispatchDetails */}
           <>
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.billtyType"
-            label="Billty Type"
-            type="text"
-          /> 
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.dispatchDate"
-            label="Dispatch Date"
-            type="date"
-          /> 
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.dispatchTime"
-            label="Dispatch Time"
-            type="text"
-          /> 
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.totalFreight"
-            label="Total Freight"
-            type="number"
-          /> 
-
-          {/* consignorInvoiceDetails */}
+          <div className="hidden">
           <>
-            <h2 className="text-2xl text-center font-semibold mt-6">Consignor Invoice Details</h2>
           <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.consignorInvoiceDetails.isPODCompulsory"
-            label="POD Compulsory (Yes/No)"
-            type="text"
-          /> 
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorInvoiceDate"
-            label="Consignor - Invoice Date"
-            type="date"
-          /> 
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorDeliveryNo"
-            label="Consignor - Delivery No"
-            type="text"
-          /> 
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorInvoiceNo"
-            label="Consignor - Invoice No"
-            type="text"
-          /> 
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.consignorInvoiceDetails.valueOfGoods"
-            label="Value of Goods (Rs.)"
-            type="number"
-          /> 
-
-          {/* eWayBillDetails */}
-          <>
-          <h2 className="text-2xl text-center font-semibold mt-6">e-way Bill Details</h2>
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.eWayBillNo"
-            label="E-Way Bill No"
-            type="text"
-          />
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.eWayBillDate"
-            label="E-Way Bill Date"
-            type="date"
-          />
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.expDate"
-            label="Exp-Date "
-            type="date"
-          />
-           </>
+              form={form}
+              name="dispatch.dispatchDetails.billtyType"
+              label="Billty Type"
+              type="text"
+            />
+            <FieldForm
+              form={form}
+              name="dispatch.dispatchDetails.dispatchDate"
+              label="Dispatch Date"
+              type="date"
+            />
+            <FieldForm
+              form={form}
+              name="dispatch.dispatchDetails.dispatchTime"
+              label="Dispatch Time"
+              type="text"
+            />
+            <FieldForm
+              form={form}
+              name="dispatch.dispatchDetails.totalFreight"
+              label="Total Freight"
+              type="number"
+            />
           </>
-
-          {/* dispatch Info  */}
-          <>
-          <h2 className="text-2xl text-center font-semibold mt-6">Additional Rate for Company</h2>
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.dispatch.additionalRateForCompany"
-            label="Additional Rate for Company"
-            type="number"
-          />
-          {/* dispatch Info =====> chargesDetails */}
-          <>
-          <h2 className="text-xl text-center font-semibold mt-6">Additional Chargers Details</h2>
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.dispatch.chargesDetails[0].chargesName"
-            label="Charges Name"
-            type="text"
-          />
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.dispatch.chargesDetails[0].days"
-            label="Days"
-            type="number"
-          />
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.dispatch.chargesDetails[0].rate"
-            label="Rate"
-            type="number"
-          />
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.dispatch.chargesDetails[0].amount"
-            label="Amount"
-            type="number"
-          />
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.dispatch.chargesDetails[0].remarks"
-            label="Remarks"
-            type="text"
-          />
-          </>
-
-          </>
-
-         <div className="mt-8">
-         <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.ledgerBalanceOfParty"
-            label="LedgerBalance of Party"
-            type="text"
-          /> 
-          <FieldForm
-            form={form}
-            name="dispatch.dispatchDetails.remarks"
-            label="Remarks"
-            type="text"
-          /> 
-         </div>
-
            
-      
+
+            {/* consignorInvoiceDetails */}
+            <>
+              <h2 className="mt-6 text-center text-2xl font-semibold">
+                Consignor Invoice Details
+              </h2>
+              <FieldForm
+                form={form}
+                name="dispatch.dispatchDetails.consignorInvoiceDetails.isPODCompulsory"
+                label="POD Compulsory (Yes/No)"
+                type="text"
+              />
+              <FieldForm
+                form={form}
+                name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorInvoiceDate"
+                label="Consignor - Invoice Date"
+                type="date"
+              />
+              <FieldForm
+                form={form}
+                name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorDeliveryNo"
+                label="Consignor - Delivery No"
+                type="text"
+              />
+              <FieldForm
+                form={form}
+                name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorInvoiceNo"
+                label="Consignor - Invoice No"
+                type="text"
+              />
+              <FieldForm
+                form={form}
+                name="dispatch.dispatchDetails.consignorInvoiceDetails.valueOfGoods"
+                label="Value of Goods (Rs.)"
+                type="number"
+              />
+
+              {/* eWayBillDetails */}
+              <>
+                <h2 className="mt-6 text-center text-2xl font-semibold">
+                  e-way Bill Details
+                </h2>
+                <FieldForm
+                  form={form}
+                  name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.eWayBillNo"
+                  label="E-Way Bill No"
+                  type="text"
+                />
+                <FieldForm
+                  form={form}
+                  name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.eWayBillDate"
+                  label="E-Way Bill Date"
+                  type="date"
+                />
+                <FieldForm
+                  form={form}
+                  name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.expDate"
+                  label="Exp-Date "
+                  type="date"
+                />
+              </>
+            </>
+
+            {/* dispatch Info  */}
+            <>
+              <h2 className="mt-6 text-center text-2xl font-semibold">
+                Additional Rate for Company
+              </h2>
+              <FieldForm
+                form={form}
+                name="dispatch.dispatchDetails.dispatch.additionalRateForCompany"
+                label="Additional Rate for Company"
+                type="number"
+              />
+              {/* dispatch Info =====> chargesDetails */}
+              <>
+                <h2 className="mt-6 text-center text-xl font-semibold">
+                  Additional Chargers Details
+                </h2>
+                <FieldForm
+                  form={form}
+                  name="dispatch.dispatchDetails.dispatch.chargesDetails[0].chargesName"
+                  label="Charges Name"
+                  type="text"
+                />
+                <FieldForm
+                  form={form}
+                  name="dispatch.dispatchDetails.dispatch.chargesDetails[0].days"
+                  label="Days"
+                  type="number"
+                />
+                <FieldForm
+                  form={form}
+                  name="dispatch.dispatchDetails.dispatch.chargesDetails[0].rate"
+                  label="Rate"
+                  type="number"
+                />
+                <FieldForm
+                  form={form}
+                  name="dispatch.dispatchDetails.dispatch.chargesDetails[0].amount"
+                  label="Amount"
+                  type="number"
+                />
+                <FieldForm
+                  form={form}
+                  name="dispatch.dispatchDetails.dispatch.chargesDetails[0].remarks"
+                  label="Remarks"
+                  type="text"
+                />
+              </>
+            </>
+
+            <div className="mt-8">
+              <FieldForm
+                form={form}
+                name="dispatch.dispatchDetails.ledgerBalanceOfParty"
+                label="LedgerBalance of Party"
+                type="text"
+              />
+              <FieldForm
+                form={form}
+                name="dispatch.dispatchDetails.remarks"
+                label="Remarks"
+                type="text"
+              />
+            </div>
+            </div>
           </>
-         
-         
+{/* dispatchAdditionalDetails */}
+<div>
+<h2 className="mt-6 text-center text-2xl font-semibold">
+                Additional Details
+              </h2>
+<FieldForm
+            form={form}
+            name="dispatch.dispatchAdditionalDetails.deliveryType"
+            label="Delivery Type"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            name="dispatch.dispatchAdditionalDetails.manualLRNo"
+            label="Manual LRNo "
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            name="dispatch.dispatchAdditionalDetails.brokerCommission"
+            label="Broker Commission"
+            type="number"
+          />
+          <FieldForm
+            form={form}
+            name="dispatch.dispatchAdditionalDetails.shippingRisk"
+            label="Shipping Risk"
+            type="text"
+          />
+
+            
+          <FormField
+            control={form.control}
+            name="dispatch.dispatchAdditionalDetails.insurance.isInsured"
+            render={({ field }) => {
+              return (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="text-nowrap text-sm lg:text-base">
+                    Insurance :
+                  </FormLabel>
+                  <Select
+                    className="flex flex-1 flex-col"
+                    onValueChange={field.onChange}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                    <SelectItem value='Yes'>Yes</SelectItem>
+            <SelectItem value='No'>No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+
+          
+</div>
+{
+ ( form.getValues('dispatch.dispatchAdditionalDetails.insurance.isInsured') === 'Yes')?
+ (<>
+            {/* insurance */}
+            <h2 className="mt-6 text-center text-xl font-semibold">
+                Insurance Details
+              </h2>
+          
+            <FieldForm
+            form={form}
+            name="dispatch.dispatchAdditionalDetails.insurance.insuranceProvider"
+            label="Insurance Provider "
+            type="text"
+          />
+            <FieldForm
+            form={form}
+            name="dispatch.dispatchAdditionalDetails.insurance.policyNo"
+            label="Policy No"
+            type="text"
+          />
+            <FieldForm
+            form={form}
+            name="dispatch.dispatchAdditionalDetails.insurance.policyAmount"
+            label="Policy Amount"
+            type="number"
+          />
+            <FieldForm
+            form={form}
+            name="dispatch.dispatchAdditionalDetails.insurance.claimAmount"
+            label="Claim Amount"
+            type="number"
+          />
+            <FieldForm
+            form={form}
+            name="dispatch.dispatchAdditionalDetails.insurance.brokerDetails"
+            label="Broker Details"
+            type="text"
+          />
+
+          </>):(
+            <>
+              {/* Nothing */}
+            </>
+          )
+}
+
+
 
           <Button type="submit">{isloading ? "Loading..." : " Submit"}</Button>
         </form>
