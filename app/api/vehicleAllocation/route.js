@@ -41,10 +41,10 @@ export async function POST(req, res) {
       return Response.json({ message: "Booking not found" }, { status: 404 });
     }
 
-    if (existingBooking.status !== "Pending") {
+    if (existingBooking.status !== "Confirmed") {
       console.log(existingBooking.status);
       return Response.json(
-        { message: "Booking is not in pending state" },
+        { message: "Booking is not confirmed" },
         { status: 400 },
       );
     }
