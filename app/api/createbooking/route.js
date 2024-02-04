@@ -41,6 +41,7 @@ export async function POST(req, res) {
       remarks,
       additionalCharges,
       isUrgent,
+      status,
     } = await req.json();
 
     const existingBooking = await Booking.findOne({ orderNumber });
@@ -92,6 +93,10 @@ export async function POST(req, res) {
           adminId,
         },
       });
+
+      if (status === "Confirmed") {
+        newBooking.status = "Confirmed";
+      }
 
       if (isUrgent) {
         newBooking.isUrgent = true;

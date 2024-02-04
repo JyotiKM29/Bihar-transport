@@ -19,6 +19,7 @@ import { useState, useEffect } from "react";
 import { useToast } from "../../components/ui/use-toast";
 import Link from "next/link";
 import { FiPlus } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 
 const chargersSchema = z.object({
   name: z.string({ message: "Field is required" }),
@@ -160,6 +161,8 @@ export default function ProfileForm() {
   const [showAdditional, setShowAdditional] = useState(false);
   const [showButton, setShowButton] = useState(false);
   const [chargers, setChargers] = useState([]);
+  const [allocateVehicle, setAllocateVehicle] = useState(false);
+  const route = useRouter();
 
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
@@ -200,6 +203,7 @@ export default function ProfileForm() {
   const quantity = form.watch("quantity", 0);
   const advanceAmount = form.watch("advanceAmount", 0);
   const additionalCharges = form.watch("additionalCharges.totalCharge", 0);
+
 
   const chargeAmount = calChargeAmount(chargeQty, chargeRate);
 
@@ -276,11 +280,15 @@ export default function ProfileForm() {
   async function MyHandleSubmit(value) {
     form.setValue("additionalCharges.chargers", chargers);
 
-    console.log("hey");
-    console.log(value);
+    // console.log("hey");
+    // console.log(value);
 
     setIsLoading(true);
     try {
+      if (allocateVehicle) {
+        value.status = "Confirmed";
+        console.log(value);
+      }
       const response = await fetch("/api/createbooking", {
         method: "POST",
         headers: {
@@ -288,17 +296,29 @@ export default function ProfileForm() {
         },
         body: JSON.stringify(value),
       });
+      // console.log(await response.json());
 
       const newResult = await response.json();
 
       if (response.ok) {
+        if(allocateVehicle){
+          console.log("hey", newResult.Booking.orderNumber)
+          setIsLoading(false);
+         displayToast(
+          "Successfully Booked,Ok",
+          "✅",
+        );
+        setAllocateVehicle(false)
+        
+           route.push(`/admin/booking/${newResult.Booking.orderNumber}`);
+        }
         setIsLoading(false);
         displayToast(
           "Successfully Booked, Click view Booking button to view the booking",
           "✅",
         );
        
-        await reset(initialFormState);
+       reset(initialFormState);
       } else {
         console.error("Error:", newResult.message);
         displayToast("Error", "❌", newResult.message);
@@ -1253,12 +1273,15 @@ export default function ProfileForm() {
             {isloading ? "Loading..." : "Save Booking"}
           </Button>
          <Button
-            type="submit"
+              type="submit"
+              onClick={(e) => {
+                setAllocateVehicle(true);
+              }}
             className=" h-16 w-full self-center bg-black text-lg xl:w-1/3"
           >
-          <Link href='/'>
-          {isloading ? "Loading..." : "Save & Allot Vehicle"}
-          </Link>
+         
+                {isloading ? "Loading..." : "Save & Allot Vehicle"}
+          
             
           </Button>
          </div>
