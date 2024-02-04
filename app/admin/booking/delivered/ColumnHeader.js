@@ -11,50 +11,24 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../../../components/ui/dialog";
+import { useToast } from "../../../components/ui/use-toast";
 
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
-import { Input } from "../../../components/ui/input";
+
 
 export default function ColumnHeader() {
+  
   const { user } = useContext(UserContext);
-  const [columns, setColumns] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [vehicleIds, setVehicleIds] = useState([]);
-  const [vehicleData, setVehicleData] = useState();
 
-  const [searchInput, setSearchInput] = useState("");
+  const [columns, setColumns] = useState([]);
+ 
+  
 
 
   useEffect(() => {
-    async function deleteData(id) {
-      console.log(user);
-      console.log("id:", id);
-      try {
-        const response = await fetch(`/api/deletebooking`, {
-          method: "DELETE",
-          body: JSON.stringify({ _id: id, adminId: user._id }),
-        });
-        console.log(response);
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-      } catch (error) {
-        console.error("There was a problem with the delete request.", error);
-      }
-    }
+   
 
     setColumns([
       {
@@ -139,7 +113,7 @@ export default function ColumnHeader() {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Link href={`/admin/booking/delivered/${row.original._id}`}>
+                  <Link href={`/admin/booking/pending/${row.original._id}`}>
                     View Detail
                   </Link>
                 </DropdownMenuItem>
@@ -152,39 +126,7 @@ export default function ColumnHeader() {
                    Send Invoice
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                <Link 
-               href={`/admin/booking/${row.original.orderNumber}`}
-                >
-                   Allocation Vehicle
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Dialog>
-                    <DialogTrigger onClick={(e) => e.stopPropagation()}>
-                      Delete Data
-                    </DialogTrigger>
-                    <DialogContent className="flex flex-col justify-center">
-                      <DialogHeader>
-                        <DialogTitle>Confirm Delete ?</DialogTitle>
-                      </DialogHeader>
-                      <DialogDescription>
-                        This data row will delete permanently from the database
-                        and you cannot access it again.
-                      </DialogDescription>
-                      <DialogFooter>
-                        <Button
-                          type="submit"
-                          onClick={() => {
-                            deleteData(row.original._id, user);
-                          }}
-                        >
-                          Confirm
-                        </Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
-                </DropdownMenuItem>
+               
               </DropdownMenuContent>
             </DropdownMenu>
           );
