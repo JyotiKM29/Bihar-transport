@@ -257,12 +257,7 @@ const BookingDetails = ({ params }) => {
           tableId={bookingDetails?.booking?._id}
           identifier="remarks"  value={bookingDetails?.booking?.remarks}
         />
-        <FieldComponent
-          label={"Additional Charges"}
-          show={editBooking}
-          tableId={bookingDetails?.booking?._id}
-          identifier="additionalCharges" value={bookingDetails?.booking?.additionalCharges}
-        />
+        
         <FieldComponent
           label={"Alloted Vehicle"}
           show={editBooking}
@@ -270,6 +265,17 @@ const BookingDetails = ({ params }) => {
           identifier="allotedVehicle"  
           value={bookingDetails?.booking?.allotedVehicle}
         />
+
+ {/* Display Additional Charges if enabled */}
+ {bookingDetails?.booking?.additionalCharges?.enabled && (
+              <FieldComponent
+                label={"Additional Charges"}
+                value={bookingDetails?.booking?.additionalCharges?.totalCharge}
+                show={editBooking}
+                tableId={bookingDetails?.booking?._id}
+                identifier="additionalCharges"
+              />
+               )}
         </div>
     
        

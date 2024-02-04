@@ -19,7 +19,7 @@ function Vehicle() {
           Registration
           </TabsTrigger>
           <TabsTrigger value="allocation">
-          Vehicle Allocation
+          Vehicle Details
           </TabsTrigger>
          
         

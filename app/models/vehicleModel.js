@@ -128,10 +128,10 @@ const allotmentSchema = new mongoose.Schema(
     },
     billTo: {
       type: String,
-      enum: ["Consignor", "Consignee", "Third Party"],
-      required: function () {
-        return this.paymentLiability === "Third Party";
-      },
+      // enum: ["Consignor", "Consignee", "Third Party"],
+      // required: function () {
+      //   return this.paymentLiability === "Third Party";
+      // },
     },
     ledgerBalanceParty: { type: String }, // Assuming it can be both debit or credit
 

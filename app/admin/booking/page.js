@@ -5,9 +5,16 @@ import {
   TabsList,
   TabsTrigger,
 } from "../../components/ui/tabs";
-import PersonalBooking  from './personal/page'
+import NewBooking  from './new-booking/page'
 import CompanyBooking  from './company/page'
-import GeneralBooking  from './general/page'
+import PendingBooking  from './pending/page'
+import IntilizeBooking  from './intilize/page'
+import ConfirmBooking  from './confirm/page'
+import DispatchBooking  from './dispatch/page'
+import IntransitBooking  from './intransit/page'
+import DeliveredBooking  from './delivered/page'
+import CancelledBooking  from './cancelled/page'
+
 
 
 
@@ -15,59 +22,57 @@ function page() {
   return (
     <div className="w-full min-h-[95vh] ">
        <Tabs defaultValue="Booking" className="relative w-full min-h-full ">
-        <TabsList className="absolute right-0">
+        <TabsList className=" flex justify-center flex-wrap rounded-2xl">
           <TabsTrigger value="Booking">
            New Booking
           </TabsTrigger>
           <TabsTrigger value="Pending">
-          Pending Booking
+          Pending Bookings
           </TabsTrigger>
           <TabsTrigger value="Confirm">
-           Confirm Booking
+           Confirm Bookings
           </TabsTrigger>
           <TabsTrigger value="Intilize">
-           Intilize Booking
+           Intilize Bookings
           </TabsTrigger>
           <TabsTrigger value="Dispatch">
-           Dispatch Booking
+           Dispatch Bookings
+          </TabsTrigger>
+          <TabsTrigger value="intransist">
+           In-Transist Bookings
           </TabsTrigger>
           <TabsTrigger value="Delivered">
-           Delivered Booking
+           Delivered Bookings
           </TabsTrigger>
           <TabsTrigger value="Cancelled">
-           Cancelled Booking
+           Cancelled Bookings
           </TabsTrigger>
         
         </TabsList>
-        {/* <TabsContent value="personal">
-          <PersonalBooking  />
-        </TabsContent>
-        <TabsContent value="general">
-        <GeneralBooking  />
-        </TabsContent>
-        <TabsContent value="company">
-        <CompanyBooking  />
-        </TabsContent> */}
+       
         <TabsContent value="Booking">
-        <PersonalBooking  />
+        <NewBooking  />
           </TabsContent>
           <TabsContent value="Pending">
-          Pending Booking
+          <PendingBooking />
           </TabsContent>
           <TabsContent value="Confirm">
-           Confirm Booking
+          <ConfirmBooking />
           </TabsContent>
           <TabsContent value="Intilize">
-           Intilize Booking
+          <IntilizeBooking />
           </TabsContent>
           <TabsContent value="Dispatch">
-           Dispatch Booking
+          <DispatchBooking />
+          </TabsContent>
+          <TabsContent value="intransist">
+          <IntransitBooking />
           </TabsContent>
           <TabsContent value="Delivered">
-           Delivered Booking
+           <DeliveredBooking />
           </TabsContent>
           <TabsContent value="Cancelled">
-           Cancelled Booking
+           <CancelledBooking />
           </TabsContent>
         
       

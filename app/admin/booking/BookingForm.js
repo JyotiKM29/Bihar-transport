@@ -1,6 +1,6 @@
 "use client";
+import { FaPlus } from "react-icons/fa6";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FieldForm from "./FieldForm";
 import { useForm } from "react-hook-form";
 import LocationAdd from "./LocationAdd";
 import {
@@ -15,9 +15,10 @@ import SearchInput from "./SearchInput";
 import * as z from "zod";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
-import { useContext, useState, useEffect } from "react";
-import { UserContext } from "../../context/UserContextProvider";
+import { useState, useEffect } from "react";
 import { useToast } from "../../components/ui/use-toast";
+import Link from "next/link";
+import { FiPlus } from "react-icons/fi";
 
 const chargersSchema = z.object({
   name: z.string({ message: "Field is required" }),
@@ -200,8 +201,6 @@ export default function ProfileForm() {
   const advanceAmount = form.watch("advanceAmount", 0);
   const additionalCharges = form.watch("additionalCharges.totalCharge", 0);
 
-  // const chargersAmount = form.watch("additionalCharges.chargers.amount",0);
-
   const chargeAmount = calChargeAmount(chargeQty, chargeRate);
 
   const partyBhara = calPartyBhara(quantity, rate, additionalCharges, tax);
@@ -209,11 +208,6 @@ export default function ProfileForm() {
 
   const totalCharge = calTotalChargers(chargers);
 
-  // useEffect(()=>{
-  //   form.setValue("additionalCharges.chargers", [
-  //     ...chargers
-  //   ]);
-  //  },[chargers ,form])
 
   useEffect(() => {
     form.setValue("additionalCharges.chargers.amount", chargeAmount);
@@ -274,23 +268,10 @@ export default function ProfileForm() {
 
     setShowAddChargeForm(false);
 
-    // Reset the form fields after adding a new charger
-    // reset({
-    //   additionalCharges: {
-    //     ...form.getValues("additionalCharges"),
-    //     chargers: {
-    //       name: "",
-    //       rate: 0,
-    //       qty: 0,
-    //       amount: 0,
-    //     },
-    //   },
-    // });
+   
   };
 
-  // console.log('chargers outside : ',chargers);
-
-  // console.log(form.getValues("additionalCharges"))
+  
 
   async function MyHandleSubmit(value) {
     form.setValue("additionalCharges.chargers", chargers);
@@ -307,7 +288,6 @@ export default function ProfileForm() {
         },
         body: JSON.stringify(value),
       });
-      // console.log(response);
 
       const newResult = await response.json();
 
@@ -317,7 +297,7 @@ export default function ProfileForm() {
           "Successfully Booked, Click view Booking button to view the booking",
           "✅",
         );
-        // const userDetail = newResult.user;
+       
         await reset(initialFormState);
       } else {
         console.error("Error:", newResult.message);
@@ -434,17 +414,27 @@ export default function ProfileForm() {
                 }}
               />
 
-              <FormField
+<div className="flex items-center gap-0">
+<FormField
                 control={form.control}
                 name="consignorName"
+                
                 render={({ field }) => (
                   <SearchInput
+                 
                     form={form}
                     field={field}
                     personName="consignorName"
                   />
                 )}
               />
+              <Link href='/admin/booking/new-regesitration' className="border h-10 text-base text-nowrap px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">
+              <FiPlus  className="h-full w-full"/>
+
+              </Link>
+</div>
+
+             
 
               <FormField
                 control={form.control}
@@ -1255,12 +1245,23 @@ export default function ProfileForm() {
               )}
             </div>
           </div>
-          <Button
+         <div className="my-8 flex flex-col lg:flex-row gap-2 flex-1 justify-center lg:gap-6 items-center">
+         <Button
             type="submit"
-            className="mt-8 h-16 w-full self-center bg-black text-lg xl:w-1/3"
+            className=" h-16 w-full self-center bg-black text-lg xl:w-1/3"
           >
-            {isloading ? "Loading..." : "Submit"}
+            {isloading ? "Loading..." : "Save Booking"}
           </Button>
+         <Button
+            type="submit"
+            className=" h-16 w-full self-center bg-black text-lg xl:w-1/3"
+          >
+          <Link href='/'>
+          {isloading ? "Loading..." : "Save & Allot Vehicle"}
+          </Link>
+            
+          </Button>
+         </div>
         </form>
       </Form>
     </div>

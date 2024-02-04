@@ -1,54 +1,18 @@
 "use client";
+import { useToast } from "../../components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
 import { useEffect, useState } from "react";
-import FieldComponent from "../../FieldComponent";
-import SelectFieldComponent from "../../SelectFieldComponent";
-import { Button } from "../../../../components/ui/button";
-import { useToast } from "../../../../components/ui/use-toast";
+import FieldComponent from "./FieldComponent";
+import { Button } from "../../components/ui/button";
 
-const BookingDetails = ({ params }) => {
-  const router = useRouter();
+const ViewDetail = ({  bookingDetails , heading}) => {
   const { toast } = useToast();
-  const [bookingDetails, setBookingDetails] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const [editBooking, setEditBooking] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(`/api/bookingdetails/${params.id}`, {
-          method: "GET",
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setLoading(false);
-        setBookingDetails(data);
-        displayToast("Fetch Booking Detail Succesfully ", "✅");
-
-        console.log("data", data);
-      } catch (error) {
-        setLoading(false);
-        console.error("Error:", error);
-        displayToast("Error in Fetching Data", "❌", error.message);
-      }
-    };
-    fetchData();
-  }, [params.id]);
-
-  const displayToast = (title, action, description = "") => {
-    toast({
-      title,
-      action,
-      description,
-    });
-  };
+  // console.log('Hey jyoti ' ,bookingDetails)
+ 
 
   const handleGoBack = () => {
     router.back();
@@ -57,7 +21,7 @@ const BookingDetails = ({ params }) => {
   return (
     <div className="min-h-[90vh] w-full rounded-2xl bg-white px-6 py-4 shadow-sm ">
       <div className="flex items-center justify-between">
-        <h1 className="mb-6 text-4xl">Booking Details: </h1>
+        <h1 className="mb-6 text-4xl">{heading} Details: </h1>
         <div className="flex items-center justify-between space-x-2">
           <Button className="space-x-2 px-4" onClick={handleGoBack}>
             <IoIosArrowBack className=" fill-white" />
@@ -72,9 +36,7 @@ const BookingDetails = ({ params }) => {
           </Button>
         </div>
       </div>
-      {loading ? (
-        <p>Loading.....</p>
-      ) : (
+      {(
         <div className="w-full gap-8 xl:flex">
           <div className="w-full">
             <div className="mb-4 mt-3 flex items-center justify-between border-b">
@@ -286,74 +248,167 @@ const BookingDetails = ({ params }) => {
               identifier="remarks"
               value={bookingDetails?.booking?.remarks}
             />
-            <FieldComponent
-              label={"Additional Charges"}
-              show={editBooking}
-              tableId={bookingDetails?.booking?._id}
-              identifier="additionalCharges"
-              value={bookingDetails?.booking?.additionalCharges}
-            />
-            <SelectFieldComponent
-              label={"Status"}
-              show={bookingDetails?.booking?.status !== 'Pending' && editBooking }
-              tableId={bookingDetails?.booking?._id}
-              identifier="status"
-              value={bookingDetails?.booking?.status}
-              options={["Initialized",'Dispatched','In Transit' ,"delevered" , "cancelled"]}
-              
-            />
+
+          
+
+         
           </div>
         </div>
       )}
 
-      <div>
-        {bookingDetails?.booking?.status === "Pending" ? (
-          <h2 className="mt-8 text-center text-xl font-semibold">Vehicle Allocation is Pending </h2>
-        ) : (
+     
+         {/* Display Additional Charges if enabled */}
+         {bookingDetails?.booking?.additionalCharges?.enabled && (
           <>
-            <h2 className="mt-8 text-center text-3xl font-semibold">
-              Allocated Vehicle Detail:
-            </h2>
+          <h2 className="font-semibold text-center text-2xl mt-8">Additional Charges :</h2>
+          <FieldComponent
+                label={"Total Charges"}
+                value={bookingDetails?.booking?.additionalCharges?.totalCharge}
+                show={editBooking}
+                tableId={bookingDetails?.booking?._id}
+                identifier="additionalCharges.totalCharge"
+              />
+              {/* Display chargers array */}
+            {bookingDetails?.booking?.additionalCharges?.chargers?.map(
+              (charger, index) => (
+                <div key={index}>
+                <h2 className="text-lg text-center font-semibold ">{`CHARGE ${index + 1}`}</h2>
+                  <FieldComponent
+                    label={` Name`}
+                    value={charger.name}
+                    show={editBooking}
+                    tableId={bookingDetails?.booking?._id}
+                    identifier={`additionalCharges.chargers.name`}
+                  />
 
-            {bookingDetails?.booking?.allotedVehicle.map((vehicle, index) => (
-              <div key={index} className="grid grid-cols-2">
-                <FieldComponent
-                  label={"Vehicle No"}
-                  tableId={bookingDetails?.booking?._id}
-                  identifier={`allotedVehicle-${index}-vehicleNo`}
-                  value={vehicle.vehicleNo}
-                />
-                <FieldComponent
-                  label={"Driver Name"}
-                  tableId={bookingDetails?.booking?._id}
-                  identifier={`allotedVehicle-${index}-vehicleDriver`}
-                  value={vehicle.vehicleDriver}
-                />
-                <FieldComponent
-                  label={"Vehicle Driver Phone"}
-                  tableId={bookingDetails?.booking?._id}
-                  identifier={`allotedVehicle-${index}-vehicleDriverPhone`}
-                  value={vehicle.vehicleDriverPhone}
-                />
-                <FieldComponent
-                  label={"Owner Name"}
-                  tableId={bookingDetails?.booking?._id}
-                  identifier={`allotedVehicle-${index}-vehicleOwner`}
-                  value={vehicle.vehicleOwner}
-                />
-                <FieldComponent
-                  label={"Vehicle Owner Phone"}
-                  tableId={bookingDetails?.booking?._id}
-                  identifier={`allotedVehicle-${index}-vehicleOwnerPhone`}
-                  value={vehicle.vehicleOwnerPhone}
-                />
-              </div>
-            ))}
+                  <FieldComponent
+                    label={` Rate`}
+                    value={charger.rate}
+                    show={editBooking}
+                    tableId={bookingDetails?.booking?._id}
+                    identifier={`additionalCharges.chargers.rate`}
+                  />
+
+                  <FieldComponent
+                    label={` Quantity`}
+                    value={charger.qty}
+                    show={editBooking}
+                    tableId={bookingDetails?.booking?._id}
+                    identifier={`additionalCharges.chargers.qty`}
+                  />
+
+                  <FieldComponent
+                    label={` Amount`}
+                    value={charger.amount}
+                    show={editBooking}
+                    tableId={bookingDetails?.booking?._id}
+                    identifier={`additionalCharges.chargers.amount`}
+                  />
+                </div>
+              ),
+            )}
           </>
+             
+            )}
+
+            
+
+            {bookingDetails?.booking?.allotedVehicle.length !== 0 && (
+  <div>
+    <h2 className="font-semibold text-center text-2xl mt-8">Vehicle Allocated :</h2>
+    <FieldComponent
+      label={"Owner Name"}
+      value={bookingDetails?.booking?.allotedVehicle[0]?.vehicleOwner}
+      show={editBooking}
+      tableId={bookingDetails?.booking?._id}
+      identifier="allotedVehicle.vehicleOwner"
+    />
+    <FieldComponent
+      label={"Owner Mobile No"}
+      value={bookingDetails?.booking?.allotedVehicle[0]?.vehicleOwnerPhone}
+      show={editBooking}
+      tableId={bookingDetails?.booking?._id}
+      identifier="allotedVehicle.vehicleOwnerPhone"
+    />
+    <FieldComponent
+      label={"Driver Name"}
+      value={bookingDetails?.booking?.allotedVehicle[0]?.vehicleDriver}
+      show={editBooking}
+      tableId={bookingDetails?.booking?._id}
+      identifier="allotedVehicle.vehicleDriver"
+    />
+    <FieldComponent
+      label={"Driver Mobile No"}
+      value={bookingDetails?.booking?.allotedVehicle[0]?.vehicleDriverPhone}
+      show={editBooking}
+      tableId={bookingDetails?.booking?._id}
+      identifier="allotedVehicle.vehicleDriverPhone"
+    />
+    <FieldComponent
+      label={"Vehicle No"}
+      value={bookingDetails?.booking?.allotedVehicle[0]?.vehicleNo}
+      show={editBooking}
+      tableId={bookingDetails?.booking?._id}
+      identifier="allotedVehicle.vehicleNo"
+    />
+    <FieldComponent
+      label={"Vehicle Allocated Date"}
+      value={bookingDetails?.booking?.allotedVehicle[0]?.date}
+      show={editBooking}
+      tableId={bookingDetails?.booking?._id}
+      identifier="allotedVehicle.date"
+    />
+  </div>
+)}
+
+   
+
+{bookingDetails?.booking?.invoice.length !== 0 && (
+  <>
+    <h2 className="font-semibold text-center text-2xl mt-8">Invoice detail :</h2>
+    {bookingDetails?.booking?.invoice.map((invoice, index) => (
+      <div key={index}>
+      <h2 className="text-lg text-center font-semibold ">{`INVOICE ${index + 1}`}</h2>
+        <FieldComponent
+          label={` Invoice ID`}
+          value={invoice.invoiceId}
+          tableId={bookingDetails?.booking?._id}
+          identifier={`invoice.invoiceId`}
+        />
+        <FieldComponent
+          label={` Invoice Date`}
+          value={invoice.invoiceDate}
+          tableId={bookingDetails?.booking?._id}
+          identifier={`invoice.invoiceDate`}
+        />
+        <FieldComponent
+          label={` Sent To Email`}
+          value={invoice.sentOn}
+          tableId={bookingDetails?.booking?._id}
+          identifier={`invoice.sentOn`}
+        />
+        <FieldComponent
+          label={` Sent to Name`}
+          value={invoice.sentTo}
+          tableId={bookingDetails?.booking?._id}
+          identifier={`invoice.sentTo`}
+        />
+        {invoice.generatedBy && (
+          <FieldComponent
+            label={` Sended by Name`}
+            value={invoice.generatedBy.name}
+            tableId={bookingDetails?.booking?._id}
+            identifier={`invoice.generatedBy.name`}
+          />
         )}
       </div>
+    ))}
+  </>
+)}
+
+      
     </div>
   );
 };
 
-export default BookingDetails;
+export default ViewDetail;

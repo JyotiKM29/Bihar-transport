@@ -1,11 +1,11 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import ColumnHeader from '../ColumnHeader';
-import { DataTable } from "./../data-table";
-import BookingForm from "./../BookingForm";
+import ColumnHeader from './ColumnHeader';
+import { DataTable } from "../data-table";
+import BookingForm from "../BookingForm";
 import { UserContext } from "../../../context/UserContextProvider";
 
-const GeneralBooking = () => {
+const PendingBooking = () => {
   const [formValue, setFormValue] = useState(true);
   const [loading , setLoading] = useState(true);
   const columns = ColumnHeader();
@@ -14,12 +14,10 @@ const GeneralBooking = () => {
 
   const [data, setData] = useState(null);
 
-
   const userId = user?._id;
 
   useEffect(() => {
     const fetchData = async () => {
-    
       try {
         if (userId) {
           const response = await fetch(`/api/getbooking/${userId}`, {
@@ -30,11 +28,18 @@ const GeneralBooking = () => {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
   
-          const data = await response.json();
-
+          const result = await response.json();
+  
           setLoading(false);
-        
-          setData(data);
+  
+          // Check if result.data is an array before applying filter
+          const pendingOrders = Array.isArray(result.data) ? result.data.filter(
+            (order) => order.status === "Pending",
+          ) : [];
+  
+          console.log(pendingOrders);
+  
+          setData(pendingOrders);
         }
       } catch (error) {
         setLoading(false);
@@ -45,35 +50,28 @@ const GeneralBooking = () => {
     fetchData();
   }, [userId]);
   
+  
+  
 
   console.log(data);
 
   return (
     <div className="min-h-[90vh] w-full space-y-6">
-      <div className="h-8  w-full ">
-        <h1 className="hidden text-4xl  lg:block ">General Booking</h1>
-      </div>
+     
       <div
         className="min-h w-full 
       space-y-2 rounded-2xl  bg-white px-4 py-4 
      shadow-sm md:px-6 xl:h-[95%]"
       >
-        <div className="flex w-full items-center justify-end gap-20 ">
-          <button
-            className="font-semiBold rounded-lg bg-blue-700 p-2 px-6 text-lg text-white"
-            onClick={() => setFormValue(!formValue)}
-          >
-            {formValue ? "View Bookings" : "New Booking"}
-          </button>
-        </div>
-        {formValue && <BookingForm />}
+        
+        <h1 className="hidden text-4xl  lg:block font-semibold">Pendings Bookings</h1>
 
        {loading ? (<div className="max-w max-h  bg-white"><h2
        className="text-xl"
-       >Loading...</h2></div>) :  (!formValue && <DataTable columns={columns} data={data?.data} />)}
+       >Loading...</h2></div>) :  ( <DataTable columns={columns} data={data} />)}
       </div>
     </div>
   );
 };
 
-export default GeneralBooking;
+export default PendingBooking;
