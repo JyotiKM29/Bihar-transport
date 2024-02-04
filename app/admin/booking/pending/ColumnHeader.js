@@ -57,7 +57,7 @@ export default function ColumnHeader() {
       
         if (response.ok) {
           setIsLoading(false);
-          displayToast("Successfully Confirm", "✅");
+          displayToast(`Successfully ${status}`, "✅");
          
         } else {
           console.error("Error:", newResult.message);
