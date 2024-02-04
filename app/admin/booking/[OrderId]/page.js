@@ -299,7 +299,10 @@ try {
           />
           <FieldForm form={form} name="remarks" label="Remarks " type="text" />
 
-          <Button type="submit">{isloading ? "Loading..." : " Submit"}</Button>
+          <div className="my-8 flex flex-col lg:flex-row gap-2 flex-1 justify-center lg:gap-6 items-center">
+        <Button type="submit">{isloading ? "Loading..." : "Assign Vehicle Only"}</Button>
+        <Button type="submit">{isloading ? "Loading..." : " Continue & Dispatch"}</Button>
+        </div>
         </form>
       </Form>
     </div>

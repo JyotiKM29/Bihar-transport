@@ -1245,12 +1245,23 @@ export default function ProfileForm() {
               )}
             </div>
           </div>
-          <Button
+         <div className="my-8 flex flex-col lg:flex-row gap-2 flex-1 justify-center lg:gap-6 items-center">
+         <Button
             type="submit"
-            className="mt-8 h-16 w-full self-center bg-black text-lg xl:w-1/3"
+            className=" h-16 w-full self-center bg-black text-lg xl:w-1/3"
           >
-            {isloading ? "Loading..." : "Submit"}
+            {isloading ? "Loading..." : "Save Booking"}
           </Button>
+         <Button
+            type="submit"
+            className=" h-16 w-full self-center bg-black text-lg xl:w-1/3"
+          >
+          <Link href='/'>
+          {isloading ? "Loading..." : "Save & Allot Vehicle"}
+          </Link>
+            
+          </Button>
+         </div>
         </form>
       </Form>
     </div>
