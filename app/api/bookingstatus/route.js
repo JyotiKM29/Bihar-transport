@@ -68,7 +68,7 @@ export async function POST(req, res) {
             return Response.json({ message: "Booking already  Cancelled" }, { status: 400 });
         }
         
-        else if (booking.status && booking.status === 'Confirmed' && status === 'Cancelled') {
+        else if (booking.status === 'Confirmed' && status === 'Cancelled') {
             booking.status = status;
             console.log(status);
             booking.updatedBy.push({
@@ -78,6 +78,25 @@ export async function POST(req, res) {
             });
             await booking.save();
             return Response.json({ message: `Booking ${status}` }, { status: 200 });
+        }
+
+        else if(booking.status === 'Initialized' && status === 'Cancelled'){
+
+
+             booking.status = status;
+            booking.updatedBy.push({
+              name: admin.name,
+              adminId: adminId,
+              date: Date.now(),
+            });
+            booking.allotedVehicle = [];
+            await booking.save();
+
+            if(exitingOrder)
+               await Order.deleteOne({_id:exitingOrder._id});
+
+            return Response.json({message:`Order ${status}`},{status:200});
+
         }
 
         else if (booking.status === 'Confirmed' && status === 'Pending') {
