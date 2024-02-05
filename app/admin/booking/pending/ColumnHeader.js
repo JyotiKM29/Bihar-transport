@@ -44,6 +44,8 @@ export default function ColumnHeader() {
 
       try {
 
+        console.log(requestData);
+
         const response = await fetch("/api/bookingstatus", {
           method: "POST",
           headers: {
@@ -60,6 +62,7 @@ export default function ColumnHeader() {
           displayToast(`Successfully ${status}`, "✅");
          
         } else {
+          console.log(newResult," ",response);
           console.error("Error:", newResult.message);
           displayToast("Error", "❌", newResult.message);
           setIsLoading(false);
