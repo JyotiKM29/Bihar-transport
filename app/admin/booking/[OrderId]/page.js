@@ -96,8 +96,8 @@ const Allocation = ({ params }) => {
     <div className="h-full w-full rounded-3xl bg-white px-6 py-4  shadow-sm">
       <h2 className="font-semiBold text-3xl ">Vehicle Allocation : </h2>
       <div className="flex flex-col mt-6 h-full w-full ">
-        <form 
-        onSubmit={handleSubmit}
+        <div 
+        // onSubmit={handleSubmit}
         className="self-end w-full flex justify-between items-center shadow-md border px-6 py-4 rounded-xl  mb-8"
         >
           <label className="flex items-center justify-start gap-4 text-nowrap">
@@ -118,17 +118,17 @@ const Allocation = ({ params }) => {
          
 
 
-          <Button className="w-[8rem] self-center"
+          {/* <Button className="w-[8rem] self-center"
           type='submit'
           >
             {loading ? "loading ..." : "Submit"}
-          </Button>
+          </Button> */}
           </div>
           
-        </form>
+        </div>
 
          {/* data table */}
-         <div className="overflow-scroll h-full w-full">
+        
   <table className="min-w-full divide-y divide-gray-200">
     <thead className="bg-gray-50">
       <tr>
@@ -155,7 +155,7 @@ const Allocation = ({ params }) => {
       ))}
     </tbody>
   </table>
-</div>
+
 
 <AllocateVehicle params={params} />
       </div>
