@@ -21,7 +21,7 @@ const Allocation = ({ params }) => {
           const response = await fetch(`/api/vehicledata/${userId}`, {
             method: "GET",
           });
-          console.log(response);
+          // console.log(response);
 
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -32,7 +32,7 @@ const Allocation = ({ params }) => {
           setLoading(false);
 
           setVehicleData(data);
-          console.log("vehicle ", data);
+          // console.log("vehicle ", data);
 
         }
       } catch (error) {
@@ -51,53 +51,18 @@ const Allocation = ({ params }) => {
         )
       : [];
 
-      async function handleSubmit(e) {
-        e.preventDefault();
-      
-        try {
-          setLoading(true);
-      
-          const response = await fetch('/api/vehicleAllocation', {
-            method: 'POST',
-            body: JSON.stringify({
-              vehicleNo,
-              adminId: userId,
-              orderNo: params.bookingId,
-            }),
-          });
-      
-          const result = await response.json();
-      
-          if (response.ok) {
-            displayToast('Successfully allocated', '✅');
-          } else {
-            console.error('Error:', result.message);
-            displayToast('Error', '❌', result.message);
-          }
-        } catch (error) {
-          console.error('Error:', error.message);
-          displayToast('Error', '❌', error.message);
-        } finally {
-          setLoading(false);
-        }
-      }
+    
       
 
-  const displayToast = (title, action, description = "") => {
-    toast({
-      title,
-      action,
-      description,
-    });
-  };
+ 
 
 
   return (
-    <div className="h-full w-full rounded-3xl bg-white px-6 py-4  shadow-sm">
+    <div className="min-h-full w-full rounded-3xl bg-white px-6 py-4  shadow-sm">
       <h2 className="font-semiBold text-3xl ">Vehicle Allocation : </h2>
       <div className="flex flex-col mt-6 h-full w-full ">
         <div 
-        // onSubmit={handleSubmit}
+        
         className="self-end w-full flex justify-between items-center shadow-md border px-6 py-4 rounded-xl  mb-8"
         >
           <label className="flex items-center justify-start gap-4 text-nowrap">
@@ -118,11 +83,11 @@ const Allocation = ({ params }) => {
          
 
 
-          {/* <Button className="w-[8rem] self-center"
+          <Button className="w-[8rem] self-center"
           type='submit'
           >
             {loading ? "loading ..." : "Submit"}
-          </Button> */}
+          </Button>
           </div>
           
         </div>

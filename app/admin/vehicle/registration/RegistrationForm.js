@@ -105,41 +105,46 @@ const ownerSchema = z.object({
 });
 
 const contactSchema  = z.object({
-  contactPerson: z.string(),
-        mobileNo:z.coerce.number(),
-        designation:  z.string(),
+  contactPerson: z.string().optional(),
+        mobileNo:z.coerce.number().optional(),
+        designation:  z.string().optional(),
 })
 
 const transporterDetailsSchema =z.object({
   vehicleGuarantor:z.enum(['Self', 'Other Transporter']),
   ifOther:z.string().optional(),
-  proofType: z.string(),
-  proofNumber: z.string(),
-  name: z.string(),
-  dob: z.coerce.date(),
-  sDWOf: z.string(),
-  mobileNo: z.coerce.number(),
-  alternateMobNo:  z.coerce.number().optional,
-  officeAddress: z.string(),
-  temporaryAddress: z.string(),
-  permanentAddress:z.string(),
-  sameAddress:  z.coerce.boolean(),
-  serviceToState:z.string(),
-  transporterRating:  z.coerce.number(),
-  typeOfVehicle: z.string(),
+  proofType: z.string().optional(),
+  proofNumber: z.string().optional(),
+  name: z.string().optional(),
+  dob: z.coerce.date().optional(),
+  sDWOf: z.string().optional(),
+  mobileNo: z.coerce.number().optional(),
+  alternateMobNo:  z.coerce.number().optional().optional(),
+  officeAddress: z.string().optional(),
+  temporaryAddress: z.string().optional(),
+  permanentAddress:z.string().optional(),
+  sameAddress:  z.coerce.boolean().optional(),
+  serviceToState:z.string().optional(),
+  transporterRating:  z.coerce.number().optional(),
+  typeOfVehicle: z.string().optional(),
   bankDetails:z.object({
-    bankName: z.string(),
-    nameOnPassbook: z.string(),
-    accountNo: z.coerce.number(),
-    ifscCode: z.string(),
-    upiNo: z.coerce.number(),
-    upiType:z.string(),
-  })
+    bankName: z.string().optional(),
+    nameOnPassbook: z.string().optional(),
+    accountNo: z.coerce.number().optional(),
+    ifscCode: z.string().optional(),
+    upiNo: z.coerce.number().optional(),
+    upiType:z.string().optional(),
+  }).optional()
   ,
-  transporterVisitingCardProof: z.array(z.string().url()),
-  remarks:z.string().optional,
-  multipleContacts: z.array(contactSchema),
+  transporterVisitingCardProof: z.array(z.string().url()).optional(),
+  remarks:z.string().optional(),
+  multipleContacts: z.array(contactSchema).optional(),
 
+}).refine((data)=>{if(data.transporterDetails.vehicleGuarantor === 'Other Transporter'){
+  return Boolean(data.transporterDetails.ifOther);
+} return true },{
+  message: "if you select Other Vehicle Guarantor , then it is required",
+  path: ["transporterDetails.ifOther"],
 })
 
 const formSchema = z.object({
@@ -214,7 +219,7 @@ const RegistrationForm = () => {
     Remark: "",
     owner: {},
     driver: {},
-    transporterDetails:{},
+    transporterDetails:{  },
     adminId: '',
   };
 
@@ -380,15 +385,18 @@ const RegistrationForm = () => {
     {/* bank detail */}
     <FieldForm form={form} nameValue="transporterDetails.bankDetails.bankName" label="Bank Name" type="text" />
     <FieldForm form={form} nameValue="transporterDetails.bankDetails.nameOnPassbook" label="Name on Passbook" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.accountNo" label="Account No" type="number" />
+    <FieldForm form={form} nameValue="transporterDetails.bankDetails.accountNo" label="Account No" type="number" />
     <FieldForm form={form} nameValue="transporterDetails.bankDetails.ifscCode" label="Ifsc Code" type="text" />
     <FieldForm form={form} nameValue="transporterDetails.bankDetails.upiNo" label="Upi No" type="number" />
     <FieldForm form={form} nameValue="transporterDetails.bankDetails.upiType" label="Upi Type" type="text" />
 
     {/* Multiple contact */}
     <FieldForm form={form} nameValue="transporterDetails.multipleContacts[0].contactPerson" label="Contact Person" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.multipleContacts[0].mobileNo" label="Mobile No" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.multipleContacts[0].mobileNo" label="Mobile No" type="number" />
     <FieldForm form={form} nameValue="transporterDetails.multipleContacts[0].designation" label="Designation" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.transporterVisitingCardProof" label="Transporter Visiting CardProof" type="file" fileNumber={1}/>
+    <FieldForm form={form} nameValue="transporterDetails.remarks" label="Owner Remarks" type="text" />
+    {/* transporterVisitingCardProof */}
    
 
 

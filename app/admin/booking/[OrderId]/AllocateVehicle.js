@@ -59,25 +59,25 @@ const AllocateVehicle = ({ params }) => {
  
 
   const initialFormState = {
-    adminId: user?._id,
-    vehicleNo: "",
+    adminId: '',
+    vehicleNo: undefined,
     orderNo: params?.OrderId,
-    arrangedBy: "",
+    arrangedBy: undefined,
     transporterDetails: {
-      personName: "",
-      transporterMobNo: "",
+      personName: undefined,
+      transporterMobNo: undefined,
     },
 
-    ledgerBalance: "",
-    rateAsPer: "",
-    paymentLiability: "",
-    billTo: "",
-    rate: "",
-    driverBhara: "",
-    commission: "",
-    netBhara: "",
-    ledgerBalanceParty: "",
-    remarks: "",
+    ledgerBalance: undefined,
+    rateAsPer: undefined,
+    paymentLiability:'',
+    billTo: undefined,
+    rate: undefined,
+    driverBhara: undefined,
+    commission: undefined,
+    netBhara:undefined,
+    ledgerBalanceParty: undefined,
+    remarks: undefined,
   };
 
   const form = useForm({
@@ -104,6 +104,8 @@ const AllocateVehicle = ({ params }) => {
       console.log("hi", error);
     }
 
+    value.adminId = user?._id;
+
     setIsLoading(true);
 try {
   const response = await fetch("/api/vehicleAllocation", {
@@ -113,7 +115,7 @@ try {
     },
     body: JSON.stringify(value),
   });
-  console.log(response);
+  // console.log(response);
 
   const newResult = await response.json();
 
@@ -134,7 +136,9 @@ try {
 }
   }
 
-  const displayToast = (title, action, description = "") => {
+
+
+  const displayToast = (title, action, description = undefined) => {
     toast({
       title,
       action,
@@ -143,12 +147,12 @@ try {
   };
 
   return (
-    <div className="max-w max-h mt-14 rounded-md  bg-white px-4 py-4 shadow-md md:px-10 lg:my-4 lg:p-8 lg:px-20">
+    <div className="max-w max-h mt-14 rounded-2xl  bg-white px-4 py-4 shadow-md md:px-10 lg:my-4 ">
       <h2 className="mb-6 text-3xl font-semibold"> Vehicle Allocation </h2>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(myhandleSubmit)}
-          className="flex w-full max-w-xl flex-col gap-0"
+          className=" w-full grid grid-cols-2 space-x-6"
         >
           <FieldForm
             form={form}
@@ -217,7 +221,7 @@ try {
 
           <FormField
             control={form.control}
-            name="PaymentLiability"
+            name="paymentLiability"
             render={({ field }) => {
               return (
                 <FormItem className="flex items-center justify-center gap-4">
@@ -301,7 +305,7 @@ try {
 
           <div className="my-8 flex flex-col lg:flex-row gap-2 flex-1 justify-center lg:gap-6 items-center">
         <Button type="submit">{isloading ? "Loading..." : "Assign Vehicle Only"}</Button>
-        <Button type="submit">{isloading ? "Loading..." : " Continue & Dispatch"}</Button>
+        {/* <Button type="submit">{isloading ? "Loading..." : " Continue & Dispatch"}</Button> */}
         </div>
         </form>
       </Form>
