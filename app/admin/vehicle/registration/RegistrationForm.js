@@ -1,13 +1,21 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Form } from "../../../components/ui/form";
+// import { Form } from "../../../components/ui/form";
 import { Button } from "../../../components/ui/button";
 import { useContext, useState } from "react";
 import * as z from "zod";
 import { useToast } from "../../../components/ui/use-toast";
 import FieldForm from "../FieldForm";
 import { UserContext } from "../../../context/UserContextProvider";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../../components/ui/form";
 
 const driverSchema = z.object({
   licenseNo: z.string({ message: "License No is required" }),
@@ -43,6 +51,7 @@ const driverSchema = z.object({
   }),
   smartPhone: z.coerce.boolean({ message: "Smartphone status is required" }),
   owner: z.coerce.boolean({ message: "Owner status is required" }),
+  img: z.array(z.string().url()),
   proof:  z.array(z.string().url()),
 });
 
@@ -91,49 +100,91 @@ const ownerSchema = z.object({
     .positive(),
   withPhone: z.coerce.boolean({ message: "With Phone status is required" }),
   bank: bankSchema,
+  img:z.array(z.string().url()),
   remarks: z.string({ message: "Remarks are required" }).min(3),
 });
 
+const contactSchema  = z.object({
+  contactPerson: z.string(),
+        mobileNo:z.coerce.number(),
+        designation:  z.string(),
+})
+
+const transporterDetailsSchema =z.object({
+  vehicleGuarantor:z.enum(['Self', 'Other Transporter']),
+  ifOther:z.string().optional(),
+  proofType: z.string(),
+  proofNumber: z.string(),
+  name: z.string(),
+  dob: z.coerce.date(),
+  sDWOf: z.string(),
+  mobileNo: z.coerce.number(),
+  alternateMobNo:  z.coerce.number().optional,
+  officeAddress: z.string(),
+  temporaryAddress: z.string(),
+  permanentAddress:z.string(),
+  sameAddress:  z.coerce.boolean(),
+  serviceToState:z.string(),
+  transporterRating:  z.coerce.number(),
+  typeOfVehicle: z.string(),
+  bankDetails:z.object({
+    bankName: z.string(),
+    nameOnPassbook: z.string(),
+    accountNo: z.coerce.number(),
+    ifscCode: z.string(),
+    upiNo: z.coerce.number(),
+    upiType:z.string(),
+  })
+  ,
+  transporterVisitingCardProof: z.array(z.string().url()),
+  remarks:z.string().optional,
+  multipleContacts: z.array(contactSchema),
+
+})
+
 const formSchema = z.object({
-  vehicleNo: z.string({ message: "Vehicle No is required" }).min(3),
-  registrationAuthority: z
-    .string({ message: "Registration Authority is required" })
-    .min(3),
-  fuelName: z.string({ message: "Fuel Name is required" }).min(3),
-  vehicleAge: z.coerce
-    .number({
-      message: "Vehicle Age is required",
-    })
-    .positive(),
-  vehicleType: z.string({ message: "Vehicle Type is required" }).min(3),
-  vehicleClass: z.string({ message: "Vehicle Class is required" }).min(3),
-  vehicleLength: z.string({ message: "Vehicle Length is required" }).min(3),
-  passingCapacity: z.string({ message: "Passing Capacity is required" }),
-  maxCapacity: z.string({ message: "Max Capacity is required" }),
-  chassisNo: z.string({ message: "Chassis No is required" }).min(3),
-  EngineNo: z.string({ message: "Engine No is required" }).min(3),
-  fitnessValidUpTo: z.coerce.date({
-    message: "Fitness Valid Up To date is required",
-  }),
-  taxPaidUpTo: z.coerce.date({ message: "Tax Paid Up To date is required" }),
-  insurenceValidUpTo: z.coerce.date({
-    message: "Insurance Valid Up To date is required",
-  }),
-  permitValidUpTo: z.coerce.date({
-    message: "Permit Valid Up To date is required",
-  }),
-  nationalPermit: z.coerce.boolean({
-    message: "National Permit status is required",
-  }),
-  nationalPermitValidUpTo: z.coerce.date({
-    message: "National Permit Valid Up To date is required",
-  }),
-  rcPhoto:  z.array(z.string().url()),
-  Remark: z.string({ message: "Remark is required" }).min(3),
-  owner: ownerSchema,
-  driver: driverSchema,
+  // vehicleNo: z.string({ message: "Vehicle No is required" }).min(3),
+  // registrationAuthority: z
+  //   .string({ message: "Registration Authority is required" })
+  //   .min(3),
+  // fuelName: z.string({ message: "Fuel Name is required" }).min(3),
+  // vehicleAge: z.coerce
+  //   .number({
+  //     message: "Vehicle Age is required",
+  //   })
+  //   .positive(),
+  // vehicleType: z.string({ message: "Vehicle Type is required" }).min(3),
+  // vehicleClass: z.string({ message: "Vehicle Class is required" }).min(3),
+  // vehicleLength: z.string({ message: "Vehicle Length is required" }).min(3),
+  // passingCapacity: z.string({ message: "Passing Capacity is required" }),
+  // maxCapacity: z.string({ message: "Max Capacity is required" }),
+  // chassisNo: z.string({ message: "Chassis No is required" }).min(3),
+  // EngineNo: z.string({ message: "Engine No is required" }).min(3),
+  // fitnessValidUpTo: z.coerce.date({
+  //   message: "Fitness Valid Up To date is required",
+  // }),
+  // taxPaidUpTo: z.coerce.date({ message: "Tax Paid Up To date is required" }),
+  // insurenceValidUpTo: z.coerce.date({
+  //   message: "Insurance Valid Up To date is required",
+  // }),
+  // permitValidUpTo: z.coerce.date({
+  //   message: "Permit Valid Up To date is required",
+  // }),
+  // nationalPermit: z.coerce.boolean({
+  //   message: "National Permit status is required",
+  // }),
+  // nationalPermitValidUpTo: z.coerce.date({
+  //   message: "National Permit Valid Up To date is required",
+  // }),
+  // rcPhoto:  z.array(z.string().url()),
+  // Remark: z.string({ message: "Remark is required" }).min(3),
+  // owner: ownerSchema,
+  // driver: driverSchema,
+  // transporterDetails : transporterDetailsSchema,
   adminId : z.string(),
 });
+
+
 
 const RegistrationForm = () => {
   const {toast} = useToast();
@@ -141,28 +192,29 @@ const RegistrationForm = () => {
   const [isloading, setIsLoading] = useState();
 
   const initialFormState = {
-    vehicleNo: "",
-    registrationAuthority: "",
-    fuelName: "",
-    vehicleAge: null,
-    vehicleType: "",
-    vehicleClass: "",
-    vehicleLength: "",
-    passingCapacity: "",
-    maxCapacity: "",
-    chassisNo: "",
-    EngineNo: "",
-    fitnessValidUpTo: null,
-    taxPaidUpTo: null,
-    insurenceValidUpTo: null,
-    permitValidUpTo: null,
-    nationalPermit: false,
-    nationalPermitValidUpTo: null,
+    // vehicleNo: "",
+    // registrationAuthority: "",
+    // fuelName: "",
+    // vehicleAge: null,
+    // vehicleType: "",
+    // vehicleClass: "",
+    // vehicleLength: "",
+    // passingCapacity: "",
+    // maxCapacity: "",
+    // chassisNo: "",
+    // EngineNo: "",
+    // fitnessValidUpTo: new Date().toISOString().split("T")[0],
+    // taxPaidUpTo: new Date().toISOString().split("T")[0],
+    // insurenceValidUpTo: new Date().toISOString().split("T")[0],
+    // permitValidUpTo: new Date().toISOString().split("T")[0],
+    // nationalPermit: false,
+    // nationalPermitValidUpTo: new Date().toISOString().split("T")[0],
   
-    rcPhoto: "",
-    Remark: "",
-    owner: {},
-    driver: {},
+    // rcPhoto: "",
+    // Remark: "",
+    // owner: {},
+    // driver: {},
+    transporterDetails:{},
     adminId: '',
   };
 
@@ -245,6 +297,7 @@ const RegistrationForm = () => {
    
     <FieldForm form={form} nameValue="rcPhoto" label="RC Photo" type="file" fileNumber={2}/>
     <FieldForm form={form} nameValue="Remark" label="Remark" type="text" />
+    
     {/* Add fields for owner and driver here */}
     
     {/* ...existing fields... */}
@@ -264,6 +317,7 @@ const RegistrationForm = () => {
     <FieldForm form={form} nameValue="owner.bank.ifscCode" label="Owner Bank IFSC Code" type="text" />
     <FieldForm form={form} nameValue="owner.bank.proof" label="Owner Bank Proof" type="file" fileNumber={2}/>
     <FieldForm form={form} nameValue="owner.remarks" label="Owner Remarks" type="text" />
+    <FieldForm form={form} nameValue="owner.img" label="Owner Photo" type="file" fileNumber={1}/>
 
     <h2 className="col-span-full text-2xl text-center font-bold mb-6 mt-3">Driver Details</h2>
     <FieldForm form={form} nameValue="driver.licenseNo" label="Driver License No" type="text" />
@@ -280,6 +334,61 @@ const RegistrationForm = () => {
     <FieldForm form={form} nameValue="driver.smartPhone" label="Driver Has Smartphone" type="checkbox" />
     <FieldForm form={form} nameValue="driver.owner" label="Driver Is Owner" type="checkbox" />
     <FieldForm form={form} nameValue="driver.proof" label="Driver Proof" type="file" fileNumber={2} />
+    <FieldForm form={form} nameValue="driver.img" label="Driver Photo" type="file" fileNumber={1}/>
+
+    <h2 className="col-span-full text-2xl text-center font-bold mb-6 mt-3">Transporter Details</h2>
+    <FormField
+                control={form.control}
+                name="transporterDetails.vehicleGuarantor"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                      Vehicle Guarantor :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <select {...field}>
+                            <option value="">Select Vehicle Guarantor </option>
+                            <option value="Self">Self  </option>
+                            <option value="Other Transporter"> Other Transporter Transporter</option>
+                            
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+    <FieldForm form={form} nameValue="transporterDetails.ifOther" label="if Other" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.proofType" label="Proof Type" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.proofNumber" label="Proof Number" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.name" label="Name" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.dob" label="Dob" type="date" />
+    <FieldForm form={form} nameValue="transporterDetails.sDWOf" label="SDWOf" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.mobileNo" label="MobileNo" type="number" />
+    <FieldForm form={form} nameValue="transporterDetails.alternateMobNo" label="Alt MobNo" type="number" />
+    <FieldForm form={form} nameValue="transporterDetails.officeAddress" label="Office Address" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.temporaryAddress" label="Temporary Address" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.permanentAddress" label="Permanent Address" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.sameAddress" label="Same Address" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.serviceToState" label="Service To State" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.transporterRating" label="Transporter Rating" type="number" />
+    <FieldForm form={form} nameValue="transporterDetails.typeOfVehicle" label="Type of Vehicle" type="text" />
+
+    {/* bank detail */}
+    <FieldForm form={form} nameValue="transporterDetails.bankDetails.bankName" label="Bank Name" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.bankDetails.nameOnPassbook" label="Name on Passbook" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.accountNo" label="Account No" type="number" />
+    <FieldForm form={form} nameValue="transporterDetails.bankDetails.ifscCode" label="Ifsc Code" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.bankDetails.upiNo" label="Upi No" type="number" />
+    <FieldForm form={form} nameValue="transporterDetails.bankDetails.upiType" label="Upi Type" type="text" />
+   
+
+
+
+
 
 
     <div className="col-span-full flex  md:justify-center mt-8">
