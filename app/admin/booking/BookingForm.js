@@ -1,4 +1,5 @@
 "use client";
+import MaterialInfo from './MaterialInfo';
 import { FaPlus } from "react-icons/fa6";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -15,11 +16,12 @@ import SearchInput from "./SearchInput";
 import * as z from "zod";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useToast } from "../../components/ui/use-toast";
 import Link from "next/link";
 import { FiPlus } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import AdditionalChargers from './AdditionalCharge';
 
 const chargersSchema = z.object({
   name: z.string({ message: "Field is required" }),
@@ -42,6 +44,22 @@ const additionalChargeSchema = z.object({
   chargers: z.array(chargersSchema),
 });
 
+const itemsSchema = z.object({
+  material: z.string().optional(),
+  quantity: z.coerce.number().optional(),
+  quantityUnit:  z.string().optional(),
+  actualWeight:  z.coerce.number().optional(),
+  actualWeightUnit: z.string().optional(),
+  chargedWeight: z.coerce.number().optional(),
+  chargedWeightUnit:  z.string().optional(),
+  rateAsPer:   z.string().optional(),
+  rateAsPerOption: z.string().optional(),
+  rate: z.coerce.number().optional(),
+  rateUnit:  z.string().optional(),
+  taxPercentage: z.coerce.number().optional(),
+  amount: z.coerce.number().optional(),
+})
+
 const formSchema = z.object({
   orderNumber: z.coerce
     .number({
@@ -59,42 +77,15 @@ const formSchema = z.object({
 
   unloadingPoints: z.array(z.string()),
   way: z.enum(["one way", "two way", "return"]),
-  material: z.string({ message: "Field is required" }).min(3),
-  quantity: z.coerce
-    .number({
-      message: "Quantity is required",
-    })
-    .positive(),
-  quantityUnit: z.string({ message: "Field is required" }),
+  
   vehicleType: z.string({ message: "Field is required" }).min(3),
-  actualWeight: z.coerce
-    .number({
-      message: "Field is required",
-    })
-    .positive()
-    .optional(),
-  chargedWeight: z.coerce
-    .number({
-      message: "Field is required",
-    })
-    .positive(),
-  rateAsPer: z.string({ message: "Field is required" }).min(2),
-  rate: z.coerce
-    .number({
-      message: "Field is required",
-    })
-    .positive(),
-  rateUnit: z.string({ message: "Field is required" }).min(2),
-  taxPercentage: z.coerce.number({
-    message: "Field is required",
-  }),
+  
   partyBhara: z.coerce
     .number({
       message: "Field is required",
-    })
-    .positive(),
+    }),
   hideBhara: z.coerce.boolean({}),
-  // paymentTerm:z.string().optional(),
+  
   paymentLiability: z.enum([
     "Consignor",
     "Consignee",
@@ -110,8 +101,9 @@ const formSchema = z.object({
     message: "Field is required",
   }),
   payMode: z.string({ message: "Field is required" }).min(2),
-  transactionId: z.string({ message: "Field is required" }).min(3),
+  transactionId: z.string().optional(),
   remarks: z.string({ message: "Field is required" }).min(2),
+  itemsList:z.array(itemsSchema),
   additionalCharges: additionalChargeSchema,
   adminId: z.string(),
 });
@@ -130,15 +122,9 @@ export default function ProfileForm() {
     unloadingPoints: [""],
     way: "",
     material: "",
-    quantity: 0,
-    quantityUnit: "",
+    
     vehicleType: "",
-    actualWeight: 0,
-    chargedWeight: 0,
-    rateAsPer: "",
-    rate: 0,
-    rateUnit: "",
-    taxPercentage: 0,
+    
     partyBhara: 0,
     hideBhara: false,
     paymentLiability: "",
@@ -149,6 +135,21 @@ export default function ProfileForm() {
     payMode: "",
     transactionId: "",
     remarks: "",
+    itemsList:{
+      material: undefined,
+      quantity: undefined,
+      quantityUnit:  undefined,
+      actualWeight: undefined,
+      actualWeightUnit: undefined,
+      chargedWeight:undefined,
+      chargedWeightUnit:  undefined,
+      rateAsPer:  undefined,
+      rateAsPerOption: undefined,
+      rate: undefined,
+      rateUnit: undefined,
+      taxPercentage: 0,
+      amount:undefined,
+    },
     additionalCharges: {
       enabled: false,
       totalCharge: 0,
@@ -157,11 +158,7 @@ export default function ProfileForm() {
     adminId: "",
   };
 
-  const [showAddChargeForm, setShowAddChargeForm] = useState(false);
-  const [showAdditional, setShowAdditional] = useState(false);
-  const [showButton, setShowButton] = useState(false);
-  const [chargers, setChargers] = useState([]);
-  const [allocateVehicle, setAllocateVehicle] = useState(false);
+
   const route = useRouter();
 
   const { toast } = useToast();
@@ -172,116 +169,48 @@ export default function ProfileForm() {
     defaultValues: initialFormState,
   });
 
-  function calPartyBhara(quantity, rate, additionalCharges, tax) {
-    const total = Number(quantity) * Number(rate);
-    // const gst = tax ;
-    const totalWithGst = total * Number(tax);
-    return totalWithGst + total + Number(additionalCharges);
+  const advanceAmount = form.watch("advanceAmount", 0);
+  const additionalCharges = form.watch("additionalCharges.totalCharge");
+  const PartyBhara = form.watch('partyBhara',0);
+  
+  function calPartyBhara(PartyBhara, additionalCharges ) {
+    
+    const total = Number(PartyBhara) + Number(additionalCharges);
+   
+    form.setValue("partyBhara", total )
+
+    
   }
-  function calBalanceAmount(advanceAmount, partyBhara) {
+  
+  function calBalanceAmount(advanceAmount = 0, partyBhara = 0) {
     return partyBhara - advanceAmount;
   }
-
-  function calChargeAmount(chargeQty, chargeRate) {
-    const qty = Number(chargeQty) || 0;
-    const rate = Number(chargeRate) || 0;
-    return qty * rate;
-  }
-
-  function calTotalChargers(chargers) {
-    const total = Array.isArray(chargers)
-      ? chargers?.reduce((acc, curr) => acc + curr.amount, 0)
-      : 0;
-
-    return Number(total);
-  }
-
-  const chargeRate = form.watch("additionalCharges.chargers.rate", 0);
-  const chargeQty = form.watch("additionalCharges.chargers.qty", 0);
-  const rate = form.watch("rate", 0);
-  const tax = form.watch("taxPercentage", 0);
-  const quantity = form.watch("quantity", 0);
-  const advanceAmount = form.watch("advanceAmount", 0);
-  const additionalCharges = form.watch("additionalCharges.totalCharge", 0);
-
-
-  const chargeAmount = calChargeAmount(chargeQty, chargeRate);
-
-  const partyBhara = calPartyBhara(quantity, rate, additionalCharges, tax);
-  const balanceAmount = calBalanceAmount(advanceAmount, partyBhara);
-
-  const totalCharge = calTotalChargers(chargers);
-
-
+  
   useEffect(() => {
-    form.setValue("additionalCharges.chargers.amount", chargeAmount);
-    form.setValue("additionalCharges.totalCharge", totalCharge);
-  }, [chargeRate, chargeQty, chargers, totalCharge]);
-
+    console.log('hello ')
+    calPartyBhara(PartyBhara, additionalCharges);
+    
+  }, [additionalCharges]);
+  
   useEffect(() => {
-    form.setValue("partyBhara", partyBhara);
-  }, [quantity, rate, additionalCharges, tax]);
-
-  useEffect(() => {
+    const balanceAmount = calBalanceAmount(advanceAmount, PartyBhara);
     form.setValue("balanceAmount", balanceAmount);
-  }, [partyBhara, advanceAmount, additionalCharges]);
+  }, [PartyBhara, advanceAmount]);
+  
+
+
 
   function generateUniqueId() {
     return Math.floor(100000 + Math.random() * 900000);
   }
 
-  const handleAddCharger = (e) => {
-    e.stopPropagation();
-
-    const newCharger = {
-      name: form.getValues("additionalCharges.chargers.name"),
-      rate: form.getValues("additionalCharges.chargers.rate"),
-      qty: form.getValues("additionalCharges.chargers.qty"),
-      amount: form.getValues("additionalCharges.chargers.amount"),
-    };
-
-    if (
-      !newCharger.rate ||
-      !newCharger.qty ||
-      newCharger.name === "Select Charges"
-    ) {
-      displayToast(
-        "Error",
-        "❌",
-        "fill in all fields before adding a charger.",
-      );
-
-      return;
-    }
-
  
 
-    setChargers([...form.getValues("additionalCharges.chargers"), newCharger]);
-    form.setValue("additionalCharges.chargers" , [...form.getValues("additionalCharges.chargers"), newCharger]);
-
-    console.log("Updated Chargers Array:", form.getValues("additionalCharges"));
-
-    console.log("love");
-    form.setValue("additionalCharges.enabled", true);
-    setShowButton(true);
-
-    console.log(
-      "Total Charges :",
-      form.getValues("additionalCharges.totalCharge"),
-    );
-
-    setShowAddChargeForm(false);
-
-   
-  };
-
-  
-
   async function MyHandleSubmit(value) {
-    form.setValue("additionalCharges.chargers", chargers);
+    
 
-    // console.log("hey");
-    // console.log(value);
+    console.log("hey");
+    console.log(value);
 
     setIsLoading(true);
     try {
@@ -296,7 +225,7 @@ export default function ProfileForm() {
         },
         body: JSON.stringify(value),
       });
-      // console.log(await response.json());
+    
 
       const newResult = await response.json();
 
@@ -344,11 +273,10 @@ export default function ProfileForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(MyHandleSubmit)}
-          className="flex flex-col "
+          className="flex flex-col gap-5"
         >
-          <div className="grid-col-1 grid grid-rows-3 py-2  lg:py-4 xl:grid-cols-3 xl:grid-rows-1 xl:space-x-16 ">
-            <div className="md:column-span-1 row-span-1 min-w-full -space-y-3 lg:space-y-2 ">
-              <FormField
+       <div className='rounded-xl shadow-md grid grid-cols-1 lg:grid-cols-2 space-x-6 space-y-2 border py-1 px-3'  >
+       <FormField
                 control={form.control}
                 name="orderNumber"
                 render={({ field }) => {
@@ -433,8 +361,10 @@ export default function ProfileForm() {
                   );
                 }}
               />
+       </div>
+       <div className='rounded-xl shadow-md grid grid-cols-1 lg:grid-cols-2 space-x-6 space-y-2 border py-1 px-3'  >
 
-<div className="flex items-center gap-0">
+       <div className="flex items-center gap-0">
 <FormField
                 control={form.control}
                 name="consignorName"
@@ -453,7 +383,17 @@ export default function ProfileForm() {
 
               </Link>
 </div>
-
+ <FormField
+                control={form.control}
+                name="consigneeName"
+                render={({ field }) => (
+                  <SearchInput
+                    form={form}
+                    field={field}
+                    personName="consigneeName"
+                  />
+                )}
+              />
              
 
               <FormField
@@ -464,6 +404,25 @@ export default function ProfileForm() {
                     <FormItem className="flex items-center justify-center gap-4">
                       <FormLabel className="text-nowrap text-base ">
                         Consignor Mobile No :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input type="text" value={field.value} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+               <FormField
+                control={form.control}
+                name="consigneeMobileNumber"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Consignee Mobile Number :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
@@ -490,37 +449,9 @@ export default function ProfileForm() {
                 }}
               />
 
-              <FormField
-                control={form.control}
-                name="consigneeName"
-                render={({ field }) => (
-                  <SearchInput
-                    form={form}
-                    field={field}
-                    personName="consigneeName"
-                  />
-                )}
-              />
+             
 
-              <FormField
-                control={form.control}
-                name="consigneeMobileNumber"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Consignee Mobile Number :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="text" value={field.value} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
+             
               <FormField
                 control={form.control}
                 name="unloadingPoints"
@@ -535,9 +466,10 @@ export default function ProfileForm() {
                   );
                 }}
               />
-            </div>
-            <div className="md:column-span-1 row-span-1 -space-y-3 lg:space-y-2">
-              <FormField
+       </div>
+
+       <div className='rounded-xl shadow-md grid grid-cols-1 lg:grid-cols-2 space-x-6 space-y-2 border py-1 px-3'  >
+       <FormField
                 control={form.control}
                 name="way"
                 render={({ field }) => {
@@ -582,228 +514,17 @@ export default function ProfileForm() {
                   );
                 }}
               />
-              <FormField
-                control={form.control}
-                name="material"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Material :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="text" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-              <FormField
-                control={form.control}
-                name="actualWeight"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Actual Weight :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="text" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
+       </div>
 
-              <FormField
-                control={form.control}
-                name="chargedWeight"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Charged Weight :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="text" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-
-              <FormField
-                control={form.control}
-                name="rateAsPer"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Rate As Per :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <select {...field}>
-                            <option value="">Select Rate as Per</option>
-                            <option value="Weight">Weight </option>
-                            <option value="Length">Length </option>
-                            <option value="Third Volume">Volume</option>
-                          </select>
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-
-              <div className="flex w-full items-center gap-0">
-                <FormField
-                  control={form.control}
-                  name="quantity"
-                  render={({ field }) => {
-                    return (
-                      <FormItem className="flex items-center justify-center gap-4">
-                        <FormLabel className="text-nowrap text-sm lg:text-base">
-                          Quantity :
-                        </FormLabel>
-                        <div className="flex flex-1 flex-col">
-                          <FormControl>
-                            <Input
-                              type="text"
-                              {...field}
-                              className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
-                            />
-                          </FormControl>
-
-                          <FormMessage />
-                        </div>
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="quantityUnit"
-                  render={({ field }) => {
-                    return (
-                      <FormItem className="flex items-center justify-center ">
-                        <div className="flex flex-1 flex-col">
-                          <FormControl>
-                            <select
-                              {...field}
-                              className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
-                            >
-                              <option value=""> Quantity Unity</option>
-                              <option value="Kg">Kg (Kilo gram)</option>
-                              <option value="g">g (gram) </option>
-                              <option value="Km">Km (Kilo meter)</option>
-                              <option value="Km2">Km&sup2;</option>
-                              <option value="m">m </option>
-                              <option value="m2">m&sup2;</option>
-                              <option value="tons">tons</option>
-                              <option value="pounds">pounds</option>
-                              <option value="L">L (liters)</option>
-                              <option value="m3">m³</option>
-                            </select>
-                          </FormControl>
-                          <FormMessage />
-                        </div>
-                      </FormItem>
-                    );
-                  }}
-                />
-              </div>
-              <div className="flex items-center gap-0">
-                <FormField
-                  control={form.control}
-                  name="rate"
-                  render={({ field }) => {
-                    return (
-                      <FormItem className="flex items-center justify-center gap-4">
-                        <FormLabel className="text-nowrap text-sm lg:text-base">
-                          Rate :
-                        </FormLabel>
-                        <div className="flex flex-1 flex-col">
-                          <FormControl>
-                            <Input
-                              type="text"
-                              {...field}
-                              className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </div>
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="rateUnit"
-                  render={({ field }) => {
-                    return (
-                      <FormItem className="flex items-center justify-center ">
-                        <div className="flex flex-1 flex-col">
-                          <FormControl>
-                            <select
-                              {...field}
-                              className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
-                            >
-                              <option value="">Select Rate Unit</option>
-                              <option value="Weight">Weight </option>
-                              <option value="Length">Length </option>
-                              <option value="Third Volume">Volume</option>
-                            </select>
-                          </FormControl>
-                          <FormMessage />
-                        </div>
-                      </FormItem>
-                    );
-                  }}
-                />
-              </div>
-
-              {/* Tax Options */}
-
-              <FormField
-                control={form.control}
-                name="taxPercentage"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Tax Percentage:
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <select {...field}>
-                            <option value="">Select Tax Percentage</option>
-                            <option value="0.0">0%</option>
-                            <option value="0.02">2%</option>
-                            <option value="0.05 ">5%</option>
-                            <option value="0.08 ">8%</option>
-                            <option value="0.12 ">12%</option>
-                            <option value="0.18">18%</option>
-                          </select>
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-
-              <FormField
+       <div className='flex flex-col lg:flex-row gap-6 '>
+       {/* form */}
+<div className='w-1/2 flex gap-3 flex-col rounded-xl shadow-md   border py-3 px-6'>
+<MaterialInfo form={form} nameValue='itemsList' />
+<AdditionalChargers form ={form} nameValue="additionalCharges.chargers" />
+</div>
+{/* calculation */}
+<div className='w-1/2 rounded-xl shadow-md grid grid-cols-1  space-x-6 space-y-2 border py-1 px-3'>
+<FormField
                 control={form.control}
                 name="partyBhara"
                 render={({ field }) => {
@@ -814,20 +535,18 @@ export default function ProfileForm() {
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="number" {...field} readOnly />
+                          <Input type="number" {...field}  />
                         </FormControl>
-                        <p className="-mt-2 text-[12px] text-slate-700">
+                        {/* <p className="-mt-2 text-[12px] text-slate-700">
                           Party bhara is Total Amount + 18% gst
-                        </p>
+                        </p> */}
                         <FormMessage />
                       </div>
                     </FormItem>
                   );
                 }}
               />
-            </div>
-            <div className="md:column-span-1 row-span-1 -space-y-3 lg:space-y-2">
-              <FormField
+                 <FormField
                 control={form.control}
                 name="hideBhara"
                 render={({ field }) => {
@@ -1016,256 +735,10 @@ export default function ProfileForm() {
                   );
                 }}
               />
-              {/* additional Charges */}
+</div>
+       </div>
 
-              {showAdditional ? (
-                <div>
-                  <div className="flex flex-col items-center ">
-                    <FormField
-                      control={form.control}
-                      name="additionalCharges.totalCharge"
-                      render={({ field }) => {
-                        const totalCharge = isNaN(field.value)
-                          ? 0
-                          : field.value;
-                        return (
-                          <FormItem className="flex items-center justify-center gap-4">
-                            <FormLabel className="text-nowrap text-sm lg:text-base">
-                              Additional Charges:
-                            </FormLabel>
-                            <div className="flex flex-1 flex-col">
-                              <FormControl>
-                                <Input
-                                  type="number"
-                                  value={field.value}
-                                  {...field}
-                                  readOnly
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </div>
-                          </FormItem>
-                        );
-                      }}
-                    />
-                    <div className="flex items-center gap-4">
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          form.setValue("additionalCharges.chargers", []);
-                          setChargers([]);
-                        }}
-                      >
-                        Reset
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowAdditional(!showAdditional);
-                          // form.setValue("additionalCharges.enabled", true);
-                        }}
-                      >
-                        Close
-                      </Button>
-                    </div>
-                  </div>
-                  {chargers && chargers?.length > 0 && (
-                    <table className="mx-2 my-4 w-full border">
-                      <thead>
-                        <tr className="w-full border bg-slate-50">
-                          <th>Name</th>
-                          <th>Qty</th>
-                          <th>Rate</th>
-                          <th>Amount</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {chargers.map((items, i) => (
-                          <tr key={i} className="w-full text-center ">
-                            <td>{items.name}</td>
-                            <td>{items.qty}</td>
-                            <td>{items.rate}</td>
-                            <td>{items.amount}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  )}
-
-                  <div className="flex flex-col items-center gap-3">
-                    <p className="mt-2 font-semibold">
-                      Please , Select Additional Charge
-                    </p>
-                    <div className="flex items-center gap-6">
-                      <select
-                        onChange={(e) =>
-                          form.setValue(
-                            "additionalCharges.chargers.name",
-                            e.target.value,
-                          )
-                        }
-                      >
-                        <option value="Select Charges">Select Charges</option>
-                        <option value="Detention Charge">
-                          Detention Charge
-                        </option>
-                        <option value="Pickup Charge">Pickup Charge</option>
-                        <option value="Packing Charge">Packing Charge</option>
-                        <option value="loading Charge">loading Charge</option>
-                        <option value="unloading Charge">
-                          unloading Charge
-                        </option>
-                        <option value="Other Charge">Other Charge</option>
-                      </select>
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowAddChargeForm(!showAddChargeForm);
-                        }}
-                      >
-                        Add charger
-                      </Button>
-                    </div>
-                  </div>
-                  {showAddChargeForm && (
-                    <div className="flex flex-col  ">
-                    <FormField
-                control={form.control}
-                name="additionalCharges.chargers.rate"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                      Rate :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="number" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-                    <FormField
-                control={form.control}
-                name="additionalCharges.chargers.qty"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                      Quantity :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="number" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-                    <FormField
-                control={form.control}
-                name="additionalCharges.chargers.amount"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                      Amount :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="number" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-                    
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={(e) => handleAddCharger(e)}
-                      >
-                        Add additional Charge
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div>
-                  {showButton ? (
-                    <div>
-                      <FormField
-                        control={form.control}
-                        name="additionalCharges.totalCharge"
-                        render={({ field }) => {
-                          const totalCharge = isNaN(field.value)
-                            ? 0
-                            : field.value;
-                          return (
-                            <FormItem className="flex items-center justify-center gap-4">
-                              <FormLabel className="text-nowrap text-sm lg:text-base">
-                                Additional Charges:
-                              </FormLabel>
-                              <div className="flex flex-1 flex-col">
-                                <FormControl>
-                                  <Input
-                                    type="number"
-                                    value={field.value}
-                                    {...field}
-                                    readOnly
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </div>
-                            </FormItem>
-                          );
-                        }}
-                      />
-                      <Button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowAdditional(!showAdditional);
-                          form.setValue("additionalCharges.enabled", true);
-                        }}
-                        variant="outline"
-                        className="w-full bg-slate-100"
-                      >
-                        update
-                      </Button>
-                    </div>
-                  ) : (
-                    <Button
-                      type="button"
-                      onClick={(e) => {
-                        e.nativeEvent.stopImmediatePropagation();
-                        setShowAdditional(!showAdditional);
-                        setShowButton(true);
-                        form.setValue("additionalCharges.enabled", true);
-                      }}
-                      variant="outline"
-                      className="w-full bg-slate-100"
-                    >
-                      Add Additional Charges
-                    </Button>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-         <div className="my-8 flex flex-col lg:flex-row gap-2 flex-1 justify-center lg:gap-6 items-center">
+       <div className="my-8 flex flex-col lg:flex-row gap-2 flex-1 justify-center lg:gap-6 items-center">
          <Button
             type="submit"
             className=" h-16 w-full self-center bg-black text-lg xl:w-1/3"
