@@ -143,44 +143,44 @@ const transporterDetailsSchema =z.object({
 })
 
 const formSchema = z.object({
-  // vehicleNo: z.string({ message: "Vehicle No is required" }).min(3),
-  // registrationAuthority: z
-  //   .string({ message: "Registration Authority is required" })
-  //   .min(3),
-  // fuelName: z.string({ message: "Fuel Name is required" }).min(3),
-  // vehicleAge: z.coerce
-  //   .number({
-  //     message: "Vehicle Age is required",
-  //   })
-  //   .positive(),
-  // vehicleType: z.string({ message: "Vehicle Type is required" }).min(3),
-  // vehicleClass: z.string({ message: "Vehicle Class is required" }).min(3),
-  // vehicleLength: z.string({ message: "Vehicle Length is required" }).min(3),
-  // passingCapacity: z.string({ message: "Passing Capacity is required" }),
-  // maxCapacity: z.string({ message: "Max Capacity is required" }),
-  // chassisNo: z.string({ message: "Chassis No is required" }).min(3),
-  // EngineNo: z.string({ message: "Engine No is required" }).min(3),
-  // fitnessValidUpTo: z.coerce.date({
-  //   message: "Fitness Valid Up To date is required",
-  // }),
-  // taxPaidUpTo: z.coerce.date({ message: "Tax Paid Up To date is required" }),
-  // insurenceValidUpTo: z.coerce.date({
-  //   message: "Insurance Valid Up To date is required",
-  // }),
-  // permitValidUpTo: z.coerce.date({
-  //   message: "Permit Valid Up To date is required",
-  // }),
-  // nationalPermit: z.coerce.boolean({
-  //   message: "National Permit status is required",
-  // }),
-  // nationalPermitValidUpTo: z.coerce.date({
-  //   message: "National Permit Valid Up To date is required",
-  // }),
-  // rcPhoto:  z.array(z.string().url()),
-  // Remark: z.string({ message: "Remark is required" }).min(3),
-  // owner: ownerSchema,
-  // driver: driverSchema,
-  // transporterDetails : transporterDetailsSchema,
+  vehicleNo: z.string({ message: "Vehicle No is required" }).min(3),
+  registrationAuthority: z
+    .string({ message: "Registration Authority is required" })
+    .min(3),
+  fuelName: z.string({ message: "Fuel Name is required" }).min(3),
+  vehicleAge: z.coerce
+    .number({
+      message: "Vehicle Age is required",
+    })
+    .positive(),
+  vehicleType: z.string({ message: "Vehicle Type is required" }).min(3),
+  vehicleClass: z.string({ message: "Vehicle Class is required" }).min(3),
+  vehicleLength: z.string({ message: "Vehicle Length is required" }).min(3),
+  passingCapacity: z.string({ message: "Passing Capacity is required" }),
+  maxCapacity: z.string({ message: "Max Capacity is required" }),
+  chassisNo: z.string({ message: "Chassis No is required" }).min(3),
+  EngineNo: z.string({ message: "Engine No is required" }).min(3),
+  fitnessValidUpTo: z.coerce.date({
+    message: "Fitness Valid Up To date is required",
+  }),
+  taxPaidUpTo: z.coerce.date({ message: "Tax Paid Up To date is required" }),
+  insurenceValidUpTo: z.coerce.date({
+    message: "Insurance Valid Up To date is required",
+  }),
+  permitValidUpTo: z.coerce.date({
+    message: "Permit Valid Up To date is required",
+  }),
+  nationalPermit: z.coerce.boolean({
+    message: "National Permit status is required",
+  }),
+  nationalPermitValidUpTo: z.coerce.date({
+    message: "National Permit Valid Up To date is required",
+  }),
+  rcPhoto:  z.array(z.string().url()),
+  Remark: z.string({ message: "Remark is required" }).min(3),
+  owner: ownerSchema,
+  driver: driverSchema,
+  transporterDetails : transporterDetailsSchema,
   adminId : z.string(),
 });
 
@@ -192,28 +192,28 @@ const RegistrationForm = () => {
   const [isloading, setIsLoading] = useState();
 
   const initialFormState = {
-    // vehicleNo: "",
-    // registrationAuthority: "",
-    // fuelName: "",
-    // vehicleAge: null,
-    // vehicleType: "",
-    // vehicleClass: "",
-    // vehicleLength: "",
-    // passingCapacity: "",
-    // maxCapacity: "",
-    // chassisNo: "",
-    // EngineNo: "",
-    // fitnessValidUpTo: new Date().toISOString().split("T")[0],
-    // taxPaidUpTo: new Date().toISOString().split("T")[0],
-    // insurenceValidUpTo: new Date().toISOString().split("T")[0],
-    // permitValidUpTo: new Date().toISOString().split("T")[0],
-    // nationalPermit: false,
-    // nationalPermitValidUpTo: new Date().toISOString().split("T")[0],
+    vehicleNo: "",
+    registrationAuthority: "",
+    fuelName: "",
+    vehicleAge: null,
+    vehicleType: "",
+    vehicleClass: "",
+    vehicleLength: "",
+    passingCapacity: "",
+    maxCapacity: "",
+    chassisNo: "",
+    EngineNo: "",
+    fitnessValidUpTo: new Date().toISOString().split("T")[0],
+    taxPaidUpTo: new Date().toISOString().split("T")[0],
+    insurenceValidUpTo: new Date().toISOString().split("T")[0],
+    permitValidUpTo: new Date().toISOString().split("T")[0],
+    nationalPermit: false,
+    nationalPermitValidUpTo: new Date().toISOString().split("T")[0],
   
-    // rcPhoto: "",
-    // Remark: "",
-    // owner: {},
-    // driver: {},
+    rcPhoto: "",
+    Remark: "",
+    owner: {},
+    driver: {},
     transporterDetails:{},
     adminId: '',
   };
@@ -372,7 +372,7 @@ const RegistrationForm = () => {
     <FieldForm form={form} nameValue="transporterDetails.officeAddress" label="Office Address" type="text" />
     <FieldForm form={form} nameValue="transporterDetails.temporaryAddress" label="Temporary Address" type="text" />
     <FieldForm form={form} nameValue="transporterDetails.permanentAddress" label="Permanent Address" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.sameAddress" label="Same Address" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.sameAddress" label="Same Address" type="checkbox" />
     <FieldForm form={form} nameValue="transporterDetails.serviceToState" label="Service To State" type="text" />
     <FieldForm form={form} nameValue="transporterDetails.transporterRating" label="Transporter Rating" type="number" />
     <FieldForm form={form} nameValue="transporterDetails.typeOfVehicle" label="Type of Vehicle" type="text" />
@@ -384,6 +384,11 @@ const RegistrationForm = () => {
     <FieldForm form={form} nameValue="transporterDetails.bankDetails.ifscCode" label="Ifsc Code" type="text" />
     <FieldForm form={form} nameValue="transporterDetails.bankDetails.upiNo" label="Upi No" type="number" />
     <FieldForm form={form} nameValue="transporterDetails.bankDetails.upiType" label="Upi Type" type="text" />
+
+    {/* Multiple contact */}
+    <FieldForm form={form} nameValue="transporterDetails.multipleContacts[0].contactPerson" label="Contact Person" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.multipleContacts[0].mobileNo" label="Mobile No" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.multipleContacts[0].designation" label="Designation" type="text" />
    
 
 
