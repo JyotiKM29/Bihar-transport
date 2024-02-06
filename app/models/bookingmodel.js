@@ -39,7 +39,7 @@ import mongoose from "mongoose";
 //   enabled: { type: Boolean, default: true },
 // });
 
-const additionalChargeSchema = new mongoose.Schema({
+const charge = new mongoose.Schema({
   name: { type: String, required: true },
   rate: { type: Number },
   qty: { type: Number, default: 1 },
@@ -106,6 +106,29 @@ const dispatchAdditionalDetailsSchema = new mongoose.Schema({
   },
 });
 
+const itemlistSchema = new mongoose.Schema({
+  material: { type: String },
+  quantity: { type: Number },
+  rate: { type: Number },
+  ammount: { type: Number },
+  taxPercentage: { type: Number },
+  quantityUnit: { type: String },
+  actualWeight: { type: Number },
+  actualWeightUnit: { type: String },
+  chargedWeight: { type: Number },
+  chargedWeightUnit: { type: String },
+  rateAsPer: { type: String },
+  rateAsPerOption: { type: String },
+  rate: { type: Number },
+  rateUnit: { type: String },
+  taxPercentage: { type: Number },
+});
+
+const additionalChargeSchema = mongoose.Schema({
+  enabled: { type: Boolean, default: false },
+  chargers: [charge],
+  totalCharge: { type: Number },
+});
 
 
 const bookingSchema = new mongoose.Schema(
@@ -129,16 +152,8 @@ const bookingSchema = new mongoose.Schema(
       },
     ],
     way: { type: String, default: "One Way" },
-    material: { type: String, required: true },
-    quantity: { type: Number, required: true },
-    quantityUnit: { type: String, required: true },
+    itemsList:[itemlistSchema],
     vehicleType: { type: String, required: true },
-    actualWeight: { type: Number, required: true },
-    chargedWeight: { type: Number, required: true },
-    rateAsPer: { type: String, default: "Fixed" },
-    rate: { type: Number },
-    taxPercentage: { type: Number },
-    rateUnit: { type: String },
     partyBhara: { type: Number, default: 0 },
     hideBhara: { type: Boolean, default: false },
     paymentLiability: {
@@ -156,11 +171,7 @@ const bookingSchema = new mongoose.Schema(
     transactionId: { type: String },
     remarks: { type: String },
     // additionalCharges: { type: String },
-    additionalCharges: {
-      enabled: { type: Boolean, default: false },
-      chargers: [additionalChargeSchema],
-      totalCharge: { type: Number },
-    },
+    additionalCharges: additionalChargeSchema,
     status: {
       type: String,
       default: "Pending",
