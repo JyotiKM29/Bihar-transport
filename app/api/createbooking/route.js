@@ -20,15 +20,6 @@ export async function POST(req, res) {
       consigneeMobileNumber,
       unloadingPoints,
       way,
-      material,
-      quantity,
-      quantityUnit,
-      vehicleType,
-      actualWeight,
-      chargedWeight,
-      rateAsPer,
-      rate,
-      rateUnit,
       partyBhara,
       hideBhara,
       paymentLiability,
@@ -42,6 +33,8 @@ export async function POST(req, res) {
       additionalCharges,
       isUrgent,
       status,
+      itemsList,
+      vehicleType,
     } = await req.json();
 
     const existingBooking = await Booking.findOne({ orderNumber });
@@ -69,15 +62,8 @@ export async function POST(req, res) {
         consigneeMobileNumber,
         unloadingPoints,
         way,
-        material,
-        quantity,
-        quantityUnit,
+        itemsList,
         vehicleType,
-        actualWeight,
-        chargedWeight,
-        rateAsPer,
-        rate,
-        rateUnit,
         partyBhara,
         hideBhara,
         paymentLiability,
@@ -88,6 +74,7 @@ export async function POST(req, res) {
         payMode,
         transactionId,
         remarks,
+        additionalCharges,
         createdBy: {
           name: admin.name,
           adminId,
@@ -102,15 +89,16 @@ export async function POST(req, res) {
         newBooking.isUrgent = true;
       }
 
-      if (additionalCharges) {
-        newBooking.additionalCharges = additionalCharges;
-      }
+      // if (additionalCharges) {
+      //   newBooking.additionalCharges = additionalCharges;
+      //   console.log("Additional Charges:", additionalCharges);
+      // }
 
       // Save the new booking
       const savedBooking = await newBooking.save();
 
-      // console.log(updatedVehicle);
-      console.log("Booking Created:", savedBooking);
+      // // console.log(updatedVehicle);
+      // console.log("Booking Created:", savedBooking);
 
       return Response.json(
         {
