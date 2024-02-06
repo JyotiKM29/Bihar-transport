@@ -45,6 +45,13 @@ const driverSchema = new mongoose.Schema(
         message: "Proof array must contain exactly two URLs.",
       },
     },
+    image: {
+      type: [
+        {
+          type: String,
+        },
+      ],
+    },
     remarks: { type: String },
   },
   { timestamps: true },
@@ -86,6 +93,13 @@ const ownerSchema = new mongoose.Schema(
     // Bank Details
     bank: [bankSchema],
     remarks: { type: String },
+    image: {
+      type: [
+        {
+          type: String,
+        },
+      ],
+    },
   },
   { timestamps: true },
 );
@@ -140,8 +154,61 @@ const allotmentSchema = new mongoose.Schema(
   { _id: false }, // To exclude this subdocument from having its own _id
 );
 
-
-
+const transporterDetailsSchema = new mongoose.Schema(
+  {
+    vehicleGuarantor: {
+      type: String,
+      enum: ["Self", "Others"],
+      required: true,
+    },
+    ifOther: {
+      proofType: { type: String },
+      proofNumber: { type: String },
+      name: { type: String },
+      dob: { type: Date },
+      sDWOf: { type: String },
+      mobileNo: { type: Number },
+      alternateMobNo: { type: Number },
+      officeAddress: { type: String },
+      temporaryAddress: { type: String },
+      permanentAddress: { type: String },
+      serviceToState: { type: String },
+      transporterRating: { type: Number },
+      typeOfVehicle: { type: String },
+    },
+    bankDetails: {
+      bankName: { type: String },
+      nameOnPassbook: { type: String },
+      accountNo: { type: Number },
+      ifscCode: { type: String },
+      upiNo: { type: Number },
+      upiType: { type: String },
+    },
+    transporterVisitingCardProof: {
+      type: [
+        {
+          type: String,
+        },
+      ],
+    },
+    remarks: { type: String },
+    multipleContacts: [
+      {
+        contactPerson: { type: String },
+        mobileNo: { type: Number },
+        designation: { type: String },
+      },
+    ],
+    image: {
+      type: [
+        {
+          type: String,
+        },
+      ],
+    },
+  },
+  { timestamps: true },
+);
 
 
 
@@ -164,7 +231,7 @@ const vehicleSchema = new mongoose.Schema(
     permitValidUpTo: { type: Date, required: true },
     nationalPermit: { type: Boolean },
     nationalPermitValidUpTo: { type: Date, required: true },
-
+    transporterDetails: [transporterDetailsSchema],
     allotmentStatus: { type: Boolean, default: false },
     rcPhoto: {
       type: [
