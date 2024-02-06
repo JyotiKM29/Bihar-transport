@@ -213,51 +213,51 @@ export default function ProfileForm() {
     console.log(value);
 
     setIsLoading(true);
-    try {
-      if (allocateVehicle) {
-        value.status = "Confirmed";
-        console.log(value);
-      }
-      const response = await fetch("/api/createbooking", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(value),
-      });
-    
+    // try {
+    //   if (allocateVehicle) {
+    //     value.status = "Confirmed";
+    //     console.log(value);
+    //   }
+    //   const response = await fetch("/api/createbooking", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(value),
+    //   });
+    //   // console.log(await response.json());
 
-      const newResult = await response.json();
+    //   const newResult = await response.json();
 
-      if (response.ok) {
-        if(allocateVehicle){
-          console.log("hey", newResult.Booking.orderNumber)
-          setIsLoading(false);
-         displayToast(
-          "Successfully Booked,Ok",
-          "✅",
-        );
-        setAllocateVehicle(false)
+    //   if (response.ok) {
+    //     if(allocateVehicle){
+    //       console.log("hey", newResult.Booking.orderNumber)
+    //       setIsLoading(false);
+    //      displayToast(
+    //       "Successfully Booked,Ok",
+    //       "✅",
+    //     );
+    //     setAllocateVehicle(false)
         
-           route.push(`/admin/booking/${newResult.Booking.orderNumber}`);
-        }
-        setIsLoading(false);
-        displayToast(
-          "Successfully Booked, Click view Booking button to view the booking",
-          "✅",
-        );
+    //        route.push(`/admin/booking/${newResult.Booking.orderNumber}`);
+    //     }
+    //     setIsLoading(false);
+    //     displayToast(
+    //       "Successfully Booked, Click view Booking button to view the booking",
+    //       "✅",
+    //     );
        
-       reset(initialFormState);
-      } else {
-        console.error("Error:", newResult.message);
-        displayToast("Error", "❌", newResult.message);
-        setIsLoading(false);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      displayToast("Error while sending data", "❌", newResult.message);
-      setIsLoading(false);
-    }
+    //    reset(initialFormState);
+    //   } else {
+    //     console.error("Error:", newResult.message);
+    //     displayToast("Error", "❌", newResult.message);
+    //     setIsLoading(false);
+    //   }
+    // } catch (error) {
+    //   console.error("Error:", error);
+    //   displayToast("Error while sending data", "❌", newResult.message);
+    //   setIsLoading(false);
+    // }
   }
 
   const displayToast = (title, action, description = "") => {
@@ -273,10 +273,13 @@ export default function ProfileForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(MyHandleSubmit)}
-          className="flex flex-col gap-5"
+          className="flex flex-col "
         >
-       <div className='rounded-xl shadow-md grid grid-cols-1 lg:grid-cols-2 space-x-6 space-y-2 border py-1 px-3'  >
-       <FormField
+        <MaterialInfo form={form} nameValue='itemsList' />
+       
+          <div className="grid-col-1 grid grid-rows-3 py-2  lg:py-4 xl:grid-cols-3 xl:grid-rows-1 xl:space-x-16 ">
+            <div className="md:column-span-1 row-span-1 min-w-full -space-y-3 lg:space-y-2 ">
+              <FormField
                 control={form.control}
                 name="orderNumber"
                 render={({ field }) => {
@@ -361,10 +364,8 @@ export default function ProfileForm() {
                   );
                 }}
               />
-       </div>
-       <div className='rounded-xl shadow-md grid grid-cols-1 lg:grid-cols-2 space-x-6 space-y-2 border py-1 px-3'  >
 
-       <div className="flex items-center gap-0">
+<div className="flex items-center gap-0">
 <FormField
                 control={form.control}
                 name="consignorName"
@@ -383,17 +384,7 @@ export default function ProfileForm() {
 
               </Link>
 </div>
- <FormField
-                control={form.control}
-                name="consigneeName"
-                render={({ field }) => (
-                  <SearchInput
-                    form={form}
-                    field={field}
-                    personName="consigneeName"
-                  />
-                )}
-              />
+
              
 
               <FormField
@@ -404,25 +395,6 @@ export default function ProfileForm() {
                     <FormItem className="flex items-center justify-center gap-4">
                       <FormLabel className="text-nowrap text-base ">
                         Consignor Mobile No :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="text" value={field.value} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-               <FormField
-                control={form.control}
-                name="consigneeMobileNumber"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Consignee Mobile Number :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
@@ -449,9 +421,37 @@ export default function ProfileForm() {
                 }}
               />
 
-             
+              <FormField
+                control={form.control}
+                name="consigneeName"
+                render={({ field }) => (
+                  <SearchInput
+                    form={form}
+                    field={field}
+                    personName="consigneeName"
+                  />
+                )}
+              />
 
-             
+              <FormField
+                control={form.control}
+                name="consigneeMobileNumber"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Consignee Mobile Number :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input type="text" value={field.value} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
               <FormField
                 control={form.control}
                 name="unloadingPoints"
@@ -466,10 +466,9 @@ export default function ProfileForm() {
                   );
                 }}
               />
-       </div>
-
-       <div className='rounded-xl shadow-md grid grid-cols-1 lg:grid-cols-2 space-x-6 space-y-2 border py-1 px-3'  >
-       <FormField
+            </div>
+            <div className="md:column-span-1 row-span-1 -space-y-3 lg:space-y-2">
+              <FormField
                 control={form.control}
                 name="way"
                 render={({ field }) => {
@@ -514,17 +513,12 @@ export default function ProfileForm() {
                   );
                 }}
               />
-       </div>
+            
+             
 
-       <div className='flex flex-col lg:flex-row gap-6 '>
-       {/* form */}
-<div className='w-1/2 flex gap-3 flex-col rounded-xl shadow-md   border py-3 px-6'>
-<MaterialInfo form={form} nameValue='itemsList' />
-<AdditionalChargers form ={form} nameValue="additionalCharges.chargers" />
-</div>
-{/* calculation */}
-<div className='w-1/2 rounded-xl shadow-md grid grid-cols-1  space-x-6 space-y-2 border py-1 px-3'>
-<FormField
+             
+
+              <FormField
                 control={form.control}
                 name="partyBhara"
                 render={({ field }) => {
@@ -546,7 +540,9 @@ export default function ProfileForm() {
                   );
                 }}
               />
-                 <FormField
+            </div>
+            <div className="md:column-span-1 row-span-1 -space-y-3 lg:space-y-2">
+              <FormField
                 control={form.control}
                 name="hideBhara"
                 render={({ field }) => {
@@ -735,10 +731,11 @@ export default function ProfileForm() {
                   );
                 }}
               />
-</div>
-       </div>
-
-       <div className="my-8 flex flex-col lg:flex-row gap-2 flex-1 justify-center lg:gap-6 items-center">
+              {/* additional Charges */}
+               <AdditionalChargers form ={form} nameValue="additionalCharges.chargers" />
+            </div>
+          </div>
+         <div className="my-8 flex flex-col lg:flex-row gap-2 flex-1 justify-center lg:gap-6 items-center">
          <Button
             type="submit"
             className=" h-16 w-full self-center bg-black text-lg xl:w-1/3"
@@ -758,6 +755,13 @@ export default function ProfileForm() {
             
           </Button>
          </div>
+        
+         <Button
+            type="submit"
+            className=" h-16 w-full self-center bg-black text-lg xl:w-1/3"
+          >
+            {isloading ? "Loading..." : "Save Booking"}
+          </Button>
         </form>
       </Form>
     </div>
