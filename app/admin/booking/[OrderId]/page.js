@@ -1,138 +1,87 @@
 "use client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import FieldForm from "../FieldForm";
+import React, { useContext, useEffect, useState } from "react";
 import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../components/ui/select";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../../components/ui/form";
-import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
+import AllocateVehicle from './AllocateVehicle';
 
-const formSchema = z.object({
-  adminId: z.string(),
-  vehicleNo: z.string(),
-  orderNo: z.coerce.number(),
-  arrangedBy: z.string(),
-  transporterDetails: z.object({
-    personName: z.string(),
-    transporterMobNo: z.coerce.number(),
-  }),
-
-  ledgerBalance: z.string(),
-  rateAsPer: z.string(),
-  paymentLiability: z.string(),
-  billTo: z.string(),
-  rate: z.string(),
-  driverBhara: z.coerce.number(),
-  commission: z.coerce.number(),
-  netBhara: z.coerce.number(),
-  ledgerBalanceParty: z.string(),
-  remarks: z.string(),
-});
-
-const AllocateVehicle = ({ params }) => {
-  const { toast } = useToast();
-  const [isloading, setIsLoading] = useState();
+const Allocation = ({ params }) => {
+  const [loading, setLoading] = useState(true);
+  const {toast} = useToast()
   const { user } = useContext(UserContext);
-
-  function calNetBhara(DriverBhara, Commission) {
-    const comValue = Number(DriverBhara) * Number(Commission);
-    return Number(Number(DriverBhara) + Number(comValue));
-  }
-
- 
-
-  const initialFormState = {
-    adminId: user?._id,
-    vehicleNo: "",
-    orderNo: params?.OrderId,
-    arrangedBy: "",
-    transporterDetails: {
-      personName: "",
-      transporterMobNo: "",
-    },
-
-    ledgerBalance: "",
-    rateAsPer: "",
-    paymentLiability: "",
-    billTo: "",
-    rate: "",
-    driverBhara: "",
-    commission: "",
-    netBhara: "",
-    ledgerBalanceParty: "",
-    remarks: "",
-  };
-
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: initialFormState,
-  });
-
-  const DriverBhara = form.watch("driverBhara");
-  const Commission = form.watch("commission");
+  const [vehicleData, setVehicleData] = useState([]);
+  const [vehicleNo, setVehicleNo] = useState("");
+  const userId = user?._id;
 
   useEffect(() => {
-    const value = calNetBhara(DriverBhara, Commission);
+    const fetchData = async () => {
+      try {
+        if (userId) {
+          const response = await fetch(`/api/vehicledata/${userId}`, {
+            method: "GET",
+          });
+          console.log(response);
 
-    form.setValue("netBhara", value);
-  }, [Commission, DriverBhara]);
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
 
-  async function myhandleSubmit(value) {
-   
+          const data = await response.json();
 
-    try {
-      const res = formSchema.parse(value);
-      console.log("solved", res);
-    } catch (error) {
-      console.log("hi", error);
-    }
+          setLoading(false);
 
-    setIsLoading(true);
-try {
-  const response = await fetch("/api/vehicleAllocation", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(value),
-  });
-  console.log(response);
+          setVehicleData(data);
+          console.log("vehicle ", data);
 
-  const newResult = await response.json();
+        }
+      } catch (error) {
+        setLoading(false);
+        console.error("Error:", error);
+      }
+    };
 
-  if (response.ok) {
-    setIsLoading(false);
-    displayToast("Successfully allocated vehicle", "✅");
-    // const userDetail = newResult.user;
-    form.reset(initialFormState);
-  } else {
-    console.error("Error:", newResult.message);
-    displayToast("Error", "❌", newResult.message);
-    setIsLoading(false);
-  }
-} catch (error) {
-  console.error("Error:", error);
-  displayToast("Error while sending data", "❌", newResult.message);
-  setIsLoading(false);
-}
-  }
+    fetchData();
+  }, [userId]);
+
+  const filterData =
+    vehicleData && vehicleData.data && Array.isArray(vehicleData.data)
+      ? vehicleData.data.filter((vehicle) =>
+          vehicle.vehicleNo.toLowerCase().includes(vehicleNo.toLowerCase()),
+        )
+      : [];
+
+      async function handleSubmit(e) {
+        e.preventDefault();
+      
+        try {
+          setLoading(true);
+      
+          const response = await fetch('/api/vehicleAllocation', {
+            method: 'POST',
+            body: JSON.stringify({
+              vehicleNo,
+              adminId: userId,
+              orderNo: params.bookingId,
+            }),
+          });
+      
+          const result = await response.json();
+      
+          if (response.ok) {
+            displayToast('Successfully allocated', '✅');
+          } else {
+            console.error('Error:', result.message);
+            displayToast('Error', '❌', result.message);
+          }
+        } catch (error) {
+          console.error('Error:', error.message);
+          displayToast('Error', '❌', error.message);
+        } finally {
+          setLoading(false);
+        }
+      }
+      
 
   const displayToast = (title, action, description = "") => {
     toast({
@@ -142,171 +91,76 @@ try {
     });
   };
 
+
   return (
-    <div className="max-w max-h mt-14 rounded-md  bg-white px-4 py-4 shadow-md md:px-10 lg:my-4 lg:p-8 lg:px-20">
-      <h2 className="mb-6 text-3xl font-semibold"> Vehicle Allocation </h2>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(myhandleSubmit)}
-          className="flex w-full max-w-xl flex-col gap-0"
+    <div className="h-full w-full rounded-3xl bg-white px-6 py-4  shadow-sm">
+      <h2 className="font-semiBold text-3xl ">Vehicle Allocation : </h2>
+      <div className="flex flex-col mt-6 h-full w-full ">
+        <form 
+        onSubmit={handleSubmit}
+        className="self-end w-full flex justify-between items-center shadow-md border px-6 py-4 rounded-xl  mb-8"
         >
-          <FieldForm
-            form={form}
-            name="vehicleNo"
-            label="Vehicle No"
-            type="text"
-          />
+          <label className="flex items-center justify-start gap-4 text-nowrap">
+            Order No :<h2>{params.bookingId}</h2>
+          </label>
+          <div className="flex gap-3 items-center">
+          <label className="flex items-center justify-start gap-4 text-nowrap">
+            Vehicle Id:
+            <Input
+              className='w-[20rem]'
+              type="text"
+              placeholder="Enter Vehicle No"
+              value={vehicleNo}
+              onChange={(e) => setVehicleNo(e.target.value)}
+            />
+          </label>
 
-          <FieldForm
-            form={form}
-            name="arrangedBy"
-            label="ArrangedBy "
-            type="text"
-          />
+         
 
-          <FieldForm
-            form={form}
-            name="transporterDetails.personName"
-            label="Transporter Name "
-            type="text"
-          />
 
-          <FieldForm
-            form={form}
-            name="transporterDetails.transporterMobNo"
-            label="Transporter Mobile No"
-            type="number"
-          />
-
-          <FieldForm
-            form={form}
-            name="ledgerBalance"
-            label="Ledger Balance "
-            type="text"
-          />
-
-          <FormField
-            control={form.control}
-            name="rateAsPer"
-            render={({ field }) => {
-              return (
-                <FormItem className="flex items-center justify-center gap-4">
-                  <FormLabel className="text-nowrap text-sm lg:text-base">
-                    Rate as Per :
-                  </FormLabel>
-                  <Select
-                    className="flex flex-1 flex-col"
-                    onValueChange={field.onChange}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Rate as Per" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="fixed">Fixed</SelectItem>
-                      <SelectItem value="weight">Weight</SelectItem>
-                      <SelectItem value="distance">Distance</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-
-          <FormField
-            control={form.control}
-            name="PaymentLiability"
-            render={({ field }) => {
-              return (
-                <FormItem className="flex items-center justify-center gap-4">
-                  <FormLabel className="text-nowrap text-sm lg:text-base">
-                    Payment Liability :
-                  </FormLabel>
-                  <Select
-                    className="flex flex-1 flex-col"
-                    onValueChange={field.onChange}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Payment Liability" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Consignor">Consignor</SelectItem>
-                      <SelectItem value="Consignee">Consignee</SelectItem>
-                      <SelectItem value="Third Party">Third Party</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-          <FieldForm form={form} name="billTo" label="Bill To " type="text" />
-          <FieldForm form={form} name="rate" label="Rate " type="text" />
-          <FieldForm
-            form={form}
-            name="driverBhara"
-            label="Driver Bhara "
-            type="number"
-          />
-
-          <FormField
-            control={form.control}
-            name="commission"
-            render={({ field }) => {
-              return (
-                <FormItem className="flex items-center justify-center gap-4">
-                  <FormLabel className="text-nowrap text-sm lg:text-base">
-                    Commission :
-                  </FormLabel>
-                  <Select
-                    className="flex flex-1 flex-col"
-                    onValueChange={field.onChange}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Commission Percentage" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value=".02">2%</SelectItem>
-                      <SelectItem value=".05">5%</SelectItem>
-                      <SelectItem value=".08">8%</SelectItem>
-                      <SelectItem value=".1">10%</SelectItem>
-                      <SelectItem value=".12">12%</SelectItem>
-                      <SelectItem value=".18">18%</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-          <FieldForm
-            form={form}
-            name="netBhara"
-            label="Net Bhara "
-            type="number"
-          />
-          <FieldForm
-            form={form}
-            name="ledgerBalanceParty"
-            label="Ledger Balance Party "
-            type="text"
-          />
-          <FieldForm form={form} name="remarks" label="Remarks " type="text" />
-
-          <div className="my-8 flex flex-col lg:flex-row gap-2 flex-1 justify-center lg:gap-6 items-center">
-        <Button type="submit">{isloading ? "Loading..." : "Assign Vehicle Only"}</Button>
-        <Button type="submit">{isloading ? "Loading..." : " Continue & Dispatch"}</Button>
-        </div>
+          <Button className="w-[8rem] self-center"
+          type='submit'
+          >
+            {loading ? "loading ..." : "Submit"}
+          </Button>
+          </div>
+          
         </form>
-      </Form>
+
+         {/* data table */}
+         <div className="overflow-scroll h-full w-full">
+  <table className="min-w-full divide-y divide-gray-200">
+    <thead className="bg-gray-50">
+      <tr>
+        <th className="px-4 py-2 text-left">Vehicle No</th>
+        <th className="px-4 py-2 text-left">Driver Name</th>
+        <th className="px-4 py-2 text-left">Vehicle Type</th>
+        <th className="px-4 py-2 text-left">Fuel Name</th>
+        <th className="px-4 py-2 text-left">Vehicle Age</th>
+        <th className="px-4 py-2 text-left">Allocation</th>
+        <th className="px-4 py-2 text-left">Owner Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {filterData.map((data) => (
+        <tr key={data._id} className="border-t">
+          <td className="px-4 py-2 whitespace-nowrap">{data.vehicleNo}</td>
+          <td className="px-4 py-2 whitespace-nowrap">{data.driver.name}</td>
+          <td className="px-4 py-2 whitespace-nowrap">{data.vehicleType}</td>
+          <td className="px-4 py-2 whitespace-nowrap">{data.fuelName}</td>
+          <td className="px-4 py-2 whitespace-nowrap">{data.vehicleAge}</td>
+          <td className="px-4 py-2 whitespace-nowrap">{data.allotmentStatus ? "Booked" :"UnBooked"}</td>
+          <td className="px-4 py-2 whitespace-nowrap">{data.owner.name}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<AllocateVehicle params={params} />
+      </div>
     </div>
   );
 };
 
-export default AllocateVehicle;
+export default Allocation;

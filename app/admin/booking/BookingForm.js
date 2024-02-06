@@ -160,7 +160,7 @@ export default function ProfileForm() {
 
 
   const route = useRouter();
-
+  const[allocateVehicle, setAllocateVehicle] = useState(false);
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
 
