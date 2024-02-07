@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 // import { Form } from "../../../components/ui/form";
 import { Button } from "../../../components/ui/button";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import * as z from "zod";
 import { useToast } from "../../../components/ui/use-toast";
 import FieldForm from "../FieldForm";
@@ -110,42 +110,59 @@ const contactSchema  = z.object({
         designation:  z.string().optional(),
 })
 
-const transporterDetailsSchema =z.object({
-  vehicleGuarantor:z.enum(['Self', 'Other Transporter']),
-  ifOther:z.string().optional(),
-  proofType: z.string().optional(),
-  proofNumber: z.string().optional(),
-  name: z.string().optional(),
-  dob: z.coerce.date().optional(),
-  sDWOf: z.string().optional(),
-  mobileNo: z.coerce.number().optional(),
-  alternateMobNo:  z.coerce.number().optional().optional(),
-  officeAddress: z.string().optional(),
-  temporaryAddress: z.string().optional(),
-  permanentAddress:z.string().optional(),
-  sameAddress:  z.coerce.boolean().optional(),
-  serviceToState:z.string().optional(),
-  transporterRating:  z.coerce.number().optional(),
-  typeOfVehicle: z.string().optional(),
-  bankDetails:z.object({
-    bankName: z.string().optional(),
-    nameOnPassbook: z.string().optional(),
-    accountNo: z.coerce.number().optional(),
-    ifscCode: z.string().optional(),
-    upiNo: z.coerce.number().optional(),
-    upiType:z.string().optional(),
-  }).optional()
-  ,
-  transporterVisitingCardProof: z.array(z.string().url()).optional(),
-  remarks:z.string().optional(),
-  multipleContacts: z.array(contactSchema).optional(),
 
-}).refine((data)=>{if(data.transporterDetails.vehicleGuarantor === 'Other Transporter'){
-  return Boolean(data.transporterDetails.ifOther);
-} return true },{
-  message: "if you select Other Vehicle Guarantor , then it is required",
-  path: ["transporterDetails.ifOther"],
-})
+
+const transporterDetailsSchema = z.discriminatedUnion('vehicleGuarantor', [
+  z.object({
+    vehicleGuarantor: z.literal('Self'),
+  
+      bankDetails: z.object({
+        bankName: z.string(),
+        nameOnPassbook: z.string(),
+        accountNo: z.coerce.number(),
+        ifscCode: z.string(),
+        upiNo: z.coerce.number(),
+        upiType: z.string(),
+      }),
+      transporterVisitingCardProof: z.array(z.string().url()),
+      remarks: z.string(),
+      multipleContacts: z.array(contactSchema),
+    
+  }),
+  z.object({
+    vehicleGuarantor: z.literal('Others'),
+    ifOther: z.object({
+      proofType: z.string(),
+      proofNumber: z.string(),
+      name: z.string(),
+      dob: z.coerce.date(),
+      sDWOf: z.string(),
+      mobileNo: z.coerce.number(),
+      alternateMobNo: z.coerce.number().optional(),
+      officeAddress: z.string(),
+      temporaryAddress: z.string(),
+      permanentAddress: z.string(),
+      sameAddress: z.coerce.boolean(),
+      serviceToState: z.string(),
+      transporterRating: z.coerce.number(),
+      typeOfVehicle: z.string(),
+    }),
+    bankDetails: z.object({
+      bankName: z.string(),
+      nameOnPassbook: z.string(),
+      accountNo: z.coerce.number(),
+      ifscCode: z.string(),
+      upiNo: z.coerce.number(),
+      upiType: z.string(),
+    }),
+    transporterVisitingCardProof: z.array(z.string().url()),
+    remarks: z.string(),
+    multipleContacts: z.array(contactSchema),
+  }),
+]);
+
+
+
 
 const formSchema = z.object({
   vehicleNo: z.string({ message: "Vehicle No is required" }).min(3),
@@ -228,6 +245,24 @@ const RegistrationForm = () => {
     defaultValues: initialFormState,
   });
 
+  const optionTransportor = form.watch("transporterDetails.vehicleGuarantor");
+  const sameAddress = form.watch("transporterDetails.ifOther.sameAddress");
+  const Address = form.watch("transporterDetails.ifOther.temporaryAddress");
+
+  function setPermanentAddress(){
+    if(sameAddress){
+      console.log("sameAddress:", sameAddress);
+  console.log("Address:", Address);
+      form.setValue("transporterDetails.ifOther.permanentAddress",Address );
+    }
+    
+  }
+
+  useEffect(()=>{
+    console.log("hello");
+    setPermanentAddress();
+  },[sameAddress, Address])
+
   async function MyHandleSubmit() {
     form.setValue('adminId',user._id);
     const values = form.getValues();
@@ -281,6 +316,9 @@ const RegistrationForm = () => {
     <div className="max-w max-h  bg-white px-0 ">
     <Form {...form}>
   <form onSubmit={form.handleSubmit(MyHandleSubmit)} className="grid grid-cols-1  lg:grid-cols-2 2xl:grid-cols-3  gap-x-10 xl:px-4">
+
+
+  
   <h2 className="col-span-full text-2xl text-center font-bold mb-6 mt-3">Vehicle Details</h2>
     <FieldForm form={form} nameValue="vehicleNo" label="Vehicle No" type="text" />
     <FieldForm form={form} nameValue="registrationAuthority" label="Registration Authority" type="text" />
@@ -355,8 +393,8 @@ const RegistrationForm = () => {
                         <FormControl>
                           <select {...field}>
                             <option value="">Select Vehicle Guarantor </option>
-                            <option value="Self">Self  </option>
-                            <option value="Other Transporter"> Other Transporter Transporter</option>
+                            <option value="Self">Self</option>
+                            <option value="Others"> Others </option>
                             
                           </select>
                         </FormControl>
@@ -366,22 +404,34 @@ const RegistrationForm = () => {
                   );
                 }}
               />
-    <FieldForm form={form} nameValue="transporterDetails.ifOther" label="if Other" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.proofType" label="Proof Type" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.proofNumber" label="Proof Number" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.name" label="Name" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.dob" label="Dob" type="date" />
-    <FieldForm form={form} nameValue="transporterDetails.sDWOf" label="SDWOf" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.mobileNo" label="MobileNo" type="number" />
-    <FieldForm form={form} nameValue="transporterDetails.alternateMobNo" label="Alt MobNo" type="number" />
-    <FieldForm form={form} nameValue="transporterDetails.officeAddress" label="Office Address" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.temporaryAddress" label="Temporary Address" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.permanentAddress" label="Permanent Address" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.sameAddress" label="Same Address" type="checkbox" />
-    <FieldForm form={form} nameValue="transporterDetails.serviceToState" label="Service To State" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.transporterRating" label="Transporter Rating" type="number" />
-    <FieldForm form={form} nameValue="transporterDetails.typeOfVehicle" label="Type of Vehicle" type="text" />
+   
 
+
+   {/* (form.getValues("transporterDetails.vehicleGuarantor") ) &&  */}
+
+   {
+    (form.getValues("transporterDetails.vehicleGuarantor") ) && 
+    
+      <>
+      <FieldForm form={form} nameValue="transporterDetails.ifOther.proofType" label="Proof Type" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.ifOther.proofNumber" label="Proof Number" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.ifOther.name" label="Name" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.ifOther.dob" label="Dob" type="date" />
+    <FieldForm form={form} nameValue="transporterDetails.ifOther.sDWOf" label="SDWOf" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.ifOther.mobileNo" label="MobileNo" type="number" />
+    <FieldForm form={form} nameValue="transporterDetails.ifOther.alternateMobNo" label="Alt MobNo" type="number" />
+    <FieldForm form={form} nameValue="transporterDetails.ifOther.officeAddress" label="Office Address" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.ifOther.temporaryAddress" label="Temporary Address" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.ifOther.permanentAddress" label="Permanent Address" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.ifOther.sameAddress" label="Same Address" type="checkbox" />
+    <FieldForm form={form} nameValue="transporterDetails.ifOther.serviceToState" label="Service To State" type="text" />
+    <FieldForm form={form} nameValue="transporterDetails.ifOther.transporterRating" label="Transporter Rating" type="number" />
+    <FieldForm form={form} nameValue="transporterDetails.ifOther.typeOfVehicle" label="Type of Vehicle" type="text" />
+
+      </>
+    
+   }
+    
     {/* bank detail */}
     <FieldForm form={form} nameValue="transporterDetails.bankDetails.bankName" label="Bank Name" type="text" />
     <FieldForm form={form} nameValue="transporterDetails.bankDetails.nameOnPassbook" label="Name on Passbook" type="text" />

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Form,
     FormControl,
@@ -17,6 +17,8 @@ import { Checkbox } from "../../components/ui/checkbox";
 
 const FieldForm = ({ form, nameValue, label, type = 'text' , fileNumber = 1  }) => {
   const [fileCount, setFileCount] = useState(fileNumber);
+  const [isChecked, setIsChecked] = useState(false);
+
 
   const onFileChange = async (event) => {
     const files = Array.from(event.target.files).slice(0, fileCount);
@@ -37,6 +39,16 @@ const FieldForm = ({ form, nameValue, label, type = 'text' , fileNumber = 1  }) 
     form.setValue(nameValue, urls);
   };
 
+  useEffect(() => {
+    // Update isChecked state when form value changes
+    setIsChecked(form.watch(nameValue));
+}, [form, nameValue]);
+
+const handleCheckboxChange = (e) => {
+  setIsChecked(e.target.checked); // Update isChecked state when checkbox is clicked
+  form.setValue(nameValue, e.target.checked); // Update form value with checkbox state
+};
+
   return (
     <div >
       <FormField
@@ -50,7 +62,9 @@ const FieldForm = ({ form, nameValue, label, type = 'text' , fileNumber = 1  }) 
               <FormControl>
                 {type === 'checkbox' ? (
                   <div className='h-10 flex items-center'>
-                    <Checkbox {...field} checked={field.value} className='h-6 w-6' />
+                    <Checkbox {...field} checked={isChecked} // Use isChecked state for checked status
+                                            onChange={handleCheckboxChange} // Handle checkbox change
+                                            className='h-6 w-6'/>
                   </div>
                 ) : type === 'file' ? (
                   <div >
