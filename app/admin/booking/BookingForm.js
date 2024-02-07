@@ -476,7 +476,7 @@ export default function ProfileForm() {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
                       <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Way :
+                        Trip :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>

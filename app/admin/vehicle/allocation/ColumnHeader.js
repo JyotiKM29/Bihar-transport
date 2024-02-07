@@ -84,6 +84,11 @@ export default function ColumnHeader() {
       {
         accessorKey: "allotmentStatus",
         header: "Allocation",
+        cell: ({ row }) => {
+          return (row.original.allotmentStatus === true) ? 
+          <span className="bg-green-600 text-white p-1 px-4 rounded-2xl">Booked</span> :
+          <span className="bg-orange-400 text-white p-1 px-4 rounded-2xl">Unbooked</span>;
+        }
       },
 
       {
