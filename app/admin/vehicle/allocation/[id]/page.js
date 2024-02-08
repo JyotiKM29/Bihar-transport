@@ -8,16 +8,54 @@ import { Button } from "../../../../components/ui/button";
 import { useToast } from "../../../../components/ui/use-toast";
 import { UserContext } from "../../../../context/UserContextProvider";
 
+import ColumnHeader from './ColumnHeader';
+import { DataTable } from "./../data-table";
+
 const VechicleDetail = ({ params }) => {
   const { user } = useContext(UserContext);
   const router = useRouter();
   const [vehicleDetails, setVehicleDetails] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingTable, setLoadingTable] = useState(false);
   const [editvehicle, setEditVehicle] = useState(false);
   const { toast } = useToast();
 
   const adminId = user?._id;
   const _id = params.id;
+
+  const [data, setData] = useState(null);
+  const columns = ColumnHeader();
+  const userId = user?._id;
+
+  useEffect(() => {
+    const fetchData = async () => {
+    
+      try {
+        if (userId) {
+          const response = await fetch(`/api/vehicledata/${userId}`, {
+            method: "GET",
+          },  { cache: 'force-cache' });
+          console.log(response)
+  
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+  
+          const data = await response.json();
+
+          setLoadingTable(false);
+        
+          setData(data);
+          console.log('vehicle ' ,data)
+        }
+      } catch (error) {
+        setLoadingTable(false);
+        console.error("Error:", error);
+      }
+    };
+  
+    fetchData();
+  }, [userId ]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,7 +67,7 @@ const VechicleDetail = ({ params }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ _id, adminId }),
-        });
+        } ,{ cache: 'force-cache' });
         console.log(response);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -90,6 +128,8 @@ const VechicleDetail = ({ params }) => {
         <p>Loading.....</p>
       ) : (
         <>
+
+        {loadingTable ? 'Loading table.....' : <DataTable columns={columns} data={data?.data} />}
           {/* Vehicle Details */}
           <div className="grid grid-cols-1 gap-x-6 gap-y-1 lg:grid-cols-2 2xl:gap-x-8 ">
             <h2 className="col-span-full mb-6 mt-3 text-center text-2xl font-bold">
