@@ -254,18 +254,27 @@ const DispatchVehicle = ({ params }) => {
   return (
    
 
-<div className="max-w   w-full mt-14 rounded-2xl  bg-white px-4 py-4 shadow-md md:px-10 lg:my-4 lg:p-8 lg:px-20">
+<div className="max-w   w-full mt-14 rounded-md  bg-white px-4 py-4 shadow-md md:px-10 lg:my-4 lg:p-8 lg:px-20">
       <h2 className="mb-6 text-3xl font-semibold"> Dispatch Booking Form</h2>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(myhandleSubmit)}
-         
+          className="flex w-full max-w-xl flex-col gap-0"
         >
-         <div  className="flex flex-col xl:flex-row gap-8">
-        <div className="flex w-full max-w-xl flex-col gap-0">
 
+
+
+
+
+
+         
+        
+
+          {/* dispatchDetails */}
        
-  <FieldForm
+          
+              <>
+                <FieldForm
                   form={form}
                   name="dispatch.dispatchDetails.billtyType"
                   label="Billty Type"
@@ -289,8 +298,11 @@ const DispatchVehicle = ({ params }) => {
                   label="Total Freight"
                   type="number"
                 />
+              </>
 
-<h2 className="mt-6 text-center text-2xl font-semibold">
+              {/* consignorInvoiceDetails */}
+              <>
+                <h2 className="mt-6 text-center text-2xl font-semibold">
                   Consignor Invoice Details
                 </h2>
                 <FieldForm
@@ -324,7 +336,9 @@ const DispatchVehicle = ({ params }) => {
                   type="number"
                 />
 
-<h2 className="mt-6 text-center text-2xl font-semibold">
+                {/* eWayBillDetails */}
+                <>
+                  <h2 className="mt-6 text-center text-2xl font-semibold">
                     e-way Bill Details
                   </h2>
                   <FieldForm
@@ -345,12 +359,12 @@ const DispatchVehicle = ({ params }) => {
                     label="Exp-Date "
                     type="date"
                   />
- </div>
+                </>
+              </>
 
- <div className="flex w-full max-w-xl flex-col gap-0">
- 
-
-<h2 className="mt-6 text-center text-2xl font-semibold">
+              {/* dispatch Info  */}
+              <>
+                <h2 className="mt-6 text-center text-2xl font-semibold">
                   Additional Rate for Company
                 </h2>
                 <FieldForm
@@ -359,10 +373,14 @@ const DispatchVehicle = ({ params }) => {
                   label="Additional Rate for Company"
                   type="number"
                 />
+                {/* dispatch Info =====> chargesDetails */}
+                <>
+                <AdditionalChargers form={form} nameValue="dispatch.dispatchDetails.dispatch.chargesDetails" />
+                </>
+                
+              </>
 
-<AdditionalChargers form={form} nameValue="dispatch.dispatchDetails.dispatch.chargesDetails" />
-
-<div className="mt-8">
+              <div className="mt-8">
                 <FieldForm
                   form={form}
                   name="dispatch.dispatchDetails.ledgerBalanceOfParty"
@@ -376,8 +394,11 @@ const DispatchVehicle = ({ params }) => {
                   type="text"
                 />
               </div>
-
-              <h2 className="mt-6 text-center text-2xl font-semibold">
+         
+     
+          {/* dispatchAdditionalDetails */}
+          <div >
+            <h2 className="mt-6 text-center text-2xl font-semibold">
               Additional Details
             </h2>
             <FieldForm
@@ -477,22 +498,21 @@ const DispatchVehicle = ({ params }) => {
             ) : (
               <>{/* Nothing */}</>
             )}
+          </div>
+          {/*  */}
 
-            <h2 className="mt-6 text-center text-2xl font-semibold">
+          {/* dispatchAdditionalRate */}
+          <div>
+          <h2 className="mt-6 text-center text-2xl font-semibold">
                   Additional Chargers for Vehicle hired 
                 </h2>
                 <AdditionalChargers form={form} nameValue="dispatch.dispatchAdditionalRate" />
+          </div>
 
- </div>
+         
 
- </div>
-
-<div className="w-full flex justify-center items-center">
-<Button type="submit" className='mt-8 w-full lg:w-1/3 '>{isloading ? "Loading..." : " Submit"}</Button>
-</div>
- 
+          <Button type="submit" className='mt-8'>{isloading ? "Loading..." : " Submit"}</Button>
         </form>
-       
       </Form>
     </div>
     
