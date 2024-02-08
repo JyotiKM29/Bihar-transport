@@ -16,12 +16,12 @@ import { Checkbox } from "../../components/ui/checkbox";
 
 
 const FieldForm = ({ form, nameValue, label, type = 'text' , fileNumber = 1  }) => {
-  const [fileCount, setFileCount] = useState(fileNumber);
+  
   const [isChecked, setIsChecked] = useState(false);
 
 
   const onFileChange = async (event) => {
-    const files = Array.from(event.target.files).slice(0, fileCount);
+    const files = Array.from(event.target.files).slice(0, fileNumber);
     const urls = await Promise.all(files.map(async (file) => {
       const formData = new FormData();
       formData.append('file', file);
@@ -69,7 +69,7 @@ const handleCheckboxChange = (e) => {
                 ) : type === 'file' ? (
                   <div >
                     <label className='text-[12px] -mb-1 flex text-slate-500'>
-                     <p> Select number of files to upload 2 </p>
+                     <p> Select number of files to upload  {fileNumber}</p>
                       {/* <input type='number' min='1' value={fileCount} onChange={(e) => setFileCount(e.target.value)} /> */}
                     </label>
                     <Input    type='file' onChange={onFileChange} multiple />
