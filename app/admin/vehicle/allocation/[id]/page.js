@@ -49,7 +49,7 @@ const VechicleDetail = ({ params }) => {
       }
     };
     fetchData();
-  },  [adminId, _id ]);
+  }, [adminId, _id]);
 
   const handleGoBack = () => {
     router.back();
@@ -67,7 +67,6 @@ const VechicleDetail = ({ params }) => {
     const date = new Date(dateString);
     return date.toLocaleDateString();
   }
-  
 
   return (
     <div className="min-h-[90vh] w-full rounded-2xl bg-white px-6 py-4 shadow-sm ">
@@ -92,8 +91,10 @@ const VechicleDetail = ({ params }) => {
       ) : (
         <>
           {/* Vehicle Details */}
-          <div className="grid grid-cols-1 gap-y-1 gap-x-6 2xl:gap-x-8 lg:grid-cols-2 ">
-          <h2 className="col-span-full text-2xl text-center font-bold mb-6 mt-3">Vehicle Details </h2>
+          <div className="grid grid-cols-1 gap-x-6 gap-y-1 lg:grid-cols-2 2xl:gap-x-8 ">
+            <h2 className="col-span-full mb-6 mt-3 text-center text-2xl font-bold">
+              Vehicle Details{" "}
+            </h2>
             <FieldComponent
               label={"Vehicle No"}
               value={vehicleDetails?.newVehicle?.vehicleNo}
@@ -116,7 +117,7 @@ const VechicleDetail = ({ params }) => {
               tableId={vehicleDetails?.newVehicle?._id}
               identifier="fuelName"
             />
-           
+
             {/* Continue Vehicle Details */}
             <FieldComponent
               label={"Vehicle Age"}
@@ -217,13 +218,15 @@ const VechicleDetail = ({ params }) => {
             />
             <FieldComponent
               label={"National Permit Valid Up To"}
-              value={DateString(vehicleDetails?.newVehicle?.nationalPermitValidUpTo)}
+              value={DateString(
+                vehicleDetails?.newVehicle?.nationalPermitValidUpTo,
+              )}
               show={editvehicle}
               tableId={vehicleDetails?.newVehicle?._id}
               identifier="nationalPermitValidUpTo"
               type="date"
             />
-            
+
             <FieldComponent
               label={"Remark"}
               value={vehicleDetails?.newVehicle?.Remark}
@@ -232,14 +235,14 @@ const VechicleDetail = ({ params }) => {
               identifier="Remark"
             />
             <FieldComponent
-  label={"RC Photo"}
-  value={vehicleDetails?.newVehicle?.rcPhoto}
-  show={editvehicle}
-  tableId={vehicleDetails?.newVehicle?._id}
-  identifier="rcPhoto"
-  type="file"
-/>
-            
+              label={"RC Photo"}
+              value={vehicleDetails?.newVehicle?.rcPhoto}
+              show={editvehicle}
+              tableId={vehicleDetails?.newVehicle?._id}
+              identifier="rcPhoto"
+              type="file"
+            />
+
             {/* <FieldComponent
               label={"RC Photo"}
               value={vehicleDetails?.newVehicle?.rcPhoto}
@@ -252,8 +255,10 @@ const VechicleDetail = ({ params }) => {
 
           {/* Owner Details */}
           <div className="mt-8">
-             <h2 className="col-span-full text-2xl text-center font-bold mb-6 mt-3">Owner Details</h2>
-            <div className="grid grid-cols-1 gap-y-1 gap-x-6 2xl:gap-x-8 lg:grid-cols-2 ">
+            <h2 className="col-span-full mb-6 mt-3 text-center text-2xl font-bold">
+              Owner Details
+            </h2>
+            <div className="grid grid-cols-1 gap-x-6 gap-y-1 lg:grid-cols-2 2xl:gap-x-8 ">
               <FieldComponent
                 label={"Proof Type"}
                 value={vehicleDetails?.newVehicle?.owner?.proofType}
@@ -369,9 +374,10 @@ const VechicleDetail = ({ params }) => {
 
           {/* Driver Details */}
           <div className="mt-8">
-             <h2 className="col-span-full text-2xl text-center font-bold mb-6 mt-3">
-            Driver Details</h2>
-            <div className="grid grid-cols-1 gap-y-1 gap-x-6 2xl:gap-x-8 lg:grid-cols-2 ">
+            <h2 className="col-span-full mb-6 mt-3 text-center text-2xl font-bold">
+              Driver Details
+            </h2>
+            <div className="grid grid-cols-1 gap-x-6 gap-y-1 lg:grid-cols-2 2xl:gap-x-8 ">
               <FieldComponent
                 label={"License No"}
                 value={vehicleDetails?.newVehicle?.driver?.licenseNo}
@@ -388,7 +394,9 @@ const VechicleDetail = ({ params }) => {
               />
               <FieldComponent
                 label={"Issue Date"}
-                value={DateString(vehicleDetails?.newVehicle?.driver?.issueDate)}
+                value={DateString(
+                  vehicleDetails?.newVehicle?.driver?.issueDate,
+                )}
                 show={editvehicle}
                 tableId={vehicleDetails?.newVehicle?._id}
                 identifier="driverIssueDate"
@@ -396,7 +404,9 @@ const VechicleDetail = ({ params }) => {
               />
               <FieldComponent
                 label={"Licence Validity"}
-                value={DateString(vehicleDetails?.newVehicle?.driver?.licenceValidity)}
+                value={DateString(
+                  vehicleDetails?.newVehicle?.driver?.licenceValidity,
+                )}
                 show={editvehicle}
                 tableId={vehicleDetails?.newVehicle?._id}
                 identifier="driverLicenceValidity"
@@ -479,13 +489,235 @@ const VechicleDetail = ({ params }) => {
               /> */}
 
               <FieldComponent
-  label={"Proof"}
-  value={vehicleDetails?.newVehicle?.driver?.proof}
-  show={editvehicle}
-  tableId={vehicleDetails?.newVehicle?._id}
-  identifier="driverProof"
-  type="file"
-/>
+                label={"Proof"}
+                value={vehicleDetails?.newVehicle?.driver?.proof}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverProof"
+                type="file"
+              />
+            </div>
+          </div>
+
+          {/* Transpoter Details */}
+          <div className="mt-8">
+            <h2 className="col-span-full mb-6 mt-3 text-center text-2xl font-bold">
+              Transporter Details
+            </h2>
+            <div className="grid grid-cols-1 gap-x-6 gap-y-1 lg:grid-cols-2 2xl:gap-x-8 ">
+             
+              {vehicleDetails?.newVehicle?.transporterDetails[0]
+                ?.vehicleGuarantor === "Others" && (
+                <>
+                  <h2 className="mt col-span-full mb-6 text-center text-lg font-bold">
+                    Vehicle Guarantor - Others Details
+                  </h2>
+                  <FieldComponent
+                    label={"Name"}
+                    value={
+                      vehicleDetails?.newVehicle?.transporterDetails[0]?.ifOther
+                        ?.name
+                    }
+                    show={editvehicle}
+                    tableId={vehicleDetails?.newVehicle?._id}
+                    identifier="ownerProofType"
+                  />
+                  <FieldComponent
+                    label={"Transporter Rating "}
+                    value={
+                      vehicleDetails?.newVehicle?.transporterDetails[0]?.ifOther
+                        ?.transporterRating
+                    }
+                    show={editvehicle}
+                    tableId={vehicleDetails?.newVehicle?._id}
+                    identifier="ownerProofType"
+                  />
+                  <FieldComponent
+                    label={"Type of Vehicle "}
+                    value={
+                      vehicleDetails?.newVehicle?.transporterDetails[0]?.ifOther
+                        ?.typeOfVehicle
+                    }
+                    show={editvehicle}
+                    tableId={vehicleDetails?.newVehicle?._id}
+                    identifier="ownerProofType"
+                  />
+                  <FieldComponent
+                    label={"Date of Birth "}
+                    value={
+                      vehicleDetails?.newVehicle?.transporterDetails[0]?.ifOther
+                        ?.dob
+                    }
+                    show={editvehicle}
+                    tableId={vehicleDetails?.newVehicle?._id}
+                    identifier="ownerProofType"
+                  />
+                  <FieldComponent
+                    label={"Alternate Mob No "}
+                    value={
+                      vehicleDetails?.newVehicle?.transporterDetails[0]?.ifOther
+                        ?.alternateMobNo
+                    }
+                    show={editvehicle}
+                    tableId={vehicleDetails?.newVehicle?._id}
+                    identifier="ownerProofType"
+                  />
+                  <FieldComponent
+                    label={"Mobile No"}
+                    value={
+                      vehicleDetails?.newVehicle?.transporterDetails[0]?.ifOther
+                        ?.mobileNo
+                    }
+                    show={editvehicle}
+                    tableId={vehicleDetails?.newVehicle?._id}
+                    identifier="ownerProofType"
+                  />
+                  <FieldComponent
+                    label={"Office Address"}
+                    value={
+                      vehicleDetails?.newVehicle?.transporterDetails[0]?.ifOther
+                        ?.officeAddress
+                    }
+                    show={editvehicle}
+                    tableId={vehicleDetails?.newVehicle?._id}
+                    identifier="ownerProofType"
+                  />
+                  <FieldComponent
+                    label={"Permanent Address"}
+                    value={
+                      vehicleDetails?.newVehicle?.transporterDetails[0]?.ifOther
+                        ?.permanentAddress
+                    }
+                    show={editvehicle}
+                    tableId={vehicleDetails?.newVehicle?._id}
+                    identifier="ownerProofType"
+                  />
+                  <FieldComponent
+                    label={"Temporary Address"}
+                    value={
+                      vehicleDetails?.newVehicle?.transporterDetails[0]?.ifOther
+                        ?.temporaryAddress
+                    }
+                    show={editvehicle}
+                    tableId={vehicleDetails?.newVehicle?._id}
+                    identifier="ownerProofType"
+                  />
+                </>
+              )}
+
+              <h2 className="mt col-span-full mt-6 mb-3 text-center text-lg font-bold">
+                Bank details :
+              </h2>
+              <FieldComponent
+                label={"Bank Name"}
+                value={
+                  vehicleDetails?.newVehicle?.transporterDetails[0]?.bankDetails
+                    ?.bankName
+                }
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="ownerProofType"
+              />
+              <FieldComponent
+                label={"Account No"}
+                value={
+                  vehicleDetails?.newVehicle?.transporterDetails[0]?.bankDetails
+                    ?.accountNo
+                }
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="ownerProofType"
+              />
+              <FieldComponent
+                label={"Ifsc Code"}
+                value={
+                  vehicleDetails?.newVehicle?.transporterDetails[0]?.bankDetails
+                    ?.ifscCode
+                }
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="ownerProofType"
+              />
+              <FieldComponent
+                label={"Name on Passbook"}
+                value={
+                  vehicleDetails?.newVehicle?.transporterDetails[0]?.bankDetails
+                    ?.nameOnPassbook
+                }
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="ownerProofType"
+              />
+              <FieldComponent
+                label={"Upi Type"}
+                value={
+                  vehicleDetails?.newVehicle?.transporterDetails[0]?.bankDetails
+                    ?.upiType
+                }
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="ownerProofType"
+              />
+              <FieldComponent
+                label={"Upi No"}
+                value={
+                  vehicleDetails?.newVehicle?.transporterDetails[0]?.bankDetails
+                    ?.upiNo
+                }
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="ownerProofType"
+              />
+              <FieldComponent
+                label={"Transporter Image"}
+                value={vehicleDetails?.newVehicle?.transporterDetails[0]?.image}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverProof"
+                type="file"
+              />
+
+<FieldComponent
+                label={"Transporter Visiting CardProof"}
+                value={vehicleDetails?.newVehicle?.transporterDetails[0]?.transporterVisitingCardProof}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverProof"
+                type="file"
+              />
+
+<h2 className="mt col-span-full mt-6 mb-3 text-center text-lg font-bold">
+                Multiple Contact Detail :
+              </h2>
+
+<FieldComponent
+                label={"designation "}
+                value={
+                  vehicleDetails?.newVehicle?.transporterDetails[0]?.multipleContacts[0]?.designation
+                }
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="ownerProofType"
+              />
+<FieldComponent
+                label={"contactPerson "}
+                value={
+                  vehicleDetails?.newVehicle?.transporterDetails[0]?.multipleContacts[0]?.contactPerson
+                }
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="ownerProofType"
+              />
+<FieldComponent
+                label={"mobile No "}
+                value={
+                  vehicleDetails?.newVehicle?.transporterDetails[0]?.multipleContacts[0]?.mobileNo
+                }
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="ownerProofType"
+              />
+
             </div>
           </div>
         </>
@@ -495,6 +727,5 @@ const VechicleDetail = ({ params }) => {
 };
 
 export default VechicleDetail;
-
 
 // upiNo, name, accNo, ifscCode, proof, _id, createdAt, updatedAt}
