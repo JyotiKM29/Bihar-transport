@@ -52,7 +52,7 @@ const Allocation = ({ params }) => {
       : [];
 
     
-      
+  const   vehicleDataSlice =  filterData.slice(0,4);
 
  
 
@@ -66,11 +66,11 @@ const Allocation = ({ params }) => {
         className="self-end w-full flex justify-between items-center shadow-md border px-6 py-4 rounded-xl  mb-8"
         >
           <label className="flex items-center justify-start gap-4 text-nowrap">
-            Order No :<h2>{params.bookingId}</h2>
+            Order No :<h2 className="font-semibold">{params.OrderId}</h2>
           </label>
           <div className="flex gap-3 items-center">
           <label className="flex items-center justify-start gap-4 text-nowrap">
-            Vehicle Id:
+            Vehicle Number:
             <Input
               className='w-[20rem]'
               type="text"
@@ -94,7 +94,7 @@ const Allocation = ({ params }) => {
 
          {/* data table */}
         
-  <table className="min-w-full divide-y divide-gray-200">
+  <table className="min-w-full divide-y divide-gray-200 border rounder-lg">
     <thead className="bg-gray-50">
       <tr>
         <th className="px-4 py-2 text-left">Vehicle No</th>
@@ -107,7 +107,7 @@ const Allocation = ({ params }) => {
       </tr>
     </thead>
     <tbody>
-      {filterData.map((data) => (
+      {vehicleDataSlice.map((data) => (
         <tr key={data._id} className="border-t">
           <td className="px-4 py-2 whitespace-nowrap">{data.vehicleNo}</td>
           <td className="px-4 py-2 whitespace-nowrap">{data.driver.name}</td>

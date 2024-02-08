@@ -1,4 +1,5 @@
 "use client";
+import SearchVehicle from './SearchVehicle';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -23,6 +24,9 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
+import PhotoForm  from '../../vehicle/FieldForm';
+
+
 
 const formSchema = z.object({
   adminId: z.string(),
@@ -43,6 +47,7 @@ const formSchema = z.object({
   commission: z.coerce.number(),
   netBhara: z.coerce.number(),
   ledgerBalanceParty: z.string(),
+  buildProof:z.array(z.string().url()),
   remarks: z.string(),
 });
 
@@ -77,6 +82,7 @@ const AllocateVehicle = ({ params }) => {
     commission: undefined,
     netBhara:undefined,
     ledgerBalanceParty: undefined,
+    buildProof:undefined,
     remarks: undefined,
   };
 
@@ -152,14 +158,23 @@ try {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(myhandleSubmit)}
-          className=" w-full grid grid-cols-2 space-x-6"
+          className="w-full grid grid-cols-2 space-x-6"
         >
-          <FieldForm
-            form={form}
-            name="vehicleNo"
-            label="Vehicle No"
-            type="text"
-          />
+
+<FormField
+                control={form.control}
+                name="vehicleNo"
+                
+                render={({ field }) => (
+                  <SearchVehicle
+                 
+                    form={form}
+                    field={field}
+                    label='Vehicle No'
+                  />
+                )}
+              /> 
+         
 
           <FieldForm
             form={form}
@@ -174,6 +189,7 @@ try {
             label="Transporter Name "
             type="text"
           />
+        
 
           <FieldForm
             form={form}
@@ -301,7 +317,12 @@ try {
             label="Ledger Balance Party "
             type="text"
           />
+
+          <PhotoForm  form={form} nameValue="buildProof" label="Build Proof" type="file" fileNumber={1}/>
+
           <FieldForm form={form} name="remarks" label="Remarks " type="text" />
+
+          
 
           <div className="my-8 flex flex-col lg:flex-row gap-2 flex-1 justify-center lg:gap-6 items-center">
         <Button type="submit">{isloading ? "Loading..." : "Assign Vehicle Only"}</Button>

@@ -1,8 +1,8 @@
 "use client";
 
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { Button } from "../../../components/ui/button";
-import { Checkbox } from "../../../components/ui/checkbox";
+import { Button } from "../../../../components/ui/button";
+import { Checkbox } from "../../../../components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../../../components/ui/dropdown-menu";
+} from "../../../../components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -19,11 +19,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../../components/ui/dialog";
+} from "../../../../components/ui/dialog";
 
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../../context/UserContextProvider";
+import { UserContext } from "../../../../context/UserContextProvider";
 
 export default function ColumnHeader() {
   const { user } = useContext(UserContext);
