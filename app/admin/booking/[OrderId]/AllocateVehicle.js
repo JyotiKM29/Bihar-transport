@@ -1,4 +1,5 @@
 "use client";
+import SearchVehicle from './SearchVehicle';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -152,14 +153,23 @@ try {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(myhandleSubmit)}
-          className=" w-full grid grid-cols-2 space-x-6"
+          className="w-full grid grid-cols-2 space-x-6"
         >
-          <FieldForm
-            form={form}
-            name="vehicleNo"
-            label="Vehicle No"
-            type="text"
-          />
+
+<FormField
+                control={form.control}
+                name="vehicleNo"
+                
+                render={({ field }) => (
+                  <SearchVehicle
+                 
+                    form={form}
+                    field={field}
+                    label='Vehicle No'
+                  />
+                )}
+              /> 
+         
 
           <FieldForm
             form={form}
@@ -174,6 +184,7 @@ try {
             label="Transporter Name "
             type="text"
           />
+        
 
           <FieldForm
             form={form}

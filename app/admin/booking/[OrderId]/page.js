@@ -70,7 +70,7 @@ const Allocation = ({ params }) => {
           </label>
           <div className="flex gap-3 items-center">
           <label className="flex items-center justify-start gap-4 text-nowrap">
-            Vehicle Id:
+            Vehicle Number:
             <Input
               className='w-[20rem]'
               type="text"
