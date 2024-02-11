@@ -129,7 +129,7 @@ const VechicleDetail = ({ params }) => {
       ) : (
         <>
 
-        {loadingTable ? 'Loading table.....' : <DataTable columns={columns} data={data?.data} />}
+      `  {/* {loadingTable ? 'Loading table.....' : <DataTable columns={columns} data={data?.data} />}` */}
           {/* Vehicle Details */}
           <div className="grid grid-cols-1 gap-x-6 gap-y-1 lg:grid-cols-2 2xl:gap-x-8 ">
             <h2 className="col-span-full mb-6 mt-3 text-center text-2xl font-bold">
