@@ -59,11 +59,11 @@ const ledgerSchema = new mongoose.Schema({
     name: String,
     date: Date
   },
-  updatedBy: {
+  updatedBy: [{
     id: String,
     name: String,
     date: Date
-  }
+  }],
 });
 
 mongoose.models = {};
