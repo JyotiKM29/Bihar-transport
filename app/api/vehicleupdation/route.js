@@ -21,9 +21,25 @@ export async function PUT(req, res) {
 
       const date = Date();
       
-      Object.keys(fieldsToUpdate).forEach((field) => {
-        existingVehicle[field] = fieldsToUpdate[field];
-      });
+      // Object.keys(fieldsToUpdate).forEach((field) => {
+      //   existingVehicle[field] = fieldsToUpdate[field];
+      // });
+
+       for (const fieldPath in fieldsToUpdate) {
+         const fieldValue = fieldsToUpdate[fieldPath];
+         // Split the nested field path using dots
+         const fieldPathParts = fieldPath.split(".");
+         // Traverse the nested structure to update the field
+         let nestedObj = existingVehicle;
+         for (let i = 0; i < fieldPathParts.length - 1; i++) {
+           nestedObj = nestedObj[fieldPathParts[i]];
+         }
+         // Update the actual field value
+         nestedObj[fieldPathParts[fieldPathParts.length - 1]] = fieldValue;
+       }
+
+
+
 
       if (!existingVehicle.updatedBy) {
         existingVehicle.updatedBy = []; // Initialize if not present
