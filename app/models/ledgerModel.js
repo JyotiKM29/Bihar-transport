@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const ledgerSchema = new mongoose.Schema({
   basicInfo: {
     accountName: String,
-    contactNo: String,
+    contactNo: Number,
     officeAddress: String,
     taxInfo: {
       GSTIN: String,
@@ -35,7 +35,7 @@ const ledgerSchema = new mongoose.Schema({
     tripType: String,
     route: String,
     proofType: String,
-    proofNumber: String,
+    proofNumber: Number,
     name: String,
     DOB: Date,
     SDWOf: String,
@@ -67,5 +67,5 @@ const ledgerSchema = new mongoose.Schema({
 });
 
 mongoose.models = {};
-const Ledger = mongoose.model('Ledger', ledgerSchema);
-export default Ledger;
+const ledger = mongoose.model('Ledger', ledgerSchema);
+export default ledger;

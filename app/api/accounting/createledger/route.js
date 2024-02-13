@@ -1,4 +1,4 @@
-import exp from "constants";
+
 import connectDB from "../../../middleware/connectDB";
 import ledger from "../../../models/ledgerModel";
 import user from "../../../models/usermodel";
@@ -19,8 +19,17 @@ export async function POST(req, res) {
         await connectDB();  
 
         const admin = await user.findOne({ _id: adminId });
+
         if (admin && (admin.isAdmin || admin.isOwner)) {
 
+            const existingLedger = await ledger.findOne({
+              "basicInfo.contactNo": basicInfo.contactNo,
+            });
+
+            if(existingLedger){
+              return Response.json({ message: "Ledger already exists" }, { status: 400 });
+            }
+            
             const newLedger = new ledger({
                 basicInfo,
                 accountDetails,
