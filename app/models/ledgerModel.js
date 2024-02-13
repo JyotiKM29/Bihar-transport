@@ -53,7 +53,17 @@ const ledgerSchema = new mongoose.Schema({
     upiNo: String,
     upiType: String
   },
-  GSTINAadharCardPanCardDrivingLicence: String
+  GSTINAadharCardPanCardDrivingLicence: String,
+  createdBy: {
+    id: String,
+    name: String,
+    date: Date
+  },
+  updatedBy: {
+    id: String,
+    name: String,
+    date: Date
+  }
 });
 
 mongoose.models = {};
