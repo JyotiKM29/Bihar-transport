@@ -7,11 +7,12 @@ import {
   TabsTrigger,
 } from "../../components/ui/tabs";
 import LedgerRegistration from './LedgerRegistration'
+import MoneyReceipt from './moneyreceipt/MoneyReceipt'
 
 const page = () => {
   return (
     <div className="w-full min-h-[95vh] ">
-    <Tabs defaultValue="newLedger" className="relative w-full min-h-full ">
+    <Tabs defaultValue="moneyReceipt" className="relative w-full min-h-full ">
      <TabsList className=" flex justify-center flex-wrap rounded-2xl">
        <TabsTrigger value="newLedger">
        New ledger
@@ -27,7 +28,7 @@ const page = () => {
        Money transfer 
 
        </TabsTrigger>
-       <TabsTrigger value=" pendingPayment">
+       <TabsTrigger value="pendingPayment">
        Pending payment
 
        </TabsTrigger>
@@ -35,7 +36,7 @@ const page = () => {
        Payment Voucher
 
        </TabsTrigger>
-       <TabsTrigger value="  manageExpense">
+       <TabsTrigger value="manageExpense">
        Manage Expense
 
        </TabsTrigger>
@@ -58,8 +59,8 @@ const page = () => {
      
      <LedgerRegistration />
        </TabsContent>
-       <TabsContent value="  Money receipt">
-      
+       <TabsContent value="moneyReceipt">
+      <MoneyReceipt />
        </TabsContent>
        <TabsContent value="Invoices">
       
