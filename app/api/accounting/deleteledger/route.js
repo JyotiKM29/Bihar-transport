@@ -11,7 +11,7 @@ export async function DELETE(req, res) {
 
 
 
-
+return Response.json({ message: "Internal Server Error" }, { status: 500 });
     } catch (error) {
         console.log(error);
         return Response.json({ message: "Internal Server Error" }, { status: 500 });
