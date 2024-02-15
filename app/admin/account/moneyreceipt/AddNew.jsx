@@ -39,7 +39,7 @@ const AddNew = () => {
   const { user } = useContext(UserContext);
 
   const initialFormState = {
-    receivedDate:undefined ,
+    receivedDate:new Date().toISOString().split("T")[0],
   receivedFrom: undefined,
 
   receivedAmount:undefined,
