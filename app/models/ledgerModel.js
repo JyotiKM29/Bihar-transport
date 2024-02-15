@@ -39,7 +39,7 @@ const ledgerSchema = new mongoose.Schema({
     name: String,
     DOB: Date,
     SDWOf: String,
-    proofContactNo: String, //number
+    proofContactNo: Number,
     proofAddress: String,
     designation: String,
     email: String
