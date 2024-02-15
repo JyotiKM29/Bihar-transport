@@ -1,12 +1,16 @@
 "use client";
+
+import { Button } from "../../../components/ui/button";
+
 import React, { useContext, useEffect, useState } from "react";
 import ColumnHeader from './ColumnHeader';
-import { DataTable } from "../../account/data-table";
-import BookingForm from "../BookingForm";
-import { UserContext } from "../../../context/UserContextProvider";
+import { DataTable } from '../data-table';
 
-const IntilizeBooking = () => {
-  const [formValue, setFormValue] = useState(true);
+import { UserContext } from "../../../context/UserContextProvider";
+import AddNew from "./AddNew";
+
+const MoneyExpenses = () => {
+  const [showAddForm, setShowAddForm] = useState(false);
   const [loading , setLoading] = useState(true);
   const columns = ColumnHeader();
 
@@ -34,7 +38,7 @@ const IntilizeBooking = () => {
   
           // Check if result.data is an array before applying filter
           const pendingOrders = Array.isArray(result.data) ? result.data.filter(
-            (order) => order.status === "Initialized",
+            (order) => order.status === "Pending",
           ) : [];
   
           console.log(pendingOrders);
@@ -49,29 +53,30 @@ const IntilizeBooking = () => {
   
     fetchData();
   }, [userId]);
-  
-  
-  
-
-  console.log(data);
 
   return (
-    <div className="min-h-[90vh] w-full space-y-6">
-      
-      <div
-        className="min-h w-full 
-      space-y-2 rounded-2xl  bg-white px-4 py-4 
-     shadow-sm md:px-6 xl:h-[95%]"
-      >
-        
-        <h1 className="hidden text-4xl  lg:block font-semibold">Initialized Bookings</h1>
-
-       {loading ? (<div className="max-w max-h  bg-white"><h2
-       className="text-xl"
-       >Loading...</h2></div>) :  ( <DataTable columns={columns} data={data} />)}
+    <div className="max-w max-h mt-14 rounded-md  bg-white px-4 py-4 shadow-md md:px-10 lg:my-4 lg:p-8 lg:px-20">
+      <div className="flex items-center justify-between">
+        <h2 className="mb-8  text-3xl font-semibold">Manage Expenses :</h2>
+        <div className="flex gap-3">
+          <Button onClick={() => setShowAddForm(!showAddForm)}>
+            {!showAddForm ? "New New" : "Back"}
+          </Button>
+          
+        </div>
       </div>
+
+      {showAddForm ? <AddNew />:
+<>
+     { loading ?
+       (<div className="max-w max-h  bg-white"><h2
+       className="text-xl"
+       >Loading...</h2></div>) :  
+       ( <DataTable columns={columns} data={data} />)}
+       </>
+       }
     </div>
   );
 };
 
-export default IntilizeBooking;
+export default MoneyExpenses;

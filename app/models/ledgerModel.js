@@ -7,7 +7,7 @@ const ledgerSchema = new mongoose.Schema({
     officeAddress: String,
     taxInfo: {
       GSTIN: String,
-      PanNo: String,
+      PanNo: String, 
       tradeName: String,
       legalName: String,
       GSTINStatus: String,
@@ -22,12 +22,12 @@ const ledgerSchema = new mongoose.Schema({
     natureOfAccount: String,
     openingBalance: {
       amount: Number,
-      debitCredit: String
+      debitCredit: String //dropdown
     },
     creditLimit: Number,
     defaultPaymentTerm: String,
     serviceToStates: String,
-    typeOfVehicle: String,
+    typeOfVehicle: String, 
     attachId: String,
     alert: String
   },
@@ -47,13 +47,13 @@ const ledgerSchema = new mongoose.Schema({
   bankDetails: {
     bankName: String,
     nameOnPassbook: String,
-    accountNo: String,
+    accountNo: String, //number
     IFSCCode: String,
     branch: String,
     upiNo: String,
     upiType: String
   },
-  GSTINAadharCardPanCardDrivingLicence: String,
+  GSTINAadharCardPanCardDrivingLicence: String, //dropdown 
   createdBy: {
     id: String,
     name: String,

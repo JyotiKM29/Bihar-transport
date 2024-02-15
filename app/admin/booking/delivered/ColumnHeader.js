@@ -113,7 +113,7 @@ export default function ColumnHeader() {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Link href={`/admin/booking/pending/${row.original._id}`}>
+                  <Link href={`/admin/booking/delivered/${row.original._id}`}>
                     View Detail
                   </Link>
                 </DropdownMenuItem>

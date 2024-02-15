@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import FieldForm from "./FieldForm";
+import FieldForm from "../component/FieldForm";
 import { Button } from "../../components/ui/button";
 import {
   Form,
