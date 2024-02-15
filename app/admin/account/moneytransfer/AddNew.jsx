@@ -19,16 +19,13 @@ import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
 
 const formSchema = z.object({
-  receivedDate: z.coerce.date(),
-  receivedFrom: z.string(),
+ transferDate: z.coerce.date(),
+  fromAccount: z.string(),
 
-  receivedAmount: z.coerce.number(),
+  toAmount: z.string(),
 
-  tdsAmount: z.optional(z.coerce.number()),
-
-  discountAmount: z.optional(z.coerce.number()).default(0),
-
-  paidBy: z.string(),
+  amount: z.coerce.number(),
+  
 
   narration: z.string(),
 });
@@ -39,16 +36,14 @@ const AddNew = () => {
   const { user } = useContext(UserContext);
 
   const initialFormState = {
-    receivedDate:new Date().toISOString().split("T")[0],
-  receivedFrom: undefined,
+    transferDate:new Date().toISOString().split("T")[0],
+    fromAccount: undefined,
 
-  receivedAmount:undefined,
+    toAmount:undefined,
 
-  tdsAmount:undefined ,
+    amount:undefined ,
 
-  discountAmount:undefined,
-
-  paidBy:undefined ,
+  
 
   narration:undefined,
   };
@@ -73,45 +68,34 @@ const AddNew = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(myhandleSubmit)}>
         <h2 className="text-center  text-xl font-semibold">
-        New Money Receipt :
+        New Money Transfer(Contra) Entry :
         </h2>
         <FieldForm 
         form={form} 
-        name="receivedDate" 
-        label="Received Date"
+        name="transferDate" 
+        label="Transfer Date"
          type="date" />
 
         <FieldForm 
         form={form} 
-        label="Received From" 
-        name="receivedFrom"
+        name="fromAccount" 
+        label="From Account"
          type="text" />
 
 
         <FieldForm 
         form={form} 
-        name="receivedAmount" 
-        label="Received Amount"
+        name="toAmount" 
+        label="To Amount"
          type="number" />
 
         <FieldForm 
         form={form} 
-        name="tdsAmount" 
-        label="TDS Amount"
+        name="amount" 
+        label=" Amount"
          type="number" />
 
 
-        <FieldForm 
-        form={form} 
-        name="discountAmount" 
-        label="Discount Amount"
-         type="text" />
-
-        <FieldForm 
-        form={form} 
-        name="paidBy" 
-        label="Paid By"
-         type="text" />
 
   
         <FormField

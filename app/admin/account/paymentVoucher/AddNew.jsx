@@ -19,14 +19,14 @@ import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
 
 const formSchema = z.object({
-  receivedDate: z.coerce.date(),
-  receivedFrom: z.string(),
+  paymentDate: z.coerce.date(),
+  paidTo: z.string(),
 
-  receivedAmount: z.coerce.number(),
+  paidAmount: z.coerce.number(),
 
   tdsAmount: z.optional(z.coerce.number()),
 
-  discountAmount: z.optional(z.coerce.number()).default(0),
+  
 
   paidBy: z.string(),
 
@@ -39,14 +39,14 @@ const AddNew = () => {
   const { user } = useContext(UserContext);
 
   const initialFormState = {
-    receivedDate:new Date().toISOString().split("T")[0],
-  receivedFrom: undefined,
+    paymentDate:new Date().toISOString().split("T")[0],
+    paidTo: undefined,
 
-  receivedAmount:undefined,
+    paidAmount:undefined,
 
   tdsAmount:undefined ,
 
-  discountAmount:undefined,
+
 
   paidBy:undefined ,
 
@@ -73,25 +73,25 @@ const AddNew = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(myhandleSubmit)}>
         <h2 className="text-center  text-xl font-semibold">
-        New Money Receipt :
+        New Payment Voucher Details :
         </h2>
         <FieldForm 
         form={form} 
-        name="receivedDate" 
-        label="Received Date"
+        name="paymentDate" 
+        label="Payment Date"
          type="date" />
 
         <FieldForm 
         form={form} 
-        label="Received From" 
-        name="receivedFrom"
+        name="paidTo" 
+        label="Paid To"
          type="text" />
 
 
         <FieldForm 
         form={form} 
-        name="receivedAmount" 
-        label="Received Amount"
+        name="paidAmount" 
+        label="Paid Amount"
          type="number" />
 
         <FieldForm 
@@ -101,11 +101,6 @@ const AddNew = () => {
          type="number" />
 
 
-        <FieldForm 
-        form={form} 
-        name="discountAmount" 
-        label="Discount Amount"
-         type="text" />
 
         <FieldForm 
         form={form} 

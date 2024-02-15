@@ -73,7 +73,7 @@ const AddNew = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(myhandleSubmit)}>
         <h2 className="text-center  text-xl font-semibold">
-        New Money Receipt :
+         New Invoice Creation :
         </h2>
         <FieldForm 
         form={form} 

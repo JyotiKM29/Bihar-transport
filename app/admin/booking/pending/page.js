@@ -1,12 +1,11 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
 import ColumnHeader from './ColumnHeader';
-import { DataTable } from "../data-table";
-import BookingForm from "../BookingForm";
+import { DataTable } from "../../account/data-table";
+
 import { UserContext } from "../../../context/UserContextProvider";
 
 const PendingBooking = () => {
-  const [formValue, setFormValue] = useState(true);
   const [loading , setLoading] = useState(true);
   const columns = ColumnHeader();
 

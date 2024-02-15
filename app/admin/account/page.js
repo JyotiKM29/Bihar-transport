@@ -8,6 +8,9 @@ import {
 } from "../../components/ui/tabs";
 import LedgerRegistration from './LedgerRegistration'
 import MoneyReceipt from './moneyreceipt/MoneyReceipt'
+import Invoices from './invoice/Invoices'
+import MoneyTransfer from './moneytransfer/MoneyTransfer'
+import PaymentVoucher from './paymentVoucher/PaymentVoucher'
 
 const page = () => {
   return (
@@ -24,7 +27,7 @@ const page = () => {
        Invoices
 
        </TabsTrigger>
-       <TabsTrigger value="moneyTransfer ">
+       <TabsTrigger value="moneyTransfer">
        Money transfer 
 
        </TabsTrigger>
@@ -44,11 +47,11 @@ const page = () => {
        Journal Entries
 
        </TabsTrigger>
-       <TabsTrigger value=" bulkRecieve">
+       <TabsTrigger value="bulkRecieve">
        Bulk Recieve
 
        </TabsTrigger>
-       <TabsTrigger value=" bulkPayment">
+       <TabsTrigger value="bulkPayment">
        Bulk Payment
 
        </TabsTrigger>
@@ -63,27 +66,27 @@ const page = () => {
       <MoneyReceipt />
        </TabsContent>
        <TabsContent value="Invoices">
-      
+      <Invoices />
        </TabsContent>
        <TabsContent value="moneyTransfer">
+     <MoneyTransfer />
+       </TabsContent>
+       <TabsContent value="pendingPayment">
      
        </TabsContent>
-       <TabsContent value=" pendingPayment">
-      
-       </TabsContent>
        <TabsContent value="paymentVoucher">
-      
+       <PaymentVoucher />
        </TabsContent>
-       <TabsContent value="  manageExpense">
+       <TabsContent value="manageExpense">
       
        </TabsContent>
        <TabsContent value="journalEntries">
         
         </TabsContent>
-       <TabsContent value=" bulkRecieve">
+       <TabsContent value="bulkRecieve">
         
        </TabsContent>
-       <TabsContent value=" bulkPayment">
+       <TabsContent value="bulkPayment">
         
        </TabsContent>
       
