@@ -11,6 +11,10 @@ import MoneyReceipt from './moneyreceipt/MoneyReceipt'
 import Invoices from './invoice/Invoices'
 import MoneyTransfer from './moneytransfer/MoneyTransfer'
 import PaymentVoucher from './paymentVoucher/PaymentVoucher'
+import MoneyExpenses from './moneyExpense/MoneyExpenses'
+import JournalEntries from './journalEntries/JournalEntries'
+import BulkReceive from './bulkReceive/BulkReceive'
+import BulkPayment from './bulkPayment/BulkPayment'
 
 const page = () => {
   return (
@@ -78,16 +82,16 @@ const page = () => {
        <PaymentVoucher />
        </TabsContent>
        <TabsContent value="manageExpense">
-      
+      <MoneyExpenses />
        </TabsContent>
        <TabsContent value="journalEntries">
-        
+        <JournalEntries />
         </TabsContent>
        <TabsContent value="bulkRecieve">
-        
+        <BulkReceive />
        </TabsContent>
        <TabsContent value="bulkPayment">
-        
+        <BulkPayment />
        </TabsContent>
       
      
