@@ -50,7 +50,7 @@ const BookingDetails = ({ params }) => {
   return (
     <div className="min-h-[90vh] w-full rounded-2xl bg-white px-6 py-4 shadow-sm ">
 
-      {loading ? 'Loading...':  <ViewDetail  bookingDetails={bookingDetails}  heading={"Confirm Booking"}/>}
+      {loading ? 'Loading...':  <ViewDetail  bookingDetails={bookingDetails}  heading="Confirm Booking"/>}
      
     </div>
   );

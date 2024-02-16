@@ -11,65 +11,49 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
-import { useToast } from "../../../components/ui/use-toast";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../../../components/ui/dialog";
 
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
-
+import { Input } from "../../../components/ui/input";
 
 export default function ColumnHeader() {
-  const { toast } = useToast();
-  const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
-
   const [columns, setColumns] = useState([]);
- 
-  const displayToast = (title, action, description = "") => {
-    toast({
-      title,
-      action,
-      description,
-    });
-  };
+  const [showForm, setShowForm] = useState(false);
+  const [vehicleIds, setVehicleIds] = useState([]);
+  const [vehicleData, setVehicleData] = useState();
+
+  const [searchInput, setSearchInput] = useState("");
 
 
   useEffect(() => {
-    async function handleConfirm(status , bookingId){
-      const requestData = {
-        "adminId": user?._id,
-        "status": status,
-        "bookingId": bookingId
-      };
-
+    async function deleteData(id) {
+      console.log(user);
+      console.log("id:", id);
       try {
-
-        const response = await fetch("/api/bookingstatus", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestData),
+        const response = await fetch(`/api/deletebooking`, {
+          method: "DELETE",
+          body: JSON.stringify({ _id: id, adminId: user._id }),
         });
         console.log(response);
-      
-        const newResult = await response.json();
-      
-        if (response.ok) {
-          setIsLoading(false);
-          displayToast(`Successfully ${status}`, "✅");
-         
-        } else {
-          console.error("Error:", newResult.message);
-          displayToast("Error", "❌", newResult.message);
-          setIsLoading(false);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
       } catch (error) {
-        console.error("Error:", error);
-        displayToast("Error while sending data", "❌", newResult.message);
-        setIsLoading(false);
+        console.error("There was a problem with the delete request.", error);
       }
-
     }
 
     setColumns([
@@ -155,7 +139,7 @@ export default function ColumnHeader() {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Link href={`/admin/booking/dispatch/${row.original._id}`}>
+                  <Link href={`/admin/booking/pending-booking/${row.original._id}`}>
                     View Detail
                   </Link>
                 </DropdownMenuItem>
@@ -169,10 +153,37 @@ export default function ColumnHeader() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                   <button onClick={()=>handleConfirm('In Transit',`${row.original._id}` )}>InTransit Booking</button> 
+                <Link 
+               href={`/admin/booking/${row.original.orderNumber}`}
+                >
+                   Allocation Vehicle
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                <button onClick={()=>handleConfirm('Cancelled',`${row.original._id}` )}>Cancel Booking</button> 
+                  <Dialog>
+                    <DialogTrigger onClick={(e) => e.stopPropagation()}>
+                      Delete Data
+                    </DialogTrigger>
+                    <DialogContent className="flex flex-col justify-center">
+                      <DialogHeader>
+                        <DialogTitle>Confirm Delete ?</DialogTitle>
+                      </DialogHeader>
+                      <DialogDescription>
+                        This data row will delete permanently from the database
+                        and you cannot access it again.
+                      </DialogDescription>
+                      <DialogFooter>
+                        <Button
+                          type="submit"
+                          onClick={() => {
+                            deleteData(row.original._id, user);
+                          }}
+                        >
+                          Confirm
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
