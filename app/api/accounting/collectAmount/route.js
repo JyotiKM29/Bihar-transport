@@ -29,12 +29,13 @@ export async function POST(req, res) {
         if(booking.balanceAmount < paidAmount){
             return Response.json({ message: "Paid amount is greater than balance amount" }, { status: 400 });
         }
+        const date = new Date();
 
         booking.balanceAmount -= paidAmount;
         const newPayment= {
             bookingId: _id,
             paidAmount,
-            paymentDate,
+            paymentDate: date,
             paymentMode,
             TDS,
         };
@@ -53,7 +54,7 @@ export async function POST(req, res) {
         const updated = {
             name: admin.name,
             adminId,
-            date: date.now(),
+            date: new Date(),
         };
           if(booking.updatedBy)
               booking.updatedBy.push(updated);
@@ -64,7 +65,7 @@ export async function POST(req, res) {
         }
 
         const final = await booking.save();
-        return Response.json({ message: "Payment collected successfully" }, { status: 200 });
+        return Response.json({ message: "Payment collected successfully", final }, { status: 200 });
     } catch (error) {
         console.log(error);
         return Response.json({ message: error.message }, { status: 500 });
