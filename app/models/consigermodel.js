@@ -93,20 +93,17 @@ const personalBookingSchema = new mongoose.Schema(
     type: {
       type: String,
       enum: ["personal"],
-       
+
       default: "personal",
     },
     consignorName: {
       type: String,
-       
     },
     contactNo: {
       type: String,
-       
     },
     address: {
       type: String,
-       
     },
     dob: {
       type: Date,
@@ -114,9 +111,13 @@ const personalBookingSchema = new mongoose.Schema(
     designation: String,
     email: {
       type: String,
-       
     },
     remarks: String,
+    booking: [],
+    totalAmount: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true },
 );
@@ -156,6 +157,11 @@ const companyBookingSchema = new mongoose.Schema(
     payableReceivable: String,
     accountGroup: String,
     openingBalance: {
+      type: Number,
+      default: 0,
+    },
+    booking: [],
+    totalAmount: {
       type: Number,
       default: 0,
     },
