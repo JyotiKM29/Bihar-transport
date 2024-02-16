@@ -1,5 +1,5 @@
 import connectDB from "../../../middleware/connectDB";
-import ledger from "../../../models/ledgerModel";
+import ledger from "../../../models/accounting/ledgerModel";
 import user from "../../../models/usermodel";
 
 export async function PUT(req, res) {
