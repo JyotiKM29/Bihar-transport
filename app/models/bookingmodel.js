@@ -205,6 +205,7 @@ const bookingSchema = new mongoose.Schema(
       dispatchAdditionalDetails: dispatchAdditionalDetailsSchema,
       dispatchAdditionalRate: [dispatchAdditionalRateSchema],
     },
+    paymentHistory: [],
     createdBy: {
       name: { type: String },
       adminId: { type: String },
