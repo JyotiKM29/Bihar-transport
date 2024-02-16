@@ -2,6 +2,7 @@ import { User } from "lucide-react";
 import connectDB from "../../middleware/connectDB";
 import user from "../../models/usermodel";
 import Booking from "../../models/bookingmodel";
+import ledger from "../../models/accounting/ledgerModel";
 
 export async function POST(req, res) {
   try {
@@ -96,6 +97,29 @@ export async function POST(req, res) {
 
       // Save the new booking
       const savedBooking = await newBooking.save();
+      const update = await ledger.findOne({ "basicInfo.contactNo": consignorMobileNumber });
+      if (update) {
+
+        update.accountDetails.totalAmount += balanceAmount;
+        update.accountDetails.totalAmount -= advanceAmount;
+        
+        if (update.bookingDetails) {
+          update.bookingDetails.push({
+            savedBooking,
+          });
+        }
+          else {
+            update.bookingDetails = [];
+            update.bookingDetails.push({
+              savedBooking,
+            });
+        }
+        
+        await update.save();
+        console.log("Ledger Updated:", update);
+      }
+      
+
 
       // // console.log(updatedVehicle);
       // console.log("Booking Created:", savedBooking);

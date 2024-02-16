@@ -7,29 +7,29 @@ const ledgerSchema = new mongoose.Schema({
     officeAddress: String,
     taxInfo: {
       GSTIN: String,
-      PanNo: String, 
+      PanNo: String,
       tradeName: String,
       legalName: String,
       GSTINStatus: String,
       principalPlaceOfBusiness: String,
       rating: String,
       remarks: String,
-      additionalContact: String
-    }
+      additionalContact: String,
+    },
   },
   accountDetails: {
     accountGroup: String,
     natureOfAccount: String,
     openingBalance: {
       amount: Number,
-      debitCredit: String //dropdown
+      debitCredit: String, //dropdown
     },
     creditLimit: Number,
     defaultPaymentTerm: String,
     serviceToStates: String,
-    typeOfVehicle: String, 
+    typeOfVehicle: String,
     attachId: String,
-    alert: String
+    alert: String,
   },
   additionalInfo: {
     tripType: String,
@@ -42,7 +42,7 @@ const ledgerSchema = new mongoose.Schema({
     proofContactNo: Number,
     proofAddress: String,
     designation: String,
-    email: String
+    email: String,
   },
   bankDetails: {
     bankName: String,
@@ -51,19 +51,26 @@ const ledgerSchema = new mongoose.Schema({
     IFSCCode: String,
     branch: String,
     upiNo: String,
-    upiType: String
+    upiType: String,
   },
-  GSTINAadharCardPanCardDrivingLicence: String, //dropdown 
+  GSTINAadharCardPanCardDrivingLicence: String, //dropdown
   createdBy: {
     id: String,
     name: String,
-    date: Date
+    date: Date,
   },
-  updatedBy: [{
-    id: String,
-    name: String,
-    date: Date
-  }],
+  updatedBy: [
+    {
+      id: String,
+      name: String,
+      date: Date,
+    },
+  ],
+  booking: [],
+  totalAmount: {
+    type: Number,
+    default: 0,
+  },
 });
 
 mongoose.models = {};
