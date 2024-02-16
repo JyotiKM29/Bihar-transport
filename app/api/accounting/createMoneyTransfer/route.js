@@ -23,7 +23,13 @@ export async function POST(req, res) {
             to,
             amount,
             narration,
+            updatedBy: {
+                name: admin.name,
+                adminId,
+                date: new Date(),
+            }
         });
+
 
         await newTransfer.save();
         return Response.json({ message: "Money transfer created successfully" }, { status: 200 });
