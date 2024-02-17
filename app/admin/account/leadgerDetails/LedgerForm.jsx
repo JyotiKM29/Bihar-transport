@@ -230,7 +230,7 @@ const LedgerForm = () => {
     
 
 <div className="">
-<h2 className="text-xl font-semibold text-center"> Basic Info </h2>
+<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1"> Basic Info </h2>
 
      <FieldForm
             form={form}
@@ -253,7 +253,7 @@ const LedgerForm = () => {
             type="text"
           />
 
-<h2 className="text-lg font-semibold text-center">Tax Info </h2>
+<h2 className="text-lg font-semibold text-center text-blue-500 underline underline-offset-1">Tax Info </h2>
 
      <FieldForm
             form={form}
@@ -312,7 +312,7 @@ const LedgerForm = () => {
     
     </div> 
     <div className="">
-<h2 className="text-xl font-semibold text-center"> Account Details </h2>
+<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1"> Account Details </h2>
 
 <FormField
                 control={form.control}
@@ -432,7 +432,7 @@ const LedgerForm = () => {
           />
 </div>
 <div className="">
-<h2 className="text-xl font-semibold text-center"> Bank Details</h2>
+<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1"> Bank Details</h2>
 
 <FieldForm
             form={form}
@@ -477,7 +477,7 @@ const LedgerForm = () => {
             type="text"
           />
 
-<h2 className="text-xl font-semibold text-center">ID proof</h2>
+<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1">ID proof</h2>
 
 <FieldForm
             form={form}
@@ -487,7 +487,7 @@ const LedgerForm = () => {
           />
 </div>
     <div className="">
-<h2 className="text-xl font-semibold text-center">Additional Info </h2>
+<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1">Additional Info </h2>
 
 <FieldForm
             form={form}
@@ -563,8 +563,8 @@ const LedgerForm = () => {
 
   </div>
 
-<div className="flex justify-center items-center">
-<Button type="submit" className='w-full lg:w-1/3 '>{isloading ? "Loading..." : " Submit"}</Button>
+<div className="flex justify-center items-center my-8">
+<Button type="submit" className='h-16 text-lg w-full lg:w-1/3 '>{isloading ? "Loading..." : " Submit"}</Button>
 </div>
 
 

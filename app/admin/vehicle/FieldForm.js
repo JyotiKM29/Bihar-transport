@@ -62,20 +62,20 @@ const handleCheckboxChange = (e) => {
               <FormControl>
                 {type === 'checkbox' ? (
                   <div className='h-10 flex items-center'>
-                    <Checkbox {...field} checked={isChecked} // Use isChecked state for checked status
-                                            onChange={handleCheckboxChange} // Handle checkbox change
+                    <Checkbox {...field} checked={isChecked} 
+                                            onChange={handleCheckboxChange} 
                                             className='h-6 w-6'/>
                   </div>
                 ) : type === 'file' ? (
                   <div >
                     <label className='text-[12px] -mb-1 flex text-slate-500'>
                      <p> Select number of files to upload  {fileNumber}</p>
-                      {/* <input type='number' min='1' value={fileCount} onChange={(e) => setFileCount(e.target.value)} /> */}
+                    
                     </label>
                     <Input    type='file' onChange={onFileChange} multiple />
                   </div>
                 ) : (
-                  <Input type={type} {...field} />
+                  <Input type={type} {...field} placeholder={`Enter value of ${label}`} />
                 )}
               </FormControl>
               <FormMessage />

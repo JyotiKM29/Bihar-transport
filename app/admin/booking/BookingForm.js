@@ -383,6 +383,7 @@ export default function ProfileForm() {
 
               </Link>
 </div>
+  <div className="flex items-center gap-0">
  <FormField
                 control={form.control}
                 name="consigneeName"
@@ -392,9 +393,14 @@ export default function ProfileForm() {
                     field={field}
                     personName="consigneeName"
                   />
+                  
                 )}
               />
-             
+               <Link href='/admin/booking/new-regesitration' className="border h-10 text-base text-nowrap px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">
+              <FiPlus  className="h-full w-full"/>
+
+              </Link>
+              </div>
 
               <FormField
                 control={form.control}

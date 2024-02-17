@@ -22,7 +22,7 @@ const FieldForm = ({ form, name, label, type, options }) => {
             </FormLabel>
             <div className="flex flex-1 flex-col">
               <FormControl>
-                <Input value={field?.value} type={type} {...field} />
+                <Input value={field?.value} type={type} placeholder={`Enter value of ${label}`} {...field} />
               </FormControl>
               <FormMessage />
             </div>

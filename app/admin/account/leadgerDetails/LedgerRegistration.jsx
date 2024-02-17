@@ -9,7 +9,7 @@ import { DataTable } from "../data-table";
 import { UserContext } from "../../../context/UserContextProvider";
 
 const LedgerRegistration = () => {
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(true);
   const [loading, setLoading] = useState(true);
   const columns = ColumnHeader();
 
@@ -58,10 +58,10 @@ const LedgerRegistration = () => {
   return (
     <div className="max-w max-h mt-14 rounded-md  bg-white px-4 py-4 shadow-md md:px-10 lg:my-4 lg:p-8 lg:px-20">
       <div className="flex items-center justify-between">
-        <h2 className="mb-8  text-3xl font-semibold">Ledger Details :</h2>
+        <h2 className="mb-8  text-3xl font-semibold text-orange-400">Ledger Details :</h2>
         <div className="flex gap-3">
           <Button onClick={() => setShowAddForm(!showAddForm)}>
-            {!showAddForm ? "New New" : "Back"}
+            {!showAddForm ? "New New" : "Ledger detail"}
           </Button>
         </div>
       </div>

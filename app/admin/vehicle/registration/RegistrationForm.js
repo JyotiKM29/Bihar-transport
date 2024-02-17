@@ -319,7 +319,7 @@ const RegistrationForm = () => {
 
 
   
-  <h2 className="col-span-full text-2xl text-center font-bold mb-6 mt-3">Vehicle Details</h2>
+  <h2 className="col-span-full text-3xl text-center font-semibold mb-6 mt-3 text-blue-500 underline underline-offset-1 tracking-normal">Vehicle Details</h2>
     <FieldForm form={form} nameValue="vehicleNo" label="Vehicle No" type="text" />
     <FieldForm form={form} nameValue="registrationAuthority" label="Registration Authority" type="text" />
     <FieldForm form={form} nameValue="fuelName" label="Fuel Name" type="text" />
@@ -344,7 +344,7 @@ const RegistrationForm = () => {
     {/* Add fields for owner and driver here */}
     
     {/* ...existing fields... */}
-    <h2 className="col-span-full text-2xl text-center font-bold mb-6 mt-3">Owner Details</h2>
+    <h2 className="col-span-full text-3xl text-center font-semibold mb-6 mt-3 text-blue-500 underline underline-offset-1 tracking-normal">Owner Details</h2>
     <FieldForm form={form} nameValue="owner.proofType" label="Owner Proof Type" type="text" />
     <FieldForm form={form} nameValue="owner.proofNumber" label="Owner Proof Number" type="text" />
     <FieldForm form={form} nameValue="owner.name" label="Owner Name" type="text" />
@@ -362,7 +362,7 @@ const RegistrationForm = () => {
     <FieldForm form={form} nameValue="owner.remarks" label="Owner Remarks" type="text" />
     <FieldForm form={form} nameValue="owner.img" label="Owner Photo" type="file" fileNumber={1}/>
 
-    <h2 className="col-span-full text-2xl text-center font-bold mb-6 mt-3">Driver Details</h2>
+    <h2 className="col-span-full text-3xl text-center font-semibold mb-6 mt-3 text-blue-500 underline underline-offset-1 tracking-normal">Driver Details</h2>
     <FieldForm form={form} nameValue="driver.licenseNo" label="Driver License No" type="text" />
     <FieldForm form={form} nameValue="driver.name" label="Driver Name" type="text" />
     <FieldForm form={form} nameValue="driver.issueDate" label="Driver License Issue Date" type="date" />
@@ -379,7 +379,7 @@ const RegistrationForm = () => {
     <FieldForm form={form} nameValue="driver.proof" label="Driver Proof" type="file" fileNumber={2} />
     <FieldForm form={form} nameValue="driver.img" label="Driver Photo" type="file" fileNumber={1}/>
 
-    <h2 className="col-span-full text-2xl text-center font-bold mb-6 mt-3">Transporter Details</h2>
+    <h2 className="col-span-full text-3xl text-center font-semibold mb-6 mt-3 text-blue-500 underline underline-offset-1 tracking-normal">Transporter Details</h2>
     <FormField
                 control={form.control}
                 name="transporterDetails.vehicleGuarantor"
@@ -454,8 +454,8 @@ const RegistrationForm = () => {
 
 
 
-    <div className="col-span-full flex  md:justify-center mt-8">
-  <Button type="submit" className="h-16 bg-black text-lg w-full xl:w-1/3">
+    <div className="col-span-full flex  md:justify-center my-8">
+  <Button type="submit" className="h-16  text-lg w-full xl:w-1/3">
     {isloading ? "Loading..." : "Submit"}
   </Button>
 </div>
