@@ -56,7 +56,7 @@ const LedgerRegistration = () => {
         <h2 className="mb-8  text-3xl font-semibold text-orange-500">Ledger Details :</h2>
         <div className="flex gap-3">
           <Button onClick={() => setShowAddForm(!showAddForm)}>
-            {!showAddForm ? "New New" : "Ledger detail"}
+            {!showAddForm ? "Add New ledger " : "Ledger detail"}
           </Button>
         </div>
       </div>
