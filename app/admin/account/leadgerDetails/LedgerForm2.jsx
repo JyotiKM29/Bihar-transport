@@ -456,7 +456,7 @@ const[showBankDetail , setShowBankDetail] = useState(false);
 
 {
   showBankDetail ?<div className="">
-<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1"  onClick={()=>setShowBankDetail(!showBankDetail)} > Bank Details</h2>
+<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1 my-6"  onClick={()=>setShowBankDetail(!showBankDetail)} > Bank Details</h2>
 
 <FieldForm
             form={form}
@@ -503,18 +503,19 @@ const[showBankDetail , setShowBankDetail] = useState(false);
 
 
 </div>:
-<p className="text-xl  text-center text-blue-500 underline underline-offset-1 my-3" onClick={()=>setShowBankDetail(!showBankDetail)}>Bank detail</p>
+<p className="text-xl  text-center text-blue-500 underline underline-offset-1 my-6" onClick={()=>setShowBankDetail(!showBankDetail)}>Bank detail</p>
 }
 
 
 
 {
-  showadditionalContact?<AdditionalContact form={form} nameValue='additionalContact' setshowAdditionalContact={setshowAdditionalContact} showadditionalContact={showadditionalContact}/>:<p className="text-xl  text-center text-blue-500 underline underline-offset-1" onClick={()=>setshowAdditionalContact(!showadditionalContact)}>Additional Contact  </p>
+  showadditionalContact?<AdditionalContact form={form} nameValue='additionalContact' setshowAdditionalContact={setshowAdditionalContact} showadditionalContact={showadditionalContact}/>:<p className="text-xl  text-center text-blue-500 underline underline-offset-1 my-6" onClick={()=>setshowAdditionalContact(!showadditionalContact)}>Additional Contact  </p>
 }
-</div>
+
+
 {showadditionalInfo ? 
   <div className="">
-<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1" onClick={()=>setShowAdditionalInfo(!showadditionalInfo)} >Additional Info </h2>
+<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1 my-3" onClick={()=>setShowAdditionalInfo(!showadditionalInfo)} >Additional Info </h2>
 
 <FieldForm
             form={form}
@@ -563,8 +564,10 @@ const[showBankDetail , setShowBankDetail] = useState(false);
           />
 
 </div>
-:<span className="text-xl  text-center text-blue-500 underline underline-offset-1 my-6" onClick={()=>setShowAdditionalInfo(!showadditionalInfo)}>Additional Info </span>
+:<p className="text-xl  text-center text-blue-500 underline underline-offset-1 my-3" onClick={()=>setShowAdditionalInfo(!showadditionalInfo)}>Additional Info </p>
 }
+</div>
+
 
 
 
