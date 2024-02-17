@@ -82,10 +82,10 @@ export default function ColumnHeader() {
         enableHiding: false,
       },
      
-      {
-        accessorKey: "orderNumber",
-        header: "Order Id",
-      },
+      // {
+      //   accessorKey: "orderNumber",
+      //   header: "Order Id",
+      // },
       {
         accessorKey: "consignorName",
         header: "Consignor",
@@ -108,7 +108,7 @@ export default function ColumnHeader() {
 
       {
         accessorKey: "paymentTerm",
-        header: "Payment Term",
+        header: "Term",
       },
       {
         accessorKey: "partyBhara",
@@ -116,11 +116,11 @@ export default function ColumnHeader() {
       },
       {
         accessorKey: "advanceAmount",
-        header: "Received Amount",
+        header: "Received ",
       },
       {
         accessorKey: "balanceAmount",
-        header: "Due Amount",
+        header: "Due ",
       },
       
       {

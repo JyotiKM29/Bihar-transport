@@ -81,48 +81,45 @@ export default function ColumnHeader() {
         enableSorting: false,
         enableHiding: false,
       },
-      {
-        accessorKey: "orderNumber",
-        header: "Order Id",
-      },
+      // {
+      //   accessorKey: "venderNo",
+      //   header: "Vender No",
+      // },
 
       {
-        accessorKey: "vehicleRequiredDate",
+        accessorKey: "date",
         header: "Date Req",
         cell: ({ row }) => {
-          const date = new Date(row.original.vehicleRequiredDate);
+          const date = new Date(row.original.date);
           return date.toLocaleDateString();
         },
       },
 
       {
-        accessorKey: "consignorName",
-        header: "Consignor",
+        accessorKey: "expenseCategory",
+        header: "eExpense Category",
       },
 
       {
-        accessorKey: "status",
-        header: "status",
+        accessorKey: "paidAmount",
+        header: "Paid Amount",
       },
       {
-        accessorKey: "loadingPoints",
+        accessorKey: "PaidBy",
 
-        header: "From",
+        header: "Paid By",
       },
       {
-        accessorKey: "unloadingPoints",
+        accessorKey: "remarks",
 
-        header: "To",
+        header: "Remarks",
       },
 
       {
-        accessorKey: "actualWeight",
-        header: "Weight",
+        accessorKey: "serviceCharge",
+        header: "Service Charge",
       },
-      {
-        accessorKey: "createdBy.name",
-        header: "Created By",
-      },
+    
       {
         id: "actions",
         enableHiding: false,

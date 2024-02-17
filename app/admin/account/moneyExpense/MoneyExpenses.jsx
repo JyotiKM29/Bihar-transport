@@ -24,7 +24,7 @@ const MoneyExpenses = () => {
     const fetchData = async () => {
       try {
         if (userId) {
-          const response = await fetch(`/api/getbooking/${userId}`, {
+          const response = await fetch(`/api/accounting/getExpanse/${userId}`, {
             method: "GET",
           });
   
@@ -36,14 +36,10 @@ const MoneyExpenses = () => {
   
           setLoading(false);
   
-          // Check if result.data is an array before applying filter
-          const pendingOrders = Array.isArray(result.data) ? result.data.filter(
-            (order) => order.status === "Pending",
-          ) : [];
+     
+          console.log('Money Expense',result);
   
-          console.log(pendingOrders);
-  
-          setData(pendingOrders);
+          setData(result.data);
         }
       } catch (error) {
         setLoading(false);
