@@ -266,6 +266,7 @@ const vehicleSchema = new mongoose.Schema(
         date: { type: Date },
       },
     ],
+    payment:[],
   },
   { timestamps: true },
 );

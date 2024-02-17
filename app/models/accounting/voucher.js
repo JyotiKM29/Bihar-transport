@@ -13,7 +13,7 @@ const voucherSchema = new mongoose.Schema(
     },
 
     paidTo: {
-      vehicleId: { type: Schema.Types.ObjectId }, // Corrected type definition
+      vehicleId: { type:String }, // Corrected type definition
       vehicleNo: { type: String },
       ownerName: { type: String },
       driverName: { type: String },
@@ -41,17 +41,16 @@ const voucherSchema = new mongoose.Schema(
       adminId: { type: String },
       date: {
         type: Date,
-        default: Date.now(),
+        date: Date.now(),
       },
     },
-    updatedBy: {
+    updatedBy: [{
       name: { type: String },
       adminId: { type: String },
       date: {
         type: Date,
-        default: Date.now(),
       },
-    },
+    }],
   },
   { timestamps: true },
 );
