@@ -24,26 +24,22 @@ const MoneyReceipt = () => {
     const fetchData = async () => {
       try {
         if (userId) {
-          const response = await fetch(`/api/getbooking/${userId}`, {
+          const response = await fetch(`/api/accounting/getReceipt/${userId}`, {
             method: "GET",
           });
+          console.log(response)
   
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
   
           const result = await response.json();
+          console.log(result)
   
           setLoading(false);
   
-          // Check if result.data is an array before applying filter
-          const pendingOrders = Array.isArray(result.data) ? result.data.filter(
-            (order) => order.status === "Pending",
-          ) : [];
-  
-          console.log(pendingOrders);
-  
-          setData(pendingOrders);
+        
+          setData(result.data);
         }
       } catch (error) {
         setLoading(false);
@@ -72,7 +68,8 @@ const MoneyReceipt = () => {
        (<div className="max-w max-h  bg-white"><h2
        className="text-xl"
        >Loading...</h2></div>) :  
-       ( <DataTable columns={columns} data={data} />)}
+       (<DataTable columns={columns} data={data} /> )
+       }
        </>
        }
     </div>
@@ -80,3 +77,5 @@ const MoneyReceipt = () => {
 };
 
 export default MoneyReceipt;
+
+{/* <DataTable columns={columns} data={data} /> */}

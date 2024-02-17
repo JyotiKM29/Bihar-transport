@@ -19,7 +19,7 @@ import BulkPayment from './bulkPayment/BulkPayment'
 const page = () => {
   return (
     <div className="w-full min-h-[95vh] ">
-    <Tabs defaultValue="newLedger" className="relative w-full min-h-full ">
+    <Tabs defaultValue="moneyReceipt" className="relative w-full min-h-full ">
      <TabsList className=" flex justify-center flex-wrap rounded-2xl">
        <TabsTrigger value="newLedger">
        New ledger

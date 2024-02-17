@@ -30,11 +30,7 @@ import { Input } from "../../../components/ui/input";
 export default function ColumnHeader() {
   const { user } = useContext(UserContext);
   const [columns, setColumns] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [vehicleIds, setVehicleIds] = useState([]);
-  const [vehicleData, setVehicleData] = useState();
-
-  const [searchInput, setSearchInput] = useState("");
+  
 
 
   useEffect(() => {
@@ -82,13 +78,13 @@ export default function ColumnHeader() {
         enableHiding: false,
       },
       {
-        accessorKey: "orderNumber",
-        header: "Order Id",
+        accessorKey: "recieptNo",
+        header: "Receipt No",
       },
 
       {
-        accessorKey: "vehicleRequiredDate",
-        header: "Date Req",
+        accessorKey: "recieptDate",
+        header: "Date ",
         cell: ({ row }) => {
           const date = new Date(row.original.vehicleRequiredDate);
           return date.toLocaleDateString();
@@ -96,33 +92,33 @@ export default function ColumnHeader() {
       },
 
       {
-        accessorKey: "consignorName",
-        header: "Consignor",
+        accessorKey: "receivedFrom",
+        header: "Received From",
       },
 
       {
-        accessorKey: "status",
-        header: "status",
+        accessorKey: "paidBy",
+        header: "Paid By",
       },
       {
-        accessorKey: "loadingPoints",
+        accessorKey: "receivedAmount",
 
-        header: "From",
+        header: "Cash",
       },
       {
-        accessorKey: "unloadingPoints",
+        accessorKey: "TDS",
 
-        header: "To",
+        header: "TDS",
       },
 
       {
-        accessorKey: "actualWeight",
-        header: "Weight",
+        accessorKey: "discount",
+        header: "Discount",
       },
-      {
-        accessorKey: "createdBy.name",
-        header: "Created By",
-      },
+      // {
+      //   accessorKey: "createdBy.name",
+      //   header: "Invoice",
+      // },
       {
         id: "actions",
         enableHiding: false,
@@ -138,27 +134,7 @@ export default function ColumnHeader() {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Link href={`/admin/booking/pending-booking/${row.original._id}`}>
-                    View Detail
-                  </Link>
-                </DropdownMenuItem>
-
                
-                <DropdownMenuItem>
-                <Link 
-               href={`/admin/booking/sendInvoice/${row.original._id}`}
-                >
-                   Send Invoice
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                <Link 
-               href={`/admin/booking/${row.original.orderNumber}`}
-                >
-                   Allocation Vehicle
-                  </Link>
-                </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Dialog>
                     <DialogTrigger onClick={(e) => e.stopPropagation()}>
