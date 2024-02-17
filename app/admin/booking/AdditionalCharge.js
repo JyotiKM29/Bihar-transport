@@ -81,27 +81,28 @@ const AdditionalChargers = ({ form, nameValue }) => {
       
       <h2 className="font-semibold text-xl ">  Additional Chargers :</h2>
       {/* Close and Reset button */}
-      <div className="flex items-center gap-3 max-w-md w-full">
+      <div className="flex items-center gap-3 w-full">
         <Button
           type="button"
           variant="secondary"
-          className='flex-1'
+          
+          className='flex-1 text-red-400 bg-red-200 border-2 border-red-300 hover:bg-red-300 hover:text-red-500 '
           onClick={(e) => {
             e.stopPropagation();
-
+            setShowForm(false);
             setCharges([]);
             form.setValue(nameValue, []);
           }}
         >
-          Reset Additional Charges
+         Delete All Additional Chargers
         </Button>
         <Button
           type="button"
-          className='flex-1'
+          className='flex-1  text-green-500 bg-green-100 border-2 border-green-300 hover:bg-green-200 hover:text-green-700 '
           onClick={() => setShowForm(!showForm)}
           variant="secondary"
         >
-          Enter Additional Charge
+          {showForm ? "Close Additional form":"Enter Additional Charge"}
         </Button>
       </div>
 
@@ -190,7 +191,7 @@ const AdditionalChargers = ({ form, nameValue }) => {
             />
            
             <Button
-              className='flex-1 max-w-md w-full'
+              className='flex-1 w-full  text-blue-500 bg-blue-100 border-2 border-blue-300 hover:bg-blue-200 hover:text-blue-700 '
               type="button"
               variant="secondary"
               onClick={handleAdditionalCharge}

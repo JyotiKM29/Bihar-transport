@@ -23,7 +23,7 @@ const LedgerRegistration = () => {
     const fetchData = async () => {
       try {
         if (userId) {
-          const response = await fetch(`/api/getbooking/${userId}`, {
+          const response = await fetch(`/api/accounting/getledger/${userId}`, {
             method: "GET",
           });
 
@@ -38,13 +38,13 @@ const LedgerRegistration = () => {
           setLoading(false);
           console.log(result);
           // Check if result.data is an array before applying filter
-          const pendingOrders = Array.isArray(result.data)
-            ? result.data.filter((order) => order.status === "Pending")
-            : [];
+          // const pendingOrders = Array.isArray(result.data)
+          //   ? result.data.filter((order) => order.status === "Pending")
+          //   : [];
 
-          console.log(pendingOrders);
+          // console.log(pendingOrders);
 
-          setData(pendingOrders);
+          setData(result.data);
         }
       } catch (error) {
         setLoading(false);

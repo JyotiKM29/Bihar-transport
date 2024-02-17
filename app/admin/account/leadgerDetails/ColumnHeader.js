@@ -81,47 +81,36 @@ export default function ColumnHeader() {
         enableSorting: false,
         enableHiding: false,
       },
+      // {
+      //   // accessorKey:row.index + 1 ,
+      //   accessorKey: "index",
+      //   header: "S.No",
+      //    Cell: ({ row }) => row.original.index,
+      // },
       {
-        accessorKey: "orderNumber",
-        header: "Order Id",
+        accessorKey: "basicInfo.accountName",
+        header: "Account Name",
       },
 
       {
-        accessorKey: "vehicleRequiredDate",
-        header: "Date Req",
-        cell: ({ row }) => {
-          const date = new Date(row.original.vehicleRequiredDate);
-          return date.toLocaleDateString();
-        },
+        accessorKey: "basicInfo.officeAddress",
+        header: "Address",
+      },
+
+      
+      {
+        accessorKey: "basicInfo.contactNo",
+
+        header: "Phone No",
       },
 
       {
-        accessorKey: "consignorName",
-        header: "Consignor",
-      },
-
-      {
-        accessorKey: "status",
-        header: "status",
+        accessorKey: "basicInfo.taxInfo.GSTIN",
+        header: "GST No",
       },
       {
-        accessorKey: "loadingPoints",
-
-        header: "From",
-      },
-      {
-        accessorKey: "unloadingPoints",
-
-        header: "To",
-      },
-
-      {
-        accessorKey: "actualWeight",
-        header: "Weight",
-      },
-      {
-        accessorKey: "createdBy.name",
-        header: "Created By",
+        accessorKey: "accountDetails.accountGroup",
+        header: "Account Group",
       },
       {
         id: "actions",
@@ -195,4 +184,5 @@ export default function ColumnHeader() {
 
   return columns;
 }
+
 

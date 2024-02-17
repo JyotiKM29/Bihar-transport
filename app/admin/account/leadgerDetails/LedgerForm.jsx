@@ -383,7 +383,7 @@ const LedgerForm = () => {
 <FieldForm
             form={form}
             name="accountDetails.openingBalance.amount"
-            label="Amount"
+            label="Opening Balance"
             type="number"
           />
 <FieldForm

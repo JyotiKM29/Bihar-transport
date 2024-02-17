@@ -741,7 +741,8 @@ export default function ProfileForm() {
        <div className="my-8 flex flex-col lg:flex-row gap-2 flex-1 justify-center lg:gap-6 items-center">
          <Button
             type="submit"
-            className=" h-16 w-full self-center bg-black text-lg xl:w-1/3"
+            className=" h-16 w-full self-center  text-lg xl:w-1/3 border-2 border-blue-600 bg-blue-100 text-blue-600 hover:text-white/90" 
+           
           >
             {isloading ? "Loading..." : "Save Booking"}
           </Button>
@@ -750,7 +751,7 @@ export default function ProfileForm() {
               onClick={(e) => {
                 setAllocateVehicle(true);
               }}
-            className=" h-16 w-full self-center bg-black text-lg xl:w-1/3"
+            className=" h-16 w-full self-center  text-lg xl:w-1/3"
           >
          
                 {isloading ? "Loading..." : "Save & Allot Vehicle"}
