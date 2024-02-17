@@ -37,7 +37,7 @@ const basicInfoSchema = z.object({
     remarks:z.string(),
     additionalContact:z.string(),
   })
-})
+});
 
 const accountDetailsSchema = z.object({
   accountGroup:z.enum(['Capital Way' , 'Cash in Hand', 'Bank Account','Gross Receipt from Transporter Bussiness Account',
@@ -85,7 +85,7 @@ const additionalContactSchema = z.object({
 const bankDetailsSchema = z.object({
   bankName:z.string(),
   nameOnPassbook:z.string(),
-  accountNo:z.string(),
+  accountNo:z.coerce.number(),
   IFSCCode:z.string(),
   branch:z.string(),
   upiNo:z.string(),
@@ -94,13 +94,14 @@ const bankDetailsSchema = z.object({
 
 const formSchema = z
   .object({
-    // adminId:z.string(),
-    // basicInfo : basicInfoSchema,
-    // accountDetails: accountDetailsSchema,
-    // additionalInfo: additionalInfoSchema,
-    additionalContact:z.array[additionalContactSchema],
-    // bankDetails: bankDetailsSchema,
-    // GSTINAadharCardPanCardDrivingLicence:z.string(),
+    adminId:z.string(),
+    basicInfo : basicInfoSchema,
+    accountDetails: accountDetailsSchema,
+    additionalInfo: additionalInfoSchema.partial(),
+    additionalContact:z.array(additionalContactSchema).optional(),
+
+    bankDetails:bankDetailsSchema.partial(),
+    GSTINAadharCardPanCardDrivingLicence:z.string(),
   
   });
 
@@ -108,6 +109,10 @@ const LedgerForm = () => {
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
+  const [showadditionalInfo , setShowAdditionalInfo] = useState(false);
+const [showadditionalContact , setshowAdditionalContact] = useState(false);
+const[showBankDetail , setShowBankDetail] = useState(false);
+
 
 
   const initialFormState = {
@@ -151,16 +156,10 @@ const LedgerForm = () => {
         alert:undefined,
   
     },
-    additionalContact:{},
+    additionalContact:[],
 
     bankDetails: {
-      bankName:undefined,
-      nameOnPassbook:undefined,
-      accountNo:undefined,
-      IFSCCode:undefined,
-      branch:undefined,
-      upiNo:undefined,
-      upiType:undefined,
+     
     },
     GSTINAadharCardPanCardDrivingLicence:undefined,
   }
@@ -171,7 +170,13 @@ const LedgerForm = () => {
     defaultValues: initialFormState,
   });
 
+  const data ={
+    additionalContact:[
+      {"email":'Abc@gmail.com'}
+    ]
+  }
 
+  // console.log(formSchema.parse(data))
    
   async function myhandleSubmit(value) {
    
@@ -185,33 +190,33 @@ const LedgerForm = () => {
     }
 
     value.adminId = user?._id;
-    // try {
-    //   const response = await fetch("/api/accounting/createledger", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(value),
-    //   });
-    //   console.log(response);
+    try {
+      const response = await fetch("/api/accounting/createledger", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(value),
+      });
+      console.log(response);
     
-    //   const newResult = await response.json();
+      const newResult = await response.json();
     
-    //   if (response.ok) {
-    //     setIsLoading(false);
-    //     displayToast("Successfully registered", "✅");
-    //     // const userDetail = newResult.user;
-    //     form.reset(initialFormState);
-    //   } else {
-    //     console.error("Error:", newResult.message);
-    //     displayToast("Error", "❌", newResult.message);
-    //     setIsLoading(false);
-    //   }
-    // } catch (error) {
-    //   console.error("Error:", error);
-    //   displayToast("Error while sending data", "❌", newResult.message);
-    //   setIsLoading(false);
-    // }
+      if (response.ok) {
+        setIsLoading(false);
+        displayToast("Successfully registered", "✅");
+        // const userDetail = newResult.user;
+        form.reset(initialFormState);
+      } else {
+        console.error("Error:", newResult.message);
+        displayToast("Error", "❌", newResult.message);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      displayToast("Error while sending data", "❌", newResult.message);
+      setIsLoading(false);
+    }
   }
 
   const displayToast = (title, action, description = "") => {
@@ -234,7 +239,7 @@ const LedgerForm = () => {
 
     
 
-<div className="hidden">
+<div className="">
 <h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1"> Basic Info </h2>
 
      <FieldForm
@@ -318,7 +323,7 @@ const LedgerForm = () => {
     </div> 
 
 
-    <div className="hidden">
+    <div className="">
 <h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1"> Account Details </h2>
 
 <FormField
@@ -448,9 +453,68 @@ const LedgerForm = () => {
             label="Credit Limit"
             type="number"
           />
+
+{
+  showBankDetail ?<div className="">
+<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1"  onClick={()=>setShowBankDetail(!showBankDetail)} > Bank Details</h2>
+
+<FieldForm
+            form={form}
+            name="bankDetails.bankName"
+            label="Bank Name"
+            type="text"
+          />
+<FieldForm
+            form={form}
+            name="bankDetails.nameOnPassbook"
+            label="Name On Passbook"
+            type="text"
+          />
+<FieldForm
+            form={form}
+            name="bankDetails.accountNo"
+            label="Account No"
+            type="text"
+          />
+<FieldForm
+            form={form}
+            name="bankDetails.IFSCCode"
+            label="IFSC Code"
+            type="text"
+          />
+<FieldForm
+            form={form}
+            name="bankDetails.branch"
+            label="Branch"
+            type="text"
+          />
+<FieldForm
+            form={form}
+            name="bankDetails.upiNo"
+            label="Upi No"
+            type="text"
+          />
+<FieldForm
+            form={form}
+            name="bankDetails.upiType"
+            label="Upi Type"
+            type="text"
+          />
+
+
+</div>:
+<p className="text-xl  text-center text-blue-500 underline underline-offset-1 my-3" onClick={()=>setShowBankDetail(!showBankDetail)}>Bank detail</p>
+}
+
+
+
+{
+  showadditionalContact?<AdditionalContact form={form} nameValue='additionalContact' setshowAdditionalContact={setshowAdditionalContact} showadditionalContact={showadditionalContact}/>:<p className="text-xl  text-center text-blue-500 underline underline-offset-1" onClick={()=>setshowAdditionalContact(!showadditionalContact)}>Additional Contact  </p>
+}
 </div>
-<div className="hidden">
-<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1">Additional Info </h2>
+{showadditionalInfo ? 
+  <div className="">
+<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1" onClick={()=>setShowAdditionalInfo(!showadditionalInfo)} >Additional Info </h2>
 
 <FieldForm
             form={form}
@@ -499,64 +563,19 @@ const LedgerForm = () => {
           />
 
 </div>
+:<span className="text-xl  text-center text-blue-500 underline underline-offset-1 my-6" onClick={()=>setShowAdditionalInfo(!showadditionalInfo)}>Additional Info </span>
+}
 
 
 
-<div className="hidden">
-<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1"> Bank Details</h2>
 
-<FieldForm
-            form={form}
-            name="bankDetails.bankName"
-            label="Bank Name"
-            type="text"
-          />
-<FieldForm
-            form={form}
-            name="bankDetails.nameOnPassbook"
-            label="Name On Passbook"
-            type="text"
-          />
-<FieldForm
-            form={form}
-            name="bankDetails.accountNo"
-            label="Account No"
-            type="text"
-          />
-<FieldForm
-            form={form}
-            name="bankDetails.IFSCCode"
-            label="IFSC Code"
-            type="text"
-          />
-<FieldForm
-            form={form}
-            name="bankDetails.branch"
-            label="Branch"
-            type="text"
-          />
-<FieldForm
-            form={form}
-            name="bankDetails.upiNo"
-            label="Upi No"
-            type="text"
-          />
-<FieldForm
-            form={form}
-            name="bankDetails.upiType"
-            label="Upi Type"
-            type="text"
-          />
-
-
-</div>
 
 
    
 
 
 
-<AdditionalContact form={form} nameValue='additionalContact' />
+
 
   </div>
 

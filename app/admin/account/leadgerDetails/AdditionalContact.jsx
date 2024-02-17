@@ -10,17 +10,18 @@ import {
     FormLabel,
     FormMessage,
   } from "../../../components/ui/form";
+import { useToast } from "../../../components/ui/use-toast";
 
-const AdditionalContact = ({ form, nameValue }) => {
+const AdditionalContact = ({ form, nameValue ,setshowAdditionalContact,showadditionalContact }) => {
     const [contacts, setContacts] = useState([]);
   const [showForm, setShowForm] = useState(false);
-
+  const { toast } = useToast();
 
   function handleAdditionalContact() {
 
     const newContact = {
         proofType: form.getValues(`${nameValue}[${contacts.length}].proofType`),
-        proofNumber: form.getValues(`${nameValue}[${contacts.length}].qty`),
+        proofNumber: form.getValues(`${nameValue}[${contacts.length}].proofNumber`),
         name: form.getValues(`${nameValue}[${contacts.length}].name`),
         DOB: form.getValues(`${nameValue}[${contacts.length}].DOB`),
 
@@ -34,6 +35,11 @@ const AdditionalContact = ({ form, nameValue }) => {
      
     };
 
+    if(!newContact.proofType && !newContact.proofNumber &&  !newContact.name &&  !newContact.DOB  && !newContact.SDWOf &&  !newContact.ContactNo && !newContact.Address && !newContact.designation && !newContact.email){
+      displayToast("Fill all details", "❌")
+      return ;
+    }
+
     setContacts([...contacts ,newContact]);
     console.log('contacts',contacts)
     form.setValue(nameValue, [...contacts ,newContact])
@@ -41,10 +47,22 @@ const AdditionalContact = ({ form, nameValue }) => {
     setShowForm(false);
   }
 
+
+  const displayToast = (title, action, description = "") => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
+
+
   return (
     <div>
       
-    <h2 className="font-semibold text-xl ">  Additional Contact :</h2>
+    <h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1 my-6" 
+    onClick={()=>setshowAdditionalContact(!showadditionalContact)}
+    >  Additional Contact :</h2>
     {/* Close and Reset button */}
     <div className="flex items-center gap-3 w-full my-2">
       <Button
