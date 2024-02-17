@@ -74,11 +74,11 @@ const MaterialInfo = ({ form, nameValue }) => {
       
       <h2 className="font-semibold text-xl "> Add Materials :</h2>
       {/* Close and Reset button */}
-      <div className="flex items-center gap-3  w-full">
+      <div className="flex items-center gap-3  w-full my-2">
         <Button
           type="button"
           variant="secondary"
-          className='flex-1 text-red-400 bg-red-200 border-2 border-red-300 hover:bg-red-300 hover:text-red-500 '
+          className='flex-1 text-red-400 bg-red-100 border-2 border-red-200 hover:bg-red-200 hover:text-red-500 '
           onClick={() => {
             setItems([]);
             form.setValue(nameValue, []);
@@ -89,11 +89,11 @@ const MaterialInfo = ({ form, nameValue }) => {
         </Button>
         <Button
           type="button"
-          className='flex-1  text-green-500 bg-green-100 border-2 border-green-300 hover:bg-green-200 hover:text-green-700 '
+          className='flex-1  text-green-500 bg-green-100 border-2 border-green-200 hover:bg-green-200 hover:text-green-700 '
           onClick={() => setShowForm(!showForm)}
           variant="secondary"
         >
-         Add Item 
+         {showForm ? "Close" : "Add Item "}
         </Button>
       </div>
 
@@ -172,7 +172,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                   name={`${nameValue}[${items.length}].quantityUnit`}
                   render={({ field }) => {
                     return (
-                      <FormItem className="flex items-center justify-center ">
+                      <FormItem className="flex-1 flex items-center justify-center ">
                         <div className="flex flex-1 flex-col">
                           <FormControl>
                             <select
@@ -229,7 +229,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                   name={`${nameValue}[${items.length}].actualWeightUnit`}
                   render={({ field }) => {
                     return (
-                      <FormItem className="flex items-center justify-center ">
+                      <FormItem className="flex-1 flex items-center justify-center ">
                         <div className="flex flex-1 flex-col">
                           <FormControl>
                             <select
@@ -261,7 +261,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                   name={`${nameValue}[${items.length}].chargedWeight`}
                   render={({ field }) => {
                     return (
-                      <FormItem className="flex items-center justify-center gap-4">
+                      <FormItem className="flex-1 flex items-center justify-center gap-4">
                         <FormLabel className="text-nowrap text-sm lg:text-base">
                           Charged Weight :
                         </FormLabel>
@@ -316,7 +316,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                   name={`${nameValue}[${items.length}].rateAsPer`}
                   render={({ field }) => {
                     return (
-                      <FormItem className="flex items-center justify-center gap-4">
+                      <FormItem className="flex-1 flex items-center justify-center gap-4">
                         <FormLabel className="text-nowrap text-sm lg:text-base">
                          Rate as Per :
                         </FormLabel>
@@ -371,7 +371,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                   name={`${nameValue}[${items.length}].rate`}
                   render={({ field }) => {
                     return (
-                      <FormItem className="flex items-center justify-center gap-4">
+                      <FormItem className=" flex-1 flex items-center justify-center gap-4">
                         <FormLabel className="text-nowrap text-sm lg:text-base">
                           Rate :
                         </FormLabel>
@@ -457,12 +457,12 @@ const MaterialInfo = ({ form, nameValue }) => {
             />
           
            <Button
-                className=' w-full  text-blue-500 bg-blue-100 border-2 border-blue-300 hover:bg-blue-200 hover:text-blue-700 '
+                className=' w-full  text-blue-500 bg-blue-100 border-2 border-blue-200 hover:bg-blue-200 hover:text-blue-700 '
               type="button"
               variant="secondary"
               onClick={handleAdditionalItem}
             >
-             ADD
+             Add Material
             </Button>
           
           </>

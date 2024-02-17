@@ -81,12 +81,7 @@ export default function ColumnHeader() {
         enableSorting: false,
         enableHiding: false,
       },
-      // {
-      //   // accessorKey:row.index + 1 ,
-      //   accessorKey: "index",
-      //   header: "S.No",
-      //    Cell: ({ row }) => row.original.index,
-      // },
+     
       {
         accessorKey: "basicInfo.accountName",
         header: "Account Name",
@@ -125,29 +120,9 @@ export default function ColumnHeader() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                {/* <DropdownMenuLabel>Actions</DropdownMenuLabel> */}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Link href={`/admin/booking/pending-booking/${row.original._id}`}>
-                    View Detail
-                  </Link>
-                </DropdownMenuItem>
-
                
-                <DropdownMenuItem>
-                <Link 
-               href={`/admin/booking/sendInvoice/${row.original._id}`}
-                >
-                   Send Invoice
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                <Link 
-               href={`/admin/booking/${row.original.orderNumber}`}
-                >
-                   Allocation Vehicle
-                  </Link>
-                </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Dialog>
                     <DialogTrigger onClick={(e) => e.stopPropagation()}>

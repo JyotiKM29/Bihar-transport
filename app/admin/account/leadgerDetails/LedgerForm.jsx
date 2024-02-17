@@ -16,6 +16,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
+import { Input } from "../../../components/ui/input";
 
 
 const basicInfoSchema = z.object({
@@ -46,7 +47,7 @@ const accountDetailsSchema = z.object({
   // Openning Balance
   openingBalance: z.object({
     amount:z.coerce.number(),
-    debitCredit:z.string(),
+    debitCredit:z.enum([ 'Debit', 'Credit' ]),
   }),
   creditLimit:z.coerce.number(),
   defaultPaymentTerm:z.string(),
@@ -379,19 +380,60 @@ const LedgerForm = () => {
   }}
 /> 
 
+<div className="flex w-full gap-0">
+<FormField
+                  control={form.control}
+                  name="accountDetails.openingBalance.amount"
+                  render={({ field }) => {
+                    return (
+                      <FormItem className="flex-1 flex items-center justify-center gap-4">
+                        <FormLabel className="text-nowrap text-sm lg:text-base">
+                          Charged Weight :
+                        </FormLabel>
+                        <div className="flex flex-1 flex-col">
+                          <FormControl>
+                            <Input
+                              type="text"
+                              {...field}
+                              placeholder='Enter value of  opening balance'
+                              className=" rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
+                            />
+                          </FormControl>
 
-<FieldForm
-            form={form}
-            name="accountDetails.openingBalance.amount"
-            label="Opening Balance"
-            type="number"
-          />
-<FieldForm
-            form={form}
-            name="accountDetails.openingBalance.debitCredit"
-            label="Debit Credit"
-            type="text"
-          />
+                          <FormMessage />
+                        </div>
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="accountDetails.openingBalance.debitCredit"
+                  render={({ field }) => {
+                    return (
+                      <FormItem className="flex items-center justify-center ">
+                        <div className="flex flex-1 flex-col">
+                          <FormControl>
+                            <select
+                              {...field}
+                              className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                            >
+                             <option value=""> Select Type </option>
+                              
+                              <option value="Debit">Debit</option>
+                              <option value="Credit">Credit</option>
+                             
+                            </select>
+                          </FormControl>
+                          <FormMessage />
+                        </div>
+                      </FormItem>
+                    );
+                  }}
+                />
+              </div>
+
+
 
 
 <FieldForm

@@ -37,12 +37,7 @@ const LedgerRegistration = () => {
 
           setLoading(false);
           console.log(result);
-          // Check if result.data is an array before applying filter
-          // const pendingOrders = Array.isArray(result.data)
-          //   ? result.data.filter((order) => order.status === "Pending")
-          //   : [];
-
-          // console.log(pendingOrders);
+         
 
           setData(result.data);
         }
@@ -58,7 +53,7 @@ const LedgerRegistration = () => {
   return (
     <div className="max-w max-h mt-14 rounded-md  bg-white px-4 py-4 shadow-md md:px-10 lg:my-4 lg:p-8 lg:px-20">
       <div className="flex items-center justify-between">
-        <h2 className="mb-8  text-3xl font-semibold text-orange-400">Ledger Details :</h2>
+        <h2 className="mb-8  text-3xl font-semibold text-orange-500">Ledger Details :</h2>
         <div className="flex gap-3">
           <Button onClick={() => setShowAddForm(!showAddForm)}>
             {!showAddForm ? "New New" : "Ledger detail"}
