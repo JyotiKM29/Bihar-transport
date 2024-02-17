@@ -81,48 +81,38 @@ export default function ColumnHeader() {
         enableSorting: false,
         enableHiding: false,
       },
-      {
-        accessorKey: "orderNumber",
-        header: "Order Id",
-      },
+     
 
       {
-        accessorKey: "vehicleRequiredDate",
-        header: "Date Req",
+        accessorKey: "transferDate",
+        header: "Date",
         cell: ({ row }) => {
-          const date = new Date(row.original.vehicleRequiredDate);
+          const date = new Date(row.original.transferDate);
           return date.toLocaleDateString();
         },
       },
 
       {
-        accessorKey: "consignorName",
-        header: "Consignor",
+        accessorKey: "from",
+        header: "From Account",
       },
 
       {
-        accessorKey: "status",
-        header: "status",
+        accessorKey: "narration",
+        header: "Narration",
       },
       {
-        accessorKey: "loadingPoints",
+        accessorKey: "to",
 
-        header: "From",
+        header: "To Account",
       },
       {
-        accessorKey: "unloadingPoints",
+        accessorKey: "amount",
 
-        header: "To",
+        header: "Amount ",
       },
 
-      {
-        accessorKey: "actualWeight",
-        header: "Weight",
-      },
-      {
-        accessorKey: "createdBy.name",
-        header: "Created By",
-      },
+      
       {
         id: "actions",
         enableHiding: false,

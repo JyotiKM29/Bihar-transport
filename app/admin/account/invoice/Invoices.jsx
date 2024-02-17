@@ -11,12 +11,13 @@ import AddNew from "./AddNew";
 
 const Invoices = () => {
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showPendingForm , setShowPendingForm] = useState(false);
   const [loading , setLoading] = useState(true);
   const columns = ColumnHeader();
 
   const { user } = useContext(UserContext);
 
-  const [data, setData] = useState(null);
+  const [dataPending, setDataPending] = useState(null);
 
   const userId = user?._id;
 
@@ -24,7 +25,7 @@ const Invoices = () => {
     const fetchData = async () => {
       try {
         if (userId) {
-          const response = await fetch(`/api/getbooking/${userId}`, {
+          const response = await fetch(`/api/accounting/pendingPayments/${userId}`, {
             method: "GET",
           });
   
@@ -36,14 +37,9 @@ const Invoices = () => {
   
           setLoading(false);
   
-          // Check if result.data is an array before applying filter
-          const pendingOrders = Array.isArray(result.data) ? result.data.filter(
-            (order) => order.status === "Pending",
-          ) : [];
+          console.log('Invoice',result);
   
-          console.log(pendingOrders);
-  
-          setData(pendingOrders);
+          setDataPending(result.data);
         }
       } catch (error) {
         setLoading(false);
@@ -62,7 +58,7 @@ const Invoices = () => {
           <Button onClick={() => setShowAddForm(!showAddForm)}>
             {!showAddForm ? "New Invoice" : "Back"}
           </Button>
-          <Button > Pending Invoice</Button>
+          <Button onClick={()=>setShowPendingForm(!showPendingForm)}>  {!showAddForm ? "Pending Invoice" : "Disable"}</Button>
         </div>
       </div>
 
@@ -72,7 +68,7 @@ const Invoices = () => {
        (<div className="max-w max-h  bg-white"><h2
        className="text-xl"
        >Loading...</h2></div>) :  
-       ( <DataTable columns={columns} data={data} />)}
+       ( showPendingForm ? (<DataTable columns={columns} data={dataPending} />)  :( <DataTable columns={columns} data={dataPending} />))}
        </>
        }
     </div>
