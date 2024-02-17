@@ -81,33 +81,46 @@ export default function ColumnHeader() {
         enableSorting: false,
         enableHiding: false,
       },
+     
       {
-        accessorKey: "voucherNo",
-        header: "Voucher No",
+        accessorKey: "orderNumber",
+        header: "Order Id",
+      },
+      {
+        accessorKey: "consignorName",
+        header: "Consignor",
+      },
+      {
+        accessorKey: "consigneeName",
+        header: "Consignee",
+      },
+    
+      {
+        accessorKey: "loadingPoints",
+
+        header: "From",
+      },
+      {
+        accessorKey: "unloadingPoints",
+
+        header: "To",
       },
 
       {
-        accessorKey: "paymentDate",
-        header: "Payment Date",
-        cell: ({ row }) => {
-          const date = new Date(row.original.paymentDate);
-          return date.toLocaleDateString();
-        },
+        accessorKey: "paymentTerm",
+        header: "Payment Term",
       },
-
       {
-        accessorKey: "paidTo.driverName",
-        header: "Paid To",
+        accessorKey: "partyBhara",
+        header: "Party Bhara",
       },
-
       {
-        accessorKey: "paidBy",
-        header: "Paid By",
+        accessorKey: "advanceAmount",
+        header: "Received Amount",
       },
-
       {
-        accessorKey: "paidAmount",
-        header: "Paid Amount",
+        accessorKey: "balanceAmount",
+        header: "Due Amount",
       },
       
       {

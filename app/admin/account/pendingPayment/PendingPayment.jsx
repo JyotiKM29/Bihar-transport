@@ -24,7 +24,7 @@ const PaymentVoucher = () => {
     const fetchData = async () => {
       try {
         if (userId) {
-          const response = await fetch(`/api/accounting/getVoucher/${userId}`, {
+          const response = await fetch(`/api/accounting/pendingPayments/${userId}`, {
             method: "GET",
           });
   
@@ -36,9 +36,9 @@ const PaymentVoucher = () => {
   
           setLoading(false);
   
-          console.log('payment Vocher ',result);
+          console.log('pending payment ',result);
   
-          setData(result);
+          setData(result.data);
         }
       } catch (error) {
         setLoading(false);
@@ -52,13 +52,8 @@ const PaymentVoucher = () => {
   return (
     <div className="max-w max-h mt-14 rounded-md  bg-white px-4 py-4 shadow-md md:px-10 lg:my-4 lg:p-8 lg:px-20">
       <div className="flex items-center justify-between">
-        <h2 className="mb-8  text-3xl font-semibold">Payment Vouchers :</h2>
-        <div className="flex gap-3">
-          <Button onClick={() => setShowAddForm(!showAddForm)}>
-            {!showAddForm ? "New Payment Voucher" : "Back"}
-          </Button>
-          <Button > Statements</Button>
-        </div>
+        <h2 className="mb-8  text-3xl font-semibold">Pending Payment  :</h2>
+       
       </div>
 
       {showAddForm ? <AddNew />:
