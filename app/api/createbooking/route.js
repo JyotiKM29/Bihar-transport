@@ -100,20 +100,15 @@ export async function POST(req, res) {
       const update = await ledger.findOne({ "basicInfo.contactNo": consignorMobileNumber });
       if (update) {
 
-        update.accountDetails.totalAmount += balanceAmount;
-        update.accountDetails.totalAmount -= advanceAmount;
+        update.totalAmount += balanceAmount;
+        if (update.advanceAmount) update.advanceAmount += advanceAmount;
+        else update.advanceAmount = advanceAmount;
         
-        if (update.bookingDetails) {
-          update.bookingDetails.push({
+       if(!update.booking )
+          update.booking = [];
+          update.booking.push({
             savedBooking,
           });
-        }
-          else {
-            update.bookingDetails = [];
-            update.bookingDetails.push({
-              savedBooking,
-            });
-        }
         
         await update.save();
         console.log("Ledger Updated:", update);
