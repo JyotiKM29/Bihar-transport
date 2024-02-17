@@ -71,6 +71,10 @@ const ledgerSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  advanceAmount: {
+    type: Number,
+    default: 0,
+  },
 });
 
 mongoose.models = {};
