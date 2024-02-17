@@ -19,7 +19,9 @@ export async function GET(req, context) {
             return Response.json({ message: "Admin not found" }, { status: 404 });
         }
 
-        const pendingPayments = await Booking.find({ status: "Pending" });
+        const pendingPayments = await Booking.find({
+          balanceAmount: { $gt: 0 },
+        });
         return Response.json({ message: "Pending payments fetched successfully", data: pendingPayments }, { status: 200 });
 
     } catch (error) {
