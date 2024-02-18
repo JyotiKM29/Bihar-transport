@@ -51,9 +51,9 @@ const MoneyExpenses = () => {
   }, [userId]);
 
   return (
-    <div className="max-w max-h mt-14 rounded-md  bg-white px-4 py-4 shadow-md md:px-10 lg:my-4 lg:p-8 lg:px-20">
+    <div className="max-w max-h mt-14 rounded-2xl  bg-white px-4 py-4 shadow-lg md:px-10 lg:my-4 lg:p-8 lg:px-20">
       <div className="flex items-center justify-between">
-        <h2 className="mb-8  text-3xl font-semibold">Manage Expenses :</h2>
+        <h2 className="mb-8  text-3xl font-semibold text-orange-500">Manage Expenses :</h2>
         <div className="flex gap-3">
           <Button onClick={() => setShowAddForm(!showAddForm)}>
             {!showAddForm ? "New Manage Expense" : "Back"}
