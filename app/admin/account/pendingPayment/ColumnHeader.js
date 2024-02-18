@@ -82,10 +82,11 @@ export default function ColumnHeader() {
         enableHiding: false,
       },
      
-      // {
-      //   accessorKey: "orderNumber",
-      //   header: "Order Id",
-      // },
+      {
+        // accessorKey: "",
+        header: "S.No",
+        cell: ({ row }) => (row.index + 1),
+      },
       {
         accessorKey: "consignorName",
         header: "Consignor",
@@ -122,74 +123,86 @@ export default function ColumnHeader() {
         accessorKey: "balanceAmount",
         header: "Due ",
       },
-      
-      {
-        id: "actions",
+      {id: "actions",
         enableHiding: false,
         cell: ({ row }) => {
-          return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
-                  <DotsHorizontalIcon className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Link href={`/admin/booking/pending-booking/${row.original._id}`}>
-                    View Detail
-                  </Link>
-                </DropdownMenuItem>
+        return ( 
+          <Link className="bg-green-300 px-4 py-1 rounded-2xl"
+          href={`/admin/account/pendingPayment/${row.original._id}`}
+          >Collect</Link>
+        );
+          },
+      
+
+      }
+      
+      // {
+      //   id: "actions",
+      //   enableHiding: false,
+      //   cell: ({ row }) => {
+      //     return (
+      //       <DropdownMenu>
+      //         <DropdownMenuTrigger asChild>
+      //           <Button variant="ghost" className="h-8 w-8 p-0">
+      //             <span className="sr-only">Open menu</span>
+      //             <DotsHorizontalIcon className="h-4 w-4" />
+      //           </Button>
+      //         </DropdownMenuTrigger>
+      //         <DropdownMenuContent align="end">
+      //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+      //           <DropdownMenuSeparator />
+      //           <DropdownMenuItem>
+      //             <Link href={`/admin/booking/pending-booking/${row.original._id}`}>
+      //               View Detail
+      //             </Link>
+      //           </DropdownMenuItem>
 
                
-                <DropdownMenuItem>
-                <Link 
-               href={`/admin/booking/sendInvoice/${row.original._id}`}
-                >
-                   Send Invoice
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                <Link 
-               href={`/admin/booking/${row.original.orderNumber}`}
-                >
-                   Allocation Vehicle
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Dialog>
-                    <DialogTrigger onClick={(e) => e.stopPropagation()}>
-                      Delete Data
-                    </DialogTrigger>
-                    <DialogContent className="flex flex-col justify-center">
-                      <DialogHeader>
-                        <DialogTitle>Confirm Delete ?</DialogTitle>
-                      </DialogHeader>
-                      <DialogDescription>
-                        This data row will delete permanently from the database
-                        and you cannot access it again.
-                      </DialogDescription>
-                      <DialogFooter>
-                        <Button
-                          type="submit"
-                          onClick={() => {
-                            deleteData(row.original._id, user);
-                          }}
-                        >
-                          Confirm
-                        </Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          );
-        },
-      },
+      //           <DropdownMenuItem>
+      //           <Link 
+      //          href={`/admin/booking/sendInvoice/${row.original._id}`}
+      //           >
+      //              Send Invoice
+      //             </Link>
+      //           </DropdownMenuItem>
+      //           <DropdownMenuItem>
+      //           <Link 
+      //          href={`/admin/booking/${row.original.orderNumber}`}
+      //           >
+      //              Allocation Vehicle
+      //             </Link>
+      //           </DropdownMenuItem>
+      //           <DropdownMenuItem>
+      //             <Dialog>
+      //               <DialogTrigger onClick={(e) => e.stopPropagation()}>
+      //                 Delete Data
+      //               </DialogTrigger>
+      //               <DialogContent className="flex flex-col justify-center">
+      //                 <DialogHeader>
+      //                   <DialogTitle>Confirm Delete ?</DialogTitle>
+      //                 </DialogHeader>
+      //                 <DialogDescription>
+      //                   This data row will delete permanently from the database
+      //                   and you cannot access it again.
+      //                 </DialogDescription>
+      //                 <DialogFooter>
+      //                   <Button
+      //                     type="submit"
+      //                     onClick={() => {
+      //                       deleteData(row.original._id, user);
+      //                     }}
+      //                   >
+      //                     Confirm
+      //                   </Button>
+      //                 </DialogFooter>
+      //               </DialogContent>
+      //             </Dialog>
+      //           </DropdownMenuItem>
+      //         </DropdownMenuContent>
+      //       </DropdownMenu>
+      //     );
+      //   },
+      // },
     ]);
   }, [user]);
 

@@ -20,7 +20,7 @@ import PendingPayment from './pendingPayment/PendingPayment'
 const page = () => {
   return (
     <div className="w-full min-h-[95vh] ">
-    <Tabs defaultValue="bulkPayment" className="relative w-full min-h-full ">
+    <Tabs defaultValue="pendingPayment" className="relative w-full min-h-full ">
      <TabsList className=" flex justify-center flex-wrap rounded-2xl">
        <TabsTrigger value="newLedger">
        New ledger

@@ -39,7 +39,7 @@ export function DataTable({ columns, data }) {
   return (
     <div className="max-w max-h  bg-white" >
 
-      <div className="rounded-md border  mt-8">
+      <div className="rounded-md border w-full  mt-8">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -166,7 +166,7 @@ function Filter({ column, table }) {
           placeholder="min"
           className="h-8 w-14 rounded border shadow"
         />
-        <Input
+        {/* <Input
           type="number"
           value={columnFilterValue?.[1] ?? ""}
           onChange={(e) =>
@@ -174,7 +174,7 @@ function Filter({ column, table }) {
           }
           placeholder="max"
           className="h-8 w-14 rounded border shadow"
-        />
+        /> */}
       </div>
     );
   } else {
