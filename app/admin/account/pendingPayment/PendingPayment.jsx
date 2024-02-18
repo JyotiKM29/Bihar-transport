@@ -51,7 +51,7 @@ const PaymentVoucher = () => {
   return (
     <div className="max-w max-h mt-14 rounded-2xl shadow-lg bg-white px-4 py-4  md:px-10 lg:my-4 lg:p-8 lg:px-10">
       <div className="flex items-center justify-between">
-        <h2 className="mb-8  text-3xl font-semibold">Pending Payment  :</h2>
+        <h2 className="mb-2  text-3xl font-semibold">Pending Payment  :</h2>
        
       </div>
 

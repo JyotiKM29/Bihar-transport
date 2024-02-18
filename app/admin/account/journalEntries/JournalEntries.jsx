@@ -56,7 +56,7 @@ const JournalEntries = () => {
         <h2 className="mb-8  text-3xl font-semibold">Journal Entries :</h2>
         <div className="flex gap-3">
           <Button onClick={() => setShowAddForm(!showAddForm)}>
-            {!showAddForm ? "New New" : "Back"}
+            {!showAddForm ? "New Journal Entry" : "Back"}
           </Button>
           
         </div>

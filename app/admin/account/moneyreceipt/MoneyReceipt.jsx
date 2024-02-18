@@ -56,7 +56,7 @@ const MoneyReceipt = () => {
         <h2 className="mb-8  text-3xl font-semibold">Money Receipt :</h2>
         <div className="flex gap-3">
           <Button onClick={() => setShowAddForm(!showAddForm)}>
-            {!showAddForm ? "Add New " : "Back"}
+            {!showAddForm ? "Add New Money Receipt " : "Back"}
           </Button>
           <Button variant="secondary"> Statements</Button>
         </div>

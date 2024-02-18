@@ -55,7 +55,7 @@ const PaymentVoucher = () => {
         <h2 className="mb-8  text-3xl font-semibold">Payment Vouchers :</h2>
         <div className="flex gap-3">
           <Button onClick={() => setShowAddForm(!showAddForm)}>
-            {!showAddForm ? "New Payment Voucher" : "Back"}
+            {!showAddForm ? "Add New Payment Voucher" : "Back"}
           </Button>
           <Button > Statements</Button>
         </div>

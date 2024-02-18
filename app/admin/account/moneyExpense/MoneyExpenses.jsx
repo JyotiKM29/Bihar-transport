@@ -56,7 +56,7 @@ const MoneyExpenses = () => {
         <h2 className="mb-8  text-3xl font-semibold">Manage Expenses :</h2>
         <div className="flex gap-3">
           <Button onClick={() => setShowAddForm(!showAddForm)}>
-            {!showAddForm ? "New New" : "Back"}
+            {!showAddForm ? "New Manage Expense" : "Back"}
           </Button>
           
         </div>
