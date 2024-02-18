@@ -57,7 +57,7 @@ const PaymentVoucher = () => {
           <Button onClick={() => setShowAddForm(!showAddForm)}>
             {!showAddForm ? "Add New Payment Voucher" : "Back"}
           </Button>
-          <Button > Statements</Button>
+          {/* <Button > Statements</Button> */}
         </div>
       </div>
 

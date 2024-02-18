@@ -58,7 +58,7 @@ const MoneyReceipt = () => {
           <Button onClick={() => setShowAddForm(!showAddForm)}>
             {!showAddForm ? "Add New Money Receipt " : "Back"}
           </Button>
-          <Button variant="secondary"> Statements</Button>
+          {/* <Button variant="secondary"> Statements</Button> */}
         </div>
       </div>
 
