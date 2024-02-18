@@ -1,8 +1,7 @@
-import { Book } from "lucide-react";
 import connectDB from "../../../middleware/connectDB";
 import user from "../../../models/usermodel";
 import Booking from "../../../models/bookingmodel";
-import { date } from "zod";
+// import { date } from "zod";
 
 
 export async function POST(req, res) {
@@ -29,7 +28,7 @@ export async function POST(req, res) {
         if(booking.balanceAmount < paidAmount){
             return Response.json({ message: "Paid amount is greater than balance amount" }, { status: 400 });
         }
-        const date = new Date();
+        const date = paymentDate? paymentDate : new Date();
 
         booking.balanceAmount -= paidAmount;
         const newPayment= {
