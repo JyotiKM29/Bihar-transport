@@ -12,8 +12,9 @@ export async function POST(req, res) {
             basicInfo,
             accountDetails,
             additionalInfo,
+            additionalContact,
             bankDetails,
-            GSTINAadharCardPanCardDrivingLicence
+            // GSTINAadharCardPanCardDrivingLicence
         } = await req.json();
 
         await connectDB();  
@@ -34,8 +35,9 @@ export async function POST(req, res) {
                 basicInfo,
                 accountDetails,
                 additionalInfo,
+                additionalContact,
                 bankDetails,
-                GSTINAadharCardPanCardDrivingLicence,
+                // GSTINAadharCardPanCardDrivingLicence,
                 createdBy: {
                     id: adminId,
                     name: admin.name,
