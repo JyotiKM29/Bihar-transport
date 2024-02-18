@@ -24,7 +24,7 @@ const BulkPayment = () => {
     const fetchData = async () => {
       try {
         if (userId) {
-          const response = await fetch(`/api/getbooking/${userId}`, {
+          const response = await fetch(`/api/accounting/getBulkPayment/${userId}`, {
             method: "GET",
           });
   
@@ -36,14 +36,10 @@ const BulkPayment = () => {
   
           setLoading(false);
   
-          // Check if result.data is an array before applying filter
-          const pendingOrders = Array.isArray(result.data) ? result.data.filter(
-            (order) => order.status === "Pending",
-          ) : [];
+         
+          console.log('Bulk payment ',result);
   
-          console.log(pendingOrders);
-  
-          setData(pendingOrders);
+          setData(result.data);
         }
       } catch (error) {
         setLoading(false);
@@ -61,7 +57,7 @@ const BulkPayment = () => {
 :</h2>
         <div className="flex gap-3">
           <Button onClick={() => setShowAddForm(!showAddForm)}>
-            {!showAddForm ? "Add New " : "Back"}
+            {!showAddForm ? "Add New Bulk Payments " : "Back"}
           </Button>
          
         </div>
