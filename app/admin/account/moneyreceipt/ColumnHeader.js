@@ -86,7 +86,7 @@ export default function ColumnHeader() {
         accessorKey: "recieptDate",
         header: "Date ",
         cell: ({ row }) => {
-          const date = new Date(row.original.vehicleRequiredDate);
+          const date = new Date(row.original.recieptDate);
           return date.toLocaleDateString();
         },
       },

@@ -5,7 +5,14 @@ import * as z from "zod";
 import FieldForm from "../../component/FieldForm";
 import { Button } from "../../../components/ui/button";
 import { Textarea } from "../../../components/ui/textarea";
-
+import SearchLedger from './SearchLedger';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
 import {
   Form,
   FormControl,
@@ -19,18 +26,18 @@ import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
 
 const formSchema = z.object({
-  receivedDate: z.coerce.date(),
+  adminId: z.string(),
+  date: z.coerce.date(),
+  
+  ledgerId: z.string(),
+
+  recieveAmount: z.coerce.number(),
+
   receivedFrom: z.string(),
 
-  receivedAmount: z.coerce.number(),
+  paymentMode:z.string(),
 
-  tdsAmount: z.optional(z.coerce.number()),
-
-  discountAmount: z.optional(z.coerce.number()).default(0),
-
-  paidBy: z.string(),
-
-  narration: z.string(),
+  remarks: z.string(),
 });
 
 const AddNew = () => {
@@ -39,18 +46,20 @@ const AddNew = () => {
   const { user } = useContext(UserContext);
 
   const initialFormState = {
-    receivedDate:new Date().toISOString().split("T")[0],
-  receivedFrom: undefined,
+    adminId:'',
+    date:new Date().toISOString().split("T")[0],
+  ledgerId: undefined,
 
-  receivedAmount:undefined,
+  recieveAmount:undefined,
+  receivedFrom:undefined,
 
-  tdsAmount:undefined ,
 
-  discountAmount:undefined,
 
-  paidBy:undefined ,
 
-  narration:undefined,
+
+  paymentMode:undefined ,
+
+  remarks:undefined,
   };
 
   const form = useForm({
@@ -58,7 +67,7 @@ const AddNew = () => {
     defaultValues: initialFormState,
   });
 
-  function myhandleSubmit(value) {
+  async function myhandleSubmit(value) {
     console.log(formSchema.safeParse(value));
 
     try {
@@ -67,7 +76,45 @@ const AddNew = () => {
     } catch (error) {
       console.log("hi", error);
     }
+
+  
+    value.adminId = user?._id;
+    try {
+      const response = await fetch("/api/accounting/bulkReceive", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(value),
+      });
+      console.log(response);
+    
+      const newResult = await response.json();
+    
+      if (response.ok) {
+        setIsLoading(false);
+        displayToast("Successfully New Bulk Created", "✅");
+        // const userDetail = newResult.user;
+        form.reset(initialFormState);
+      } else {
+        console.error("Error:", newResult.message);
+        displayToast("Error", "❌", newResult.message);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      displayToast("Error while sending data", "❌", newResult.message);
+      setIsLoading(false);
+    }
   }
+
+  const displayToast = (title, action, description = "") => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
 
   return (
     <Form {...form}>
@@ -75,65 +122,77 @@ const AddNew = () => {
         <h2 className="text-center  text-xl font-semibold">
         New Bulk receive :
         </h2>
+
+        <FormField
+                control={form.control}
+                name="receivedFrom"
+                
+                render={({ field }) => (
+                  <SearchLedger
+                 
+                    form={form}
+                    field={field}
+                    label='Received From'
+                  />
+                )}
+              /> 
         <FieldForm 
         form={form} 
-        name="receivedDate" 
+        name="date" 
         label="Received Date"
          type="date" />
 
-        <FieldForm 
+        {/* <FieldForm 
         form={form} 
         label="Received From" 
-        name="receivedFrom"
-         type="text" />
+        name="ledgerId"
+         type="text" /> */}
 
 
         <FieldForm 
         form={form} 
-        name="receivedAmount" 
+        name="recieveAmount" 
         label="Received Amount"
          type="number" />
+<FormField
+            control={form.control}
+            name="paymentMode"
+            render={({ field }) => {
+              return (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="text-nowrap text-sm lg:text-base">
+                  Paid By :
+                  </FormLabel>
+                  <Select
+                    className="flex flex-1 flex-col"
+                    onValueChange={field.onChange}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Paid By" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="CASH">CASH</SelectItem>
+                      <SelectItem value="BANK">BANK</SelectItem>
+                      <SelectItem value="SBI">STATE BANK OF INDIA (SBI) </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+
+  
 
         <FieldForm 
         form={form} 
-        name="tdsAmount" 
-        label="TDS Amount"
-         type="number" />
-
-
-        <FieldForm 
-        form={form} 
-        name="discountAmount" 
-        label="Discount Amount"
-         type="text" />
-
-        <FieldForm 
-        form={form} 
-        name="paidBy" 
-        label="Paid By"
+        name="remarks" 
+        label="Remarks"
          type="text" />
 
   
-        <FormField
-                control={form.control}
-                name="narration"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base ">
-                      Narration :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Textarea  {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-
 
 
 

@@ -35,7 +35,7 @@ const basicInfoSchema = z.object({
     principalPlaceOfBusiness:z.string(),
     rating:z.string(),
     remarks:z.string(),
-    additionalContact:z.string(),
+    
   })
 });
 
@@ -101,7 +101,6 @@ const formSchema = z
     additionalContact:z.array(additionalContactSchema).optional(),
 
     bankDetails:bankDetailsSchema.partial(),
-    GSTINAadharCardPanCardDrivingLicence:z.string(),
   
   });
 
@@ -313,12 +312,7 @@ const[showBankDetail , setShowBankDetail] = useState(false);
             label="Remarks"
             type="text"
           />
-     <FieldForm
-            form={form}
-            name="basicInfo.taxInfo.additionalContact"
-            label="Additional Contact"
-            type="text"
-          />
+ 
     
     </div> 
 

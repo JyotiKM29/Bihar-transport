@@ -3,15 +3,15 @@
 import { Button } from "../../../components/ui/button";
 
 import React, { useContext, useEffect, useState } from "react";
-import ColumnHeader from './ColumnHeader';
-import { DataTable } from '../data-table';
+import ColumnHeader from "./ColumnHeader";
+import { DataTable } from "../data-table";
 
 import { UserContext } from "../../../context/UserContextProvider";
 import AddNew from "./AddNew";
 
 const BulkReceive = () => {
   const [showAddForm, setShowAddForm] = useState(false);
-  const [loading , setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const columns = ColumnHeader();
 
   const { user } = useContext(UserContext);
@@ -24,33 +24,28 @@ const BulkReceive = () => {
     const fetchData = async () => {
       try {
         if (userId) {
-          const response = await fetch(`/api/getbooking/${userId}`, {
-            method: "GET",
-          });
-  
+          const response = await fetch(
+            `/api/accounting/bulkReceive/${userId}`,
+            {
+              method: "GET",
+            },
+          );
+
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
-  
+
           const result = await response.json();
-  
-          setLoading(false);
-  
-          // Check if result.data is an array before applying filter
-          const pendingOrders = Array.isArray(result.data) ? result.data.filter(
-            (order) => order.status === "Pending",
-          ) : [];
-  
-          console.log(pendingOrders);
-  
-          setData(pendingOrders);
+          console.log("Bulk Receive", result);
+           setLoading(false);
+          setData(result.data);
         }
       } catch (error) {
         setLoading(false);
         console.error("Error:", error);
       }
     };
-  
+
     fetchData();
   }, [userId]);
 
@@ -60,21 +55,24 @@ const BulkReceive = () => {
         <h2 className="mb-8  text-3xl font-semibold">Manage Bulk Receives :</h2>
         <div className="flex gap-3">
           <Button onClick={() => setShowAddForm(!showAddForm)}>
-            {!showAddForm ? "Add New " : "Back"}
+            {!showAddForm ? "Add New Bulk Receive " : " Back "}
           </Button>
-         
         </div>
       </div>
 
-      {showAddForm ? <AddNew />:
-<>
-     { loading ?
-       (<div className="max-w max-h  bg-white"><h2
-       className="text-xl"
-       >Loading...</h2></div>) :  
-       ( <DataTable columns={columns} data={data} />)}
-       </>
-       }
+      {showAddForm ? (
+        <AddNew />
+      ) : (
+        <>
+          {loading ? (
+            <div className="max-w max-h  bg-white">
+              <h2 className="text-xl">Loading...</h2>
+            </div>
+          ) : (
+            <DataTable columns={columns} data={data} />
+          )}
+        </>
+      )}
     </div>
   );
 };
