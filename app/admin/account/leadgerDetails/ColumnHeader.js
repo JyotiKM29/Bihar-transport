@@ -81,47 +81,31 @@ export default function ColumnHeader() {
         enableSorting: false,
         enableHiding: false,
       },
+     
       {
-        accessorKey: "orderNumber",
-        header: "Order Id",
+        accessorKey: "basicInfo.accountName",
+        header: "Account Name",
       },
 
       {
-        accessorKey: "vehicleRequiredDate",
-        header: "Date Req",
-        cell: ({ row }) => {
-          const date = new Date(row.original.vehicleRequiredDate);
-          return date.toLocaleDateString();
-        },
+        accessorKey: "basicInfo.officeAddress",
+        header: "Address",
+      },
+
+      
+      {
+        accessorKey: "basicInfo.contactNo",
+
+        header: "Phone No",
       },
 
       {
-        accessorKey: "consignorName",
-        header: "Consignor",
-      },
-
-      {
-        accessorKey: "status",
-        header: "status",
+        accessorKey: "basicInfo.taxInfo.GSTIN",
+        header: "GST No",
       },
       {
-        accessorKey: "loadingPoints",
-
-        header: "From",
-      },
-      {
-        accessorKey: "unloadingPoints",
-
-        header: "To",
-      },
-
-      {
-        accessorKey: "actualWeight",
-        header: "Weight",
-      },
-      {
-        accessorKey: "createdBy.name",
-        header: "Created By",
+        accessorKey: "accountDetails.accountGroup",
+        header: "Account Group",
       },
       {
         id: "actions",
@@ -136,29 +120,9 @@ export default function ColumnHeader() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                {/* <DropdownMenuLabel>Actions</DropdownMenuLabel> */}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Link href={`/admin/booking/pending-booking/${row.original._id}`}>
-                    View Detail
-                  </Link>
-                </DropdownMenuItem>
-
                
-                <DropdownMenuItem>
-                <Link 
-               href={`/admin/booking/sendInvoice/${row.original._id}`}
-                >
-                   Send Invoice
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                <Link 
-               href={`/admin/booking/${row.original.orderNumber}`}
-                >
-                   Allocation Vehicle
-                  </Link>
-                </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Dialog>
                     <DialogTrigger onClick={(e) => e.stopPropagation()}>
@@ -195,4 +159,5 @@ export default function ColumnHeader() {
 
   return columns;
 }
+
 

@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import FieldForm from "../../component/FieldForm";
 import { Button } from "../../../components/ui/button";
+import AdditionalContact from './AdditionalContact';
 
 import {
   Form,
@@ -36,7 +37,7 @@ const basicInfoSchema = z.object({
     remarks:z.string(),
     additionalContact:z.string(),
   })
-})
+});
 
 const accountDetailsSchema = z.object({
   accountGroup:z.enum(['Capital Way' , 'Cash in Hand', 'Bank Account','Gross Receipt from Transporter Bussiness Account',
@@ -50,25 +51,33 @@ const accountDetailsSchema = z.object({
     debitCredit:z.enum([ 'Debit', 'Credit' ]),
   }),
   creditLimit:z.coerce.number(),
-  defaultPaymentTerm:z.string(),
-  serviceToStates:z.string(),
-  typeOfVehicle:z.string(),
-  attachId:z.string(),
-  alert:z.string(),
+  
 })
 
 const additionalInfoSchema = z.object({
 
   tripType:z.string(),
   route:z.string(),
+  defaultPaymentTerm:z.string(),
+  serviceToStates:z.string(),
+  typeOfVehicle:z.string(),
+  attachId:z.string(),
+  alert:z.string(),
+
+
+ 
+})
+
+const additionalContactSchema = z.object({
   proofType:z.string(),
   proofNumber:z.coerce.number(),
   name:z.string(),
   DOB:z.coerce.date(),
   SDWOf:z.string(),
-  proofContactNo:z.string(),
-  proofAddress:z.string(),
-  proofAddress:z.string(),
+ ContactNo:z.coerce.number().min(999999999,'Contact no not less than 10 digits').max(9999999999,'Contact no is not more than 10 digits'),
+ alternativeContactNo:z.coerce.number().min(999999999,'Contact no not less than 10 digits').max(9999999999,'Contact no is not more than 10 digits').optional(),
+ Address:z.string(),
+  
   designation:z.string(),
   email:z.string().email(),
 })
@@ -76,7 +85,7 @@ const additionalInfoSchema = z.object({
 const bankDetailsSchema = z.object({
   bankName:z.string(),
   nameOnPassbook:z.string(),
-  accountNo:z.string(),
+  accountNo:z.coerce.number(),
   IFSCCode:z.string(),
   branch:z.string(),
   upiNo:z.string(),
@@ -88,8 +97,10 @@ const formSchema = z
     adminId:z.string(),
     basicInfo : basicInfoSchema,
     accountDetails: accountDetailsSchema,
-    additionalInfo: additionalInfoSchema,
-    bankDetails: bankDetailsSchema,
+    additionalInfo: additionalInfoSchema.partial(),
+    additionalContact:z.array(additionalContactSchema).optional(),
+
+    bankDetails:bankDetailsSchema.partial(),
     GSTINAadharCardPanCardDrivingLicence:z.string(),
   
   });
@@ -98,6 +109,10 @@ const LedgerForm = () => {
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
+  const [showadditionalInfo , setShowAdditionalInfo] = useState(false);
+const [showadditionalContact , setshowAdditionalContact] = useState(false);
+const[showBankDetail , setShowBankDetail] = useState(false);
+
 
 
   const initialFormState = {
@@ -129,34 +144,22 @@ const LedgerForm = () => {
           debitCredit:undefined,
         },
         creditLimit:undefined,
-        defaultPaymentTerm:undefined,
-        serviceToStates:undefined,
-        typeOfVehicle:undefined,
-        attachId:undefined,
-        alert:undefined,
+        
     },
     additionalInfo: {
       tripType:undefined,
   route:undefined,
-  proofType:undefined,
-  proofNumber:undefined,
-  name:undefined,
-  DOB:undefined,
-  SDWOf:undefined,
-  proofContactNo:undefined,
-  proofAddress:undefined,
-  proofAddress:undefined,
-  designation:undefined,
-  email:undefined,
+  defaultPaymentTerm:undefined,
+        serviceToStates:undefined,
+        typeOfVehicle:undefined,
+        attachId:undefined,
+        alert:undefined,
+  
     },
+    additionalContact:[],
+
     bankDetails: {
-      bankName:undefined,
-      nameOnPassbook:undefined,
-      accountNo:undefined,
-      IFSCCode:undefined,
-      branch:undefined,
-      upiNo:undefined,
-      upiType:undefined,
+     
     },
     GSTINAadharCardPanCardDrivingLicence:undefined,
   }
@@ -167,7 +170,13 @@ const LedgerForm = () => {
     defaultValues: initialFormState,
   });
 
+  const data ={
+    additionalContact:[
+      {"email":'Abc@gmail.com'}
+    ]
+  }
 
+  // console.log(formSchema.parse(data))
    
   async function myhandleSubmit(value) {
    
@@ -236,7 +245,7 @@ const LedgerForm = () => {
      <FieldForm
             form={form}
             name="basicInfo.accountName"
-            label="Account Name"
+            label="Account/Ledger Name"
             type="text"
           />
     
@@ -250,7 +259,7 @@ const LedgerForm = () => {
      <FieldForm
             form={form}
             name="basicInfo.officeAddress"
-            label="Office Address"
+            label="Office/Store Address"
             type="text"
           />
 
@@ -312,6 +321,8 @@ const LedgerForm = () => {
           />
     
     </div> 
+
+
     <div className="">
 <h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1"> Account Details </h2>
 
@@ -388,12 +399,12 @@ const LedgerForm = () => {
                     return (
                       <FormItem className="flex-1 flex items-center justify-center gap-4">
                         <FormLabel className="text-nowrap text-sm lg:text-base">
-                          Charged Weight :
+                          Opening Balance :
                         </FormLabel>
                         <div className="flex flex-1 flex-col">
                           <FormControl>
                             <Input
-                              type="text"
+                              type="number"
                               {...field}
                               placeholder='Enter value of  opening balance'
                               className=" rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
@@ -442,39 +453,10 @@ const LedgerForm = () => {
             label="Credit Limit"
             type="number"
           />
-<FieldForm
-            form={form}
-            name="accountDetails.defaultPaymentTerm"
-            label="Default PaymentTerm"
-            type="text"
-          />
-<FieldForm
-            form={form}
-            name="accountDetails.serviceToStates"
-            label="Service To States"
-            type="text"
-          />
-<FieldForm
-            form={form}
-            name="accountDetails.typeOfVehicle"
-            label="type Of Vehicle"
-            type="text"
-          />
-<FieldForm
-            form={form}
-            name="accountDetails.attachId"
-            label="Attach Id"
-            type="text"
-          />
-<FieldForm
-            form={form}
-            name="accountDetails.alert"
-            label="Alert"
-            type="text"
-          />
-</div>
-<div className="">
-<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1"> Bank Details</h2>
+
+{
+  showBankDetail ?<div className="">
+<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1 my-6"  onClick={()=>setShowBankDetail(!showBankDetail)} > Bank Details</h2>
 
 <FieldForm
             form={form}
@@ -519,17 +501,21 @@ const LedgerForm = () => {
             type="text"
           />
 
-<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1">ID proof</h2>
 
-<FieldForm
-            form={form}
-            name="GSTINAadharCardPanCardDrivingLicence"
-            label="Id proof"
-            type="text"
-          />
-</div>
-    <div className="">
-<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1">Additional Info </h2>
+</div>:
+<p className="text-xl  text-center text-blue-500 underline underline-offset-1 my-6" onClick={()=>setShowBankDetail(!showBankDetail)}>Bank detail</p>
+}
+
+
+
+{
+  showadditionalContact?<AdditionalContact form={form} nameValue='additionalContact' setshowAdditionalContact={setshowAdditionalContact} showadditionalContact={showadditionalContact}/>:<p className="text-xl  text-center text-blue-500 underline underline-offset-1 my-6" onClick={()=>setshowAdditionalContact(!showadditionalContact)}>Additional Contact  </p>
+}
+
+
+{showadditionalInfo ? 
+  <div className="">
+<h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1 my-3" onClick={()=>setShowAdditionalInfo(!showadditionalInfo)} >Additional Info </h2>
 
 <FieldForm
             form={form}
@@ -543,61 +529,52 @@ const LedgerForm = () => {
             label="Route"
             type="text"
           />
+
+
+
 <FieldForm
             form={form}
-            name="additionalInfo.proofType"
-            label="Proof Type"
+            name="additionalInfo.defaultPaymentTerm"
+            label="Default PaymentTerm"
             type="text"
           />
 <FieldForm
             form={form}
-            name="additionalInfo.proofNumber"
-            label=" Proof Number"
-            type="number"
-          />
-<FieldForm
-            form={form}
-            name="additionalInfo.name"
-            label="Name"
+            name="additionalInfo.serviceToStates"
+            label="Service To States"
             type="text"
           />
 <FieldForm
             form={form}
-            name="additionalInfo.DOB"
-            label="DOB"
-            type="date"
-          />
-<FieldForm
-            form={form}
-            name="additionalInfo.SDWOf"
-            label="SDWOf"
+            name="additionalInfo.typeOfVehicle"
+            label="type Of Vehicle"
             type="text"
           />
 <FieldForm
             form={form}
-            name="additionalInfo.proofContactNo"
-            label="Proof ContactNo"
+            name="additionalInfo.attachId"
+            label="Attach Id"
             type="text"
           />
 <FieldForm
             form={form}
-            name="additionalInfo.proofAddress"
-            label="Proof Address"
+            name="additionalInfo.alert"
+            label="Alert"
             type="text"
           />
-<FieldForm
-            form={form}
-            name="additionalInfo.designation"
-            label="Designation"
-            type="text"
-          />
-<FieldForm
-            form={form}
-            name="additionalInfo.email"
-            label="Email"
-            type="text"
-          />
+
 </div>
+:<p className="text-xl  text-center text-blue-500 underline underline-offset-1 my-3" onClick={()=>setShowAdditionalInfo(!showadditionalInfo)}>Additional Info </p>
+}
+</div>
+
+
+
+
+
+
+
+   
 
 
 
@@ -610,6 +587,8 @@ const LedgerForm = () => {
 </div>
 
 
+
+
      
         </form>
       </Form>
@@ -618,3 +597,4 @@ const LedgerForm = () => {
 }
 
 export default LedgerForm
+

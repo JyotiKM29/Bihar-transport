@@ -1,5 +1,5 @@
 "use client";
-import LedgerForm from "./LedgerForm";
+import LedgerForm from "./LedgerForm2";
 import { Button } from "../../../components/ui/button";
 
 import React, { useContext, useEffect, useState } from "react";
@@ -9,7 +9,7 @@ import { DataTable } from "../data-table";
 import { UserContext } from "../../../context/UserContextProvider";
 
 const LedgerRegistration = () => {
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(true);
   const [loading, setLoading] = useState(true);
   const columns = ColumnHeader();
 
@@ -23,11 +23,11 @@ const LedgerRegistration = () => {
     const fetchData = async () => {
       try {
         if (userId) {
-          const response = await fetch(`/api/getbooking/${userId}`, {
+          const response = await fetch(`/api/accounting/getledger/${userId}`, {
             method: "GET",
           });
 
-          console.log("response", response);
+          // console.log("response", response);
 
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -36,15 +36,10 @@ const LedgerRegistration = () => {
           const result = await response.json();
 
           setLoading(false);
-          console.log(result);
-          // Check if result.data is an array before applying filter
-          const pendingOrders = Array.isArray(result.data)
-            ? result.data.filter((order) => order.status === "Pending")
-            : [];
+          // console.log(result);
+         
 
-          console.log(pendingOrders);
-
-          setData(pendingOrders);
+          setData(result.data);
         }
       } catch (error) {
         setLoading(false);
@@ -58,10 +53,10 @@ const LedgerRegistration = () => {
   return (
     <div className="max-w max-h mt-14 rounded-md  bg-white px-4 py-4 shadow-md md:px-10 lg:my-4 lg:p-8 lg:px-20">
       <div className="flex items-center justify-between">
-        <h2 className="mb-8  text-3xl font-semibold">Ledger Details :</h2>
+        <h2 className="mb-8  text-3xl font-semibold text-orange-500">Ledger Details :</h2>
         <div className="flex gap-3">
           <Button onClick={() => setShowAddForm(!showAddForm)}>
-            {!showAddForm ? "New New" : "Back"}
+            {!showAddForm ? "Add New ledger " : "Ledger detail"}
           </Button>
         </div>
       </div>

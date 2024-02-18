@@ -25,14 +25,17 @@ import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
 
 const formSchema = z.object({
-  receivedDate: z.coerce.date(),
+ 
+  adminId:z.string(),
+  recieptNo:z.string(),
+  recieptDate: z.coerce.date(),
   receivedFrom: z.string(),
 
   receivedAmount: z.coerce.number(),
 
-  tdsAmount: z.optional(z.coerce.number()),
+  TDS: z.optional(z.coerce.number()),
 
-  discountAmount: z.optional(z.coerce.number()).default(0),
+  discount: z.optional(z.coerce.number()).default(0),
 
   paidBy: z.enum(['CASH','BANK','SBI' ]),
 
@@ -45,14 +48,16 @@ const AddNew = () => {
   const { user } = useContext(UserContext);
 
   const initialFormState = {
-    receivedDate:new Date().toISOString().split("T")[0],
+  adminId:'',
+  recieptNo:undefined,
+    recieptDate:new Date().toISOString().split("T")[0],
   receivedFrom: undefined,
 
   receivedAmount:undefined,
 
-  tdsAmount:undefined ,
+  TDS:undefined ,
 
-  discountAmount:undefined,
+  discount:undefined,
 
   paidBy:undefined ,
 
@@ -64,7 +69,7 @@ const AddNew = () => {
     defaultValues: initialFormState,
   });
 
-  function myhandleSubmit(value) {
+  async function myhandleSubmit(value) {
     console.log(formSchema.safeParse(value));
 
     try {
@@ -73,8 +78,45 @@ const AddNew = () => {
     } catch (error) {
       console.log("hi", error);
     }
+
+  
+    value.adminId = user?._id;
+    try {
+      const response = await fetch("/api/accounting/createReceipt", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(value),
+      });
+      console.log(response);
+    
+      const newResult = await response.json();
+    
+      if (response.ok) {
+        setIsLoading(false);
+        displayToast("Successfully registered", "✅");
+        // const userDetail = newResult.user;
+        form.reset(initialFormState);
+      } else {
+        console.error("Error:", newResult.message);
+        displayToast("Error", "❌", newResult.message);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      displayToast("Error while sending data", "❌", newResult.message);
+      setIsLoading(false);
+    }
   }
 
+  const displayToast = (title, action, description = "") => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(myhandleSubmit)}>
@@ -83,7 +125,13 @@ const AddNew = () => {
         </h2>
         <FieldForm 
         form={form} 
-        name="receivedDate" 
+        name="recieptNo" 
+        label="Reciept No"
+         type="text" />
+
+        <FieldForm 
+        form={form} 
+        name="recieptDate" 
         label="Received Date"
          type="date" />
 
@@ -102,14 +150,14 @@ const AddNew = () => {
 
         <FieldForm 
         form={form} 
-        name="tdsAmount" 
+        name="TDS" 
         label="TDS Amount"
          type="number" />
 
 
         <FieldForm 
         form={form} 
-        name="discountAmount" 
+        name="discount" 
         label="Discount Amount"
          type="text" />
 

@@ -19,10 +19,11 @@ import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
 
 const formSchema = z.object({
+  adminId: z.string(),
   date: z.coerce.date(),
   expenseCategory: z.string(),
 
-  expenseAccount: z.string(),
+  serviceAccount: z.string(),
   serviceCharge: z.coerce.number(),
   paidAmount: z.coerce.number(),
 
@@ -40,10 +41,11 @@ const AddNew = () => {
   const { user } = useContext(UserContext);
 
   const initialFormState = {
+    adminId: "",
     date:new Date().toISOString().split("T")[0],
     expenseCategory: undefined,
 
-    expenseAccount:undefined,
+    serviceAccount:undefined,
 
     serviceCharge:undefined ,
 
@@ -59,7 +61,7 @@ const AddNew = () => {
     defaultValues: initialFormState,
   });
 
-  function myhandleSubmit(value) {
+  async function myhandleSubmit(value) {
     console.log(formSchema.safeParse(value));
 
     try {
@@ -68,7 +70,43 @@ const AddNew = () => {
     } catch (error) {
       console.log("hi", error);
     }
+    value.adminId = user?._id;
+    try {
+      const response = await fetch("/api/accounting/createExpanse", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(value),
+      });
+      console.log(response);
+    
+      const newResult = await response.json();
+    
+      if (response.ok) {
+        setIsLoading(false);
+        displayToast("Successfully registered", "✅");
+        // const userDetail = newResult.user;
+        form.reset(initialFormState);
+      } else {
+        console.error("Error:", newResult.message);
+        displayToast("Error", "❌", newResult.message);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      displayToast("Error while sending data", "❌", newResult.message);
+      setIsLoading(false);
+    }
   }
+
+  const displayToast = (title, action, description = "") => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
 
   return (
     <Form {...form}>
@@ -91,9 +129,9 @@ const AddNew = () => {
 
         <FieldForm 
         form={form} 
-        name="expenseAccount" 
+        name="serviceAccount" 
         label="Expense Account"
-         type="number" />
+         type="text" />
 
         <FieldForm 
         form={form} 

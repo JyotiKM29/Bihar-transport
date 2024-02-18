@@ -383,6 +383,7 @@ export default function ProfileForm() {
 
               </Link>
 </div>
+  <div className="flex items-center gap-0">
  <FormField
                 control={form.control}
                 name="consigneeName"
@@ -392,9 +393,14 @@ export default function ProfileForm() {
                     field={field}
                     personName="consigneeName"
                   />
+                  
                 )}
               />
-             
+               <Link href='/admin/booking/new-regesitration' className="border h-10 text-base text-nowrap px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">
+              <FiPlus  className="h-full w-full"/>
+
+              </Link>
+              </div>
 
               <FormField
                 control={form.control}
@@ -741,7 +747,8 @@ export default function ProfileForm() {
        <div className="my-8 flex flex-col lg:flex-row gap-2 flex-1 justify-center lg:gap-6 items-center">
          <Button
             type="submit"
-            className=" h-16 w-full self-center bg-black text-lg xl:w-1/3"
+            className=" h-16 w-full self-center  text-lg xl:w-1/3 border-2 border-blue-600 bg-blue-100 text-blue-600 hover:text-white/90" 
+           
           >
             {isloading ? "Loading..." : "Save Booking"}
           </Button>
@@ -750,7 +757,7 @@ export default function ProfileForm() {
               onClick={(e) => {
                 setAllocateVehicle(true);
               }}
-            className=" h-16 w-full self-center bg-black text-lg xl:w-1/3"
+            className=" h-16 w-full self-center  text-lg xl:w-1/3"
           >
          
                 {isloading ? "Loading..." : "Save & Allot Vehicle"}

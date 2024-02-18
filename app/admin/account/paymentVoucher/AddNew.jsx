@@ -19,12 +19,13 @@ import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
 
 const formSchema = z.object({
+  adminId:z.string(),
   paymentDate: z.coerce.date(),
   paidTo: z.string(),
 
   paidAmount: z.coerce.number(),
 
-  tdsAmount: z.optional(z.coerce.number()),
+  TDS: z.optional(z.coerce.number()),
 
   
 
@@ -39,12 +40,13 @@ const AddNew = () => {
   const { user } = useContext(UserContext);
 
   const initialFormState = {
+    adminId:"",
     paymentDate:new Date().toISOString().split("T")[0],
     paidTo: undefined,
 
     paidAmount:undefined,
 
-  tdsAmount:undefined ,
+  TDS:undefined ,
 
 
 
@@ -58,7 +60,7 @@ const AddNew = () => {
     defaultValues: initialFormState,
   });
 
-  function myhandleSubmit(value) {
+  async function myhandleSubmit(value) {
     console.log(formSchema.safeParse(value));
 
     try {
@@ -67,7 +69,43 @@ const AddNew = () => {
     } catch (error) {
       console.log("hi", error);
     }
+    value.adminId = user?._id;
+    try {
+      const response = await fetch("/api/accounting/createVoucher", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(value),
+      });
+      console.log(response);
+    
+      const newResult = await response.json();
+    
+      if (response.ok) {
+        setIsLoading(false);
+        displayToast("Successfully registered", "✅");
+        // const userDetail = newResult.user;
+        form.reset(initialFormState);
+      } else {
+        console.error("Error:", newResult.message);
+        displayToast("Error", "❌", newResult.message);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      displayToast("Error while sending data", "❌", newResult.message);
+      setIsLoading(false);
+    }
   }
+
+  const displayToast = (title, action, description = "") => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
 
   return (
     <Form {...form}>
@@ -96,7 +134,7 @@ const AddNew = () => {
 
         <FieldForm 
         form={form} 
-        name="tdsAmount" 
+        name="TDS" 
         label="TDS Amount"
          type="number" />
 
