@@ -17,6 +17,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
+import SearchVOD from "./SearchVOD";
 
 const formSchema = z.object({
   adminId:z.string(),
@@ -119,12 +120,20 @@ const AddNew = () => {
         label="Payment Date"
          type="date" />
 
-        <FieldForm 
-        form={form} 
-        name="paidTo" 
-        label="Paid To"
-         type="text" />
 
+<FormField
+                control={form.control}
+                name="paidTo" 
+                
+                render={({ field }) => (
+                  <SearchVOD
+                 
+                    form={form}
+                    field={field}
+                    label='Paid To'
+                  />
+                )}
+              />
 
         <FieldForm 
         form={form} 
