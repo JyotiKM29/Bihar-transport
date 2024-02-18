@@ -5,6 +5,15 @@ import * as z from "zod";
 import FieldForm from "../../component/FieldForm";
 import { Button } from "../../../components/ui/button";
 import { Textarea } from "../../../components/ui/textarea";
+import SearchExpenseCategory from './SearchExpenseCategory'
+import SearchVOD from './SearchVOD';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
 
 import {
   Form,
@@ -17,6 +26,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
+import Link from "next/link";
 
 const formSchema = z.object({
   adminId: z.string(),
@@ -119,19 +129,55 @@ const AddNew = () => {
         name="date" 
         label="Date"
          type="date" />
-
+{/* 
         <FieldForm 
         form={form} 
         label="Expense Category" 
         name="expenseCategory"
-         type="text" />
+         type="text" /> */}
+         <div className="flex items-center">
+
+<FormField
+                control={form.control}
+                 name="expenseCategory"
+                
+                render={({ field }) => (
+                  <SearchExpenseCategory
+                 
+                    form={form}
+                    field={field}
+                    label="Expense Category" 
+                  />
+                )}
+              /> 
+  <Link href='/admin/account/moneyExpense' className="p-1.5 px-3 border bg-slate-100 bottom-2 rounded-md h-10 font-semibold text-slate-500">
+Add New
+              </Link> 
+
+</div>
 
 
-        <FieldForm 
-        form={form} 
-        name="serviceAccount" 
-        label="Expense Account"
-         type="text" />
+<div className="flex items-center">
+
+<FormField
+                control={form.control}
+                name="serviceAccount" 
+                
+                render={({ field }) => (
+                  <SearchVOD
+                 
+                    form={form}
+                    field={field}
+                    label="Expense Account" 
+                  />
+                )}
+              /> 
+  <Link href='/admin/vehicle' className="p-1.5 px-3 border bg-slate-100 bottom-2 rounded-md h-10 font-semibold text-slate-500">
+Add New
+              </Link> 
+
+</div>
+
 
         <FieldForm 
         form={form} 
@@ -146,11 +192,36 @@ const AddNew = () => {
         label="Paid Amount"
          type="text" />
 
-        <FieldForm 
-        form={form} 
-        name="paidBy" 
-        label="Paid By"
-         type="text" />
+
+<FormField
+            control={form.control}
+            name="paidBy"
+            render={({ field }) => {
+              return (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="text-nowrap text-sm lg:text-base">
+                  Paid By :
+                  </FormLabel>
+                  <Select
+                    className="flex flex-1 flex-col"
+                    onValueChange={field.onChange}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Paid By" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="CASH">CASH</SelectItem>
+                      <SelectItem value="BANK">BANK</SelectItem>
+                      <SelectItem value="SBI">STATE BANK OF INDIA (SBI) </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
 
         <FieldForm 
         form={form} 

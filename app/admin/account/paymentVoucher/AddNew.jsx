@@ -5,7 +5,13 @@ import * as z from "zod";
 import FieldForm from "../../component/FieldForm";
 import { Button } from "../../../components/ui/button";
 import { Textarea } from "../../../components/ui/textarea";
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
 import {
   Form,
   FormControl,
@@ -27,7 +33,7 @@ const formSchema = z.object({
   paidAmount: z.coerce.number(),
 
   TDS: z.optional(z.coerce.number()),
-
+  vehicleId:z.string(),
   
 
   paidBy: z.string(),
@@ -48,7 +54,7 @@ const AddNew = () => {
     paidAmount:undefined,
 
   TDS:undefined ,
-
+  vehicleId:'',
 
 
   paidBy:undefined ,
@@ -149,11 +155,36 @@ const AddNew = () => {
 
 
 
-        <FieldForm 
-        form={form} 
-        name="paidBy" 
-        label="Paid By"
-         type="text" />
+       
+<FormField
+            control={form.control}
+            name="paidBy"
+            render={({ field }) => {
+              return (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="text-nowrap text-sm lg:text-base">
+                  Paid By :
+                  </FormLabel>
+                  <Select
+                    className="flex flex-1 flex-col"
+                    onValueChange={field.onChange}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Paid By" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="CASH">CASH</SelectItem>
+                      <SelectItem value="BANK">BANK</SelectItem>
+                      <SelectItem value="SBI">STATE BANK OF INDIA (SBI) </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
 
   
         <FormField

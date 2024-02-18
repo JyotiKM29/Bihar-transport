@@ -29,7 +29,7 @@ const voucherSchema = new mongoose.Schema(
 
     paidBy: {
       type: String,
-      enum: ["Bank", "Cash", "UPI"],
+      enum: ["BANK", "CASH", "SBI"],
     },
 
     narration: {

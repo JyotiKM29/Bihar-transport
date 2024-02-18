@@ -152,7 +152,7 @@ const AddNew = () => {
                 )}
               />
               <Link href='/admin/account/leadgerDetails' className="p-1.5 px-3 border bg-slate-100 bottom-2 rounded-md h-10 font-semibold text-slate-500">
-ADD
+Add New
               </Link> 
 
 </div>

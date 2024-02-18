@@ -108,9 +108,8 @@ const SearchVOD = ({ form, field, label  }) => {
 
                     if(result?.vehicleNo){
                         setInputValue(result?.vehicleNo)
-                 
-                  form.setValue('paidTo', result?.vehicleNo);
-                  form.setValue('vehicleId', result?._id);
+           
+                  form.setValue('serviceAccount', result?.vehicleNo);
                   
                   setSearchResult([]);
                   setSearchTerm("");
