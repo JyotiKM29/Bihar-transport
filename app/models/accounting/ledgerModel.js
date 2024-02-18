@@ -1,5 +1,21 @@
 const mongoose = require('mongoose');
 
+
+const additionalContactSchema = new mongoose.Schema({
+  proofType: { type: String },
+  proofNumber: { type: Number },
+  name: { type: String },
+  DOB: { type: Date },
+  SDWOf: { type: String },
+  ContactNo: { type: Number },
+  alternativeContactNo: { type: Number },
+  Address: { type: String },
+  designation: { type: String },
+  email: { type: String },
+  proofPhoto: { type: String },
+});
+
+
 const ledgerSchema = new mongoose.Schema({
   basicInfo: {
     accountName: String,
@@ -25,25 +41,18 @@ const ledgerSchema = new mongoose.Schema({
       debitCredit: String, //dropdown
     },
     creditLimit: Number,
+  },
+  additionalInfo: {
+    tripType: String,
+    route: String,
     defaultPaymentTerm: String,
     serviceToStates: String,
     typeOfVehicle: String,
     attachId: String,
     alert: String,
   },
-  additionalInfo: {
-    tripType: String,
-    route: String,
-    proofType: String,
-    proofNumber: Number,
-    name: String,
-    DOB: Date,
-    SDWOf: String,
-    proofContactNo: Number,
-    proofAddress: String,
-    designation: String,
-    email: String,
-  },
+  additionalContact: [additionalContactSchema],
+  
   bankDetails: {
     bankName: String,
     nameOnPassbook: String,
@@ -53,7 +62,7 @@ const ledgerSchema = new mongoose.Schema({
     upiNo: String,
     upiType: String,
   },
-  GSTINAadharCardPanCardDrivingLicence: String, //dropdown
+  // GSTINAadharCardPanCardDrivingLicence: String, //dropdown
   createdBy: {
     id: String,
     name: String,
