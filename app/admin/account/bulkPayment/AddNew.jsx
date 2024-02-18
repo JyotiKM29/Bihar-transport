@@ -85,7 +85,7 @@ const AddNew = () => {
     
       if (response.ok) {
         setIsLoading(false);
-        displayToast("Successfully New Bulk Payment Created", "✅");
+        displayToast("Successfull", "✅");
         // const userDetail = newResult.user;
         form.reset(initialFormState);
       } else {
@@ -95,7 +95,7 @@ const AddNew = () => {
       }
     } catch (error) {
       console.error("Error:", error);
-      displayToast("Error while sending data", "❌", newResult.message);
+      displayToast("Error ", "❌", newResult.message);
       setIsLoading(false);
     }
   }
