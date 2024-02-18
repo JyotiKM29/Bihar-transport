@@ -23,6 +23,8 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
+import SearchLedger from "../bulkReceive/SearchLedger";
+import Link from "next/link";
 
 const formSchema = z.object({
  
@@ -135,13 +137,25 @@ const AddNew = () => {
         label="Received Date"
          type="date" />
 
-        <FieldForm 
-        form={form} 
-        label="Received From" 
-        name="receivedFrom"
-         type="text" />
+<div className="flex items-center">
+<FormField
+                control={form.control}
+                name="receivedFrom"
+                
+                render={({ field }) => (
+                  <SearchLedger
+                 
+                    form={form}
+                    field={field}
+                    label='Received From'
+                  />
+                )}
+              />
+              <Link href='/admin/account/leadgerDetails' className="p-1.5 px-3 border bg-slate-100 bottom-2 rounded-md h-10 font-semibold text-slate-500">
+ADD
+              </Link> 
 
-
+</div>
         <FieldForm 
         form={form} 
         name="receivedAmount" 

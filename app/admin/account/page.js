@@ -6,7 +6,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "../../components/ui/tabs";
-import LedgerRegistration from './leadgerDetails/LedgerRegistration'
+import LedgerRegistration from './leadgerDetails/page'
 import MoneyReceipt from './moneyreceipt/MoneyReceipt'
 import Invoices from './invoice/Invoices'
 import MoneyTransfer from './moneytransfer/MoneyTransfer'
@@ -20,7 +20,7 @@ import PendingPayment from './pendingPayment/PendingPayment'
 const page = () => {
   return (
     <div className="w-full min-h-[95vh] ">
-    <Tabs defaultValue="pendingPayment" className="relative w-full min-h-full ">
+    <Tabs defaultValue="newLedger" className="relative w-full min-h-full ">
      <TabsList className=" flex justify-center flex-wrap rounded-2xl">
        <TabsTrigger value="newLedger">
        New ledger
