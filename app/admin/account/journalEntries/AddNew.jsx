@@ -53,7 +53,15 @@ const AddNew = () => {
     defaultValues: initialFormState,
   });
 
-  function myhandleSubmit(value) {
+  form.watch('debit', 0);
+let debitAmount = form.getValues('debit');
+
+useEffect(() => {
+  form.setValue('credit', debitAmount);
+}, [debitAmount]);
+
+
+  async function myhandleSubmit(value) {
     console.log(formSchema.safeParse(value));
 
     try {
@@ -62,7 +70,43 @@ const AddNew = () => {
     } catch (error) {
       console.log("hi", error);
     }
+    value.adminId = user?._id;
+    try {
+      const response = await fetch("/api/accounting/journalEntries", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(value),
+      });
+      console.log(response);
+    
+      const newResult = await response.json();
+    
+      if (response.ok) {
+        setIsLoading(false);
+        displayToast("Successfully added new expanse", "✅");
+        // const userDetail = newResult.user;
+        form.reset(initialFormState);
+      } else {
+        console.error("Error:", newResult.message);
+        displayToast("Error", "❌ ", newResult.message);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      displayToast("Error", "❌ ", newResult.message);
+      setIsLoading(false);
+    }
   }
+
+  const displayToast = (title, action, description = "") => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
 
   return (
     <Form {...form}>

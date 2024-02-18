@@ -55,7 +55,7 @@ const MoneyTransfer = () => {
         <h2 className="mb-8  text-3xl font-semibold">Money Transfers(Contra) :</h2>
         <div className="flex gap-3">
           <Button onClick={() => setShowAddForm(!showAddForm)}>
-            {!showAddForm ? "Add New " : "Back"}
+            {!showAddForm ? "Add New Money Transfers " : "Back"}
           </Button>
           
         </div>
