@@ -166,6 +166,12 @@ const AdditionalContact = ({ form, nameValue ,setshowAdditionalContact,showaddit
             />
 <FieldForm
               form={form}
+              name={"file"}
+              label="Proof Image "
+              type="file"
+            />
+<FieldForm
+              form={form}
               name={`${nameValue}[${contacts.length}].name`}
               label="Name"
               type="text"

@@ -24,7 +24,7 @@ const JournalEntries = () => {
     const fetchData = async () => {
       try {
         if (userId) {
-          const response = await fetch(`/api/getbooking/${userId}`, {
+          const response = await fetch(`/api/accounting/journalEntries/${userId}`, {
             method: "GET",
           });
   
@@ -36,14 +36,10 @@ const JournalEntries = () => {
   
           setLoading(false);
   
-          // Check if result.data is an array before applying filter
-          const pendingOrders = Array.isArray(result.data) ? result.data.filter(
-            (order) => order.status === "Pending",
-          ) : [];
+       console.log('Journal Entry',result);
+          
   
-          console.log(pendingOrders);
-  
-          setData(pendingOrders);
+          setData(result);
         }
       } catch (error) {
         setLoading(false);

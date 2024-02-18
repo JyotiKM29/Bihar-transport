@@ -24,7 +24,7 @@ const basicInfoSchema = z.object({
   contactNo:z.coerce.number().min(999999999,'Contact no not less than 10 digits').max(9999999999,'Contact no is not more than 10 digits'),
   officeAddress:z.string(),
 
-  // texInfo :
+  // taxInfo :
   taxInfo: z.object({
     GSTIN:z.string(),
     PanNo:z.string(),
@@ -38,6 +38,7 @@ const basicInfoSchema = z.object({
   })
 })
 
+
 const accountDetailsSchema = z.object({
   accountGroup:z.enum(['Capital Way' , 'Cash in Hand', 'Bank Account','Gross Receipt from Transporter Bussiness Account',
 'Cost of Transporting Account' ,'Indirect Expenses', 'Sundry Debtor' ,'Sundry  Creditor','Duties and Taxes ','Customers', 'Vehicle Vendor ', 'Transporter', 'Petrol Pump'] ,"please select from given options"),
@@ -50,28 +51,31 @@ const accountDetailsSchema = z.object({
     debitCredit:z.enum([ 'Debit', 'Credit' ]),
   }),
   creditLimit:z.coerce.number(),
-  defaultPaymentTerm:z.string(),
-  serviceToStates:z.string(),
-  typeOfVehicle:z.string(),
-  attachId:z.string(),
-  alert:z.string(),
+  // defaultPaymentTerm:z.string(),
+  // serviceToStates:z.string(),
+  // typeOfVehicle:z.string(),
+  // attachId:z.string(),
+  // alert:z.string(),
 })
 
 const additionalInfoSchema = z.object({
 
   tripType:z.string(),
   route:z.string(),
-  proofType:z.string(),
-  proofNumber:z.coerce.number(),
-  name:z.string(),
-  DOB:z.coerce.date(),
-  SDWOf:z.string(),
-  proofContactNo:z.string(),
-  proofAddress:z.string(),
-  proofAddress:z.string(),
-  designation:z.string(),
-  email:z.string().email(),
+  // proofType:z.string(),
+  // proofNumber:z.coerce.number(),
+  // name:z.string(),
+  // DOB:z.coerce.date(),
+  // SDWOf:z.string(),
+  // proofContactNo:z.string(),
+  // proofAddress:z.string(),
+  // proofAddress:z.string(),
+  // designation:z.string(),
+  // email:z.string().email(),
 })
+
+
+// additionalContactSchema is not created
 
 const bankDetailsSchema = z.object({
   bankName:z.string(),
@@ -89,8 +93,9 @@ const formSchema = z
     basicInfo : basicInfoSchema,
     accountDetails: accountDetailsSchema,
     additionalInfo: additionalInfoSchema,
+    // additionalContact is array
     bankDetails: bankDetailsSchema,
-    GSTINAadharCardPanCardDrivingLicence:z.string(),
+    // GSTINAadharCardPanCardDrivingLicence:z.string(),
   
   });
 

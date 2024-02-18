@@ -17,17 +17,17 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
+import { Input } from "../../../components/ui/input";
 
 const formSchema = z.object({
-  entryDate: z.coerce.date(),
-  fromAccount: z.string(),
-  fromAmount:z.coerce.number(),
+ adminId:z.string(),
+ date:z.coerce.date(),
+ from:z.string(),
+ to:z.string(),
+ debit:z.coerce.number(),
+ credit:z.coerce.number(),
+ narration:z.string(),
 
-  toAccount: z.string(),
-  toAmount:z.coerce.number(),
-
-
-  narration: z.string(),
 });
 
 const AddNew = () => {
@@ -36,12 +36,14 @@ const AddNew = () => {
   const { user } = useContext(UserContext);
 
   const initialFormState = {
-    entryDate:new Date().toISOString().split("T")[0],
-    fromAccount: undefined,
-    fromAmount: undefined,
-    toAccount:undefined,
-    toAmount: undefined,
-    narration:undefined ,
+  
+    adminId:'',
+ date:new Date().toISOString().split("T")[0],
+ from:undefined,
+ to:undefined,
+ debit:undefined,
+ credit:undefined,
+ narration:undefined,
 
    
   };
@@ -70,37 +72,55 @@ const AddNew = () => {
         </h2>
         <FieldForm 
         form={form} 
-        name="entryDate" 
-        label="Entry Date"
+        name="date" 
+        label="Date"
          type="date" />
 
+
+
+
+<div className=" flex flex-col md:flex-row w-full gap-4">
+<div className="flex-1">
 <FieldForm 
         form={form} 
-        name="fromAccount" 
+        name="from" 
         label="From Account"
          type="text" />
+</div>
 
-
-        <FieldForm 
+<div className="flex-1">
+<FieldForm 
         form={form} 
-        name="fromAmount" 
-        label="From Amount"
+        name="debit" 
+        label="Debit"
          type="number" />
-
-        <FieldForm 
-        form={form} 
-        name="toAccount" 
-        label="To Account "
-         type="text" />
-
-
-        <FieldForm 
-        form={form} 
-        name="toAmount" 
-        label="To Amount"
-         type="number" />
+</div>
 
        
+
+</div>
+
+
+<div className=" flex flex-col md:flex-row w-full gap-4">
+<div className="flex-1">
+<FieldForm 
+        form={form} 
+        name="to" 
+        label="To Account"
+         type="text" />
+</div>
+
+<div className="flex-1">
+<FieldForm 
+        form={form} 
+        name="credit" 
+        label="Credit"
+         type="number" />
+</div>
+
+       
+
+</div>
 
 <FormField
                 control={form.control}

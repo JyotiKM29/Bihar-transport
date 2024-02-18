@@ -82,114 +82,120 @@ export default function ColumnHeader() {
         enableHiding: false,
       },
       {
-        accessorKey: "orderNumber",
-        header: "Order Id",
+        header: "S.No",
+        cell: ({ row }) => (row.index + 1),
       },
 
       {
-        accessorKey: "vehicleRequiredDate",
+        accessorKey: "date",
         header: "Date Req",
         cell: ({ row }) => {
-          const date = new Date(row.original.vehicleRequiredDate);
+          const date = new Date(row.original.date);
           return date.toLocaleDateString();
         },
       },
 
       {
-        accessorKey: "consignorName",
-        header: "Consignor",
+        accessorKey: "from",
+        header: "From Account",
       },
 
       {
-        accessorKey: "status",
-        header: "status",
+        accessorKey: "to",
+        header: "To Account",
       },
+     
       {
-        accessorKey: "loadingPoints",
+        accessorKey: "voucherNo",
 
-        header: "From",
-      },
-      {
-        accessorKey: "unloadingPoints",
-
-        header: "To",
+        header: "Voucher No",
       },
 
       {
-        accessorKey: "actualWeight",
-        header: "Weight",
+        accessorKey: "credit",
+        header: "Credit",
       },
       {
-        accessorKey: "createdBy.name",
-        header: "Created By",
+        accessorKey: "debit",
+        header: "Debit",
       },
+
       {
-        id: "actions",
-        enableHiding: false,
-        cell: ({ row }) => {
-          return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
-                  <DotsHorizontalIcon className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Link href={`/admin/booking/pending-booking/${row.original._id}`}>
-                    View Detail
-                  </Link>
-                </DropdownMenuItem>
+        // accessorKey: "",
+
+        header: "Source",
+        cell:({row})=>(
+          <p>Journal</p>
+        ),
+      },
+      
+      // {
+      //   id: "actions",
+      //   enableHiding: false,
+      //   cell: ({ row }) => {
+      //     return (
+      //       <DropdownMenu>
+      //         <DropdownMenuTrigger asChild>
+      //           <Button variant="ghost" className="h-8 w-8 p-0">
+      //             <span className="sr-only">Open menu</span>
+      //             <DotsHorizontalIcon className="h-4 w-4" />
+      //           </Button>
+      //         </DropdownMenuTrigger>
+      //         <DropdownMenuContent align="end">
+      //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+      //           <DropdownMenuSeparator />
+      //           <DropdownMenuItem>
+      //             <Link href={`/admin/booking/pending-booking/${row.original._id}`}>
+      //               View Detail
+      //             </Link>
+      //           </DropdownMenuItem>
 
                
-                <DropdownMenuItem>
-                <Link 
-               href={`/admin/booking/sendInvoice/${row.original._id}`}
-                >
-                   Send Invoice
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                <Link 
-               href={`/admin/booking/${row.original.orderNumber}`}
-                >
-                   Allocation Vehicle
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Dialog>
-                    <DialogTrigger onClick={(e) => e.stopPropagation()}>
-                      Delete Data
-                    </DialogTrigger>
-                    <DialogContent className="flex flex-col justify-center">
-                      <DialogHeader>
-                        <DialogTitle>Confirm Delete ?</DialogTitle>
-                      </DialogHeader>
-                      <DialogDescription>
-                        This data row will delete permanently from the database
-                        and you cannot access it again.
-                      </DialogDescription>
-                      <DialogFooter>
-                        <Button
-                          type="submit"
-                          onClick={() => {
-                            deleteData(row.original._id, user);
-                          }}
-                        >
-                          Confirm
-                        </Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          );
-        },
-      },
+      //           <DropdownMenuItem>
+      //           <Link 
+      //          href={`/admin/booking/sendInvoice/${row.original._id}`}
+      //           >
+      //              Send Invoice
+      //             </Link>
+      //           </DropdownMenuItem>
+      //           <DropdownMenuItem>
+      //           <Link 
+      //          href={`/admin/booking/${row.original.orderNumber}`}
+      //           >
+      //              Allocation Vehicle
+      //             </Link>
+      //           </DropdownMenuItem>
+      //           <DropdownMenuItem>
+      //             <Dialog>
+      //               <DialogTrigger onClick={(e) => e.stopPropagation()}>
+      //                 Delete Data
+      //               </DialogTrigger>
+      //               <DialogContent className="flex flex-col justify-center">
+      //                 <DialogHeader>
+      //                   <DialogTitle>Confirm Delete ?</DialogTitle>
+      //                 </DialogHeader>
+      //                 <DialogDescription>
+      //                   This data row will delete permanently from the database
+      //                   and you cannot access it again.
+      //                 </DialogDescription>
+      //                 <DialogFooter>
+      //                   <Button
+      //                     type="submit"
+      //                     onClick={() => {
+      //                       deleteData(row.original._id, user);
+      //                     }}
+      //                   >
+      //                     Confirm
+      //                   </Button>
+      //                 </DialogFooter>
+      //               </DialogContent>
+      //             </Dialog>
+      //           </DropdownMenuItem>
+      //         </DropdownMenuContent>
+      //       </DropdownMenu>
+      //     );
+      //   },
+      // },
     ]);
   }, [user]);
 

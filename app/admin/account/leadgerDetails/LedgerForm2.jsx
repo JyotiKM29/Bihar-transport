@@ -25,7 +25,7 @@ const basicInfoSchema = z.object({
   contactNo:z.coerce.number().min(999999999,'Contact no not less than 10 digits').max(9999999999,'Contact no is not more than 10 digits'),
   officeAddress:z.string(),
 
-  // texInfo :
+  // taxInfo :
   taxInfo: z.object({
     GSTIN:z.string(),
     PanNo:z.string(),
