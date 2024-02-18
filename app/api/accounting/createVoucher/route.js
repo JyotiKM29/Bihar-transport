@@ -18,13 +18,16 @@ export async function POST(req, res) {
                 }]
         });
         if (!admin) {
-            return res.json({ message: "Admin does not exist" }, { status: 404 });
+            return Response.json({ message: "Admin does not exist" }, { status: 404 });
         }
 
 
         const vehicle = await Vehicles.findOne({ _id: vehicleId });
         if (!vehicle) {
-            return res.json({ message: "Vehicle does not exist" }, { status: 404 });
+            return Response.json(
+              { message: "Vehicle does not exist" },
+              { status: 404 },
+            );
         }
 
         const party = vehicle.owner.name;
