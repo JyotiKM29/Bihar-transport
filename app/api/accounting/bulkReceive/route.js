@@ -29,7 +29,7 @@ export async function POST(req, res) {
 
         console.log("Ledger : ",ledgerData.booking);
         let payment = recieveAmount;
-        let n = ledgerData.booking;
+        let n = ledgerData.booking.length;
         let i = 0;
 
         while (payment & i<n) {

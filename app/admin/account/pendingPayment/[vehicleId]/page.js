@@ -114,7 +114,7 @@ const CollectPayment = ({ params }) => {
 
       if (response.ok) {
         setIsLoading(false);
-        displayToast("Successfully registered", "✅");
+        displayToast("Successfully collected", "✅");
         // const userDetail = newResult.user;
         form.reset(initialFormState);
       } else {
@@ -124,7 +124,7 @@ const CollectPayment = ({ params }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      displayToast("Error while sending data", "❌", newResult.message);
+      displayToast("Error", "❌ ", newResult.message);
       setIsLoading(false);
     }
   }

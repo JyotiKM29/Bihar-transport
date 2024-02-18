@@ -85,12 +85,12 @@ const AddNew = () => {
     
       if (response.ok) {
         setIsLoading(false);
-        displayToast("Successfully registered", "✅");
+        displayToast("Successfully added a new voucher", "✅");
         // const userDetail = newResult.user;
         form.reset(initialFormState);
       } else {
         console.error("Error:", newResult.message);
-        displayToast("Error", "❌", newResult.message);
+        displayToast("Error", "❌ ", newResult.message);
         setIsLoading(false);
       }
     } catch (error) {
