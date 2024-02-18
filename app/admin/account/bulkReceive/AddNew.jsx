@@ -93,17 +93,17 @@ const AddNew = () => {
     
       if (response.ok) {
         setIsLoading(false);
-        displayToast("Successfully New Bulk Created", "✅");
+        displayToast("New Bulk Created", "✅");
         // const userDetail = newResult.user;
         form.reset(initialFormState);
       } else {
         console.error("Error:", newResult.message);
-        displayToast("Error", "❌", newResult.message);
+        displayToast("Error", "❌ ", newResult.message);
         setIsLoading(false);
       }
     } catch (error) {
       console.error("Error:", error);
-      displayToast("Error while sending data", "❌", newResult.message);
+      displayToast("Error : ", "❌", newResult.message);
       setIsLoading(false);
     }
   }

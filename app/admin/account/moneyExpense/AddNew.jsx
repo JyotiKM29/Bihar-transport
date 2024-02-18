@@ -85,17 +85,17 @@ const AddNew = () => {
     
       if (response.ok) {
         setIsLoading(false);
-        displayToast("Successfully registered", "✅");
+        displayToast("Successfully added new expanse", "✅");
         // const userDetail = newResult.user;
         form.reset(initialFormState);
       } else {
         console.error("Error:", newResult.message);
-        displayToast("Error", "❌", newResult.message);
+        displayToast("Error", "❌ ", newResult.message);
         setIsLoading(false);
       }
     } catch (error) {
       console.error("Error:", error);
-      displayToast("Error while sending data", "❌", newResult.message);
+      displayToast("Error", "❌ ", newResult.message);
       setIsLoading(false);
     }
   }
