@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const additionalContactSchema = new mongoose.Schema({
   proofType: { type: String },
-  proofNumber: { type: Number },
+  proofNumber: { type: String },
   name: { type: String },
   DOB: { type: Date },
   SDWOf: { type: String },
