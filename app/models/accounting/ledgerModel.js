@@ -31,6 +31,7 @@ const ledgerSchema = new mongoose.Schema({
       rating: String,
       remarks: String,
       additionalContact: String,
+      alert: Boolean,
     },
   },
   accountDetails: {
@@ -49,7 +50,7 @@ const ledgerSchema = new mongoose.Schema({
     serviceToStates: String,
     typeOfVehicle: String,
     attachId: String,
-    alert: String,
+   
   },
   additionalContact: [additionalContactSchema],
   

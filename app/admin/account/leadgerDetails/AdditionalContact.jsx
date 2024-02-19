@@ -141,9 +141,7 @@ const AdditionalContact = ({ form, nameValue ,setshowAdditionalContact,showaddit
                         <FormControl>
                           <select {...field}>
                           <option value=" ">Select Proof Type</option>
-                        <option value="GSTIN">
-                         GSTIN
-                        </option>
+                       
                         <option value="Aadhar Card">
                         Aadhar Card</option>
                         <option value="Pan Card">Pan Card</option>
@@ -167,7 +165,7 @@ const AdditionalContact = ({ form, nameValue ,setshowAdditionalContact,showaddit
 <FieldForm
               form={form}
               name={"file"}
-              label="Proof Image "
+              label="Attach Image "
               type="file"
             />
 <FieldForm
@@ -179,7 +177,7 @@ const AdditionalContact = ({ form, nameValue ,setshowAdditionalContact,showaddit
 <FieldForm
               form={form}
               name={`${nameValue}[${contacts.length}].DOB`}
-              label="date of Birth"
+              label="Date of Birth"
               type="date"
             />
 <FieldForm

@@ -27,9 +27,8 @@ import SearchLedger from "../bulkReceive/SearchLedger";
 import Link from "next/link";
 
 const formSchema = z.object({
- 
-  adminId:z.string(),
-  recieptNo:z.string(),
+  adminId: z.string(),
+  recieptNo: z.string(),
   recieptDate: z.coerce.date(),
   receivedFrom: z.string(),
 
@@ -39,7 +38,7 @@ const formSchema = z.object({
 
   discount: z.optional(z.coerce.number()).default(0),
 
-  paidBy: z.enum(['CASH','BANK','SBI' ]),
+  paidBy: z.enum(["CASH", "BANK", "SBI"]),
 
   narration: z.string(),
 });
@@ -50,21 +49,30 @@ const AddNew = () => {
   const { user } = useContext(UserContext);
 
   const initialFormState = {
-  adminId:'',
-  recieptNo:undefined,
-    recieptDate:new Date().toISOString().split("T")[0],
-  receivedFrom: undefined,
+    adminId: "",
+    recieptNo: generateUniqueId(10),
+    recieptDate: new Date().toISOString().split("T")[0],
+    receivedFrom: undefined,
 
-  receivedAmount:undefined,
+    receivedAmount: undefined,
 
-  TDS:undefined ,
+    TDS: undefined,
 
-  discount:undefined,
+    discount: undefined,
 
-  paidBy:undefined ,
+    paidBy: undefined,
 
-  narration:undefined,
+    narration: undefined,
   };
+
+  function generateUniqueId(length) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let uniqueId = '';
+    for (let i = 0; i < length; i++) {
+      uniqueId += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return uniqueId;
+  }
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -81,7 +89,6 @@ const AddNew = () => {
       console.log("hi", error);
     }
 
-  
     value.adminId = user?._id;
     try {
       const response = await fetch("/api/accounting/createReceipt", {
@@ -92,9 +99,9 @@ const AddNew = () => {
         body: JSON.stringify(value),
       });
       console.log(response);
-    
+
       const newResult = await response.json();
-    
+
       if (response.ok) {
         setIsLoading(false);
         displayToast("Successfully created new receipt", "✅");
@@ -123,115 +130,106 @@ const AddNew = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(myhandleSubmit)}>
         <h2 className="text-center  text-xl font-semibold">
-        New Money Receipt :
+          New Money Receipt :
         </h2>
-        <FieldForm 
-        form={form} 
-        name="recieptNo" 
-        label="Reciept No"
-         type="text" />
+        <FieldForm
+          form={form}
+          name="recieptNo"
+          label="Reciept No"
+          type="text"
+        />
 
-        <FieldForm 
-        form={form} 
-        name="recieptDate" 
-        label="Received Date"
-         type="date" />
+        <FieldForm
+          form={form}
+          name="recieptDate"
+          label="Received Date"
+          type="date"
+        />
 
-<div className="flex items-center">
-<FormField
-                control={form.control}
-                name="receivedFrom"
-                
-                render={({ field }) => (
-                  <SearchLedger
-                 
-                    form={form}
-                    field={field}
-                    label='Received From'
-                  />
-                )}
-              />
-              <Link href='/admin/account/leadgerDetails' className="p-1.5 px-3 border bg-slate-100 bottom-2 rounded-md h-10 font-semibold text-slate-500">
-Add New
-              </Link> 
-
-</div>
-        <FieldForm 
-        form={form} 
-        name="receivedAmount" 
-        label="Received Amount"
-         type="number" />
-
-        <FieldForm 
-        form={form} 
-        name="TDS" 
-        label="TDS Amount"
-         type="number" />
-
-
-        <FieldForm 
-        form={form} 
-        name="discount" 
-        label="Discount Amount"
-         type="text" />
-
-       
-
-<FormField
+        <div className="flex items-center">
+          <FormField
             control={form.control}
-            name="paidBy"
-            render={({ field }) => {
-              return (
-                <FormItem className="flex items-center justify-center gap-4">
-                  <FormLabel className="text-nowrap text-sm lg:text-base">
-                  Paid By :
-                  </FormLabel>
-                  <Select
-                    className="flex flex-1 flex-col"
-                    onValueChange={field.onChange}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Paid By" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="CASH">CASH</SelectItem>
-                      <SelectItem value="BANK">BANK</SelectItem>
-                      <SelectItem value="SBI">STATE BANK OF INDIA (SBI) </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
+            name="receivedFrom"
+            render={({ field }) => (
+              <SearchLedger form={form} field={field} label="Received From" />
+            )}
           />
+          <Link
+            href="/admin/account/leadgerDetails"
+            className="bottom-2 h-10 rounded-md border bg-slate-100 p-1.5 px-3 font-semibold text-slate-500"
+          >
+            Add New
+          </Link>
+        </div>
+        <FieldForm
+          form={form}
+          name="receivedAmount"
+          label="Received Amount"
+          type="number"
+        />
 
-  
+        <FieldForm form={form} name="TDS" label="TDS Amount" type="number" />
+
+        <FieldForm
+          form={form}
+          name="discount"
+          label="Discount Amount"
+          type="text"
+        />
+
         <FormField
-                control={form.control}
-                name="narration"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base ">
-                      Narration :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Textarea  {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
+          control={form.control}
+          name="paidBy"
+          render={({ field }) => {
+            return (
+              <FormItem className="flex items-center justify-center gap-4">
+                <FormLabel className="text-nowrap text-sm lg:text-base">
+                  Received By :
+                </FormLabel>
+                <Select
+                  className="flex flex-1 flex-col"
+                  onValueChange={field.onChange}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Paid By" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="CASH">CASH</SelectItem>
+                    <SelectItem value="BANK">BANK</SelectItem>
+                    <SelectItem value="SBI">
+                      STATE BANK OF INDIA (SBI){" "}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
 
+        <FormField
+          control={form.control}
+          name="narration"
+          render={({ field }) => {
+            return (
+              <FormItem className="flex items-center justify-center gap-4">
+                <FormLabel className="text-nowrap text-base ">
+                  Narration :
+                </FormLabel>
+                <div className="flex flex-1 flex-col">
+                  <FormControl>
+                    <Textarea {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            );
+          }}
+        />
 
-
-
-        <div className="flex items-center justify-center my-8">
+        <div className="my-8 flex items-center justify-center">
           <Button type="submit" className="w-full lg:w-1/3 ">
             {isloading ? "Loading..." : " Submit"}
           </Button>
