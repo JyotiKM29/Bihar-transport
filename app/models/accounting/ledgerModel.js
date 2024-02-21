@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const additionalContactSchema = new mongoose.Schema({
   proofType: { type: String },
-  proofNumber: { type: Number },
+  proofNumber: { type: String },
   name: { type: String },
   DOB: { type: Date },
   SDWOf: { type: String },
@@ -31,6 +31,7 @@ const ledgerSchema = new mongoose.Schema({
       rating: String,
       remarks: String,
       additionalContact: String,
+      alert: Boolean,
     },
   },
   accountDetails: {
@@ -49,7 +50,7 @@ const ledgerSchema = new mongoose.Schema({
     serviceToStates: String,
     typeOfVehicle: String,
     attachId: String,
-    alert: String,
+   
   },
   additionalContact: [additionalContactSchema],
   

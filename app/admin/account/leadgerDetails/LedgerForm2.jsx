@@ -5,6 +5,13 @@ import * as z from "zod";
 import FieldForm from "../../component/FieldForm";
 import { Button } from "../../../components/ui/button";
 import AdditionalContact from './AdditionalContact';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
 
 import {
   Form,
@@ -18,6 +25,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
 import { Input } from "../../../components/ui/input";
+import { Checkbox } from "../../../components/ui/checkbox";
 
 
 const basicInfoSchema = z.object({
@@ -35,7 +43,7 @@ const basicInfoSchema = z.object({
     principalPlaceOfBusiness:z.string(),
     rating:z.string(),
     remarks:z.string(),
-    
+    alert:z.coerce.boolean(),
   })
 });
 
@@ -62,7 +70,7 @@ const additionalInfoSchema = z.object({
   serviceToStates:z.string(),
   typeOfVehicle:z.string(),
   attachId:z.string(),
-  alert:z.string(),
+  // alert:z.string(),
 
 
  
@@ -70,7 +78,7 @@ const additionalInfoSchema = z.object({
 
 const additionalContactSchema = z.object({
   proofType:z.string(),
-  proofNumber:z.coerce.number(),
+  proofNumber:z.string(),
   name:z.string(),
   DOB:z.coerce.date(),
   SDWOf:z.string(),
@@ -131,7 +139,8 @@ const[showBankDetail , setShowBankDetail] = useState(false);
         principalPlaceOfBusiness:undefined,
         rating:undefined,
         remarks:undefined,
-        additionalContact:undefined,
+        alert:false,
+        // additionalContact:undefined,
       }
     },
     accountDetails:{
@@ -306,14 +315,40 @@ const[showBankDetail , setShowBankDetail] = useState(false);
             label="Rating"
             type="text"
           />
+          <div className="flex items-center w-full gap-4">
+
+         <div className="flex-1">
+
+       
      <FieldForm
             form={form}
             name="basicInfo.taxInfo.remarks"
             label="Remarks"
             type="text"
           />
+  </div>
+<FormField
+            control={form.control}
+            name="basicInfo.taxInfo.alert"
+            render={({ field }) => {
+              return (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="text-nowrap text-sm lg:text-base">
+                  Alert :
+                  </FormLabel>
+             
+                    <FormControl>
+                      <Checkbox {...field}  />
+                    </FormControl>
+                  
+                 
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
  
-    
+ </div> 
     </div> 
 
 
@@ -511,11 +546,43 @@ const[showBankDetail , setShowBankDetail] = useState(false);
   <div className="">
 <h2 className="text-xl font-semibold text-center text-blue-500 underline underline-offset-1 my-3" onClick={()=>setShowAdditionalInfo(!showadditionalInfo)} >Additional Info </h2>
 
-<FieldForm
+{/* <FieldForm
             form={form}
             name="additionalInfo.tripType"
             label="Trip Type"
             type="text"
+          /> */}
+
+<FormField
+            control={form.control}
+            name="additionalInfo.tripType"
+            render={({ field }) => {
+              return (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="text-nowrap text-sm lg:text-base">
+                  Trip Type:
+                  </FormLabel>
+                  <Select
+                    className="flex flex-1 flex-col"
+                    onValueChange={field.onChange}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Trip Type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="One Way">One Way</SelectItem>
+                      <SelectItem value="Two way">Two way</SelectItem>
+                      <SelectItem value="Return">Return</SelectItem>
+                      <SelectItem value="All">All</SelectItem>
+                    
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
 <FieldForm
             form={form}
@@ -525,13 +592,45 @@ const[showBankDetail , setShowBankDetail] = useState(false);
           />
 
 
-
+{/* 
 <FieldForm
             form={form}
             name="additionalInfo.defaultPaymentTerm"
             label="Default PaymentTerm"
             type="text"
+          /> */}
+
+<FormField
+            control={form.control}
+            name="additionalInfo.defaultPaymentTerm"
+            render={({ field }) => {
+              return (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="text-nowrap text-sm lg:text-base">
+                  Default Payment Term:
+                  </FormLabel>
+                  <Select
+                    className="flex flex-1 flex-col"
+                    onValueChange={field.onChange}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Payment term" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="To be Billed">To be Billed</SelectItem>
+                      <SelectItem value="To pay">To pay</SelectItem>
+                    
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
+
+
 <FieldForm
             form={form}
             name="additionalInfo.serviceToStates"
@@ -550,12 +649,12 @@ const[showBankDetail , setShowBankDetail] = useState(false);
             label="Attach Id"
             type="text"
           />
-<FieldForm
+{/* <FieldForm
             form={form}
             name="additionalInfo.alert"
             label="Alert"
             type="text"
-          />
+          /> */}
 
 </div>
 :<p className="text-xl  text-center text-blue-500 underline underline-offset-1 my-3" onClick={()=>setShowAdditionalInfo(!showadditionalInfo)}>Additional Info </p>
