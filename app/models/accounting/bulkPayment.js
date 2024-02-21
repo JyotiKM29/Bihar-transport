@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const bulkRecieveSchema = new mongoose.Schema(
+const bulkPaymentSchema = new mongoose.Schema(
   {
     date: {
       type: Date,
@@ -42,4 +42,4 @@ const bulkRecieveSchema = new mongoose.Schema(
 );
 
 mongoose.models = {};
-export default mongoose.model("bulkRecieve", bulkRecieveSchema);
+export default mongoose.model("bulkPayment", bulkPaymentSchema);

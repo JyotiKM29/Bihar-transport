@@ -94,7 +94,8 @@ export async function POST(req, res) {
           },
         });
 
-        await slip.save();
+     const data = await slip.save();
+      console.log("worked", data);
         return Response.json({ message: "Payment received successfully." }, { status: 200 });
 
     } catch (error) {
