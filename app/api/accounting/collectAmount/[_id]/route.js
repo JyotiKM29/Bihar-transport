@@ -1,5 +1,5 @@
-import connectDB from "../../../../../middleware/connectDB";
-import bulkRecieve from "../../../../../models/accounting/bulkRecieve";
+import connectDB from "../../../../middleware/connectDB";
+import bulkRecieve from "../../../../models/accounting/bulkRecieve"
 
 
 export async function GET(req, context) {
