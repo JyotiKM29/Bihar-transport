@@ -9,6 +9,9 @@ const bulkPaymentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    vehicleId:{
+      type: String,
+    },
     recieveAmount: {
       type: Number,
       required: true,

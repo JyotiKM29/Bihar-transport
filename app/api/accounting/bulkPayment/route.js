@@ -84,6 +84,7 @@ export async function POST(req, res) {
         const slip = new bulkPayment({
           date,
           recieveFrom,
+          vehicleId:vehicle._id,
           recieveAmount,
           paymentMode,
           remarks,
@@ -93,6 +94,8 @@ export async function POST(req, res) {
             date: Date.now(),
           },
         });
+
+     console.log(slip);
 
      const data = await slip.save();
       console.log("worked", data);
