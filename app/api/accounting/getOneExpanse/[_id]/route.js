@@ -11,6 +11,11 @@ export async function GET(req, context) {
         await connectDB();
 
         const expanseData = await expanse.findOne({ _id });
+
+        if(!expanseData){
+            return Response.json({ message: "Expanse not found" }, { status: 400 });
+        }
+
         return Response.json({ message: "Ledger Details", data:expanseData }, { status: 200 });
 
     } catch (error) {

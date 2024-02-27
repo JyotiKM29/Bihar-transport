@@ -9,7 +9,12 @@ export async function GET(req, context) {
       await connectDB();
       
       const data = await bulkRecieve.findOne({ _id });
-      // console.log("hey",categories);
+    // console.log("hey",categories);
+    if (!data)
+      return Response.json(
+        { message: "No data found" },
+        { status: 404 });
+    
         return Response.json(
             { message: "successfull", data },
             { status: 200 },
