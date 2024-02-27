@@ -30,11 +30,7 @@ import { Input } from "../../../components/ui/input";
 export default function ColumnHeader() {
   const { user } = useContext(UserContext);
   const [columns, setColumns] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [vehicleIds, setVehicleIds] = useState([]);
-  const [vehicleData, setVehicleData] = useState();
-
-  const [searchInput, setSearchInput] = useState("");
+  
 
 
   useEffect(() => {
@@ -55,6 +51,8 @@ export default function ColumnHeader() {
         console.error("There was a problem with the delete request.", error);
       }
     }
+
+    
 
     setColumns([
       {
@@ -112,65 +110,65 @@ export default function ColumnHeader() {
         enableHiding: false,
         cell: ({ row }) => {
           return (
-            // <DropdownMenu>
-            //   <DropdownMenuTrigger asChild>
-            //     <Button variant="ghost" className="h-8 w-8 p-0">
-            //       <span className="sr-only">Open menu</span>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
                   <DotsHorizontalIcon className="h-4 w-4" />
-            //     </Button>
-            //   </DropdownMenuTrigger>
-            //   <DropdownMenuContent align="end">
-            //     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            //     <DropdownMenuSeparator />
-            //     <DropdownMenuItem>
-            //       <Link href={`/admin/booking/pending-booking/${row.original._id}`}>
-            //         View Detail
-            //       </Link>
-            //     </DropdownMenuItem>
+                 </Button>
+               </DropdownMenuTrigger>
+               <DropdownMenuContent align="end">
+                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                 <DropdownMenuSeparator />
+                 <DropdownMenuItem>
+                   <Link href={`/admin/booking/pending-booking/${row.original._id}`}>
+                     View Detail
+                   </Link>
+                 </DropdownMenuItem>
 
                
-            //     <DropdownMenuItem>
-            //     <Link 
-            //    href={`/admin/booking/sendInvoice/${row.original._id}`}
-            //     >
-            //        Send Invoice
-            //       </Link>
-            //     </DropdownMenuItem>
-            //     <DropdownMenuItem>
-            //     <Link 
-            //    href={`/admin/booking/${row.original.orderNumber}`}
-            //     >
-            //        Allocation Vehicle
-            //       </Link>
-            //     </DropdownMenuItem>
-            //     <DropdownMenuItem>
-            //       <Dialog>
-            //         <DialogTrigger onClick={(e) => e.stopPropagation()}>
-            //           Delete Data
-            //         </DialogTrigger>
-            //         <DialogContent className="flex flex-col justify-center">
-            //           <DialogHeader>
-            //             <DialogTitle>Confirm Delete ?</DialogTitle>
-            //           </DialogHeader>
-            //           <DialogDescription>
-            //             This data row will delete permanently from the database
-            //             and you cannot access it again.
-            //           </DialogDescription>
-            //           <DialogFooter>
-            //             <Button
-            //               type="submit"
-            //               onClick={() => {
-            //                 deleteData(row.original._id, user);
-            //               }}
-            //             >
-            //               Confirm
-            //             </Button>
-            //           </DialogFooter>
-            //         </DialogContent>
-            //       </Dialog>
-            //     </DropdownMenuItem>
-            //   </DropdownMenuContent>
-            // </DropdownMenu>
+                 <DropdownMenuItem>
+                 <Link 
+                href={`/admin/booking/sendInvoice/${row.original._id}`}
+                 >
+                    Send Invoice
+                   </Link>
+                 </DropdownMenuItem>
+                 <DropdownMenuItem>
+                 <Link 
+                href={`/admin/booking/${row.original.orderNumber}`}
+                 >
+                    Allocation Vehicle
+                   </Link>
+                 </DropdownMenuItem>
+                 <DropdownMenuItem>
+                   <Dialog>
+                     <DialogTrigger onClick={(e) => e.stopPropagation()}>
+                       Delete Data
+                     </DialogTrigger>
+                     <DialogContent className="flex flex-col justify-center">
+                       <DialogHeader>
+                         <DialogTitle>Confirm Delete ?</DialogTitle>
+                       </DialogHeader>
+                       <DialogDescription>
+                         This data row will delete permanently from the database
+                         and you cannot access it again.
+                       </DialogDescription>
+                       <DialogFooter>
+                         <Button
+                           type="submit"
+                           onClick={() => {
+                             deleteData(row.original._id, user);
+                           }}
+                         >
+                           Confirm
+                         </Button>
+                       </DialogFooter>
+                     </DialogContent>
+                   </Dialog>
+                 </DropdownMenuItem>
+               </DropdownMenuContent>
+             </DropdownMenu>
           );
         },
       },

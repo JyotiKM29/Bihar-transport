@@ -13,6 +13,8 @@ const SignIn = () => {
   const [hide, setHide] = useState(true);
   const { user, setUser } = useContext(UserContext);
 
+  
+
   const router = useRouter();
   const { toast } = useToast();
   const [email, setEmail] = useState("");

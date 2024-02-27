@@ -1,5 +1,5 @@
 "use client";
-
+import * as XLSX from "xlsx";
 import {
   Column,
   Table as ReactTable,
@@ -24,7 +24,64 @@ import {
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 
-export function DataTable({ columns, data }) {
+
+
+
+export function DataTable({ columns, data  }) {
+
+  function getExportFileBlob({ columns, data, fileType, fileName }) {
+    if (fileType === "xlsx") {
+     
+
+      const header = columns.map((c) => ({ header: c.header, accessorKey: c.accessorKey }));
+
+      console.log('header' ,header)
+      const compatibleData = data.map((row) => {
+
+        
+        
+        const obj = {};
+        header.forEach((col, index) => {
+            let accessorKey = col.accessorKey;
+            obj[col.header] = accessNestedProperty(row, accessorKey);
+           
+           
+        });
+        return obj;
+    });
+      // Log processed data for debugging:
+      console.log("Compatible data after processing:", compatibleData);
+
+      let wb = XLSX.utils.book_new();
+      let ws1 = XLSX.utils.json_to_sheet(compatibleData, {
+        header,
+      });
+      XLSX.utils.book_append_sheet(wb, ws1, "mySheet");
+      XLSX.writeFile(wb, `${fileName}.xlsx`);
+
+     
+      return false;
+    }
+  }
+
+  function accessNestedProperty(obj, key) {
+    if (typeof key !== 'string') {
+      // If key is not a string, return undefined
+      return undefined;
+  }
+
+    const keys = key?.split('.');
+    let result = obj;
+    for (const k of keys) {
+        result = result[k];
+        if (result === undefined) {
+            return undefined;
+        }
+    }
+    return result;
+}
+
+
   const table = useReactTable({
     data,
     columns,
@@ -36,8 +93,13 @@ export function DataTable({ columns, data }) {
     debugTable: true,
   });
 
+  
+  
+
   return (
     <div className="max-w max-h  bg-white" >
+ 
+     
 
       <div className="rounded-md border w-full  mt-8">
         <Table>
@@ -144,6 +206,20 @@ export function DataTable({ columns, data }) {
           >
             Next
           </Button>
+          <Button
+          variant="secondary"
+          
+        onClick={() => {
+          getExportFileBlob({
+            columns,
+            data,
+            fileType: "xlsx",
+            fileName: "mySheet", 
+          });
+        }}
+      >
+       Export to ExcelSheet
+      </Button>
         </div>
       </div>
     </div>
