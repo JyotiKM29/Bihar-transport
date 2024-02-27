@@ -117,7 +117,7 @@ export default function ColumnHeader() {
       },
 
       {
-        // accessorKey: "",
+  
         header: "View",
         cell: ({ row }) =><Link href={`/admin/account/bulkReceive/${row.original._id}`} >
           <Eye />
