@@ -32,6 +32,11 @@ const View = ({ params }) => {
     router.back();
   };
 
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+}
+
   return (
     <div className="max-w max-h mt-14 rounded-2xl  bg-white px-4 py-4 shadow-lg md:px-10 lg:my-4 lg:p-8 lg:px-20">
       <div className="flex items-center justify-between">
@@ -426,21 +431,138 @@ const View = ({ params }) => {
               identifier={`additionalInfo.email`}
             />
             <hr />
-           
+
+
+            {/* Additional Chargers */}
+
+            {data?.additionalContact.length !== 0 && (
+  <>
+    <h2 className="mt-8 text-center font-medium text-blue-500 text-xl">Additional Contacts</h2>
+
+    {data?.additionalContact.map((addCont, index) => (
+      <div key={index}>
+        <h2 className="text-lg text-center font-semibold">{`CONTACT ${index + 1}`}</h2>
+        <DataView
+          label="Proof Type"
+          value={addCont?.proofType}
+          show={editAccounting}
+          tableId={data?._id}
+          apiCall="editledger"
+          identifier={`additionalContact[${index}].proofType`}
+        />
+        <hr />
+
+        <DataView
+          label="Proof Number"
+          value={addCont?.proofNumber}
+          show={editAccounting}
+          tableId={data?._id}
+          apiCall="editledger"
+          identifier={`additionalContact[${index}].proofNumber`}
+        />
+        <hr />
+
+        <DataView
+          label="Name"
+          value={addCont?.name}
+          show={editAccounting}
+          tableId={data?._id}
+          apiCall="editledger"
+          identifier={`additionalContact[${index}].name`}
+        />
+        <hr />
+
+        <DataView
+          label="Date of Birth"
+          value={addCont?.DOB}
+          show={editAccounting}
+          tableId={data?._id}
+          apiCall="editledger"
+          identifier={`additionalContact[${index}].DOB`}
+          type="date"
+        />
+        <hr />
+
+        <DataView
+          label="Relationship"
+          value={addCont?.SDWOf}
+          show={editAccounting}
+          tableId={data?._id}
+          apiCall="editledger"
+          identifier={`additionalContact[${index}].SDWOf`}
+        />
+        <hr />
+
+        <DataView
+          label="Contact Number"
+          value={addCont?.ContactNo}
+          show={editAccounting}
+          tableId={data?._id}
+          apiCall="editledger"
+          identifier={`additionalContact[${index}].ContactNo`}
+        />
+        <hr />
+
+        <DataView
+          label="Alternative Contact Number"
+          value={addCont?.alternativeContactNo}
+          show={editAccounting}
+          tableId={data?._id}
+          apiCall="editledger"
+          identifier={`additionalContact[${index}].alternativeContactNo`}
+        />
+        <hr />
+
+        <DataView
+          label="Address"
+          value={addCont?.Address}
+          show={editAccounting}
+          tableId={data?._id}
+          apiCall="editledger"
+          identifier={`additionalContact[${index}].Address`}
+        />
+        <hr />
+
+        <DataView
+          label="Designation"
+          value={addCont?.designation}
+          show={editAccounting}
+          tableId={data?._id}
+          apiCall="editledger"
+          identifier={`additionalContact[${index}].designation`}
+        />
+        <hr />
+
+        <DataView
+          label="Email"
+          value={addCont?.email}
+          show={editAccounting}
+          tableId={data?._id}
+          apiCall="editledger"
+          identifier={`additionalContact[${index}].email`}
+        />
+        <hr />
+      </div>
+    ))}
+  </>
+)}
+
+
           
-            <div className="overflow-x-auto">
+            {data?.booking.length > 0 ? (
+              <div className="overflow-x-auto">
     <table className="min-w-full overflow-scroll">
            
             <thead>
                 <tr >
                     <th className="border py-1 px-2 bg-blue-200">Order Number</th>
                     <th className="border py-1 px-2 bg-blue-200">Date</th>
-                    <th className="border py-1 px-2 bg-blue-200">Vehicle Required Date</th>
+                    <th className="border py-1 px-2 bg-blue-200">Vehicle Req Date</th>
                     <th className="border py-1 px-2 bg-blue-200">Consignor Name</th>
-                    <th className="border py-1 px-2 bg-blue-200">Consignor Mobile Number</th>
+                    <th className="border py-1 px-2 bg-blue-200">Consignor Mobile No</th>
                     <th className="border py-1 px-2 bg-blue-200">Loading Points</th>
                     <th className="border py-1 px-2 bg-blue-200">Consignee Name</th>
-                    <th className="border py-1 px-2 bg-blue-200">Consignee Mobile Number</th>
+                    <th className="border py-1 px-2 bg-blue-200">Consignee Mobile No</th>
                     <th className="border py-1 px-2 bg-blue-200">Unloading Points</th>
                     <th className="border py-1 px-2 bg-blue-200">Way</th>
                     <th className="border py-1 px-2 bg-blue-200">Vehicle Type</th>
@@ -453,8 +575,8 @@ const View = ({ params }) => {
                     <th className="border py-1 px-2 bg-blue-200">Pay Mode</th>
                     <th className="border py-1 px-2 bg-blue-200">Transaction ID</th>
                     <th className="border py-1 px-2 bg-blue-200">Remarks</th>
-                    <th className="border py-1 px-2 bg-blue-200">Additional Charges Enabled</th>
-                    <th className="border py-1 px-2 bg-blue-200">Total Additional Charges</th>
+                    <th className="border py-1 px-2 bg-blue-200">Additional Charges</th>
+                    <th className="border py-1 px-2 bg-blue-200">Total Charges</th>
                     <th className="border py-1 px-2 bg-blue-200">Status</th>
                     <th className="border py-1 px-2 bg-blue-200">Is Urgent</th>
                   
@@ -464,8 +586,9 @@ const View = ({ params }) => {
                 {data?.booking?.map((booking, index) => (
                     <tr key={index}>
                         <td className="border py-1 px-2" >{booking.savedBooking.orderNumber}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.date}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.vehicleRequiredDate}</td>
+                        <td className="border py-1 px-2">{formatDate(booking.savedBooking.date)}</td>
+<td className="border py-1 px-2">{formatDate(booking.savedBooking.vehicleRequiredDate)}</td>
+
                         <td className="border py-1 px-2">{booking.savedBooking.consignorName}</td>
                         <td className="border py-1 px-2">{booking.savedBooking.consignorMobileNumber}</td>
                         <td className="border py-1 px-2">{booking.savedBooking.loadingPoints.join(', ')}</td>
@@ -493,6 +616,7 @@ const View = ({ params }) => {
             </tbody>
         </table>
 </div>
+            ): <h2 className="text-center mt-4 text-red-600 font-medium">No Booking with that ledger</h2>}
           </>
         )}
       </>
