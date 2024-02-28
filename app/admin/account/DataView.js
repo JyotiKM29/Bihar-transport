@@ -34,14 +34,14 @@ const DataView = ({ label, value, show, identifier, tableId ,apiCall, type = 'te
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          adminId: user._id,
+          adminId:  user._id,
           _id: tableId,
           fieldsToUpdate: {
             [identifier]: newValue,
           },
         })
       });
-      console.log(await response.json());
+      console.log('response', await response.json());
 
       if (response.ok) {
         displayToast("Successfully Updated", "✅");

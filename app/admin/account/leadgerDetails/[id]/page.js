@@ -193,7 +193,7 @@ const View = ({ params }) => {
 
 
             <DataView
-              label="accountGroup "
+              label="Account Group "
               value={data?.accountDetails?.accountGroup}
               show={editAccounting}
               tableId={data?._id}
@@ -202,7 +202,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="natureOfAccount "
+              label="Nature of Account "
               value={data?.accountDetails?.natureOfAccount}
               show={editAccounting}
               tableId={data?._id}
@@ -211,7 +211,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="creditLimit "
+              label="Credit Limit"
               value={data?.accountDetails?.creditLimit}
               show={editAccounting}
               tableId={data?._id}
@@ -220,7 +220,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="defaultPaymentTerm "
+              label="Default Payment Term "
               value={data?.accountDetails?.defaultPaymentTerm}
               show={editAccounting}
               tableId={data?._id}
@@ -229,7 +229,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="serviceToStates "
+              label="Service to States "
               value={data?.accountDetails?.serviceToStates}
               show={editAccounting}
               tableId={data?._id}
@@ -238,7 +238,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="typeOfVehicle "
+              label="Type of Vehicle "
               value={data?.accountDetails?.typeOfVehicle}
               show={editAccounting}
               tableId={data?._id}
@@ -247,7 +247,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="attachId "
+              label="Attach Id "
               value={data?.accountDetails?.attachId}
               show={editAccounting}
               tableId={data?._id}
@@ -256,7 +256,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="alert "
+              label="Alert "
               value={data?.accountDetails?.alert}
               show={editAccounting}
               tableId={data?._id}
@@ -268,7 +268,7 @@ const View = ({ params }) => {
             
             <h2 className="text-center mt-8 font-medium text-blue-500 text-xl">Bank Detail</h2>
             <DataView
-              label="bankName"
+              label="Bank Name"
               value={data?.bankDetails?.bankName}
               show={editAccounting}
               tableId={data?._id}
@@ -277,7 +277,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="nameOnPassbook"
+              label="Name on Passbook"
               value={data?.bankDetails?.nameOnPassbook}
               show={editAccounting}
               tableId={data?._id}
@@ -286,7 +286,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="accountNo"
+              label="Account No"
               value={data?.bankDetails?.accountNo}
               show={editAccounting}
               tableId={data?._id}
@@ -304,7 +304,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="branch"
+              label="Branch"
               value={data?.bankDetails?.branch}
               show={editAccounting}
               tableId={data?._id}
@@ -313,7 +313,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="upiNo"
+              label="Upi No"
               value={data?.bankDetails?.upiNo}
               show={editAccounting}
               tableId={data?._id}
@@ -322,7 +322,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="upiType"
+              label="Upi Type"
               value={data?.bankDetails?.upiType}
               show={editAccounting}
               tableId={data?._id}
@@ -332,7 +332,7 @@ const View = ({ params }) => {
             <hr />
             <h2 className="text-center mt-8 font-medium text-blue-500 text-xl">Additional Info</h2>
             <DataView
-              label="tripType "
+              label="Trip Type "
               value={data?.additionalInfo?.tripType}
               show={editAccounting}
               tableId={data?._id}
@@ -341,7 +341,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="route "
+              label="Route "
               value={data?.additionalInfo?.route}
               show={editAccounting}
               tableId={data?._id}
@@ -350,7 +350,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="proofType "
+              label="Proof Type"
               value={data?.additionalInfo?.proofType}
               show={editAccounting}
               tableId={data?._id}
@@ -359,7 +359,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label=" proofNumber"
+              label="Proof Number"
               value={data?.additionalInfo?.proofNumber}
               show={editAccounting}
               tableId={data?._id}
@@ -368,7 +368,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="name "
+              label="Name "
               value={data?.additionalInfo?.name}
               show={editAccounting}
               tableId={data?._id}
@@ -396,7 +396,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="proofContactNo "
+              label="Proof contact No "
               value={data?.additionalInfo?.proofContactNo}
               show={editAccounting}
               tableId={data?._id}
@@ -405,7 +405,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="proofAddress "
+              label="Proof Address "
               value={data?.additionalInfo?.proofAddress}
               show={editAccounting}
               tableId={data?._id}
@@ -414,7 +414,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="designation "
+              label="Designation "
               value={data?.additionalInfo?.designation}
               show={editAccounting}
               tableId={data?._id}
@@ -423,7 +423,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label=" email"
+              label="Email"
               value={data?.additionalInfo?.email}
               show={editAccounting}
               tableId={data?._id}
