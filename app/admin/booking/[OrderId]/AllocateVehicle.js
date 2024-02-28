@@ -269,7 +269,7 @@ try {
           <FieldForm
             form={form}
             name="driverBhara"
-            label="Driver Bhara "
+            label="Driver Bhara  (Rs)"
             type="number"
           />
 
@@ -308,13 +308,13 @@ try {
           <FieldForm
             form={form}
             name="netBhara"
-            label="Net Bhara "
+            label="Net Bhara  (Rs) "
             type="number"
           />
           <FieldForm
             form={form}
             name="ledgerBalanceParty"
-            label="Ledger Balance Party "
+            label="Ledger Balance Party  (Rs) "
             type="text"
           />
 

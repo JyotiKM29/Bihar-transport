@@ -537,7 +537,7 @@ export default function ProfileForm() {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
                       <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Party Bhara :
+                        Party Bhara  (Rs):
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
@@ -650,7 +650,7 @@ export default function ProfileForm() {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
                       <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Advance Amount :
+                        Advance Amount  (Rs):
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
@@ -669,7 +669,7 @@ export default function ProfileForm() {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
                       <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Balance Amount :
+                        Balance Amount  (Rs):
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
