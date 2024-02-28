@@ -4,8 +4,8 @@ import connectDB from "../../../../middleware/connectDB";
 
 export async function PUT(req, context) {
   try {
-    const { adminId, _id, feildsToUpdate } = await req.json();
-
+    const { adminId, _id, fieldsToUpdate } = await req.json();
+;
     await connectDB();
     const admin = await user.findOne({
       $and: [{ _id: adminId }, { $or: [{ isAdmin: true }, { isOwner: true }] }],
@@ -21,8 +21,8 @@ export async function PUT(req, context) {
     }
 
     // update all the components coming from feildsToUpdate
-    for (const key in feildsToUpdate) {
-      updatedReceipt[key] = feildsToUpdate[key];
+    for (const key in fieldsToUpdate) {
+      updatedReceipt[key] = fieldsToUpdate[key];
     }
 
     const updated = {
