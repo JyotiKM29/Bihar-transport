@@ -26,6 +26,7 @@ import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { Input } from "../../../components/ui/input";
+import { Eye } from "lucide-react";
 
 export default function ColumnHeader() {
   const { user } = useContext(UserContext);
@@ -114,6 +115,13 @@ export default function ColumnHeader() {
         accessorKey: "remarks",
 
         header: "Remarks",
+      },
+      {
+  
+        header: "View",
+        cell: ({ row }) =><Link href={`/admin/account/bulkPayment/${row.original._id}`} >
+          <Eye />
+        </Link>,
       },
       {
         id: "actions",
