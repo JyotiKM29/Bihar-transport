@@ -3,11 +3,14 @@ import React, { useEffect, useState } from "react";
 import { Button } from "../../../../components/ui/button";
 import { useRouter } from "next/navigation";
 import DataView from "../../DataView";
+import { IoIosArrowBack } from "react-icons/io";
+import { MdEdit } from "react-icons/md";
 
 const View = ({ params }) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
   const router = useRouter();
+  const [editAccounting, setEditAccounting] = useState(false);
 
   const id = params.id;
   async function fetchData() {
@@ -29,39 +32,86 @@ const View = ({ params }) => {
     router.back();
   };
 
-
-
   return (
     <div className="max-w max-h mt-14 rounded-2xl  bg-white px-4 py-4 shadow-lg md:px-10 lg:my-4 lg:p-8 lg:px-20">
       <div className="flex items-center justify-between">
         <h2 className="mb-8  text-3xl font-semibold text-orange-500">
           Bulk Receive Details :
         </h2>
-        <div className="flex gap-3">
-          <Button onClick={handleGoBack}>Back</Button>
+        <div className="flex items-center justify-between space-x-2">
+          <Button className="space-x-2 px-4" onClick={handleGoBack}>
+            <IoIosArrowBack className=" fill-white" />
+            <pre className="text-base">Back</pre>
+          </Button>
+          <Button
+            onClick={() => setEditAccounting(!editAccounting)}
+            className="space-x-2 px-4"
+          >
+            <pre className="text-base">Edit</pre>
+            <MdEdit className="h-8 fill-white" />
+          </Button>
         </div>
       </div>
 
       <>
-        {loading ? "loading ..." :<>
+        {loading ? (
+          "loading ..."
+        ) : (
+          <>
+            <DataView label="Receive From" value={data?.recieveFrom} />
+            <hr />
 
-        <DataView title='Receive From' value={data?.recieveFrom}  />
-        <hr />
-        <br />
-        <DataView title='Receive Amount' value={data?.recieveAmount}  />
-        <hr />
-        <br />
-<DataView title='Payment Mode' value={data?.paymentMode}  />
-<hr />
-<br />
-<DataView title='Remark' value={data?.remarks}  />
-<hr />
-<br />
-<DataView title='Date' value={data?.date ? new Date(data?.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }): "N/A"}
+            <DataView
+              label="Receive Amount"
+              value={data?.recieveAmount}
+              show={editAccounting}
+              tableId={data?._id}
+              apiCall="bulkReceive"
+              identifier={`recieveAmount`}
             />
-<hr />
-        </>
-        }
+            <hr />
+
+            <DataView
+              label="Payment Mode"
+              value={data?.paymentMode}
+              show={editAccounting}
+              tableId={data?._id}
+              apiCall="bulkReceive"
+              identifier={`paymentMode`}
+            />
+            <hr />
+
+            <DataView
+              label="Remark"
+              value={data?.remarks}
+              show={editAccounting}
+              tableId={data?._id}
+              apiCall="bulkReceive"
+              identifier={`remarks`}
+            />
+            <hr />
+
+            <DataView
+              label="Date"
+              value={
+                data?.date
+                  ? new Date(data?.date).toLocaleDateString("en-US", {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })
+                  : "N/A"
+              }
+              show={editAccounting}
+              tableId={data?._id}
+              apiCall="bulkReceive"
+              identifier={`date`}
+              type="date"
+            />
+            <hr />
+          </>
+        )}
       </>
     </div>
   );

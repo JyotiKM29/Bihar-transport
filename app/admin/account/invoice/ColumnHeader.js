@@ -36,23 +36,34 @@ export default function ColumnHeader() {
 
   const [searchInput, setSearchInput] = useState("");
 
+  const displayToast = (title, action, description = "") => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
 
   useEffect(() => {
     async function deleteData(id) {
-      console.log(user);
-      console.log("id:", id);
+     
       try {
         const response = await fetch(`/api/deletebooking`, {
           method: "DELETE",
           body: JSON.stringify({ _id: id, adminId: user._id }),
         });
-        console.log(response);
+        // console.log(response);
 
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+         console.log('error ', response.statusText)
+          displayToast("Update deleted", "❌" );
+        }else{
+          displayToast("Successfully deleted", "✅");
+          window.location.reload();
         }
       } catch (error) {
         console.error("There was a problem with the delete request.", error);
+        displayToast("Error", "❌", error.message);
       }
     }
 
