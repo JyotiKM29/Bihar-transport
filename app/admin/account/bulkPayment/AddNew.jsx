@@ -150,7 +150,7 @@ const AddNew = () => {
         <FieldForm 
         form={form} 
         name="recieveAmount" 
-        label="Recieved Amount"
+        label="Recieved Amount (Rs)"
          type="number" />
 
 <FormField

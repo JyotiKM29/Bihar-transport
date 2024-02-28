@@ -155,16 +155,16 @@ const CollectPayment = ({ params }) => {
           <p className="mr-3 text-nowrap text-lg ">{data?.booking?.paymentLiability}</p>
         </label>
         <label className="flex gap-2">
-          <h2 className="mr-3 text-nowrap text-lg font-semibold ">Total Billing Amount
+          <h2 className="mr-3 text-nowrap text-lg font-semibold ">Total Billing Amount (Rs)
 :</h2>
           <p className="mr-3 text-nowrap text-lg ">{data?.booking?.partyBhara}</p>
         </label>
         <label className="flex gap-2">
-          <h2 className="mr-3 text-nowrap text-lg font-semibold ">Amount Received </h2>
+          <h2 className="mr-3 text-nowrap text-lg font-semibold ">Amount Received  (Rs) </h2>
           <p className="mr-3 text-nowrap text-lg ">{data?.booking?.advanceAmount}</p>
         </label>
         <label className="flex gap-2">
-          <h2 className="mr-3 text-nowrap text-lg font-semibold ">Amount Pending </h2>
+          <h2 className="mr-3 text-nowrap text-lg font-semibold ">Amount Pending  (Rs)</h2>
           <p className="mr-3 text-nowrap text-lg ">{data?.booking?.balanceAmount}</p>
         </label>
       </div>
@@ -174,7 +174,7 @@ const CollectPayment = ({ params }) => {
           <FieldForm
             form={form}
             name="paidAmount"
-            label="Paid Amount"
+            label="Paid Amount  (Rs)"
             type="number"
           />
           <FieldForm

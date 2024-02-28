@@ -97,7 +97,7 @@ const View = ({ params }) => {
             />
             <hr />
             <DataView
-              label="Received Amount"
+              label="Received Amount (Rs)"
               value={data?.receivedAmount}
               show={editAccounting}
               tableId={data?._id}

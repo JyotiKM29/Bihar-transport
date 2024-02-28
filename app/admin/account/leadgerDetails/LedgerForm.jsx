@@ -5,6 +5,7 @@ import * as z from "zod";
 import FieldForm from "../../component/FieldForm";
 import { Button } from "../../../components/ui/button";
 import AdditionalContact from './AdditionalContact';
+import StarRating from '../StarRating';
 import {
   Select,
   SelectContent,
@@ -173,6 +174,8 @@ const[showBankDetail , setShowBankDetail] = useState(false);
   }
 
 
+
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: initialFormState,
@@ -233,6 +236,11 @@ const[showBankDetail , setShowBankDetail] = useState(false);
       action,
       description,
     });
+  };
+
+  const handleRatingChange = (value) => {
+    // Update the value of the form field here
+    form.setValue('basicInfo.taxInfo.rating', value);
   };
 
   return (
@@ -309,12 +317,32 @@ const[showBankDetail , setShowBankDetail] = useState(false);
             label="Principal Place Of Business"
             type="text"
           />
-     <FieldForm
+        
+          <FormField
+        control={form.control}
+        name="basicInfo.taxInfo.rating"
+        render={({ field }) => {
+          return (
+            <FormItem className="flex items-center justify-center gap-4">
+              <FormLabel className="text-nowrap text-sm lg:text-base">
+                Rating :
+              </FormLabel>
+              <FormControl>
+                <Input type="text" {...field} />
+                
+              </FormControl>
+              <StarRating onChange={handleRatingChange} />
+              <FormMessage />
+            </FormItem>
+          );
+        }}
+      />
+     {/* <FieldForm
             form={form}
             name="basicInfo.taxInfo.rating"
             label="Rating"
             type="text"
-          />
+          /> */}
           <div className="flex items-center w-full gap-4">
 
          <div className="flex-1">
@@ -428,7 +456,7 @@ const[showBankDetail , setShowBankDetail] = useState(false);
                     return (
                       <FormItem className="flex-1 flex items-center justify-center gap-4">
                         <FormLabel className="text-nowrap text-sm lg:text-base">
-                          Opening Balance :
+                          Opening Balance (Rs):
                         </FormLabel>
                         <div className="flex flex-1 flex-col">
                           <FormControl>
@@ -479,7 +507,7 @@ const[showBankDetail , setShowBankDetail] = useState(false);
 <FieldForm
             form={form}
             name="accountDetails.creditLimit"
-            label="Credit Limit"
+            label="Credit Limit (Rs)"
             type="number"
           />
 

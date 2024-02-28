@@ -34,7 +34,7 @@ const View = ({ params }) => {
     <div className="max-w max-h mt-14 rounded-2xl  bg-white px-4 py-4 shadow-lg md:px-10 lg:my-4 lg:p-8 lg:px-20">
       <div className="flex items-center justify-between">
         <h2 className="mb-8  text-3xl font-semibold text-orange-500">
-          Money Receipt Details :
+          Money Transfer Details :
         </h2>
         <div className="flex items-center justify-between space-x-2">
           <Button className="space-x-2 px-4" onClick={handleGoBack}>
@@ -57,10 +57,10 @@ const View = ({ params }) => {
         ) : (
           <>
           <DataView
-  label="Reciept Date"
+  label="Transfer Date"
   value={
-    data?.recieptDate
-      ? new Date(data?.recieptDate).toLocaleDateString("en-US", {
+    data?.transferDate
+      ? new Date(data?.transferDate).toLocaleDateString("en-US", {
           weekday: "long",
           year: "numeric",
           month: "short",
@@ -70,66 +70,38 @@ const View = ({ params }) => {
   }
   show={editAccounting}
   tableId={data?._id}
-  apiCall="updateReceipt"
-  identifier={`recieptDate`}
+  apiCall="updateMoneyTransfer"
+  identifier={`transferDate`}
   type="date"
 />
 
             <hr />
 
             <DataView
-              label="Reciept No"
-              value={data?.recieptNo}
+              label="From"
+              value={data?.from}
               show={editAccounting}
               tableId={data?._id}
-              apiCall="updateReceipt"
-              identifier={`recieptNo`}
-            />
-            <hr />
-
-            <DataView
-              label="Received From"
-              value={data?.receivedFrom}
-              // show={editAccounting}
-              tableId={data?._id}
-              apiCall="updateReceipt"
-              identifier={`receivedFrom`}
+              apiCall="updateMoneyTransfer"
+              identifier={`from`}
             />
             <hr />
             <DataView
-              label="Received Amount"
-              value={data?.receivedAmount}
+              label="To"
+              value={data?.to}
               show={editAccounting}
               tableId={data?._id}
-              apiCall="updateReceipt"
-              identifier={`receivedAmount`}
+              apiCall="updateMoneyTransfer"
+              identifier={`to`}
             />
             <hr />
             <DataView
-              label="TDS"
-              value={data?.TDS}
+              label="Amount"
+              value={data?.amount}
               show={editAccounting}
               tableId={data?._id}
-              apiCall="updateReceipt"
-              identifier={`TDS`}
-            />
-            <hr />
-            <DataView
-              label="Discount"
-              value={data?.discount}
-              show={editAccounting}
-              tableId={data?._id}
-              apiCall="updateReceipt"
-              identifier={`discount`}
-            />
-            <hr />
-            <DataView
-              label="Paid By"
-              value={data?.paidBy}
-              show={editAccounting}
-              tableId={data?._id}
-              apiCall="updateReceipt"
-              identifier={`paidBy`}
+              apiCall="updateMoneyTransfer"
+              identifier={`amount`}
             />
             <hr />
             <DataView
@@ -137,10 +109,12 @@ const View = ({ params }) => {
               value={data?.narration}
               show={editAccounting}
               tableId={data?._id}
-              apiCall="updateReceipt"
+              apiCall="updateMoneyTransfer"
               identifier={`narration`}
             />
             <hr />
+
+           
           </>
         )}
       </>

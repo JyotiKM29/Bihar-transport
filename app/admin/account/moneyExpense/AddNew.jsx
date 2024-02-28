@@ -182,14 +182,14 @@ Add New
         <FieldForm 
         form={form} 
         name="serviceCharge" 
-        label="Service Charge "
+        label="Service Charge  (Rs)"
          type="number" />
 
 
         <FieldForm 
         form={form} 
         name="paidAmount" 
-        label="Paid Amount"
+        label="Paid Amount  (Rs)"
          type="text" />
 
 

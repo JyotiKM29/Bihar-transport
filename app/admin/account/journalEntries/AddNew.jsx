@@ -136,7 +136,7 @@ useEffect(() => {
 <FieldForm 
         form={form} 
         name="debit" 
-        label="Debit"
+        label="Debit  (Rs)"
          type="number" />
 </div>
 
@@ -158,7 +158,7 @@ useEffect(() => {
 <FieldForm 
         form={form} 
         name="credit" 
-        label="Credit"
+        label="Credit  (Rs)"
          type="number" />
 </div>
 

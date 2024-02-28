@@ -68,7 +68,7 @@ const View = ({ params }) => {
         })
       : "N/A"
   }
-  show={editAccounting}
+  
   tableId={data?._id}
   apiCall="updateReceipt"
   identifier={`paymentDate`}
@@ -80,7 +80,7 @@ const View = ({ params }) => {
             <DataView
               label="paidAmount"
               value={data?.paidAmount}
-              show={editAccounting}
+              
               tableId={data?._id}
               apiCall="updateReceipt"
               identifier={`paidAmount`}
@@ -89,7 +89,7 @@ const View = ({ params }) => {
             <DataView
               label="TDS"
               value={data?.TDS}
-              show={editAccounting}
+              
               tableId={data?._id}
               apiCall="updateReceipt"
               identifier={`TDS`}
@@ -98,7 +98,7 @@ const View = ({ params }) => {
             <DataView
               label="paidBy"
               value={data?.paidBy}
-              show={editAccounting}
+              
               tableId={data?._id}
               apiCall="updateReceipt"
               identifier={`paidBy`}
@@ -107,7 +107,7 @@ const View = ({ params }) => {
             <DataView
               label="narration"
               value={data?.narration}
-              show={editAccounting}
+              
               tableId={data?._id}
               apiCall="updateReceipt"
               identifier={`narration`}
@@ -116,7 +116,7 @@ const View = ({ params }) => {
             <DataView
               label="voucherNo"
               value={data?.voucherNo}
-              show={editAccounting}
+              
               tableId={data?._id}
               apiCall="updateReceipt"
               identifier={`voucherNo`}
@@ -127,7 +127,7 @@ const View = ({ params }) => {
             <DataView
               label="vehicleNo"
               value={data?.paidTo.vehicleNo}
-              show={editAccounting}
+              
               tableId={data?._id}
               apiCall="updateReceipt"
               identifier={`paidTo.vehicleNo`}
@@ -136,7 +136,7 @@ const View = ({ params }) => {
             <DataView
               label="ownerName"
               value={data?.paidTo.ownerName}
-              show={editAccounting}
+              
               tableId={data?._id}
               apiCall="updateReceipt"
               identifier={`paidTo.ownerName`}
@@ -145,7 +145,7 @@ const View = ({ params }) => {
             <DataView
               label="driverName"
               value={data?.paidTo.driverName}
-              show={editAccounting}
+              
               tableId={data?._id}
               apiCall="updateReceipt"
               identifier={`paidTo.driverName`}

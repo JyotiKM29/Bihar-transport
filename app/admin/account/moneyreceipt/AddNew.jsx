@@ -164,16 +164,16 @@ const AddNew = () => {
         <FieldForm
           form={form}
           name="receivedAmount"
-          label="Received Amount"
+          label="Received Amount  (Rs)"
           type="number"
         />
 
-        <FieldForm form={form} name="TDS" label="TDS Amount" type="number" />
+        <FieldForm form={form} name="TDS" label="TDS " type="number" />
 
         <FieldForm
           form={form}
           name="discount"
-          label="Discount Amount"
+          label="Discount Amount (Rs)"
           type="text"
         />
 
