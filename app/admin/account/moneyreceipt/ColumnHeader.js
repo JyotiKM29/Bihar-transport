@@ -104,7 +104,7 @@ export default function ColumnHeader() {
       {
         accessorKey: "receivedAmount",
 
-        header: "Cash",
+        header: "Cash ₹",
       },
       {
         accessorKey: "TDS",
