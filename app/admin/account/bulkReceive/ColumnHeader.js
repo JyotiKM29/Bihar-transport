@@ -1,5 +1,5 @@
 "use client";
-
+import { Eye } from 'lucide-react';
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "../../../components/ui/button";
 import { Checkbox } from "../../../components/ui/checkbox";
@@ -116,7 +116,13 @@ export default function ColumnHeader() {
         header: "Remarks",
       },
 
-     
+      {
+  
+        header: "View",
+        cell: ({ row }) =><Link href={`/admin/account/bulkReceive/${row.original._id}`} >
+          <Eye />
+        </Link>,
+      },
       {
         id: "actions",
         enableHiding: false,
