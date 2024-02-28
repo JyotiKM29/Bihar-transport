@@ -3,11 +3,15 @@ import React, { useEffect, useState } from "react";
 import { Button } from "../../../../components/ui/button";
 import { useRouter } from "next/navigation";
 import DataView from "../../DataView";
+import { IoIosArrowBack } from "react-icons/io";
+import { MdEdit } from "react-icons/md";
 
 const View = ({ params }) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
   const router = useRouter();
+  const [editAccounting, setEditAccounting] = useState(false);
+
 
   const id = params.id;
   async function fetchData() {
@@ -35,8 +39,18 @@ const View = ({ params }) => {
         <h2 className="mb-8  text-3xl font-semibold text-orange-500">
           Journal Entries Details :
         </h2>
-        <div className="flex gap-3">
-          <Button onClick={handleGoBack}>Back</Button>
+        <div className="flex items-center justify-between space-x-2">
+          <Button className="space-x-2 px-4" onClick={handleGoBack}>
+            <IoIosArrowBack className=" fill-white" />
+            <pre className="text-base">Back</pre>
+          </Button>
+          <Button
+            onClick={() => setEditAccounting(!editAccounting)}
+            className="space-x-2 px-4"
+          >
+            <pre className="text-base">Edit</pre>
+            <MdEdit className="h-8 fill-white" />
+          </Button>
         </div>
       </div>
 
@@ -46,7 +60,7 @@ const View = ({ params }) => {
         ) : (
           <>
             <DataView
-              title="Date"
+              label="Date"
               value={
                 data?.date
                   ? new Date(data?.date).toLocaleDateString("en-US", {
@@ -57,22 +71,49 @@ const View = ({ params }) => {
                     })
                   : "N/A"
               }
+
+              show={editAccounting}
+              tableId={data?._id}
+              apiCall="journal"
+              identifier={`date`}
+              type="date"
             />
             <hr />
-            <br />
-            <DataView title=" From" value={data?.from} />
+          
+            <DataView label=" From" value={data?.from} 
+                show={editAccounting}
+              tableId={data?._id}
+              apiCall="journal"
+              identifier={`from`}
+            />
             <hr />
-            <br />
-            <DataView title="To" value={data?.to} />
+          
+            <DataView label="To" value={data?.to} 
+                show={editAccounting}
+              tableId={data?._id}
+              apiCall="journal"
+              identifier={`to`}
+            />
             <hr />
-            <br />
-            <DataView title="Debit" value={data?.debit} />
+          
+            <DataView label="Debit" value={data?.debit} 
+                show={editAccounting}
+              tableId={data?._id}
+              apiCall="journal"
+              identifier={`debit`}
+            />
             <hr />
-            <br />
-            <DataView title="Credit" value={data?.credit} />
+          
+            <DataView label="Credit" value={data?.credit}   show={editAccounting}
+              tableId={data?._id}
+              apiCall="journal"
+              identifier={`credit`}/>
             <hr />
-            <br />
-            <DataView title="Narration" value={data?.narration} />
+          
+            <DataView label="Narration" value={data?.narration}   show={editAccounting}
+              tableId={data?._id}
+              apiCall="journal"
+              identifier={`narration`}/>
             <hr />
           </>
         )}
