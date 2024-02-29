@@ -12,35 +12,46 @@ export async function POST(request,response) {
     // console.log(email, password, ip, location);
 
     // Check for existing user with the same email
-    const existingUser = await user.findOne({ email });
+    // const existingUser = await user.findOne({ email });
 
-    // console.log("admin", existingUser);
 
-    if (!existingUser) {
-      return Response.json({ message: "user does not exist" }, { status: 400 });
-    }
+    // // console.log("admin", existingUser);
 
-    // Password failed
-    if (existingUser.password !== password) {
-      return Response.json(
-        { message: "password doesn't match" },
-        { status: 400 },
-      );
-    }
+    // if (!existingUser) {
+    //   return Response.json({ message: "user does not exist" }, { status: 400 });
+    // }
 
-    // If user but not admin
-    if (!existingUser.isAdmin && !existingUser.isOwner) {
-      return Response.json(
-        { message: "ask owner to assign you as admin role" },
-        { status: 400 },
-      );
-    }
+    // // Password failed
+    // if (existingUser.password !== password) {
+    //   return Response.json(
+    //     { message: "password doesn't match" },
+    //     { status: 400 },
+    //   );
+    // }
 
-    // Success cases
-    if (!Array.isArray(existingUser.loginHistory)) {
-      existingUser.loginHistory = [];
-      console.log("hey");
-    }
+    // // If user but not admin
+    // if (!existingUser.isAdmin && !existingUser.isOwner) {
+    //   return Response.json(
+    //     { message: "ask owner to assign you as admin role" },
+    //     { status: 400 },
+    //   );
+    // }
+
+    // // Success cases
+    // if (!Array.isArray(existingUser.loginHistory)) {
+    //   existingUser.loginHistory = [];
+    //   console.log("hey");
+    // }
+
+        const existingUser = await user.findOne({
+          $and: [
+            { $and: [{ email }, { password }] },
+            { $or: [{ isAdmin: true }, { isOwner: true }] },
+          ],
+        });
+
+    if (!existingUser) return Response.json({ message: "Not authorised" }, { status: 400 });
+
 
     // Append the new login history entry
     existingUser.loginHistory.push({ ip, location });
