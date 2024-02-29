@@ -656,7 +656,7 @@ const[showBankDetail , setShowBankDetail] = useState(false);
 <FieldForm
             form={form}
             name="additionalInfo.typeOfVehicle"
-            label="type Of Vehicle"
+            label="Type Of Vehicle"
             type="text"
           />
 <FieldForm
