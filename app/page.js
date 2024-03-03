@@ -17,8 +17,10 @@ const SignIn = () => {
 
   const router = useRouter();
   const { toast } = useToast();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  //set default password and email so , that User can check inside details , even then Owner not llowed them 
+  
+  const [email, setEmail] = useState("jyotikumari4442@gmail.com");
+  const [password, setPassword] = useState("567890");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
