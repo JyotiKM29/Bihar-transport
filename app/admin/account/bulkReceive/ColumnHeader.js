@@ -1,26 +1,7 @@
 "use client";
 import { Eye, Pencil, Trash2 } from 'lucide-react';
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { Button } from "../../../components/ui/button";
 import { Checkbox } from "../../../components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../../../components/ui/dropdown-menu";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../../../components/ui/dialog";
 
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
