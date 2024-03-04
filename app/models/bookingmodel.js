@@ -167,6 +167,8 @@ const bookingSchema = new mongoose.Schema(
     },
     advanceAmount: { type: Number },
     balanceAmount: { type: Number },
+    GSTPercentage: { type: Number },
+    GSTType: { type: String, enum:["RCM", "FCM"] },
     payMode: { type: String },
     transactionId: { type: String },
     remarks: { type: String },
