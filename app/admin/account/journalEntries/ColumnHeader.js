@@ -1,26 +1,7 @@
 "use client";
 
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { Button } from "../../../components/ui/button";
 import { Checkbox } from "../../../components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../../../components/ui/dropdown-menu";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../../../components/ui/dialog";
 
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
@@ -31,11 +12,6 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 export default function ColumnHeader() {
   const { user } = useContext(UserContext);
   const [columns, setColumns] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [vehicleIds, setVehicleIds] = useState([]);
-  const [vehicleData, setVehicleData] = useState();
-
-  const [searchInput, setSearchInput] = useState("");
 
 
   useEffect(() => {
