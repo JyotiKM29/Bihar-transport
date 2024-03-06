@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import FieldForm from "../../component/FieldForm";
 import { Button } from "../../../components/ui/button";
-import { Textarea } from "../../../components/ui/textarea";
 import SearchVOD from './SearchVOD'
 import {
   Select,
@@ -120,19 +119,7 @@ const AddNew = () => {
         name="date" 
         label="Date"
          type="date" />
-{/* 
-        <FieldForm 
-        form={form} 
-        label="Received From" 
-        name="vehicleNo"
-         type="text" /> */}
 
-
-        {/* <FieldForm 
-        form={form} 
-        name="recieveFrom" 
-        label="Received From"
-         type="number" /> */}
 
 <FormField
                 control={form.control}

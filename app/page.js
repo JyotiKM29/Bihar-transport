@@ -19,8 +19,8 @@ const SignIn = () => {
   const { toast } = useToast();
   //set default password and email so , that User can check inside details , even then Owner not llowed them 
   
-  const [email, setEmail] = useState("jyotikumari4442@gmail.com");
-  const [password, setPassword] = useState("567890");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
