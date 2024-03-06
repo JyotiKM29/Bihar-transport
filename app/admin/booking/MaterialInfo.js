@@ -25,24 +25,24 @@ const MaterialInfo = ({ form, nameValue }) => {
   
   
   
-  function calAmount(rate, quantity, taxPercentage = 0) {
+  function calAmount(rate, quantity, GSTPercentage = 0) {
     const amount = parseFloat(rate) * parseFloat(quantity);
-    const total = parseFloat(amount) * Number(taxPercentage);
+    const total = parseFloat(amount) * Number(GSTPercentage);
     return parseFloat(amount + total);
   }
 
   const quantity = form.watch(`${nameValue}[${items.length}].quantity`);
   const rate = form.watch(`${nameValue}[${items.length}].rate`);
-  const taxPercentage = form.watch(`${nameValue}[${items.length}].taxPercentage`);
+  const GSTPercentage = form.watch(`${nameValue}[${items.length}].GSTPercentage`);
 
   useEffect(() => {
     if (!isNaN(parseFloat(rate)) && !isNaN(parseFloat(quantity))) {
-      let result = calAmount(rate, quantity, taxPercentage);
+      let result = calAmount(rate, quantity, GSTPercentage);
       form.setValue(`${nameValue}[${items.length}].amount`, result);
     }
    calPartyBhara() ;
 
-  }, [rate, quantity, items.length, nameValue, taxPercentage]);
+  }, [rate, quantity, items.length, nameValue, GSTPercentage]);
  
 
   function handleAdditionalItem() {
@@ -58,7 +58,8 @@ const MaterialInfo = ({ form, nameValue }) => {
       rateAsPerOption: form.getValues(`${nameValue}[${items.length}].rateAsPerOption`),
       rate: form.getValues(`${nameValue}[${items.length}].rate`),
       rateUnit: form.getValues(`${nameValue}[${items.length}].rateUnit`),
-      taxPercentage: form.getValues(`${nameValue}[${items.length}].taxPercentage`),
+      GSTPercentage: form.getValues(`${nameValue}[${items.length}].GSTPercentage`),
+      GSTType: form.getValues(`${nameValue}[${items.length}].GSTType`),
       amount: form.getValues(`${nameValue}[${items.length}].amount`),
     };
 
@@ -122,7 +123,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                   {/* <td>{items.chargedWeight}{items.chargedWeightUnit}</td> */}
                   {/* <td>{items.rateAsPer}({items.rateAsPerOption})</td> */}
                   {/* <td>{items.rate}({items.rateUnit})</td> */}
-                  <td>{items.taxPercentage}</td>
+                  <td>{items.GSTPercentage}</td>
                   <td>{items.amount}</td>
                 </tr>
               ))}
@@ -424,12 +425,12 @@ const MaterialInfo = ({ form, nameValue }) => {
               <FormField
                 control={form.control}
                
-                name={`${nameValue}[${items.length}].taxPercentage`}
+                name={`${nameValue}[${items.length}].GSTPercentage`}
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
                       <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Tax Percentage:
+                        GST Percentage:
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
@@ -441,6 +442,31 @@ const MaterialInfo = ({ form, nameValue }) => {
                             <option value="0.08 ">8%</option>
                             <option value="0.12 ">12%</option>
                             <option value="0.18">18%</option>
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+              <FormField
+                control={form.control}
+               
+                name={`${nameValue}[${items.length}].GSTType`}
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        GST Type:
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <select {...field}>
+                            <option value="">Select GST Type</option>
+                            <option value="RCM">RCM</option>
+                            <option value="FCM">FCM</option>
+                            
                           </select>
                         </FormControl>
                         <FormMessage />
