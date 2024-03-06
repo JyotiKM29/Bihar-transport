@@ -56,7 +56,8 @@ const itemsSchema = z.object({
   rateAsPerOption: z.string().optional(),
   rate: z.coerce.number().optional(),
   rateUnit:  z.string().optional(),
-  taxPercentage: z.coerce.number().optional(),
+  GSTPercentage: z.coerce.number().optional(),
+  GSTType:z.enum(['RCM','FCM']),
   amount: z.coerce.number().optional(),
 })
 
@@ -147,7 +148,8 @@ export default function ProfileForm() {
       rateAsPerOption: undefined,
       rate: undefined,
       rateUnit: undefined,
-      taxPercentage: 0,
+      GSTPercentage: 0,
+      GSTType:'',
       amount:undefined,
     },
     additionalCharges: {
@@ -537,7 +539,7 @@ export default function ProfileForm() {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
                       <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Party Bhara  (Rs):
+                        Party Bhara (Rs):
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>

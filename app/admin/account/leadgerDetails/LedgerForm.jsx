@@ -49,10 +49,10 @@ const basicInfoSchema = z.object({
 });
 
 const accountDetailsSchema = z.object({
-  accountGroup:z.enum(['Capital Way' , 'Cash in Hand', 'Bank Account','Gross Receipt from Transporter Bussiness Account',
+  accountGroup:z.enum(['Capital Account' , 'Cash in Hand', 'Bank Account','Gross Receipt Transport',
 'Cost of Transporting Account' ,'Indirect Expenses', 'Sundry Debtor' ,'Sundry  Creditor','Duties and Taxes ','Customers', 'Vehicle Vendor ', 'Transporter', 'Petrol Pump'] ,"please select from given options"),
 
-  natureOfAccount:z.enum(['Capital' , 'Current Asset','Income', 'Expenses','Amounts Recievable' , 'Liabilities']),
+  natureOfAccount:z.enum(['Capital' , 'Current Asset','Indirect Income', 'Expenses','Amounts Recievable' , 'Liabilities']),
 
   // Openning Balance
   openingBalance: z.object({
@@ -396,10 +396,10 @@ const[showBankDetail , setShowBankDetail] = useState(false);
                         <FormControl>
                           <select {...field}>
                             <option value="">Select Account Group </option>
-                            <option value="Capital Way">Capital Way</option>
+                            <option value="Capital Account">Capital Account</option>
                             <option value="Cash in Hand">Cash in Hand</option>
                             <option value="Bank Account">Bank Account</option>
-                            <option value="Gross Receipt from Transporter Bussiness Account"> Gross Receipt from Transporter Bussiness Account</option>
+                            <option value="Gross Receipt Transport"> Gross Receipt Transport</option>
                             <option value="Cost of Transporting Account">Cost of Transporting Account</option>
                             <option value="Indirect Expenses">Indirect Expenses</option>
                             <option value="retuIndirect Indirectrn">Indirect Indirect</option>
@@ -408,7 +408,7 @@ const[showBankDetail , setShowBankDetail] = useState(false);
                             <option value="Duties and Taxes">Duties and Taxes </option>
                             <option value="Customers ">Customers </option>
                             <option value="Vehicle Vendor">Vehicle Vendor </option>
-                            <option value="Transporter">Transporter </option>
+                            <option value="Book Receipt">Book Receipt </option>
                             <option value="Petrol Pump">Petrol Pump </option>
                           </select>
                         </FormControl>
@@ -435,7 +435,7 @@ const[showBankDetail , setShowBankDetail] = useState(false);
               <option value="">Select Nature Of Account</option>
               <option value="Capital">Capital</option>
               <option value="Current Asset">Current Asset</option>
-              <option value="Income">Income</option>
+              <option value="Indirect Income">Indirect Income</option>
               <option value="Expenses">Expenses</option>
               <option value="Amounts Receivable">Amounts Receivable</option>
               <option value="Liabilities">Liabilities</option>

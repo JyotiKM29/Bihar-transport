@@ -85,7 +85,8 @@ const LocationAdd = ({ form, field, label, nameValue }) => {
     e.preventDefault();
     const value = e.target.value;
     form.setValue(field.name, value);
-    setSearchTerm(value);
+    setSearchTerm(value); 
+     setInputValue(value);
     fetchLocation(value);
   }
 
@@ -94,13 +95,13 @@ const LocationAdd = ({ form, field, label, nameValue }) => {
       <FormLabel className="self-start pt-6 text-nowrap text-sm lg:text-base">
         {label} :
       </FormLabel>
-      <div className="relative flex w-full  flex-col">
-        <FormControl>
+      <div className=" flex w-full  flex-col">
+        <FormControl >
           <Input
             type="text"
-            value={field.value}
+            value={inputValue}
             {...field}
-           
+            className=" text-wrap "
             onChange={(e) => {
               handleChange(e);
             }}
@@ -131,32 +132,35 @@ const LocationAdd = ({ form, field, label, nameValue }) => {
             searchResult.map((result, id) => (
               <div
                 key={id}
-                className="w-full cursor-pointer px-3 py-2 hover:bg-slate-200"
+                className="border w-full cursor-pointer px-3 py-2 hover:bg-slate-200"
                 onClick={
-                  () => {addLocation(result.placeAddress)
+                  () => {
+                    addLocation(result.placeAddress)
                     setSearchResult([])
+                    setSearchTerm("");
                   }
                 }
               >
+                <p >{result.placeAddress},  {result.placeName} </p>
                 
-                {result.placeAddress} ,{result.placeName}
+               
               </div>
             ))}
         </div>
         {Locations.length > 0 && (
   <div
     id="box"
-    className="flex h-14 items-center gap-1 overflow-x-scroll rounded-md border border-input px-3 py-0 text-sm ring-offset-background active:outline-none active:ring-2 active:ring-offset-1  pt-1"
+    className="flex flex-col min-h-14 items-center gap-1 overflow-x-scroll rounded-md border border-input px-3 py-0 text-sm ring-offset-background active:outline-none active:ring-2 active:ring-offset-1  pt-1 "
   >
     {Locations.map((location, i) => (
       <span
         key={i}
-        className="flex h-8 items-center gap-1 rounded-lg bg-blue-50 px-3"
+        className="self-start flex min-h-8 py-1 items-center gap-1 rounded-lg bg-blue-50 px-3 justify-between"
       >
-        <pre>{location}</pre>
+        <pre className="text-wrap ">{location}</pre>
 
         <button
-          className="min-w bg-grey-100 h-full rounded-full"
+          className="min-w bg-grey-100 h-full ml-4 rounded-full"
           onClick={() => deleteLocation(i)}
         >
           <GrClose />

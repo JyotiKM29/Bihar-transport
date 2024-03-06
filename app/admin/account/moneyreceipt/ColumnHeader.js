@@ -63,6 +63,7 @@ export default function ColumnHeader() {
         accessorKey: "recieptNo",
         header: "Receipt No",
       },
+     
 
       {
         accessorKey: "recieptDate",
@@ -80,12 +81,12 @@ export default function ColumnHeader() {
 
       {
         accessorKey: "paidBy",
-        header: "Paid By",
+        header: "Receive By",
       },
       {
         accessorKey: "receivedAmount",
 
-        header: "Cash ₹",
+        header: "Cash (₹)",
       },
       {
         accessorKey: "TDS",
@@ -96,6 +97,10 @@ export default function ColumnHeader() {
       {
         accessorKey: "discount",
         header: "Discount",
+      },
+      {
+        accessorKey: "recieptNo",
+        header: "InVoice No",
       },
       {
   
