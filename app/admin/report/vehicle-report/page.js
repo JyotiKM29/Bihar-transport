@@ -1,33 +1,37 @@
+'use client'
 import React from "react";
 import { Button } from "../../../components/ui/button";
 
-const VehicleReport = () => {
+import { ChevronLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+const BookingReport = () => {
+  const router = useRouter();
+
+  function handleBack(){
+    router.back()
+  }
   return (
-    
-      <div
-        className="max-h flex 
-          w-full xl:w-1/3 flex-col  gap-3 space-y-2 rounded-2xl 
-         bg-white px-4 py-4 shadow-md md:p-6 xl:h-[95%]"
-      >
-        <h1 className="text-2xl xl:text-3xl text-center lg:block ">Vehicle Report</h1>
-        <Button > Truck Wise Report </Button>
-        <Button > Lorry Attendence report </Button>
-        <Button > Vehicle Trip Register Report </Button>
-        <Button > Vehicle Payment History </Button>
-        <Button >Trip wise Profit & loss Statement </Button>
-        <Button >
-          {" "}
-          Vehicle wise Profit & loss Statement{" "}
-        </Button>
-        <Button > Date Wise Fuel Statement </Button>
-        <Button >
-          {" "}
-          Vehicle Vendor wise Outstanding Report{" "}
-        </Button>
-        <Button > Summary of Fuel Supply </Button>
-      </div>
+    <div
+    className="max-h flex 
+    w-full  flex-col  gap-3 space-y-2 rounded-2xl 
+     bg-white px-4 py-4 shadow-md md:p-6 xl:h-[95%]"
+  >
+  <div className="flex ">
+
  
+  
+    <h1 className="flex-1 text-2xl xl:text-3xl text-center lg:block ">State-wise Report</h1>
+    <Button  variant='secondary' className='flex gap-2 self-end' onClick={handleBack}>
+    <ChevronLeft />
+     Back
+  </Button>
+    </div>
+   
+    
+  </div>
   );
 };
 
-export default VehicleReport;
+export default BookingReport;
+

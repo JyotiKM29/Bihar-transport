@@ -22,8 +22,8 @@ const SearchBooking = () => {
   const { user } = useContext(UserContext);
   const [data, setData] = useState([]);
 
-  const dataBar =[data?.totalBooking , data?.confirmedBooking , data?.cancelledBooking];
-  const categoryBar = ["Total Booking" , "Confirm Booking" ,"Cancelled Booking"]
+  const dataBar =[data?.totalBooking , data?.confirmedBooking , data?.deliveredBooking , data?.cancelledBooking];
+  const categoryBar = ["Total Booking" , "Confirm Booking" ,"Delivered Booking" ,"Cancelled Booking"]
 
  
 
@@ -131,6 +131,7 @@ const SearchBooking = () => {
       <tr >
         <td className="border px-2 py-1 text-center">{data?.totalBooking}</td>
         <td className="border px-2 py-1 text-center">{data?.confirmedBooking}</td>
+        <td className="border px-2 py-1 text-center">{data?.deliveredBooking}</td>
         <td className="border px-2 py-1 text-center">{data?.cancelledBooking}</td>
       </tr>
    

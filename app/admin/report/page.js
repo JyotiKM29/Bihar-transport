@@ -14,16 +14,14 @@ function Report() {
     <div className="min-h-[90vh] w-full rounded-2xl  bg-white p-6 shadow-sm ">
      
       <div className="flex flex-col gap-6 xl:flex-row">
-        {/* {showBooking ? (
-          <Button onClick={() => setShowBooking(!showBooking)}>
-            Booking Report
-          </Button>
-        ) : (
-          <BookingReport />
-        )} */}
-        <Link href='/admin/report/bookingReport'>
+        
+        <Link href='/admin/report/bookingReport' className="px-8 py-2 rounded-lg shadow-md bg-blue-600 text-white max-w-full ">
         Booking Report
         </Link>
+        <Link href='/admin/report/stateReport' className="px-8 py-2 rounded-lg shadow-md bg-blue-600 text-white max-w-full ">
+        State Report
+        </Link>
+
       </div>
     </div>
   );
