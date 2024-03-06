@@ -29,6 +29,9 @@ export async function POST(req, res) {
          confirmedBooking: {
            $sum: { $cond: [{ $eq: ["$status", "Confirmed"] }, 1, 0] },
          },
+         Delivered: {
+           $sum: { $cond: [{ $eq: ["$status", "Delivered"] }, 1, 0] },
+         },
          cancelledBooking: {
            $sum: { $cond: [{ $eq: ["$status", "Cancelled"] }, 1, 0] },
          },
@@ -41,6 +44,7 @@ export async function POST(req, res) {
    const data = {
      totalBooking: result.totalBooking || 0,
      confirmedBooking: result.confirmedBooking || 0,
+     deliveredBooking: result.Delivered || 0,
      cancelledBooking: result.cancelledBooking || 0,
    };
 
