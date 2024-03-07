@@ -15,7 +15,7 @@ const BookingReport = () => {
     <div
     className="max-h flex 
     w-full  flex-col  gap-3 space-y-2 rounded-2xl 
-     bg-white px-4 py-4 shadow-md md:p-6 xl:h-[95%]"
+     bg-white px-4 py-4 shadow-md md:p-6 xl:min-h-[95%]"
   >
   <div className="flex ">
 

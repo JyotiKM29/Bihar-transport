@@ -8,10 +8,13 @@ import { Form } from "../../../components/ui/form";
 import { useContext,useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
+import InflationChart from "./InflationChart";
+
+
 const formSchema = z.object({
   adminId: z.string(),
-  fromDate: z.coerce.date(),
-  toDate: z.coerce.date(),
+  vehicleNo: z.string(),
+  
 });
 
 const VehicleNoBooking = () => {
@@ -24,16 +27,13 @@ const VehicleNoBooking = () => {
 
   const initialFormState = {
     adminId: "",
-    fromDate: new Date().toISOString().split("T")[0],
-    toDate: new Date().toISOString().split("T")[0],
+    vehicleNo: undefined,
   };
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: initialFormState,
   });
 
-  const StartDate = form.getValues('fromDate');
-  const EndDate = form.getValues( 'toDate') ;
 
   async function myhandleSubmit(value) {
     console.log(formSchema.safeParse(value));
@@ -47,7 +47,7 @@ const VehicleNoBooking = () => {
 
     value.adminId = user?._id;
     try {
-      const response = await fetch("/api/report/booking", {
+      const response = await fetch("/api/report/vehicleNo", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -61,7 +61,7 @@ const VehicleNoBooking = () => {
       if (response.ok) {
         setIsLoading(false);
         displayToast("Successfully", "✅");
-        // console.log("New booking created!", newResult);
+        console.log("New booking created!", newResult);
         setData(newResult.data);
         console.log('data :',data )
         form.reset(initialFormState);
@@ -85,6 +85,11 @@ const VehicleNoBooking = () => {
     });
   };
 
+
+  const dataBar =[data?.TotalBooking , data?.cancelledBooking , data?.pendingBooking , data?.confirmedBooking , data?.deleiveredBooking];
+  const categoryBar = ["Total Booking" ,"Cancelled Booking" , "Pending Booking", "Confirm Booking" ,"Delivered Booking" ]
+
+
   return (
     <div>
       <Form {...form}>
@@ -95,14 +100,12 @@ const VehicleNoBooking = () => {
           <div className="flex-1">
             <FieldForm
               form={form}
-              name="fromDate"
-              label="From Date"
-              type="date"
+              name="vehicleNo"
+              label="Vehicle No"
+              type="text"
             />
           </div>
-          <div className="flex-1">
-            <FieldForm form={form} name="toDate" label="To Date" type="date" />
-          </div>
+          
           <Button type="submit" className="w-full lg:w-1/3 ">
             {isloading ? "Loading..." : " Get Bookings"}
           </Button>
@@ -111,32 +114,53 @@ const VehicleNoBooking = () => {
 
 
 
+{
+  data && Object.keys(data).length > 0 && (
+  
+    <div className="max-h grid-col-1 grid max-w-full bg-teal-100 md:grid-cols-2 p-4 shadow-xl px-6 rounded-xl mb-8">
+        <label className="flex gap-2">
+          <h2 className="mr-3 text-nowrap text-lg font-semibold ">Total Booking:</h2>
+          <p className="mr-3 text-nowrap text-lg "> {data.TotalBooking}</p>
+        </label>
+        <label className="flex gap-2">
+          <h2 className="mr-3 text-nowrap text-lg font-semibold ">Cancelled Booking:</h2>
+          <p className="mr-3 text-nowrap text-lg "> {data.cancelledBooking}</p>
+        </label>
+        <label className="flex gap-2">
+          <h2 className="mr-3 text-nowrap text-lg font-semibold ">pending Booking:</h2>
+          <p className="mr-3 text-nowrap text-lg "> {data.pendingBooking}</p>
+        </label>
+        <label className="flex gap-2">
+          <h2 className="mr-3 text-nowrap text-lg font-semibold ">Confirm Booking:</h2>
+          <p className="mr-3 text-nowrap text-lg "> {data.confirmedBooking}</p>
+        </label>
+        <label className="flex gap-2">
+          <h2 className="mr-3 text-nowrap text-lg font-semibold ">Delivered Booking:</h2>
+          <p className="mr-3 text-nowrap text-lg "> {data.deleiveredBooking}</p>
+        </label>
+        <label className="flex gap-2">
+          <h2 className="mr-3 text-nowrap text-lg font-semibold ">Total Revenue:</h2>
+          <p className="mr-3 text-nowrap text-lg "> {data.totalRevenue}</p>
+        </label>
+        <label className="flex gap-2">
+          <h2 className="mr-3 text-nowrap text-lg font-semibold ">Total Commision:</h2>
+          <p className="mr-3 text-nowrap text-lg "> {data.totalCommision}</p>
+        </label>
+        <label className="flex gap-2">
+          <h2 className="mr-3 text-nowrap text-lg font-semibold ">Total Driver  Earnings:</h2>
+          <p className="mr-3 text-nowrap text-lg "> {data.totalDriverBhara}</p>
+        </label>
+      
+    </div>
+  )
+}
+    
 
-      {/* Table */}
-      {data && Object.keys(data).length > 0 && <table className="w-1/2 mt-10 ">
-        <thead>
-          <tr>
-          <th className="border py-1 px-2 bg-blue-200">Total Booking</th>
-          <th className="border py-1 px-2 bg-blue-200">Confirm Booking</th>
-          <th className="border py-1 px-2 bg-blue-200">Delivered Booking</th>
-          <th className="border py-1 px-2 bg-blue-200">Cancelled Booking</th>
-          </tr>
-        </thead>
-        <tbody>
- 
-      <tr >
-        <td className="border px-2 py-1 text-center">{data?.totalBooking}</td>
-        <td className="border px-2 py-1 text-center">{data?.confirmedBooking}</td>
-        <td className="border px-2 py-1 text-center">{data?.deliveredBooking}</td>
-        <td className="border px-2 py-1 text-center">{data?.cancelledBooking}</td>
-      </tr>
-   
-</tbody>
-
-      </table> }
-
-
-      {/* graph */}
+<div className="w-1/2">
+{(data && Object.keys(data).length > 0)? <InflationChart  data={dataBar} category={categoryBar}
+  totalValue={data.TotalBooking}
+/> : <p className="font-light text-red-700 ">No Booking  Data Available for this period. Select Dates</p>}
+</div>
 
 
     </div>
