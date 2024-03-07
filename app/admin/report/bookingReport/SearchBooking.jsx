@@ -5,7 +5,7 @@ import * as z from "zod";
 import FieldForm from "../../component/FieldForm";
 import { Button } from "../../../components/ui/button";
 import { Form } from "../../../components/ui/form";
-import { useContext, useEffect, useState } from "react";
+import { useContext,useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
 import InflationChart from './InflationChart';
@@ -123,6 +123,7 @@ const SearchBooking = () => {
           <tr>
           <th className="border py-1 px-2 bg-blue-200">Total Booking</th>
           <th className="border py-1 px-2 bg-blue-200">Confirm Booking</th>
+          <th className="border py-1 px-2 bg-blue-200">Delivered Booking</th>
           <th className="border py-1 px-2 bg-blue-200">Cancelled Booking</th>
           </tr>
         </thead>
