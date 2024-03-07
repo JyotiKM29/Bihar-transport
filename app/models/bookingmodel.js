@@ -200,6 +200,17 @@ const bookingSchema = new mongoose.Schema(
         date: { type: Date },
       },
     ],
+    invoiceStatus: { type: Boolean, default: false },
+    generatedInvoice: {
+
+      invoiceNumber: { type: Number, unique: true},
+      invoiceDate: { type: Date },
+      invoiceAmount: { type: Number },
+      invoiceGST: { type: Number },
+      invoiceTotal: { type: Number },
+      invoiceRemarks: { type: String },
+
+    },
     invoice: [],
     dispatch: {
       isDispatched: { type: Boolean, default: false },
