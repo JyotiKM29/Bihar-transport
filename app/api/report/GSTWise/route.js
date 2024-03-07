@@ -40,5 +40,4 @@ export async function POST(req, res) {
         console.log(error);
         return Response.json({ message: error.message }, { status: 400 });
     }
-
 }
