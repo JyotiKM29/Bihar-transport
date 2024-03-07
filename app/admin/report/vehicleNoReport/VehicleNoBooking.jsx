@@ -20,9 +20,6 @@ const VehicleNoBooking = () => {
   const { user } = useContext(UserContext);
   const [data, setData] = useState([]);
 
-  const dataBar =[data?.totalBooking , data?.confirmedBooking , data?.deliveredBooking , data?.cancelledBooking];
-  const categoryBar = ["Total Booking" , "Confirm Booking" ,"Delivered Booking" ,"Cancelled Booking"]
-
  
 
   const initialFormState = {
