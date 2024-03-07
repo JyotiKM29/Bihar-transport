@@ -8,8 +8,6 @@ import { Form } from "../../../components/ui/form";
 import { useContext,useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
-import InflationChart from './InflationChart';
-
 const formSchema = z.object({
   adminId: z.string(),
   fromDate: z.coerce.date(),
@@ -114,7 +112,7 @@ const VehicleNoBooking = () => {
         </form>
       </Form>
 
-<div className="flex gap-8">
+
 
 
       {/* Table */}
@@ -143,13 +141,7 @@ const VehicleNoBooking = () => {
 
       {/* graph */}
 
-<div className="w-1/2">
-{(data && Object.keys(data).length > 0)? <InflationChart  data={dataBar} category={categoryBar}
-  fromDate={StartDate} toDate={EndDate} totalValue={data.totalBooking}
-/> : <p className="font-light text-red-700 ">No Booking  Data Available for this period.</p>}
-</div>
-     
-      </div>
+
     </div>
   );
 };

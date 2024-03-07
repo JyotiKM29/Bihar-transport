@@ -145,7 +145,7 @@ const SearchBooking = () => {
 
 <div className="w-1/2">
 {(data && Object.keys(data).length > 0)? <InflationChart  data={dataBar} category={categoryBar}
-  fromDate={StartDate} toDate={EndDate} totalValue={data.totalBooking}
+  totalValue={data.totalBooking}
 /> : <p className="font-light text-red-700 ">No Booking  Data Available for this period. Select Dates</p>}
 </div>
      
