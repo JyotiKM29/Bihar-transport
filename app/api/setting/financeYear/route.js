@@ -5,16 +5,35 @@ import connectDB from "../../../middleware/connectDB";
 export async function POST(req, res) {
 
     try {
-        
+
         const { adminId, financeYear } = await req.json();    
         await connectDB();
 
-        const admin = await usermodel.find({ $and: [{ _id: adminId }, { $or: [{ isAdmin: true }, { isOwner: true }] }] });
-        if (!admin) {
-            return Response.json({ message: "Admin not found" }, { status: 400 });
+        const admin = await usermodel.findOne({
+          $and: [
+            { _id: adminId },
+            { $or: [{ isAdmin: true }, { isOwner: true }] },
+          ],
+        });
+        if (!admin || !admin.name || !admin._id) {
+          return Response.json(
+            { message: "Admin not found or missing required fields" },
+            { status: 400 },
+          );
         }
 
-        const financeYearData = await settingmodel.create({ financeYear });
+        console.log(admin.name, admin._id, financeYear);
+
+        const financeYearData = new settingmodel({
+          financeYear,
+          createdBy: {
+            adminId,
+            name: admin.name,
+          },
+        });
+
+        await financeYearData.save();
+        
         return Response.json({message:"Successfully Created"}, { status: 200 });
         
     } catch (error) {

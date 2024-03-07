@@ -16,7 +16,7 @@ export async function GET(req, context) {
         }
 
         const financeYearData = await settingmodel.find({}).sort({ createdAt: -1 }).limit(1);
-        return Response.json(financeYearData.financeYear, { status: 200 });
+        return Response.json(financeYearData, { status: 200 });
 
     } catch (error) {
         console.log(error);

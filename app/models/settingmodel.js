@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const settingSchema = new mongoose.Schema({
 
-    financeYear: { type: Date },
+    financeYear: { type: String },
     createdBY: {
-        _id: { type: String },
+        adminId: { type: String },
         name: { type: String },
     },
     updatedBY: {

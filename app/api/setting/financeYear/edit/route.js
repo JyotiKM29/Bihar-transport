@@ -15,9 +15,13 @@ export async function PUT(req, res) {
             return Response.json({ message: "Admin not found" }, { status: 400 });
         }
 
-        const financeYearData = await settingmodel.findByIdAndUpdate
-            ({ _id }, { financeYear }, { new: true });
-        
+       const Data = await settingmodel.findOneAndUpdate({ _id: _id }, {
+            financeYear: financeYear,
+            updatedBy: {
+                name: admin.name,
+                id: admin._id
+            }
+        });
         return Response.json({ message: "Successfully Updated" }, { status: 200 });
         
     } catch (error) {
