@@ -39,7 +39,7 @@ export default function ColumnHeader() {
         }else{
           // displayToast("Successfully deleted", "✅");
           console.log(' deleted')
-          window.location.reload();
+          // window.location.reload();
         }
       } catch (error) {
         console.error("There was a problem with the delete request.", error);

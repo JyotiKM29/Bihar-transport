@@ -50,7 +50,7 @@ async function signOut() {
     if (response.ok) {
       console.log('Signed out successfully');
       // Redirect to the home page or perform other actions after sign out
-      window.location.href = '/';
+      // window.location.href = '/';
     } else {
       console.error('Failed to sign out');
     }
