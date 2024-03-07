@@ -1,8 +1,8 @@
 'use client'
 import React from "react";
 import { Button } from "../../../components/ui/button";
-
-import { ChevronLeft } from "lucide-react";
+import SearchBooking from './SearchBooking'
+import { Backpack, ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const BookingReport = () => {
@@ -21,13 +21,13 @@ const BookingReport = () => {
 
  
   
-    <h1 className="flex-1 text-2xl xl:text-3xl text-center lg:block ">State-wise Report</h1>
+    <h1 className="flex-1 text-2xl xl:text-3xl text-center lg:block ">Booking Report</h1>
     <Button  variant='secondary' className='flex gap-2 self-end' onClick={handleBack}>
     <ChevronLeft />
      Back
   </Button>
     </div>
-   
+    <SearchBooking />
     
   </div>
   );
