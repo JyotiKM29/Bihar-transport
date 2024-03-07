@@ -16,7 +16,7 @@ const formSchema = z.object({
   toDate: z.coerce.date(),
 });
 
-const SearchBooking = () => {
+const VehicleNoBooking = () => {
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
@@ -114,7 +114,7 @@ const SearchBooking = () => {
         </form>
       </Form>
 
-<div className="flex gap-8 ">
+<div className="flex gap-8">
 
 
       {/* Table */}
@@ -146,7 +146,7 @@ const SearchBooking = () => {
 <div className="w-1/2">
 {(data && Object.keys(data).length > 0)? <InflationChart  data={dataBar} category={categoryBar}
   fromDate={StartDate} toDate={EndDate} totalValue={data.totalBooking}
-/> : <p className="font-light text-red-700 ">No Booking  Data Available for this period. Select Dates</p>}
+/> : <p className="font-light text-red-700 ">No Booking  Data Available for this period.</p>}
 </div>
      
       </div>
@@ -154,4 +154,4 @@ const SearchBooking = () => {
   );
 };
 
-export default SearchBooking;
+export default VehicleNoBooking;

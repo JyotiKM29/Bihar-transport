@@ -1,11 +1,15 @@
-"use client";
-import dynamic from "next/dynamic";
-const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import React, { useState, useEffect } from 'react';
+import ApexCharts from 'apexcharts';
 
-const InflationChart = ({ data, category, fromDate, toDate, totalValue }) => {
-  
+const InflationChart = ({ data, category, fromDate, toDate  , totalValue}) => {
   const [options, setOptions] = useState({
+    series: [
+      {
+        name: 'Booking Report',
+        data: data,
+        // colors: ['#03A9F4', '#4CAF50', '#F44336'], 
+      },
+    ],
     chart: {
       height: 350,
       type: 'bar',
@@ -22,12 +26,14 @@ const InflationChart = ({ data, category, fromDate, toDate, totalValue }) => {
     dataLabels: {
       enabled: true,
       formatter: (val) => {
-        return ((val / totalValue).toFixed(2) * 100) + '%';
+       
+        return ((val / totalValue).toFixed(2) * 100) + '%' ;
+      
       },
       offsetY: -20,
       style: {
         fontSize: '12px',
-        colors: ['#304758'],
+        colors: ['#304758'], // Ensure color matches if needed
       },
     },
     xaxis: {
@@ -67,7 +73,7 @@ const InflationChart = ({ data, category, fromDate, toDate, totalValue }) => {
       },
     },
     title: {
-      text: `Booking from ${fromDate} to ${toDate}`,
+      text: `Booking  from ${fromDate} to ${toDate}`,
       floating: true,
       offsetY: 330,
       align: 'center',
@@ -77,17 +83,20 @@ const InflationChart = ({ data, category, fromDate, toDate, totalValue }) => {
     },
   });
 
-  const [series, setSeries] = useState([
-    {
-      name: 'Booking Report',
-      data: data,
-    },
-  ]);
+  useEffect(() => {
+    const chart = new ApexCharts(document.getElementById('chart'), options);
+    chart.render();
+
+    // Cleanup function to avoid memory leaks and potential issues
+    return () => {
+      if (chart) {
+        chart.destroy();
+      }
+    };
+  }, [options]); // Re-render chart on options change
 
   return (
-    <div id="bar">
-      <ApexChart options={options} series={series} type="bar" height={'100%'} />
-    </div>
+    <div id="chart"></div>
   );
 };
 
