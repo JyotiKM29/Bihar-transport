@@ -4,12 +4,12 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import FieldForm from "../../component/FieldForm";
 import { Button } from "../../../components/ui/button";
-import { Form } from "../../../components/ui/form";
+import { Form, FormField } from "../../../components/ui/form";
 import { useContext,useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
 import InflationChart from "./InflationChart";
-
+import SearchVOD from "./SearchVOD";
 
 const formSchema = z.object({
   adminId: z.string(),
@@ -98,12 +98,19 @@ const VehicleNoBooking = () => {
           className="flex max-w-full flex-col items-center justify-between  gap-4 md:flex-row "
         >
           <div className="flex-1">
-            <FieldForm
-              form={form}
-              name="vehicleNo"
-              label="Vehicle No"
-              type="text"
-            />
+          <FormField
+                control={form.control}
+                name="paidTo" 
+                
+                render={({ field }) => (
+                  <SearchVOD
+                 
+                    form={form}
+                    field={field}
+                    label='Vehicle No'
+                  />
+                )}
+              />
           </div>
           
           <Button type="submit" className="w-full lg:w-1/3 ">
@@ -156,7 +163,7 @@ const VehicleNoBooking = () => {
 }
     
 
-<div className="w-1/2">
+<div className="w-2/3 h-5/6" >
 {(data && Object.keys(data).length > 0)? <InflationChart  data={dataBar} category={categoryBar}
   totalValue={data.TotalBooking}
 /> : <p className="font-light text-red-700 ">No Booking  Data Available for this period. Select Dates</p>}
