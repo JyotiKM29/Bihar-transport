@@ -1,26 +1,26 @@
-import React from 'react'
-import MasterSetting from './master-setting/page'
-import VehicleSetting from './vehicle-setting/page'
-import PriceMangement from './price-mangement/page'
-import TaxSetting from './tax-setting/page'
-import OtherSetting from './other-setting/page'
+"use client";
+import React, { useState } from "react";
 
-const page = () => {
+import Link from "next/link";
+
+function Report() {
+  const [showBooking, setShowBooking] = useState(true);
+
   return (
-    <div className="w-full min-h-[90vh] rounded-2xl  bg-white p-6 shadow-sm ">
-    <h5 className='text-center text-base md:text-lg mb-8'>Set settings from below Details:</h5>
-    <div className='grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6'>
-     <MasterSetting />
-     <VehicleSetting />
-     <PriceMangement />
-     <OtherSetting />
-     <TaxSetting />
-     
-    
+    <div className="min-h-[90vh] w-full rounded-2xl  bg-white p-8 xl:px-24 shadow-sm ">
+    <h2 className="mb-14 mt-4 text-3xl font-semibold text-emerald-800 ">
+          Settings  :
+        </h2>
+      <div className="flex flex-col gap-6 w-full lg:w-1/2 ">
+      
+        <Link href='/admin/settings/financeyear' className="px-8 py-2 rounded-lg shadow-md bg-emerald-500 hover:bg-emerald-700 text-white max-w-full ">
+        Finance Year
+        </Link>
+        
+
+      </div>
     </div>
-     
-    </div>
-  )
+  );
 }
 
-export default page
+export default Report;

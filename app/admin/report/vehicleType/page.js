@@ -21,8 +21,8 @@ const BookingReport = () => {
 
  
   
-    <h1 className="flex-1 text-2xl xl:text-3xl text-center lg:block ">Vehicle-type Wise Report</h1>
-    <Button  variant='secondary' className='flex gap-2 self-end' onClick={handleBack}>
+    <h1 className="flex-1 text-2xl xl:text-3xl text-center lg:block text-violet-800  ">Vehicle-type Wise Report</h1>
+    <Button  variant='secondary' className='flex gap-2 self-end shadow-md bg-violet-200 hover:bg-violet-300 ' onClick={handleBack}>
     <ChevronLeft />
      Back
   </Button>

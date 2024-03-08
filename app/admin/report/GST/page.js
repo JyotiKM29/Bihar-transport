@@ -1,8 +1,8 @@
 'use client'
 import React from "react";
 import { Button } from "../../../components/ui/button";
-import VehicleNoBooking from './VehicleNoBooking';
-import { ChevronLeft } from "lucide-react";
+import GSTWise from './GSTWise'
+import { Backpack, ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const BookingReport = () => {
@@ -15,19 +15,19 @@ const BookingReport = () => {
     <div
     className="max-h flex 
     w-full  flex-col  gap-3 space-y-2 rounded-2xl 
-     bg-white px-4 py-4 shadow-md md:p-6 xl:min-h-[95%]"
+     bg-white px-4 py-4 shadow-md md:p-6 xl:h-[95%]"
   >
   <div className="flex ">
 
  
   
-    <h1 className="flex-1 text-2xl xl:text-3xl text-center lg:block text-violet-800  ">Vehicle-wise Report</h1>
-    <Button  variant='secondary' className='flex  shadow-md bg-violet-200 hover:bg-violet-300  gap-2 self-end' onClick={handleBack}>
+    <h1 className="flex-1 text-2xl xl:text-3xl text-center lg:block text-violet-800 ">GST wise Report</h1>
+    <Button  variant='secondary' className='flex gap-2  shadow-md bg-violet-200 hover:bg-violet-300 self-end' onClick={handleBack}>
     <ChevronLeft />
      Back
   </Button>
     </div>
-   <VehicleNoBooking />
+    <GSTWise />
     
   </div>
   );

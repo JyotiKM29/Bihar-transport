@@ -16,14 +16,14 @@ const formSchema = z.object({
   toDate: z.coerce.date(),
 });
 
-const SearchBooking = () => {
+const GSTWise = () => {
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
   const [data, setData] = useState([]);
 
-  const dataBar =[data?.totalBooking , data?.confirmedBooking , data?.deliveredBooking , data?.cancelledBooking];
-  const categoryBar = ["Total Booking" , "Confirm Booking" ,"Delivered Booking" ,"Cancelled Booking"]
+  const dataBar =[data?.RCM , data?.FCM];
+  const categoryBar = ["RCM" , "FCM" ]
 
  
 
@@ -52,7 +52,7 @@ const SearchBooking = () => {
 
     value.adminId = user?._id;
     try {
-      const response = await fetch("/api/report/booking", {
+      const response = await fetch("/api/report/GSTWise", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -108,7 +108,7 @@ const SearchBooking = () => {
           <div className="flex-1">
             <FieldForm form={form} name="toDate" label="To Date" type="date" />
           </div>
-          <Button type="submit" className="w-full lg:w-1/5 shadow-md bg-violet-500 hover:bg-violet-700 text-white ">
+          <Button type="submit"className="w-full lg:w-1/5 shadow-md bg-violet-500 hover:bg-violet-700 text-white ">
             {isloading ? "Loading..." : " Get Bookings"}
           </Button>
         </form>
@@ -121,19 +121,17 @@ const SearchBooking = () => {
       {data && Object.keys(data).length > 0 && <table className="w-1/2 mt-10 ">
         <thead>
           <tr>
-          <th className="border py-1 px-2 bg-blue-200">Total Booking</th>
-          <th className="border py-1 px-2 bg-blue-200">Confirm Booking</th>
-          <th className="border py-1 px-2 bg-blue-200">Delivered Booking</th>
-          <th className="border py-1 px-2 bg-blue-200">Cancelled Booking</th>
+          <th className="border py-1 px-2 bg-blue-200">RCM</th>
+          <th className="border py-1 px-2 bg-blue-200">FCM</th>
+         
           </tr>
         </thead>
         <tbody>
  
       <tr >
-        <td className="border px-2 py-1 text-center">{data?.totalBooking}</td>
-        <td className="border px-2 py-1 text-center">{data?.confirmedBooking}</td>
-        <td className="border px-2 py-1 text-center">{data?.deliveredBooking}</td>
-        <td className="border px-2 py-1 text-center">{data?.cancelledBooking}</td>
+        <td className="border px-2 py-1 text-center">{data?.RCM}</td>
+        <td className="border px-2 py-1 text-center">{data?.FCM}</td>
+        
       </tr>
    
 </tbody>
@@ -146,7 +144,7 @@ const SearchBooking = () => {
 <div className="w-1/2">
 {(data && Object.keys(data).length > 0)? <InflationChart  data={dataBar} category={categoryBar}
   totalValue={data.totalBooking}
-/> : <p className="font-light text-red-700 ">No Booking  Data Available for this period. Select Dates</p>}
+/> : <p className="font-light text-red-700 ">No  Data Available for this period. Select Dates</p>}
 </div>
      
       </div>
@@ -154,4 +152,4 @@ const SearchBooking = () => {
   );
 };
 
-export default SearchBooking;
+export default GSTWise;
