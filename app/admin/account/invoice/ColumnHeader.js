@@ -12,11 +12,6 @@ import { Input } from "../../../components/ui/input";
 export default function ColumnHeader() {
   const { user } = useContext(UserContext);
   const [columns, setColumns] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [vehicleIds, setVehicleIds] = useState([]);
-  const [vehicleData, setVehicleData] = useState();
-
-  const [searchInput, setSearchInput] = useState("");
 
   const displayToast = (title, action, description = "") => {
     toast({

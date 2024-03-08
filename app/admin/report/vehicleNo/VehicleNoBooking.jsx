@@ -2,7 +2,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import FieldForm from "../../component/FieldForm";
 import { Button } from "../../../components/ui/button";
 import { Form, FormField } from "../../../components/ui/form";
 import { useContext,useState } from "react";
@@ -100,7 +99,7 @@ const VehicleNoBooking = () => {
           <div className="flex-1">
           <FormField
                 control={form.control}
-                name="paidTo" 
+                name="vehicleNo" 
                 
                 render={({ field }) => (
                   <SearchVOD

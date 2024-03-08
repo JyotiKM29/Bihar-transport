@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 
-import BookingReport from "./bookingReport/page";
-import VehicleReport from "./vehicleNoReport/page";
-import InvoiceReport from "./stateReport/page";
+import BookingReport from "./bookingDate/page";
+import VehicleReport from "./vehicleNo/page";
+import InvoiceReport from "./stateWise/page";
 import { Button } from "../../components/ui/button";
 import Link from "next/link";
 
@@ -15,14 +15,17 @@ function Report() {
      
       <div className="flex flex-col gap-6 xl:flex-row">
         
-        <Link href='/admin/report/bookingReport' className="px-8 py-2 rounded-lg shadow-md bg-blue-600 text-white max-w-full ">
-        Booking Report
+        <Link href='/admin/report/bookingDate' className="px-8 py-2 rounded-lg shadow-md bg-blue-600 text-white max-w-full ">
+        Booking Date
         </Link>
-        <Link href='/admin/report/stateReport' className="px-8 py-2 rounded-lg shadow-md bg-blue-600 text-white max-w-full ">
-        State Report
+        <Link href='/admin/report/stateWise' className="px-8 py-2 rounded-lg shadow-md bg-blue-600 text-white max-w-full ">
+        State Wise
         </Link>
-        <Link href='/admin/report/vehicleNoReport' className="px-8 py-2 rounded-lg shadow-md bg-blue-600 text-white max-w-full ">
-        Vehicle No Report
+        <Link href='/admin/report/vehicleNo' className="px-8 py-2 rounded-lg shadow-md bg-blue-600 text-white max-w-full ">
+        Vehicle No
+        </Link>
+        <Link href='/admin/report/vehicleType' className="px-8 py-2 rounded-lg shadow-md bg-blue-600 text-white max-w-full ">
+        Vehicle Type
         </Link>
 
       </div>
