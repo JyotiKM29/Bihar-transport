@@ -26,7 +26,7 @@ export async function POST(req, res) {
 
         const booking = await Booking.findOne({ _id: bookingId });
 
-        if (booking.generatedInvoice) {
+        if (booking.invoiceStatus) {
             return Response.json(
                 { message: "Invoice already generated" },
                 { status: 400 },
