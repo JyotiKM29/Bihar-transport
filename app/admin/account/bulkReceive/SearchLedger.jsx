@@ -38,14 +38,7 @@ const SearchLedger = ({ form, field, label  }) => {
         console.log("Filter data:", results);
 
         setSearchResult(results.slice(0, 5));
-      } else {
-        console.log("Person not found");
-        if (personName === "consignorName") {
-          setSearchResult([{ consignorName: value }]);
-        } else {
-          setSearchResult([{ consigneeName: value }]);
-        }
-      }
+      } 
     } catch (error) {
       console.log("Fetch failed", error);
     }

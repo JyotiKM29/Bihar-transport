@@ -1,5 +1,5 @@
 "use client";
-import SearchVehicle from './SearchVehicle';
+import SearchVehicle from "./SearchVehicle";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -24,9 +24,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
-import PhotoForm  from '../../vehicle/FieldForm';
-
-
+import PhotoForm from "../../vehicle/FieldForm";
 
 const formSchema = z.object({
   adminId: z.string(),
@@ -47,7 +45,7 @@ const formSchema = z.object({
   commission: z.coerce.number(),
   netBhara: z.coerce.number(),
   ledgerBalanceParty: z.string(),
-  buildProof:z.array(z.string().url()),
+  buildProof: z.array(z.string().url()),
   remarks: z.string(),
 });
 
@@ -61,10 +59,8 @@ const AllocateVehicle = ({ params }) => {
     return Number(Number(DriverBhara) + Number(comValue));
   }
 
- 
-
   const initialFormState = {
-    adminId: '',
+    adminId: "",
     vehicleNo: undefined,
     orderNo: params?.OrderId,
     arrangedBy: undefined,
@@ -75,14 +71,14 @@ const AllocateVehicle = ({ params }) => {
 
     ledgerBalance: undefined,
     rateAsPer: undefined,
-    paymentLiability:'',
+    paymentLiability: "",
     billTo: undefined,
     rate: undefined,
     driverBhara: undefined,
     commission: undefined,
-    netBhara:undefined,
+    netBhara: undefined,
     ledgerBalanceParty: undefined,
-    buildProof:undefined,
+    buildProof: undefined,
     remarks: undefined,
   };
 
@@ -101,8 +97,6 @@ const AllocateVehicle = ({ params }) => {
   }, [Commission, DriverBhara]);
 
   async function myhandleSubmit(value) {
-   
-
     try {
       const res = formSchema.parse(value);
       console.log("solved", res);
@@ -113,36 +107,34 @@ const AllocateVehicle = ({ params }) => {
     value.adminId = user?._id;
 
     setIsLoading(true);
-try {
-  const response = await fetch("/api/vehicleAllocation", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(value),
-  });
-  // console.log(response);
+    try {
+      const response = await fetch("/api/vehicleAllocation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(value),
+      });
+      // console.log(response);
 
-  const newResult = await response.json();
+      const newResult = await response.json();
 
-  if (response.ok) {
-    setIsLoading(false);
-    displayToast("Successfully allocated vehicle", "✅");
-    // const userDetail = newResult.user;
-    form.reset(initialFormState);
-  } else {
-    console.error("Error:", newResult.message);
-    displayToast("Error", "❌", newResult.message);
-    setIsLoading(false);
+      if (response.ok) {
+        setIsLoading(false);
+        displayToast("Successfully allocated vehicle", "✅");
+        // const userDetail = newResult.user;
+        form.reset(initialFormState);
+      } else {
+        console.error("Error:", newResult.message);
+        displayToast("Error", "❌", newResult.message);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      displayToast("Error while sending data", "❌", newResult.message);
+      setIsLoading(false);
+    }
   }
-} catch (error) {
-  console.error("Error:", error);
-  displayToast("Error while sending data", "❌", newResult.message);
-  setIsLoading(false);
-}
-  }
-
-
 
   const displayToast = (title, action, description = undefined) => {
     toast({
@@ -158,23 +150,20 @@ try {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(myhandleSubmit)}
-          className="w-full grid grid-cols-2 space-x-6"
+          className="grid w-full grid-cols-2 space-x-6"
         >
-
-<FormField
-                control={form.control}
-                name="vehicleNo"
-                
-                render={({ field }) => (
-                  <SearchVehicle
-                    nameValue="vehicleNo"
-                    form={form}
-                    field={field}
-                    label='Vehicle No'
-                  />
-                )}
-              /> 
-         
+          <FormField
+            control={form.control}
+            name="vehicleNo"
+            render={({ field }) => (
+              <SearchVehicle
+                nameValue="vehicleNo"
+                form={form}
+                field={field}
+                label="Vehicle No"
+              />
+            )}
+          />
 
           <FieldForm
             form={form}
@@ -189,7 +178,6 @@ try {
             label="Transporter Name "
             type="text"
           />
-        
 
           <FieldForm
             form={form}
@@ -318,16 +306,22 @@ try {
             type="text"
           />
 
-          <PhotoForm  form={form} nameValue="buildProof" label="Build Proof" type="file" fileNumber={1}/>
+          <PhotoForm
+            form={form}
+            nameValue="buildProof"
+            label="Build Proof"
+            type="file"
+            fileNumber={1}
+          />
 
           <FieldForm form={form} name="remarks" label="Remarks " type="text" />
 
-          
-
-          <div className="my-8 flex flex-col lg:flex-row gap-2 flex-1 justify-center lg:gap-6 items-center">
-        <Button type="submit">{isloading ? "Loading..." : "Assign Vehicle Only"}</Button>
-        {/* <Button type="submit">{isloading ? "Loading..." : " Continue & Dispatch"}</Button> */}
-        </div>
+          <div className="my-8 flex flex-1 flex-col items-center justify-center gap-2 lg:flex-row lg:gap-6">
+            <Button type="submit">
+              {isloading ? "Loading..." : "Assign Vehicle Only"}
+            </Button>
+            {/* <Button type="submit">{isloading ? "Loading..." : " Continue & Dispatch"}</Button> */}
+          </div>
         </form>
       </Form>
     </div>
