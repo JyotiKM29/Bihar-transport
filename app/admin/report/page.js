@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 
 import BookingReport from "./bookingReport/page";
-import VehicleReport from "./vehicle-report/page";
+import VehicleReport from "./vehicleNoReport/page";
 import InvoiceReport from "./stateReport/page";
 import { Button } from "../../components/ui/button";
 import Link from "next/link";
@@ -20,6 +20,9 @@ function Report() {
         </Link>
         <Link href='/admin/report/stateReport' className="px-8 py-2 rounded-lg shadow-md bg-blue-600 text-white max-w-full ">
         State Report
+        </Link>
+        <Link href='/admin/report/vehicleNoReport' className="px-8 py-2 rounded-lg shadow-md bg-blue-600 text-white max-w-full ">
+        Vehicle No Report
         </Link>
 
       </div>

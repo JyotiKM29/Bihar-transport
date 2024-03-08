@@ -41,7 +41,7 @@ export default function ColumnHeader() {
           displayToast("Update deleted", "❌" );
         }else{
           displayToast("Successfully deleted", "✅");
-          window.location.reload();
+          // window.location.reload();
         }
       } catch (error) {
         console.error("There was a problem with the delete request.", error);
