@@ -42,10 +42,10 @@ export async function POST(req, res) {
       
         gstWise["FCM"] = 0;
         gstWise["RCM"] = 0;
-        
+
       }
 
-      return Response.json(gstWise, { status: 200 });
+      return Response.json({ data: gstWise }, { status: 200 });
     } catch (error) {
         console.log(error);
         return Response.json({ message: error.message }, { status: 400 });
