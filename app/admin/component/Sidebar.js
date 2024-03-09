@@ -9,7 +9,7 @@ import { FaTruck } from "react-icons/fa";
 import { GoSignOut } from "react-icons/go";
 import { UserContext } from "../../context/UserContextProvider";
 import { useRouter } from "next/navigation";
-
+import { FaBookmark } from "react-icons/fa";
 import { useToast } from "../../components/ui/use-toast";
 
 
@@ -19,8 +19,9 @@ const iconData = [
   { index: 2, icon: FaTruck, name: "Vehicle", key: "vehicle" },
 
   { index: 3, icon: MdAccountBalance, name: "Account", key: "chartLine" },
-  { index: 4, icon: FaChartLine, name: "Reports", key: "table" },
-  { index: 5, icon: IoMdSettings, name: "Settings", key: "info" },
+  { index: 4, icon: FaBookmark, name: "Quotations", key: "table" },
+  { index: 5, icon: FaChartLine, name: "Reports", key: "table" },
+  { index: 6, icon: IoMdSettings, name: "Settings", key: "info" },
 ];
 
 const paths = [
@@ -28,6 +29,7 @@ const paths = [
   "/admin/booking",
   "/admin/vehicle",
   "/admin/account",
+  "/admin/quotations",
   "/admin/report",
   "/admin/settings",
 ];
