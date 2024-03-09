@@ -62,6 +62,7 @@ const GSTWise = () => {
       console.log(response);
 
       const newResult = await response.json();
+      console.log(newResult);
 
       if (response.ok) {
         setIsLoading(false);
