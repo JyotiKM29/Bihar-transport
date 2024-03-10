@@ -114,9 +114,7 @@ export default function ColumnHeaderPending() {
           <>
 
         
-          {/* <Link className="bg-green-300 px-4 py-1 rounded-2xl"
-          href={`/admin/account/pendingPayment/${row.original._id}`}
-          >Collect</Link> */}
+        
           <Button className="bg-green-300 text-sm  px-4 text-black  rounded-3xl hover:bg-green-500"
            onClick ={()=>GenerateInvoice(row.original._id)}
           >Invoice</Button>
