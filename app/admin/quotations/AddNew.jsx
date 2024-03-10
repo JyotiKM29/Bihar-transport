@@ -25,10 +25,10 @@ const formSchema = z.object({
   quoteValidity: z.coerce.date(),
   customerDetails: z.object({
     customerId: z.string(),
-    customerName: z.string(),
-    customerEmail: z.string(),
-    customerPhone: z.string(),
-    customerAddress: z.string(),
+    customerName: z.string().optional(),
+    customerEmail: z.string().optional(),
+    customerPhone: z.string().optional(),
+    customerAddress: z.string().optional(),
   }),
   product: z.object({
     productId: z.string(),
@@ -46,8 +46,23 @@ const AddNew = () => {
 
   const initialFormState = {
     adminId: "",
-
-    remarks: undefined,
+    quoteDate:new Date().toISOString().split("T")[0],
+    quoteValidity:new Date().toISOString().split("T")[0],
+    customerDetails:{
+      customerId:"",
+      customerName:"",
+      customerEmail:"",
+      customerPhone:"",
+      customerAddress:"",
+    },
+    product:{
+      productId:undefined,
+      productName:undefined,
+      productDescription:undefined,
+      productPrice:undefined,
+      quantity:undefined,
+    },
+    
   };
 
   const form = useForm({
@@ -106,26 +121,36 @@ const AddNew = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(myhandleSubmit)}>
         <h2 className="text-center  text-xl font-semibold">
-          New Expense Creation :
+          New Quatation :
         </h2>
+        <FieldForm form={form} name="quoteDate" label="quoteDate" type="date" />
+        <FieldForm form={form} name="quoteValidity" label="Quote Validity" type="date" />
 
         <FormField
           control={form.control}
-          name="serviceAccount"
+          name="customerDetails.customerName"
           render={({ field }) => (
-            <SearchCustomer form={form} field={field} label="Expense Account" />
+            <SearchCustomer form={form} field={field} label="Customer" />
           )}
         />
-
+{/* 
         <FormField
           control={form.control}
           name="serviceAccount"
           render={({ field }) => (
             <SearchProduct form={form} field={field} label="Expense Account" />
           )}
-        />
+        /> */}
 
-        <FieldForm form={form} name="remarks" label="Remarks" type="text" />
+        <FieldForm form={form} name="product.productId" label="Product Id" type="text" />
+
+        <FieldForm form={form} name="product.productName" label="Product Name" type="text" />
+
+        <FieldForm form={form} name="product.productDescription" label="Product Description" type="text" />
+
+        <FieldForm form={form} name="product.productPrice" label="Product Price" type="number" />
+
+        <FieldForm form={form} name="product.quantity" label="Quantity" type="number" />
 
         <div className="my-8 flex items-center justify-center">
           <Button

@@ -10,7 +10,6 @@ import { Input } from "../../components/ui/input";
 import { UserContext } from "../../context/UserContextProvider";
 import { useToast } from "../../components/ui/use-toast";
 
-
 const SearchCustomer = ({ form, field, label  }) => {
   const { user } = useContext(UserContext);
   const [searchTerm, setSearchTerm] = useState("");
@@ -20,34 +19,26 @@ const SearchCustomer = ({ form, field, label  }) => {
 
   async function fetchData(value) {
     try {
-      const res = await fetch(`/api/vehicledata/${user._id}`);
+      const res = await fetch(`/api/accounting/getledger/${user._id}`);
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
       const result = await res.json();
-      console.log("result fetched:", result);
+      console.log("result my love", result);
 
       if (result && Array.isArray(result.data)) {
         const results = result.data.filter((item) => {
-          const searchTermLowerCase = value.toLowerCase();
-          return (
-              // Check if the vehicleNo, owner name, or driver name includes the search term
-              (item.vehicleNo && item.vehicleNo.toLowerCase().includes(searchTermLowerCase)) ||
-              (item.owner && item.owner.name && item.owner.name.toLowerCase().includes(searchTermLowerCase)) ||
-              (item.driver && item.driver.name && item.driver.name.toLowerCase().includes(searchTermLowerCase))
-          );
-      });
-      console.log("Filter data:", results);
+            return (
+                value &&
+                item.basicInfo &&
+                item.basicInfo.accountName &&
+                item.basicInfo.accountName.toLowerCase().includes(value.toLowerCase())
+            );
+        });
+        console.log("Filter data:", results);
 
         setSearchResult(results.slice(0, 5));
-      } else {
-        console.log("Person not found");
-        if (personName === "consignorName") {
-          setSearchResult([{ consignorName: value }]);
-        } else {
-          setSearchResult([{ consigneeName: value }]);
-        }
-      }
+      } 
     } catch (error) {
       console.log("Fetch failed", error);
     }
@@ -105,26 +96,32 @@ const SearchCustomer = ({ form, field, label  }) => {
               <div
                 key={id}
                 className="w-full cursor-pointer px-3 py-2 hover:bg-slate-200"
-                onClick={() => {
+                onClick={(e) => {
+e.preventDefault();
+                    if(result?.basicInfo?.accountName){
+                      
+                        setInputValue(result?.basicInfo?.accountName)
+                  form.setValue('customerDetails.customerName', result?.basicInfo?.accountName);
+               
+                  form.setValue('customerDetails.customerPhone', result?.basicInfo?.contactNo);
+                  form.setValue('customerDetails.customerAddress', result?.basicInfo?.officeAddress);
+                  form.setValue('customerDetails.customerId', result?.basicInfo?.taxInfo?.GSTIN);
+                  form.setValue('customerDetails.customerEmail', 'customer@gmail.com');
 
-                    if(result?.vehicleNo){
-                        setInputValue(result?.vehicleNo)
-           
-                  form.setValue('serviceAccount', result?.vehicleNo);
-                  
+                  console.log('SET VLUE')
+               const name =  form.getValues('customerDetails.customerName')
+               const phone =  form.getValues('customerDetails.customerPhone')
+               const add =  form.getValues('customerDetails.customerAddress')
+               const id =  form.getValues('customerDetails.customerId')
+               const mail =  form.getValues('customerDetails.customerEmail')
+                  console.log(name , phone , add , id ,mail);
                   setSearchResult([]);
                   setSearchTerm("");
-                    }else{
-
-                        displayToast("Can't set ledger ", "❌" ,'ledger not found')
                     }
                    
                 }}
               >
-            
-                {result?.owner?.name}(owner),&nbsp;&nbsp;&nbsp;  
-                {result?.driver?.name}(driver),&nbsp;&nbsp;&nbsp; 
-                {result?.vehicleNo}(vehicle No)
+                {result.basicInfo.accountName}
               </div>
             ))}
         </div>

@@ -22,7 +22,7 @@ const Quotation = () => {
       const fetchData = async () => {
         try {
           if (userId) {
-            const response = await fetch(`/api/accounting/getExpanse/${userId}`, {
+            const response = await fetch(`/api/quote/get/${userId}`, {
               method: "GET",
             });
     
@@ -35,7 +35,7 @@ const Quotation = () => {
             setLoading(false);
     
        
-            console.log('Money Expense',result);
+            console.log('Quatation',result);
     
             setData(result.data);
           }

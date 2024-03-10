@@ -61,44 +61,39 @@ export default function ColumnHeader() {
         enableSorting: false,
         enableHiding: false,
       },
-      // {
-      //   accessorKey: "venderNo",
-      //   header: "Vender No",
-      // },
+     
 
       {
-        accessorKey: "date",
-        header: "Date Req",
+        accessorKey: "quoteDate",
+        header: "Quote",
         cell: ({ row }) => {
-          const date = new Date(row.original.date);
+          const date = new Date(row.original.quoteDate);
+          return date.toLocaleDateString();
+        },
+      },
+    
+      {
+        accessorKey: "customerDetails.customerName",
+        header: "Customer Name",
+      },
+      {
+        accessorKey: "customerDetails.customerEmail",
+        header: "Customer Email",
+      },
+
+      {
+        accessorKey: "product.productName",
+        header: "Product Name",
+      },
+      {
+        accessorKey: "quoteValidity",
+        header: "Validate",
+        cell: ({ row }) => {
+          const date = new Date(row.original.quoteValidity);
           return date.toLocaleDateString();
         },
       },
 
-      {
-        accessorKey: "expenseCategory",
-        header: "eExpense Category",
-      },
-
-      {
-        accessorKey: "paidAmount",
-        header: "Paid Amount",
-      },
-      {
-        accessorKey: "PaidBy",
-
-        header: "Paid By",
-      },
-      {
-        accessorKey: "remarks",
-
-        header: "Remarks",
-      },
-
-      {
-        accessorKey: "serviceCharge",
-        header: "Service Charge",
-      },
     
       {
   
