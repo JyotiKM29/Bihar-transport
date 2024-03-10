@@ -97,7 +97,7 @@ const id = params.id;
           <p className="absolute w-1/3 top-[312px] left-[380px]  text-[.5rem] ">{data?.unloadingPoints}
 </p>
 
-          <p className="absolute  top-[340px] left-[69px]  text-[.7rem] ">{data?.allotedVehicle[0].vehicleNo}</p>
+          <p className="absolute  top-[340px] left-[69px]  text-[.7rem] ">{data?.allotedVehicle[0]?.vehicleNo}</p>
           <p className="absolute top-[340px] left-[424px]  text-[.7rem] ">{data?.vehicleType}</p>
 
 
@@ -115,16 +115,16 @@ const id = params.id;
           <p className="absolute top-[498px] left-[430px]  text-[.7rem] ">{data?.partyBhara}</p>
 
 
-          <p className="absolute top-[564px] left-[92px]  text-[.7rem] ">{data?.allotedVehicle[0].vehicleDriver}</p>
-          <p className="absolute top-[564px] left-[426px]  text-[.7rem] ">{data?.allotedVehicle[0].vehicleOwner}</p>
+          <p className="absolute top-[564px] left-[92px]  text-[.7rem] ">{data?.allotedVehicle[0]?.vehicleDriver}</p>
+          <p className="absolute top-[564px] left-[426px]  text-[.7rem] ">{data?.allotedVehicle[0]?.vehicleOwner}</p>
 
-          <p className="absolute top-[590px] left-[82px]  text-[.7rem] ">{data?.allotedVehicle[0].vehicleDriverPhone}</p>
-          <p className="absolute top-[590px] left-[422px]  text-[.7rem] ">{data?.allotedVehicle[0].vehicleOwnerPhone}</p>
+          <p className="absolute top-[590px] left-[82px]  text-[.7rem] ">{data?.allotedVehicle[0]?.vehicleDriverPhone}</p>
+          <p className="absolute top-[590px] left-[422px]  text-[.7rem] ">{data?.allotedVehicle[0]?.vehicleOwnerPhone}</p>
 
           <p className="absolute top-[626px] left-[82px]  text-[.7rem] ">{data?.remarks}</p>
           
         </div>
-        {/* end of actual receipt */}
+       
       </div>
       <div className="self-start">
         <div className="actions-right">
