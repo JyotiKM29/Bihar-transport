@@ -47,27 +47,27 @@ const quoteSchema = new mongoose.Schema(
         customerDetails: {
             customerId: {
                 type: String,
-                required: true,
+               
             },
             customerName: {
                 type: String,
-                required: true,
+               
             },
             customerAddress: {
                 type: String,
-                required: true,
+              
             },
             customerMobileNo: {
                 type: Number,
-                required: true,
+              
             },
             customerEmail: {
                 type: String,
-                required: true,
+              
             },
             customerGSTIN: {
                 type: String,
-                required: true,
+              
             },
         },
         product: [productSchema],
