@@ -10,7 +10,7 @@ import { Input } from "../../components/ui/input";
 import { UserContext } from "../../context/UserContextProvider";
 import { useToast } from "../../components/ui/use-toast";
 
-const SearchExpenseCategory = ({ form, field, label  }) => {
+const SearchProduct = ({ form, field, label  }) => {
   const { user } = useContext(UserContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
@@ -19,22 +19,24 @@ const SearchExpenseCategory = ({ form, field, label  }) => {
 
   async function fetchData(value) {
     try {
-      const res = await fetch(`/api/accounting/getExpanseCategory/${user._id}`);
+      const res = await fetch(`/api/vehicledata/${user._id}`);
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
       const result = await res.json();
-      console.log("result my love", result);
+      console.log("result fetched:", result);
 
-      if (result && Array.isArray(result.categories)) {
-        const results = result.categories.filter((item) => {
-            return (
-                value &&
-                item.name &&
-                item.name.toLowerCase().includes(value.toLowerCase())
-            );
-        });
-        console.log("Filter data:", results);
+      if (result && Array.isArray(result.data)) {
+        const results = result.data.filter((item) => {
+          const searchTermLowerCase = value.toLowerCase();
+          return (
+              // Check if the vehicleNo, owner name, or driver name includes the search term
+              (item.vehicleNo && item.vehicleNo.toLowerCase().includes(searchTermLowerCase)) ||
+              (item.owner && item.owner.name && item.owner.name.toLowerCase().includes(searchTermLowerCase)) ||
+              (item.driver && item.driver.name && item.driver.name.toLowerCase().includes(searchTermLowerCase))
+          );
+      });
+      console.log("Filter data:", results);
 
         setSearchResult(results.slice(0, 5));
       } else {
@@ -104,10 +106,10 @@ const SearchExpenseCategory = ({ form, field, label  }) => {
                 className="w-full cursor-pointer px-3 py-2 hover:bg-slate-200"
                 onClick={() => {
 
-                    if(result?.name){
-                        setInputValue(result?.name)
-                  form.setValue('expenseCategory', result?.name);
-                 
+                    if(result?.vehicleNo){
+                        setInputValue(result?.vehicleNo)
+           
+                  form.setValue('serviceAccount', result?.vehicleNo);
                   
                   setSearchResult([]);
                   setSearchTerm("");
@@ -118,7 +120,10 @@ const SearchExpenseCategory = ({ form, field, label  }) => {
                    
                 }}
               >
-                {result?.name}
+            
+                {result?.owner?.name}(owner),&nbsp;&nbsp;&nbsp;  
+                {result?.driver?.name}(driver),&nbsp;&nbsp;&nbsp; 
+                {result?.vehicleNo}(vehicle No)
               </div>
             ))}
         </div>
@@ -127,4 +132,4 @@ const SearchExpenseCategory = ({ form, field, label  }) => {
   );
 };
 
-export default SearchExpenseCategory;
+export default SearchProduct;

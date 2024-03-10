@@ -2,13 +2,13 @@
 
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
-import { Checkbox } from "../../../components/ui/checkbox";
+import { Checkbox } from "../../components/ui/checkbox";
 
 
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../../context/UserContextProvider";
-import { Input } from "../../../components/ui/input";
+import { UserContext } from "../../context/UserContextProvider";
+import { Input } from "../../components/ui/input";
 import { Pencil } from "lucide-react";
 
 export default function ColumnHeader() {

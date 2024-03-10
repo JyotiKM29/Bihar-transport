@@ -5,12 +5,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../components/ui/form";
-import { Input } from "../../../components/ui/input";
-import { UserContext } from "../../../context/UserContextProvider";
-import { useToast } from "../../../components/ui/use-toast";
+} from "../../components/ui/form";
+import { Input } from "../../components/ui/input";
+import { UserContext } from "../../context/UserContextProvider";
+import { useToast } from "../../components/ui/use-toast";
 
-const SearchVOD = ({ form, field, label  }) => {
+
+const SearchCustomer = ({ form, field, label  }) => {
   const { user } = useContext(UserContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
@@ -132,4 +133,4 @@ const SearchVOD = ({ form, field, label  }) => {
   );
 };
 
-export default SearchVOD;
+export default SearchCustomer;

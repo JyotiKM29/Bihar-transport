@@ -1,3 +1,19 @@
+
+import React from 'react'
+import PDFDesigner from './PDFDesigner'
+
+const page = () => {
+  return (
+    <div>
+      
+      <PDFDesigner />
+    </div>
+  )
+}
+
+export default page
+
+
 // 'use client'
 
 // import {  BLANK_PDF } from '@pdfme/common';
@@ -443,17 +459,4 @@
 // };
 
 // export default PdfViewer;
-
-
-import React from 'react'
-
-const page = () => {
-  return (
-    <div>
-      Invoice Genetated
-    </div>
-  )
-}
-
-export default page
 

@@ -2,19 +2,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import FieldForm from "../../component/FieldForm";
-import { Button } from "../../../components/ui/button";
-import { Textarea } from "../../../components/ui/textarea";
-import SearchExpenseCategory from './SearchExpenseCategory'
-import SearchVOD from './SearchVOD';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../components/ui/select";
-
+import FieldForm from "../component/FieldForm";
+import { Button } from "../../components/ui/button";
+import SearchProduct from "./SearchProduct";
+import SearchCustomer from "./SearchCustomer";
 import {
   Form,
   FormControl,
@@ -22,27 +13,30 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../components/ui/form";
+} from "../../components/ui/form";
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../../context/UserContextProvider";
-import { useToast } from "../../../components/ui/use-toast";
+import { UserContext } from "../../context/UserContextProvider";
+import { useToast } from "../../components/ui/use-toast";
 import Link from "next/link";
 
 const formSchema = z.object({
   adminId: z.string(),
-  date: z.coerce.date(),
-  expenseCategory: z.string(),
-
-  serviceAccount: z.string(),
-  serviceCharge: z.coerce.number(),
-  paidAmount: z.coerce.number(),
-
-
-
-  
-  paidBy: z.string(),
-
-  remarks: z.string(),
+  quoteDate: z.coerce.date(),
+  quoteValidity: z.coerce.date(),
+  customerDetails: z.object({
+    customerId: z.string(),
+    customerName: z.string(),
+    customerEmail: z.string(),
+    customerPhone: z.string(),
+    customerAddress: z.string(),
+  }),
+  product: z.object({
+    productId: z.string(),
+    productName: z.string(),
+    productDescription: z.string(),
+    productPrice: z.coerce.number(),
+    quantity: z.coerce.number(),
+  }),
 });
 
 const AddNew = () => {
@@ -52,18 +46,8 @@ const AddNew = () => {
 
   const initialFormState = {
     adminId: "",
-    date:new Date().toISOString().split("T")[0],
-    expenseCategory: undefined,
 
-    serviceAccount:undefined,
-
-    serviceCharge:undefined ,
-
-    paidAmount:undefined,
-
-  paidBy:undefined ,
-
-  remarks:undefined,
+    remarks: undefined,
   };
 
   const form = useForm({
@@ -82,7 +66,7 @@ const AddNew = () => {
     }
     value.adminId = user?._id;
     try {
-      const response = await fetch("/api/accounting/createExpanse", {
+      const response = await fetch("/api/quote/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -90,9 +74,9 @@ const AddNew = () => {
         body: JSON.stringify(value),
       });
       console.log(response);
-    
+
       const newResult = await response.json();
-    
+
       if (response.ok) {
         setIsLoading(false);
         displayToast("Successfully added new expanse", "✅");
@@ -122,118 +106,32 @@ const AddNew = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(myhandleSubmit)}>
         <h2 className="text-center  text-xl font-semibold">
-         New Expense Creation :
+          New Expense Creation :
         </h2>
-        <FieldForm 
-        form={form} 
-        name="date" 
-        label="Date"
-         type="date" />
-{/* 
-        <FieldForm 
-        form={form} 
-        label="Expense Category" 
-        name="expenseCategory"
-         type="text" /> */}
-         <div className="flex items-center">
 
-<FormField
-                control={form.control}
-                 name="expenseCategory"
-                
-                render={({ field }) => (
-                  <SearchExpenseCategory
-                 
-                    form={form}
-                    field={field}
-                    label="Expense Category" 
-                  />
-                )}
-              /> 
-  <Link href='/admin/account/moneyExpense' className="p-1.5 px-3 border bg-slate-100 bottom-2 rounded-md h-10 font-semibold text-slate-500">
-Add New
-              </Link> 
+        <FormField
+          control={form.control}
+          name="serviceAccount"
+          render={({ field }) => (
+            <SearchCustomer form={form} field={field} label="Expense Account" />
+          )}
+        />
 
-</div>
+        <FormField
+          control={form.control}
+          name="serviceAccount"
+          render={({ field }) => (
+            <SearchProduct form={form} field={field} label="Expense Account" />
+          )}
+        />
 
+        <FieldForm form={form} name="remarks" label="Remarks" type="text" />
 
-<div className="flex items-center">
-
-<FormField
-                control={form.control}
-                name="serviceAccount" 
-                
-                render={({ field }) => (
-                  <SearchVOD
-                 
-                    form={form}
-                    field={field}
-                    label="Expense Account" 
-                  />
-                )}
-              /> 
-  <Link href='/admin/vehicle' className="p-1.5 px-3 border bg-slate-100 bottom-2 rounded-md h-10 font-semibold text-slate-500">
-Add New
-              </Link> 
-
-</div>
-
-
-        <FieldForm 
-        form={form} 
-        name="serviceCharge" 
-        label="Service Charge  (Rs)"
-         type="number" />
-
-
-        <FieldForm 
-        form={form} 
-        name="paidAmount" 
-        label="Paid Amount  (Rs)"
-         type="text" />
-
-
-<FormField
-            control={form.control}
-            name="paidBy"
-            render={({ field }) => {
-              return (
-                <FormItem className="flex items-center justify-center gap-4">
-                  <FormLabel className="text-nowrap text-sm lg:text-base">
-                  Paid By :
-                  </FormLabel>
-                  <Select
-                    className="flex flex-1 flex-col"
-                    onValueChange={field.onChange}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Paid By" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="CASH">CASH</SelectItem>
-                      <SelectItem value="BANK">BANK</SelectItem>
-                      <SelectItem value="SBI">STATE BANK OF INDIA (SBI) </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-
-        <FieldForm 
-        form={form} 
-        name="remarks" 
-        label="Remarks"
-         type="text" />
-
-  
-
-
-        <div className="flex items-center justify-center my-8">
-          <Button type="submit" className="w-full lg:w-1/3 ">
+        <div className="my-8 flex items-center justify-center">
+          <Button
+            type="submit"
+            className="w-full rounded-lg bg-cyan-500 px-8 py-2 text-white shadow-md hover:bg-cyan-700 lg:w-1/3 "
+          >
             {isloading ? "Loading..." : " Submit"}
           </Button>
         </div>
