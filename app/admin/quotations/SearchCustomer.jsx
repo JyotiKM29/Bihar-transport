@@ -50,13 +50,7 @@ const SearchCustomer = ({ form, field, label  }) => {
     fetchData(value);
   }
 
-  const displayToast = (title, action, description = "") => {
-    toast({
-      title,
-      action,
-      description,
-    });
-  };
+  
 
   return (
     <FormItem className="flex flex-1 items-center justify-center gap-4">

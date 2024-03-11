@@ -46,7 +46,7 @@ const AddNew = () => {
     quoteDate:new Date().toISOString().split("T")[0],
     quoteValidity:new Date().toISOString().split("T")[0],
     customerDetails:{
-      customerId:"",
+      customerId:generateUniqueId(),
       customerName:"",
       customerEmail:"",
       customerPhone:"",
@@ -61,6 +61,9 @@ const AddNew = () => {
     },
     
   };
+  function generateUniqueId() {
+    return Math.floor(100000 + Math.random() * 900000);
+  }
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -69,7 +72,17 @@ const AddNew = () => {
 
   async function myhandleSubmit(value) {
     console.log(formSchema.safeParse(value));
-
+    const { customerDetails, ...rest } = value;
+    const payload = {
+      ...rest,
+      adminId: user?._id,
+    };
+  
+    // Conditionally add customerDetails if they contain meaningful information
+    if (customerDetails && Object.values(customerDetails).some(val => val)) {
+      payload.customerDetails = customerDetails;
+    }
+  
     try {
       const res = formSchema.parse(value);
       console.log("solved", res);
@@ -130,6 +143,7 @@ const AddNew = () => {
             <SearchCustomer form={form} field={field} label="Customer" />
           )}
         />
+        
 {/* 
         <FormField
           control={form.control}

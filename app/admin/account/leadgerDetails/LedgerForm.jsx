@@ -385,8 +385,8 @@ const LedgerForm = () => {
 
           <div className="">
             <h2 className="text-center text-xl font-semibold text-blue-500 underline underline-offset-1">
-              {" "}
-              Account Details{" "}
+            
+              Account Details
             </h2>
 
             <FormField
@@ -536,10 +536,10 @@ const LedgerForm = () => {
             {showBankDetail ? (
               <div className="">
                 <h2
-                  className="my-6 text-center text-xl font-semibold text-blue-500 underline underline-offset-1"
+                  className="text-center text-xl font-semibold text-blue-500 underline underline-offset-1"
                   onClick={() => setShowBankDetail(!showBankDetail)}
                 >
-                  {" "}
+                 
                   Bank Details
                 </h2>
 
@@ -588,7 +588,7 @@ const LedgerForm = () => {
               </div>
             ) : (
               <p
-                className="my-6  text-center text-xl text-blue-500 underline underline-offset-1"
+                   className="my-6 text-center text-xl font-semibold  px-8 py-2 rounded-lg shadow-md bg-blue-500 hover:bg-blue-700 text-white max-w-full "
                 onClick={() => setShowBankDetail(!showBankDetail)}
               >
                 Bank detail
@@ -604,7 +604,7 @@ const LedgerForm = () => {
               />
             ) : (
               <p
-                className="my-6  text-center text-xl text-blue-500 underline underline-offset-1"
+                  className="my-6 text-center text-xl font-semibold   px-8 py-2 rounded-lg shadow-md bg-blue-500 hover:bg-blue-700 text-white max-w-full "
                 onClick={() => setshowAdditionalContact(!showadditionalContact)}
               >
                 Additional Contact{" "}
@@ -614,7 +614,7 @@ const LedgerForm = () => {
             {showadditionalInfo ? (
               <div className="">
                 <h2
-                  className="my-3 text-center text-xl font-semibold text-blue-500 underline underline-offset-1"
+                      className="text-center text-xl font-semibold text-blue-500 underline underline-offset-1"
                   onClick={() => setShowAdditionalInfo(!showadditionalInfo)}
                 >
                   Additional Info{" "}
@@ -709,7 +709,7 @@ const LedgerForm = () => {
               </div>
             ) : (
               <p
-                className="my-3  text-center text-xl text-blue-500 underline underline-offset-1"
+                    className="my-6 text-center text-xl font-semibold    px-8 py-2 rounded-lg shadow-md bg-blue-500 hover:bg-blue-700 text-white max-w-full "
                 onClick={() => setShowAdditionalInfo(!showadditionalInfo)}
               >
                 Additional Info{" "}
