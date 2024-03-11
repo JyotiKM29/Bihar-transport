@@ -89,7 +89,7 @@ const currentWeekEndDate = new Date(
       data.orderDelivered = booking.filter((item) => item.status === "delevered").length;
       data.pendingPOD = booking.filter((item) => item.status === "Pending").length;
       data.invoice = booking.filter((item) => item.status === "Pending").length;
-      data.pendingInvoice = booking.filter((item) => item.status === "Pending").length;
+      data.pendingInvoice = booking.filter((item) => item.invoiceStatus === false).length;
 
       booking.forEach((item) => {
         data.advanceAmount += item.advanceAmount;

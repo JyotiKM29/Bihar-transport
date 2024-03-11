@@ -60,12 +60,14 @@ export async function GET(req, context) {
     ).length;
 
     data.invoice = booking.length;
-data.generatedInvoice = await Booking.find({
-  $and: [
-    { invoice: { $exists: true } },
-    { $expr: { $gt: [{ $size: "$invoice" }, 0] } },
-  ],
-}).countDocuments();
+// data.generatedInvoice = await Booking.find({
+//   $and: [
+//     { invoice: { $exists: true } },
+//     { $expr: { $gt: [{ $size: "$invoice" }, 0] } },
+//   ],
+    // }).countDocuments();
+    data.generatedInvoice = await Booking.find({ invoiceStatus: true }).countDocuments();
+    
     
     data.pendingInvoice = booking.length - data.generatedInvoice;
 
