@@ -143,6 +143,7 @@ const AddNew = () => {
             <SearchCustomer form={form} field={field} label="Customer" />
           )}
         />
+        
 {/* 
         <FormField
           control={form.control}

@@ -6,6 +6,7 @@ import { Progress } from "../../components/ui/progress";
 import { FiBarChart } from "react-icons/fi";
 import { FaClock } from "react-icons/fa";
 import { UserContext } from "../../context/UserContextProvider";
+import Link from "next/link";
 
 const TodayData = () => {
   const [loading, setLoading] = useState(true);
@@ -48,9 +49,9 @@ const TodayData = () => {
   const inTransit = Math.round((data?.inTransit / data?.totalOrder) * 100);
   const orderDilevered = Math.round((data?.orderDelivered / data?.totalOrder) * 100);
   const pendingPOD = Math.round((data?.pendingPOD / data?.totalOrder) * 100);
-  const invoice = Math.round((data?.invoice / data?.totalOrder) * 100);
-  const pendingInvoice = Math.round((data?.pendingInvoice / data?.totalOrder) * 100);
-  const generatedInvoice = Math.round((data?.generatedInvoice / data?.totalOrder) * 100);
+  const invoice = Math.round((data?.invoice / data?.invoice) * 100);
+  const pendingInvoice = Math.round((data?.pendingInvoice / data?.invoice) * 100);
+  const generatedInvoice = Math.round((data?.generatedInvoice / data?.invoice) * 100);
   const totalAmount = Math.round((data?.totalAmount)/1000)
   const advanceAmount = Math.round((data?.advanceAmount)/1000)
 
@@ -78,11 +79,11 @@ const TodayData = () => {
                         lg:row-span-2 xl:col-span-4
                        xl:row-span-1 xl:grid-cols-3 xl:grid-rows-2 "
           >
-            <div
+            <Link href='/admin/booking'
               className="flex  h-full w-full  
           rounded-3xl bg-white p-4 shadow-md "
             >
-              <div className=" flex h-full w-2/5 flex-col justify-between p-2 xl:p-1 2xl:p-2">
+              <div  className=" flex h-full w-2/5 flex-col justify-between p-2 xl:p-1 2xl:p-2">
                 <p className="text-lg text-slate-400 xl:text-wrap xl:text-base 2xl:text-wrap 2xl:text-lg">
                   Pending Order
                 </p>
@@ -93,8 +94,8 @@ const TodayData = () => {
               <div className=" flex-grow-1 h-full w-3/5 ">
                 <RadialBarChart value={pendingOrder} />
               </div>
-            </div>
-            <div
+            </Link>
+            <Link href='/admin/booking'
               className="flex  h-full w-full  
           rounded-3xl bg-white p-4 shadow-md "
             >
@@ -109,8 +110,8 @@ const TodayData = () => {
               <div className=" flex-grow-1 h-full w-3/5 ">
                 <RadialBarChart value={dispatchedOrder} />
               </div>
-            </div>
-            <div
+            </Link>
+            <Link href='/admin/booking'
               className="flex  h-full w-full  
           rounded-3xl bg-white p-4 shadow-md "
             >
@@ -125,8 +126,8 @@ const TodayData = () => {
               <div className=" flex-grow-1 h-full w-3/5 ">
                 <RadialBarChart value={lorryInCampus} />
               </div>
-            </div>
-            <div
+            </Link>
+            <Link href='/admin/booking'
               className="flex  h-full w-full  
           rounded-3xl bg-white p-4 shadow-md "
             >
@@ -141,8 +142,8 @@ const TodayData = () => {
               <div className=" flex-grow-1 h-full w-3/5 ">
                 <RadialBarChart value={inTransit} />
               </div>
-            </div>
-            <div
+            </Link>
+            <Link href='/admin/booking'
               className="flex  h-full w-full  
           rounded-3xl bg-white p-4 shadow-md "
             >
@@ -157,8 +158,8 @@ const TodayData = () => {
               <div className=" flex-grow-1 h-full w-3/5 ">
                 <RadialBarChart value={orderDilevered} />
               </div>
-            </div>
-            <div
+            </Link>
+            <Link href='/admin/booking'
               className="flex  h-full w-full  
           rounded-3xl bg-white p-4 shadow-md "
             >
@@ -173,7 +174,7 @@ const TodayData = () => {
               <div className=" flex-grow-1 h-full w-3/5 ">
                 <RadialBarChart value={pendingPOD}/>
               </div>
-            </div>
+            </Link>
           </div>
 
           <div
