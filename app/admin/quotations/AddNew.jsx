@@ -22,17 +22,17 @@ const formSchema = z.object({
   quoteValidity: z.coerce.date(),
   customerDetails: z.object({
     customerId: z.string(),
-    customerName: z.string().optional(),
+    customerName: z.string(),
     customerEmail: z.string().optional(),
-    customerPhone: z.string().optional(),
+    customerPhone: z.number().optional(),
     customerAddress: z.string().optional(),
   }),
   product: z.object({
     productId: z.string(),
     productName: z.string(),
-    productDescription: z.string(),
-    productPrice: z.coerce.number(),
-    quantity: z.coerce.number(),
+    productDescription: z.string().optional(),
+    productPrice: z.coerce.number().optional(),
+    quantity: z.coerce.number().optional(),
   }),
 });
 
@@ -104,7 +104,7 @@ const AddNew = () => {
 
       if (response.ok) {
         setIsLoading(false);
-        displayToast("Successfully added new expanse", "✅");
+        displayToast("Successfully Added new Quatation", "✅");
         // const userDetail = newResult.user;
         form.reset(initialFormState);
       } else {
@@ -136,13 +136,27 @@ const AddNew = () => {
         <FieldForm form={form} name="quoteDate" label="quoteDate" type="date" />
         <FieldForm form={form} name="quoteValidity" label="Quote Validity" type="date" />
 
-        <FormField
+<div className="flex gap-8 w-full">
+
+
+<div className="flex-1">
+<FormField
           control={form.control}
           name="customerDetails.customerName"
           render={({ field }) => (
             <SearchCustomer form={form} field={field} label="Customer" />
           )}
         />
+
+<FieldForm form={form}  name="customerDetails.customerId" label="Customer Id" type="text" />
+
+<FieldForm form={form}  name="customerDetails.customerEmail" label="Customer Name" type="email" />
+<FieldForm form={form}  name="customerDetails.customerPhone" label="Customer Phone" type="number" />
+
+<FieldForm form={form}  name="customerDetails.customerAddress" label="Customer Address" type="text" />
+
+</div>
+       
         
 {/* 
         <FormField
@@ -152,6 +166,7 @@ const AddNew = () => {
             <SearchProduct form={form} field={field} label="Expense Account" />
           )}
         /> */}
+        <div className="flex-1">
 
         <FieldForm form={form} name="product.productId" label="Product Id" type="text" />
 
@@ -162,7 +177,8 @@ const AddNew = () => {
         <FieldForm form={form} name="product.productPrice" label="Product Price" type="number" />
 
         <FieldForm form={form} name="product.quantity" label="Quantity" type="number" />
-
+        </div>
+</div>
         <div className="my-8 flex items-center justify-center">
           <Button
             type="submit"
