@@ -133,7 +133,7 @@ const AddNew = () => {
         <h2 className="text-center  text-xl font-semibold">
           New Quatation :
         </h2>
-        <FieldForm form={form} name="quoteDate" label="quoteDate" type="date" />
+        <FieldForm form={form} name="Quote Date" label="quoteDate" type="date" />
         <FieldForm form={form} name="quoteValidity" label="Quote Validity" type="date" />
 
 <div className="flex gap-8 w-full">
