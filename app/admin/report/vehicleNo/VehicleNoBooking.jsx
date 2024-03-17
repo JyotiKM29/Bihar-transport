@@ -113,7 +113,7 @@ const VehicleNoBooking = () => {
           </div>
           
           <Button type="submit" className="w-full lg:w-1/5 shadow-md bg-violet-500 hover:bg-violet-700 text-white ">
-            {isloading ? "Loading..." : " Get Bookings"}
+            {isloading ? "Loading..." : "Generate Report"}
           </Button>
         </form>
       </Form>
