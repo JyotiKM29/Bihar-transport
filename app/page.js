@@ -19,8 +19,8 @@ const SignIn = () => {
   const { toast } = useToast();
   //set default password and email so , that User can check inside details , even then Owner not llowed them 
   
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@bihar-transport.vercel.app");
+  const [password, setPassword] = useState("xyz@124~%^&");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
