@@ -164,13 +164,16 @@ export default function ColumnHeader() {
                 </DropdownMenuItem>
 
                
+                {/* 
+                commented area because client asked 
                 <DropdownMenuItem>
                 <Link 
                href={`/admin/booking/sendInvoice/${row.original._id}`}
                 >
                    Send Invoice
                   </Link>
-                </DropdownMenuItem>
+                </DropdownMenuItem> 
+                */}
                 <DropdownMenuItem>
                    <button onClick={()=>handleConfirm('Confirmed',`${row.original._id}` )}>Confirm Booking</button> 
                 </DropdownMenuItem>

@@ -161,13 +161,16 @@ export default function ColumnHeader() {
                 </DropdownMenuItem>
 
                
+                {/* 
+                commented according to client request
+
                 <DropdownMenuItem>
                 <Link 
                href={`/admin/booking/sendInvoice/${row.original._id}`}
                 >
                    Send Invoice
                   </Link>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
                 <DropdownMenuItem>
                 <Link 
 href={`/admin/booking/${row.original.orderNumber}`}
