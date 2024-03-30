@@ -192,7 +192,7 @@ export function DataTable({ columns, data  }) {
           </span>
         </div>
 
-        <div className="flex items-center gap-4 space-x-2">
+        <div className="text-sm flex flex-col md:flex-row  items-center gap-4 space-x-2">
           <span className="flex items-center gap-1">
             <div>Page</div>
             <strong>
@@ -201,7 +201,8 @@ export function DataTable({ columns, data  }) {
             </strong>
           </span>
 
-          <Button
+         <div className="gap-4 flex ">
+         <Button
             variant="outline"
             size="sm"
             onClick={() => table.previousPage()}
@@ -209,6 +210,7 @@ export function DataTable({ columns, data  }) {
           >
             Previous
           </Button>
+          
           <Button
             variant="outline"
             size="sm"
@@ -217,6 +219,7 @@ export function DataTable({ columns, data  }) {
           >
             Next
           </Button>
+         </div>
           <Button
           variant="secondary"
           

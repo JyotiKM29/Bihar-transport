@@ -54,11 +54,11 @@ const Quotation = () => {
      
       
       
-        <div className="flex gap-3 items-center justify-between">
-        <h2 className=" text-3xl font-semibold text-cyan-800 ">
+        <div className="pt-4 lg:pt-0 flex gap-3 items-center justify-between">
+        <h2 className="text-xl lg:text-3xl font-semibold text-cyan-800 ">
     Quotations  :
         </h2>
-          <Button onClick={() => setShowAddForm(!showAddForm)} className="px-8 py-2 rounded-lg shadow-md bg-cyan-200 hover:bg-cyan-300 text-black max-w-full ">
+          <Button onClick={() => setShowAddForm(!showAddForm)} className="lg:px-8 lg:py-2 rounded-lg shadow-md bg-cyan-200 hover:bg-cyan-300 text-black max-w-full ">
             {!showAddForm ? "New Quotations" : "Back"}
           </Button>
           
