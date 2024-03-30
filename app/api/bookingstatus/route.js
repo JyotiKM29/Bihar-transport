@@ -15,7 +15,11 @@ export async function POST(req, res) {
         
         if (!admin) {
             return Response.json({ message: "Admin not found" }, { status: 404 });
-        }
+      }
+      
+      if (status === "Cancelled") {
+        return Response.json({ message: "Invalid request" }, { status: 400 });
+      }
 
         const booking = await Booking.findOne({ _id: bookingId });
         console.log(booking);
