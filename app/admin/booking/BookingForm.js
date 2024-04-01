@@ -474,9 +474,9 @@ export default function ProfileForm() {
                   );
                 }}
               />
-       </div>
+       {/* </div> */}
 
-       <div className='rounded-xl shadow-md grid grid-cols-1 lg:grid-cols-2 space-x-6 space-y-2 border py-1 px-3'  >
+       {/* <div className='rounded-xl shadow-md grid grid-cols-1 lg:grid-cols-2 space-x-6 space-y-2 border py-1 px-3'  > */}
        <FormField
                 control={form.control}
                 name="way"
@@ -522,6 +522,11 @@ export default function ProfileForm() {
                   );
                 }}
               />
+
+          
+
+
+
        </div>
 
        <div className='flex flex-col lg:flex-row gap-6 '>
@@ -545,9 +550,9 @@ export default function ProfileForm() {
                         <FormControl>
                           <Input type="number" {...field}  />
                         </FormControl>
-                        {/* <p className="-mt-2 text-[12px] text-slate-700">
+                        <p className="-mt-2 text-[12px] text-slate-700">
                           Party bhara is Total Amount + 18% gst
-                        </p> */}
+                        </p>
                         <FormMessage />
                       </div>
                     </FormItem>
