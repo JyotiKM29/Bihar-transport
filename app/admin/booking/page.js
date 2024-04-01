@@ -22,12 +22,14 @@ function Booking() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tabValue = searchParams.get("tab");
-  console.log(tabValue);
+  console.log('search :',tabValue);
+  console.log('selectedTab :',selectedTab);
 
   useEffect(() => {
    
     setSelectedTab(tabValue);
-  }, [searchParams]);
+
+  }, [tabValue , selectedTab]);
 
   const handleTabChange = (value) => {
     setSelectedTab(value);
@@ -37,35 +39,35 @@ function Booking() {
 
   return (
     <div className="min-h-[95vh] w-full">
-      <Tabs defaultValue={selectedTab} className="relative min-h-full w-full">
+      <Tabs value={selectedTab} className="relative min-h-full w-full">
         <TabsList className="flex flex-wrap justify-center rounded-2xl">
           <TabsTrigger
-            value="Booking"
-            onClick={() => handleTabChange("newBooking")}
+            value="newbooking"
+            onClick={() => handleTabChange("newbooking")}
           >
             New Booking
           </TabsTrigger>
           <TabsTrigger
-            value="Pending"
-            onClick={() => handleTabChange("Pending")}
+            value="pending"
+            onClick={() => handleTabChange("pending")}
           >
             Pending Bookings
           </TabsTrigger>
           <TabsTrigger
-            value="Confirm"
-            onClick={() => handleTabChange("Confirm")}
+            value="confirm"
+            onClick={() => handleTabChange("confirm")}
           >
             Confirm Bookings
           </TabsTrigger>
           <TabsTrigger
-            value="Intilize"
-            onClick={() => handleTabChange("Intilize")}
+            value="intilize"
+            onClick={() => handleTabChange("intilize")}
           >
             Intilize Bookings
           </TabsTrigger>
           <TabsTrigger
-            value="Dispatch"
-            onClick={() => handleTabChange("Dispatch")}
+            value="dispatch"
+            onClick={() => handleTabChange("dispatch")}
           >
             Dispatch Bookings
           </TabsTrigger>
@@ -76,41 +78,41 @@ function Booking() {
             In-Transist Bookings
           </TabsTrigger>
           <TabsTrigger
-            value="Delivered"
-            onClick={() => handleTabChange("Delivered")}
+            value="delivered"
+            onClick={() => handleTabChange("delivered")}
           >
             Delivered Bookings
           </TabsTrigger>
           <TabsTrigger
-            value="Cancelled"
-            onClick={() => handleTabChange("Cancelled")}
+            value="cancelled"
+            onClick={() => handleTabChange("cancelled")}
           >
             Cancelled Bookings
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="Booking">
+        <TabsContent value="newbooking">
           <NewBooking />
         </TabsContent>
-        <TabsContent value="Pending">
+        <TabsContent value="pending">
           <PendingBooking />
         </TabsContent>
-        <TabsContent value="Confirm">
+        <TabsContent value="confirm">
           <ConfirmBooking />
         </TabsContent>
-        <TabsContent value="Intilize">
+        <TabsContent value="intilize">
           <InitializeBooking />
         </TabsContent>
-        <TabsContent value="Dispatch">
+        <TabsContent value="dispatch">
           <DispatchBooking />
         </TabsContent>
         <TabsContent value="intransist">
           <IntransitBooking />
         </TabsContent>
-        <TabsContent value="Delivered">
+        <TabsContent value="delivered">
           <DeliveredBooking />
         </TabsContent>
-        <TabsContent value="Cancelled">
+        <TabsContent value="cancelled">
           <CancelledBooking />
         </TabsContent>
       </Tabs>

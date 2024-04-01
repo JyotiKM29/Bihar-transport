@@ -111,7 +111,7 @@ const TodayData = () => {
                 <RadialBarChart value={dispatchedOrder} />
               </div>
             </Link>
-            <Link href='/admin/booking'
+            <Link href='/admin/booking?tab=intilize'
               className="flex  h-full w-full  
           rounded-3xl bg-white p-4 shadow-md "
             >
@@ -159,7 +159,7 @@ const TodayData = () => {
                 <RadialBarChart value={orderDilevered} />
               </div>
             </Link>
-            <Link href='/admin/booking'
+            <Link href='/admin/booking?=delivered'
               className="flex  h-full w-full  
           rounded-3xl bg-white p-4 shadow-md "
             >
