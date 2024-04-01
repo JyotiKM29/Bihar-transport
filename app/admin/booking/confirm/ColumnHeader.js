@@ -178,9 +178,16 @@ href={`/admin/booking/${row.original.orderNumber}`}
     Allocate Vehicle
    </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                <button onClick={()=>handleConfirm('Cancelled',`${row.original._id}` )}>Cancel Booking</button> 
+                  <DropdownMenuItem>
+                <Link 
+href={`/admin/booking/cancel/${row.original._id}`}
+ >
+   Cancel Booking
+   </Link>
                 </DropdownMenuItem>
+                {/* <DropdownMenuItem>
+                <button onClick={()=>handleConfirm('Cancelled',`${row.original._id}` )}>Cancel Booking</button> 
+                </DropdownMenuItem> */}
               </DropdownMenuContent>
             </DropdownMenu>
           );

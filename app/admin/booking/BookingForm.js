@@ -78,9 +78,8 @@ const formSchema = z.object({
 
   unloadingPoints: z.array(z.string()),
   way: z.enum(["one way", "two way", "return"]),
-  
   vehicleType: z.string({ message: "Field is required" }).min(3),
-  
+  noOfVehicle: z.enum(["1", "2", "3"]),
   partyBhara: z.coerce
     .number({
       message: "Field is required",
@@ -520,7 +519,6 @@ export default function ProfileForm() {
                   );
                 }}
               />
-      
        </div>
 
       
@@ -546,9 +544,9 @@ export default function ProfileForm() {
                         <FormControl>
                           <Input type="number" {...field}  />
                         </FormControl>
-                        {/* <p className="-mt-2 text-[12px] text-slate-700">
+                        <p className="-mt-2 text-[12px] text-slate-700">
                           Party bhara is Total Amount + 18% gst
-                        </p> */}
+                        </p>
                         <FormMessage />
                       </div>
                     </FormItem>

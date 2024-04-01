@@ -171,8 +171,12 @@ export default function ColumnHeader() {
                 <DropdownMenuItem>
                    <button onClick={()=>handleConfirm('In Transit',`${row.original._id}` )}>InTransit Booking</button> 
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                <button onClick={()=>handleConfirm('Cancelled',`${row.original._id}` )}>Cancel Booking</button> 
+                 <DropdownMenuItem>
+                <Link 
+href={`/admin/booking/cancel/${row.original._id}`}
+ >
+     Cancel Booking
+   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
