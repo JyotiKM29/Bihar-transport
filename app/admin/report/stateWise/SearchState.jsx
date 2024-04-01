@@ -164,6 +164,9 @@ const SearchState = () => {
 
 
       {/* Table */}
+      <div className="overflow-x-scroll ">
+
+     
       {data && Object.keys(data).length > 0 && (
   <table className="w-full mt-10 rounded ">
     <thead >
@@ -189,7 +192,7 @@ const SearchState = () => {
   </table>
 )}
 
- 
+</div>
      
 
     </div>

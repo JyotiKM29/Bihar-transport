@@ -17,13 +17,13 @@ const BookingReport = () => {
     w-full  flex-col  gap-3 space-y-2 rounded-2xl 
      bg-white px-4 py-4 shadow-md md:p-6 xl:min-h-[95%]"
     >
-      <div className="flex ">
+      <div className="flex mt-8 lg:mt-3 ">
         <h1 className="flex-1 text-center text-2xl lg:block xl:text-3xl text-violet-800  ">
           State-wise Report
         </h1>
         <Button
           variant="secondary"
-          className="flex gap-2 shadow-md bg-violet-200 hover:bg-violet-300  self-end"
+          className="flex gap-2 px-2 shadow-md bg-violet-200 hover:bg-violet-300  self-end"
           onClick={handleBack}
         >
           <ChevronLeft />
