@@ -79,7 +79,7 @@ const TodayData = () => {
                         lg:row-span-2 xl:col-span-4
                        xl:row-span-1 xl:grid-cols-3 xl:grid-rows-2 "
           >
-            <Link href='/admin/booking'
+            <Link href='/admin/booking?tab=pending'
               className="flex  h-full w-full  
           rounded-3xl bg-white p-4 shadow-md "
             >
@@ -95,7 +95,7 @@ const TodayData = () => {
                 <RadialBarChart value={pendingOrder} />
               </div>
             </Link>
-            <Link href='/admin/booking'
+            <Link href='/admin/booking?tab=dispatch'
               className="flex  h-full w-full  
           rounded-3xl bg-white p-4 shadow-md "
             >
@@ -127,7 +127,7 @@ const TodayData = () => {
                 <RadialBarChart value={lorryInCampus} />
               </div>
             </Link>
-            <Link href='/admin/booking'
+            <Link href='/admin/booking?tab=intransist'
               className="flex  h-full w-full  
           rounded-3xl bg-white p-4 shadow-md "
             >
@@ -143,7 +143,7 @@ const TodayData = () => {
                 <RadialBarChart value={inTransit} />
               </div>
             </Link>
-            <Link href='/admin/booking'
+            <Link href='/admin/booking?tab=delivered'
               className="flex  h-full w-full  
           rounded-3xl bg-white p-4 shadow-md "
             >
