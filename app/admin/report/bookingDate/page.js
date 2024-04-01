@@ -17,7 +17,7 @@ const BookingReport = () => {
     w-full  flex-col  gap-3 space-y-2 rounded-2xl 
      bg-white px-4 py-4 shadow-md md:p-6 xl:h-[95%]"
   >
-  <div className="flex ">
+  <div className="flex pt-8 lg:pt-3 ">
 
  
   

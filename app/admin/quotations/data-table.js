@@ -174,7 +174,7 @@ export function DataTable({ columns, data  }) {
           </TableBody>
         </Table>
       </div>
-      <div className="flex flex-col md:flex-row  items-center justify-end gap-3 py-4">
+      <div className="flex text-sm flex-col lg:flex-row   items-center justify-end gap-3 py-4">
         <div className="flex flex-1 items-center gap-4 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
@@ -192,7 +192,7 @@ export function DataTable({ columns, data  }) {
           </span>
         </div>
 
-        <div className="flex items-center gap-4 space-x-2">
+        <div className="text-sm flex flex-col md:flex-row  items-center gap-4 space-x-2">
           <span className="flex items-center gap-1">
             <div>Page</div>
             <strong>
@@ -200,6 +200,8 @@ export function DataTable({ columns, data  }) {
               {table.getPageCount()}
             </strong>
           </span>
+<div className="flex gap-4">
+
 
           <Button
             variant="outline"
@@ -217,6 +219,7 @@ export function DataTable({ columns, data  }) {
           >
             Next
           </Button>
+</div>
           <Button
           variant="secondary"
           

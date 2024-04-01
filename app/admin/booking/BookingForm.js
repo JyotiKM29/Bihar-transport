@@ -283,8 +283,8 @@ export default function ProfileForm() {
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Order ID :{" "}
+                      <FormLabel className="px-5 text-nowrap text-sm lg:text-base">
+                        Order ID :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
@@ -365,7 +365,7 @@ export default function ProfileForm() {
        </div>
        <div className='rounded-xl shadow-md grid grid-cols-1 lg:grid-cols-2 space-x-6 space-y-2 border py-1 px-3'  >
 
-       <div className="flex items-center gap-0">
+       <div className="px-5 flex items-center gap-0">
 <FormField
                 control={form.control}
                 name="consignorName"
@@ -473,9 +473,7 @@ export default function ProfileForm() {
                   );
                 }}
               />
-       {/* </div> */}
 
-       {/* <div className='rounded-xl shadow-md grid grid-cols-1 lg:grid-cols-2 space-x-6 space-y-2 border py-1 px-3'  > */}
        <FormField
                 control={form.control}
                 name="way"
@@ -574,21 +572,23 @@ export default function ProfileForm() {
 
        </div>
 
+      
+
        <div className='flex flex-col lg:flex-row gap-6 '>
        {/* form */}
-<div className='w-1/2 flex gap-3 flex-col rounded-xl shadow-md   border py-3 px-6'>
+<div className='lg:w-1/2 flex gap-3 flex-col rounded-xl shadow-md   border py-3 px-6'>
 <MaterialInfo form={form} nameValue='itemsList' />
 <AdditionalChargers form ={form} nameValue="additionalCharges.chargers" />
 </div>
 {/* calculation */}
-<div className='w-1/2 rounded-xl shadow-md grid grid-cols-1  space-x-6 space-y-2 border py-1 px-3'>
+<div className='lg:w-1/2 rounded-xl shadow-md grid grid-cols-1  space-x-6 space-y-2 border py-1 px-3'>
 <FormField
                 control={form.control}
                 name="partyBhara"
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                      <FormLabel className=" px-5 text-nowrap text-sm lg:text-base">
                         Party Bhara (Rs):
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
