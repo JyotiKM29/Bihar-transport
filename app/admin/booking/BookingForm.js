@@ -78,9 +78,8 @@ const formSchema = z.object({
 
   unloadingPoints: z.array(z.string()),
   way: z.enum(["one way", "two way", "return"]),
-  
   vehicleType: z.string({ message: "Field is required" }).min(3),
-  
+  noOfVehicle: z.enum(["1", "2", "3"]),
   partyBhara: z.coerce
     .number({
       message: "Field is required",
@@ -522,10 +521,6 @@ export default function ProfileForm() {
                   );
                 }}
               />
-
-          
-
-
 
        </div>
 
