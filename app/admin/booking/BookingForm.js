@@ -79,7 +79,8 @@ const formSchema = z.object({
   unloadingPoints: z.array(z.string()),
   way: z.enum(["one way", "two way", "return"]),
   vehicleType: z.string({ message: "Field is required" }).min(3),
-  noOfVehicle: z.enum(["1", "2", "3"]),
+  noOfVehicle: z.enum(["1", "2", "3", "others"]),
+  customNoOfVehicle: z.number().optional(),
   partyBhara: z.coerce
     .number({
       message: "Field is required",
@@ -122,9 +123,8 @@ export default function ProfileForm() {
     unloadingPoints: [""],
     way: "",
     material: "",
-    
     vehicleType: "",
-    
+    noOfVehicle:1,
     partyBhara: 0,
     hideBhara: false,
     paymentLiability: "",
@@ -519,6 +519,57 @@ export default function ProfileForm() {
                   );
                 }}
               />
+
+
+ <FormField
+            control={form.control}
+            name="noOfVehicle"
+            render={({ field }) => {
+              return (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="text-nowrap text-sm lg:text-base">
+                    No of Vehicle :
+                  </FormLabel>
+                  <div className="flex flex-1 flex-col">
+                    <FormControl>
+                      <select {...field}>
+                        <option value="">Select No of Vehicle</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="others">Others</option>
+                      </select>
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              );
+            }}
+          />
+
+          {form.watch("noOfVehicle") === "others" && (
+            <FormField
+              control={form.control}
+              name="customNoOfVehicle"
+              render={({ field }) => {
+                return (
+                  <FormItem className="flex items-center justify-center gap-4">
+                    <FormLabel className="text-nowrap text-sm lg:text-base">
+                      Specify No of Vehicle :
+                    </FormLabel>
+                    <div className="flex flex-1 flex-col">
+                      <FormControl>
+                        <Input type="number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                );
+              }}
+            />
+          )}
+
+
        </div>
 
       

@@ -154,6 +154,7 @@ const bookingSchema = new mongoose.Schema(
     way: { type: String, default: "One Way" },
     itemsList:[itemlistSchema],
     vehicleType: { type: String, required: true },
+    noOfVehicle:{type:Number},
     partyBhara: { type: Number, default: 0 },
     hideBhara: { type: Boolean, default: false },
     paymentLiability: {
