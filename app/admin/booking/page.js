@@ -21,7 +21,8 @@ function Booking() {
   const [selectedTab, setSelectedTab] = useState(null);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const tabValue = searchParams.get("tab");
+  let tabValue = searchParams.get("tab");
+  if (!tabValue) tabValue = "newbooking";
   console.log('search :',tabValue);
   console.log('selectedTab :',selectedTab);
 
