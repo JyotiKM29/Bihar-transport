@@ -98,7 +98,7 @@ export default function ColumnHeader() {
       {
   
         header: "Edit",
-        cell: ({ row }) =><Link href={`/admin/account/moneyExpense/${row.original._id}`}  >
+        cell: ({ row }) =><Link href={`/admin/quotations/${row.original._id}`}  >
         <div className='bg-yellow-400 p-1 h-8 w-8 rounded flex items-center justify-center'>
         <Pencil
          strokeWidth={1.5}   className='fill-yellow-400 text-white h-5 w-5'/>
