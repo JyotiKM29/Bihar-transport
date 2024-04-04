@@ -5,12 +5,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../components/ui/form";
-import { Input } from "../../../components/ui/input";
-import { UserContext } from "../../../context/UserContextProvider";
-import { useToast } from "../../../components/ui/use-toast";
+} from "../../components/ui/form";
+import { Input } from "../../components/ui/input";
+import { UserContext } from "../../context/UserContextProvider";
+import { useToast } from "../../components/ui/use-toast";
 
-const SearchLedger = ({ form, field, label  }) => {
+const SearchItem = ({ form, field, label , items,nameValue  }) => {
   const { user } = useContext(UserContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
@@ -19,7 +19,7 @@ const SearchLedger = ({ form, field, label  }) => {
 
   async function fetchData(value) {
     try {
-      const res = await fetch(`/api/accounting/getledger/${user._id}`);
+      const res = await fetch(`/api/getProduct/${user._id}`);
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
@@ -30,9 +30,9 @@ const SearchLedger = ({ form, field, label  }) => {
         const results = result.data.filter((item) => {
             return (
                 value &&
-                item.basicInfo &&
-                item.basicInfo.accountName &&
-                item.basicInfo.accountName.toLowerCase().includes(value.toLowerCase())
+                item.name &&
+              
+                item.name.toLowerCase().includes(value.toLowerCase())
             );
         });
         console.log("Filter data:", results);
@@ -98,10 +98,12 @@ const SearchLedger = ({ form, field, label  }) => {
                 className="w-full cursor-pointer px-3 py-2 hover:bg-slate-200"
                 onClick={() => {
 
-                    if(result?.basicInfo?.accountName){
-                        setInputValue(result?.basicInfo?.accountName)
-                  form.setValue('receivedFrom', result?.basicInfo?.accountName);
-                  form.setValue('ledgerId', result?._id);
+                    if(result?.name){
+                        setInputValue(result?.name)
+                      
+
+                  form.setValue(`${nameValue}[${items.length}].material`, result?.name);
+                  form.setValue(`${nameValue}[${items.length}].hsnNo`, result?.hsnNo);
                   
                   setSearchResult([]);
                   setSearchTerm("");
@@ -112,7 +114,7 @@ const SearchLedger = ({ form, field, label  }) => {
                    
                 }}
               >
-                {result.basicInfo.accountName}
+                {result.name}
               </div>
             ))}
         </div>
@@ -121,4 +123,4 @@ const SearchLedger = ({ form, field, label  }) => {
   );
 };
 
-export default SearchLedger;
+export default SearchItem;

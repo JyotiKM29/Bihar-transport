@@ -30,7 +30,7 @@ const CartTable = ({items}) => {
         <tbody>
           {Array.isArray(items) && items.map((items, i) => (
             <tr key={i} className="w-full text-center">
-              <td>{items.HSN}</td>
+              <td>{items.hsnNo}</td>
               <td>{items.material}</td>
               <td>{items.quantity} {items.quantityUnit}</td>
               <td>{items.actualWeight}{items.actualWeightUnit} </td>

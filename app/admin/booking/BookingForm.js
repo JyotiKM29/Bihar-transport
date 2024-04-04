@@ -47,6 +47,7 @@ const additionalChargeSchema = z.object({
 
 const itemsSchema = z.object({
   material: z.string().optional(),
+  hsnNo:z.string(),
   quantity: z.coerce.number().optional(),
   quantityUnit:  z.string().optional(),
   actualWeight:  z.coerce.number().optional(),

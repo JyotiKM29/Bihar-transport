@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import FieldForm from "../component/FieldForm";
 import { Button } from "../../components/ui/button";
+import SearchItem from './SearchItem';
 import {
   Form,
   FormControl,
@@ -51,6 +52,7 @@ const MaterialInfo = ({ form, nameValue }) => {
   function handleAdditionalItem() {
     const newItem = {
       material: form.getValues(`${nameValue}[${items.length}].material`),
+      hsnNo: form.getValues(`${nameValue}[${items.length}].hsnNo`),
       quantity: form.getValues(`${nameValue}[${items.length}].quantity`),
       quantityUnit: form.getValues(`${nameValue}[${items.length}].quantityUnit`),
       actualWeight: form.getValues(`${nameValue}[${items.length}].actualWeight`),
@@ -113,10 +115,33 @@ const MaterialInfo = ({ form, nameValue }) => {
         {showForm && (
           <>
           <p>Fill in the details below:</p>
+          <div className="flex items-center">
+          <div className="flex-1">
+       
+             <FormField
+                control={form.control}
+                name={`${nameValue}[${items.length}].material`}
+                
+                render={({ field }) => (
+                  <SearchItem
+                 
+                  nameValue={nameValue}
+                  items={items}
+                    form={form}
+                    field={field}
+                    label="Material Name"
+                  />
+                )}
+              /> 
+          </div>
+         
+            <button className="border bg-gray-100 text-2xl h-10 rounded w-10">+</button>
+          </div>
+           
             <FieldForm
               form={form}
-              name={`${nameValue}[${items.length}].material`}
-              label="Material Name"
+              name={`${nameValue}[${items.length}].hsnNo`}
+              label="HSN No"
               type="text"
             />
                <div className="flex w-full items-center gap-0">
