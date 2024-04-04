@@ -1,4 +1,5 @@
 "use client";
+import CartTable from './CartTable';
 import MaterialInfo from './MaterialInfo';
 import { FaPlus } from "react-icons/fa6";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -58,6 +59,7 @@ const itemsSchema = z.object({
   rateUnit:  z.string().optional(),
   GSTPercentage: z.coerce.number().optional(),
   GSTType:z.enum(['RCM','FCM']),
+  basicAmount:z.coerce.number(),
   amount: z.coerce.number().optional(),
 })
 
@@ -169,7 +171,7 @@ export default function ProfileForm() {
     resolver: zodResolver(formSchema),
     defaultValues: initialFormState,
   });
-
+  const CartItems = form.getValues("itemsList");
   const advanceAmount = form.watch("advanceAmount", 0);
   const additionalCharges = form.watch("additionalCharges.totalCharge");
   const PartyBhara = form.watch('partyBhara',0);
@@ -572,9 +574,13 @@ export default function ProfileForm() {
 
        </div>
 
+       <div className='rounded-xl shadow-md grid grid-cols-1  space-x-6 space-y-2 border py-1 px-3'  >
+       <CartTable items={CartItems}/>
       
+</div>     
 
        <div className='flex flex-col lg:flex-row gap-6 '>
+    
        {/* form */}
 <div className='lg:w-1/2 flex gap-3 flex-col rounded-xl shadow-md   border py-3 px-6'>
 <MaterialInfo form={form} nameValue='itemsList' />
