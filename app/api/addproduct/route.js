@@ -36,7 +36,7 @@ export async function POST(req, res) {
 
     await product.save();
     console.log("no problem");
-
+// yhey 
     return Response.json(
       { message: "Product added successfully" },
       { status: 200 },
