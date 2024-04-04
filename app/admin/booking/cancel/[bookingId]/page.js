@@ -83,7 +83,7 @@ const EmailSend = ({ params }) => {
           />
         </label>
         <Button type="submit">
-          {loading ? "Loading ..." : "Cancel Invoice"}
+          {loading ? "Loading ..." : "Cancel Booking"}
         </Button>
       </form>
     </div>
