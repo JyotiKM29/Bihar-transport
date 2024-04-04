@@ -26,7 +26,9 @@ const MaterialInfo = ({ form, nameValue }) => {
   
   
   function calAmount(rate, quantity, GSTPercentage = 0) {
+    
     const amount = parseFloat(rate) * parseFloat(quantity);
+    form.setValue(`${nameValue}[${items.length}].basicAmount`,amount);
     const total = parseFloat(amount) * Number(GSTPercentage);
     return parseFloat(amount + total);
   }
@@ -38,6 +40,7 @@ const MaterialInfo = ({ form, nameValue }) => {
   useEffect(() => {
     if (!isNaN(parseFloat(rate)) && !isNaN(parseFloat(quantity))) {
       let result = calAmount(rate, quantity, GSTPercentage);
+
       form.setValue(`${nameValue}[${items.length}].amount`, result);
     }
    calPartyBhara() ;
@@ -61,6 +64,8 @@ const MaterialInfo = ({ form, nameValue }) => {
       GSTPercentage: form.getValues(`${nameValue}[${items.length}].GSTPercentage`),
       GSTType: form.getValues(`${nameValue}[${items.length}].GSTType`),
       amount: form.getValues(`${nameValue}[${items.length}].amount`),
+      basicAmount: form.getValues(`${nameValue}[${items.length}].basicAmount`),
+      
     };
 
     console.log(newItem);
@@ -72,8 +77,11 @@ const MaterialInfo = ({ form, nameValue }) => {
 
   return (
     <div>
+     <h2 className="font-semibold text-xl "> Add Materials :</h2>
+   
+
       
-      <h2 className="font-semibold text-xl "> Add Materials :</h2>
+     
       {/* Close and Reset button */}
       <div className="flex items-center gap-3  w-full my-2">
         <Button
@@ -98,39 +106,7 @@ const MaterialInfo = ({ form, nameValue }) => {
         </Button>
       </div>
 
-      {/* Table display */}
-      <div>
-        {items && items.length > 0 && (
-          <table className="mx-2 my-4 w-full border">
-            <thead>
-              <tr className="w-full border bg-slate-50">
-                <th>Material Name</th>
-                <th>Qty</th>
-                <th>Actual Wt</th>
-                {/* <th>chargedWeight</th> */}
-                {/* <th>rateAsPer</th> */}
-                {/* <th>rate</th> */}
-                <th>Tax</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((items, i) => (
-                <tr key={i} className="w-full text-center">
-                  <td>{items.material}</td>
-                  <td>{items.quantity} {items.quantityUnit}</td>
-                  <td>{items.actualWeight}{items.actualWeightUnit} </td>
-                  {/* <td>{items.chargedWeight}{items.chargedWeightUnit}</td> */}
-                  {/* <td>{items.rateAsPer}({items.rateAsPerOption})</td> */}
-                  {/* <td>{items.rate}({items.rateUnit})</td> */}
-                  <td>{items.GSTPercentage}</td>
-                  <td>{items.amount}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+     
 
       {/* Form */}
       <div>
