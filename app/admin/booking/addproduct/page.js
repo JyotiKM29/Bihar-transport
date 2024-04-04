@@ -13,6 +13,7 @@ const AddProduct = () => {
   const { user } = useContext(UserContext);
 
   const userId = user?._id;
+  // user id
 
   const displayToast = (title, action, description = "") => {
     toast({
@@ -36,7 +37,7 @@ const AddProduct = () => {
         }),
       );
 
-      const response = await fetch("/api/addProduct", {
+      const response = await fetch("/api/addproduct", {
         method: "POST",
         body: JSON.stringify({
           adminId: userId,
