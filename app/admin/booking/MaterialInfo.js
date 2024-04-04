@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import FieldForm from "../component/FieldForm";
 import { Button } from "../../components/ui/button";
 import SearchItem from './SearchItem';
@@ -12,10 +12,18 @@ import {
   FormMessage,
 } from "../../components/ui/form";
 import { Input } from "../../components/ui/input";
+import { UserContext } from "../../context/UserContextProvider";
+import Link from "next/link";
 
 const MaterialInfo = ({ form, nameValue }) => {
   const [items, setItems] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [loading , setLoading] = useState(true);
+
+  const { user } = useContext(UserContext);
+
+  const [data, setData] = useState(null);
+  const userId = user?._id;
 
   function calPartyBhara() {
     const totalAmount = items.reduce((acc, item) => acc + parseFloat(item.amount), 0);
@@ -47,6 +55,34 @@ const MaterialInfo = ({ form, nameValue }) => {
    calPartyBhara() ;
 
   }, [rate, quantity, items.length, nameValue, GSTPercentage]);
+
+
+  useEffect(()=>{
+   const fetchUnits = async() =>{
+    try {
+      if (userId) {
+        const response = await fetch(`/api/getunits/${userId}`, {
+          method: "GET",
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        setLoading(false);
+      
+        setData(data.data);
+        console.log(data);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error:", error);
+    }
+   }
+   fetchUnits();
+  },[userId])
  
 
   function handleAdditionalItem() {
@@ -135,15 +171,15 @@ const MaterialInfo = ({ form, nameValue }) => {
               /> 
           </div>
          
-            <button className="border bg-gray-100 text-2xl h-10 rounded w-10">+</button>
+            <Link href='/admin/booking/addproduct' className="flex justify-center items-center border bg-gray-100 text-xl h-10 rounded w-10">+</Link>
           </div>
            
-            <FieldForm
+            {/* <FieldForm
               form={form}
               name={`${nameValue}[${items.length}].hsnNo`}
               label="HSN No"
               type="text"
-            />
+            /> */}
                <div className="flex w-full items-center gap-0">
                 <FormField
                   control={form.control}
@@ -181,7 +217,13 @@ const MaterialInfo = ({ form, nameValue }) => {
                               {...field}
                               className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
                             >
-                              <option value=""> Quantity Unity</option>
+                            <option value=""> Quantity Unity</option>
+                         {Array.isArray(data) && data.map((unit) => (
+  <option key={unit.name} value={unit.name}>
+    {unit.name}
+  </option>
+))}
+                              {/* <option value=""> Quantity Unity</option>
                               <option value="Kg">Kg (Kilo gram)</option>
                               <option value="g">g (gram) </option>
                               <option value="Km">Km (Kilo meter)</option>
@@ -191,7 +233,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                               <option value="tons">tons</option>
                               <option value="pounds">pounds</option>
                               <option value="L">L (liters)</option>
-                              <option value="m3">m³</option>
+                              <option value="m3">m³</option> */}
                             </select>
                           </FormControl>
                           <FormMessage />
@@ -200,6 +242,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                     );
                   }}
                 />
+                 <Link href='/admin/settings/newunit' className="flex justify-center items-center border bg-gray-100 text-xl h-10 rounded w-10">+</Link>
               </div>
                <div className="flex w-full items-center gap-0">
                 <FormField

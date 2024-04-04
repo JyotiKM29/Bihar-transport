@@ -3,28 +3,27 @@ import { ShoppingCart } from 'lucide-react';
 
 const CartTable = ({items}) => {
   return (
-    <div className='px-4 py-2 w-full '>
+    <div className='px-4 py-2 w-full overflow-x-scroll'>
         <h2 className="font-semibold text-xl flex gap-2 "><ShoppingCart strokeWidth={2.5} /> Total Item in Cart</h2>
    
 
  
-    <div className=' w-full'>
+    <div className=' w-full '>
     { (
       <table className="mx-2 my-4 w-full border">
         <thead>
-          <tr className="w-full border bg-slate-50">
-          <th>HSN</th>
-            <th>Material Name</th>
-            <th>Quantity</th>
-            <th>Weight</th>
-            <th>Rate</th>
-            <th>Rate/Per</th>
-            <th>Basic Amount</th>
+          <tr className="font-semiBold w-full border bg-slate-50">
+          <th className="font-light pr-3 text-nowrap ">HSN</th>
+            <th className="font-light pr-3 text-nowrap ">Material Name</th>
+            <th className="font-light pr-3 text-nowrap ">Quantity</th>
+            <th className="font-light pr-3 text-nowrap ">Weight</th>
+            <th className="font-light pr-3 text-nowrap ">Rate</th>
+            <th className="font-light pr-3 text-nowrap ">Rate/Per</th>
+            <th className="font-light pr-3 text-nowrap ">Basic Amount</th>
            
-            <th>Tax</th>
-            <th>Amount</th>
-             {/* <th>Action
-</th> */}
+            <th className="font-light pr-3 text-nowrap ">Tax</th>
+            <th className="font-light pr-3 text-nowrap ">Amount</th>
+         
           </tr>
         </thead>
         <tbody>
@@ -34,7 +33,7 @@ const CartTable = ({items}) => {
               <td>{items.material}</td>
               <td>{items.quantity} {items.quantityUnit}</td>
               <td>{items.actualWeight}{items.actualWeightUnit} </td>
-              {/* <td>{items.chargedWeight}{items.chargedWeightUnit}</td> */}
+              
               <td>{items.rate}({items.rateUnit})</td>
               <td>{items.rateAsPer}({items.rateAsPerOption})</td>
              
