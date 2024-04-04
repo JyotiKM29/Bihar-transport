@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const unitSchema = new mongoose.Schema({
     name: { type: String, required: true },
     addedBy: {
-        name: { type: String, required: true },
+        name: { type: String, },
         id: { type: String, required: true },
         date: { type: Date, default: Date.now } // Change made here
     }
