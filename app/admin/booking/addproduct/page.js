@@ -49,6 +49,8 @@ const AddProduct = () => {
 
       if (response.ok) {
         displayToast("Product Added Successfully", "✅");
+        setProductName("");
+        setHsnNo("");
       } else {
         console.error("Error:", result.message);
         displayToast("Failed to add product", "❌", result.message);
