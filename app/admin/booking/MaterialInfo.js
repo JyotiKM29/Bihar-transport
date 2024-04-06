@@ -233,7 +233,6 @@ const MaterialInfo = ({ form, nameValue }) => {
                                   {unit.name}
                                 </option>
                               ))}
-                        
                              
                           </select>
                         </FormControl>
@@ -380,9 +379,19 @@ const MaterialInfo = ({ form, nameValue }) => {
                             className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
                           >
                             <option value=""> Select Rate as Rate</option>
-                            <option value="Weight">Weight</option>
-                            <option value="Quantity">Quantity</option>
-                            <option value="Distance">Distance</option>
+                           
+                            <option value="Actual weight">Actual weight</option>
+                            <option value="charged weight">
+                              charged weight
+                            </option>
+                            <option value="quantity">quantity</option>
+                            <option value="distance ">distance </option>
+                            <option value=" fixed "> fixed </option>
+                            <option value="Per trip"> Per trip</option>
+                            <option value="per kg"> per kg </option>
+                            <option value="Per ton">Per ton</option>
+                            <option value="Bundles">Bundles</option>
+                            <option value="pounds">pounds</option>
                           </select>
                         </FormControl>
 
