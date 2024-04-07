@@ -181,15 +181,19 @@ export default function ProfileForm() {
   const advanceAmount = form.watch("advanceAmount", 0);
   const additionalCharges = form.watch("additionalCharges.totalCharge");
   const PartyBhara = form.watch('partyBhara',0);
-  
-  function calPartyBhara(PartyBhara, additionalCharges ) {
-    const totalAdditionalCharges = form.getValues('totalAdditionalCharges')
+  const totalAdditionalCharges = form.getValues('totalAdditionalCharges')
     const totalAdditionalChargeTax = form.getValues('totalAdditionalChargeTax')
+
+
+  function calPartyBhara(PartyBhara) {
+    
     const total = Number(PartyBhara) + Number(totalAdditionalCharges) + Number(totalAdditionalChargeTax);
 
-   
+   console.log('total1',totalAdditionalCharges)
+   console.log('total2',totalAdditionalChargeTax)
+   console.log('total',PartyBhara)
     form.setValue("partyBhara", total )
-
+ return  total;
     
   }
   
@@ -201,12 +205,12 @@ export default function ProfileForm() {
     console.log('hello ')
     calPartyBhara(PartyBhara, additionalCharges);
     
-  }, [additionalCharges]);
+  }, [additionalCharges, ]);
   
   useEffect(() => {
-    const balanceAmount = calBalanceAmount(advanceAmount, PartyBhara);
-    form.setValue("balanceAmount", balanceAmount);
-  }, [PartyBhara, advanceAmount]);
+    const balanceAmount = calBalanceAmount( PartyBhara);
+    form.setValue("balanceAmount",balanceAmount);
+  }, [PartyBhara, totalAdditionalCharges , totalAdditionalChargeTax]);
   
 
 

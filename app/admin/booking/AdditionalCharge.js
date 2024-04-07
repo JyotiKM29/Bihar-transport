@@ -27,8 +27,9 @@ const AdditionalChargers = ({ form, nameValue }) => {
     }
     const PartyBhara = form.getValues("partyBhara");
 
-    const total = Number(PartyBhara) + Number(charges[charges.length - 1]?.amount);
-    form.setValue('totalAdditionalCharges', Number(charges[charges.length - 1]?.amount).toFixed(2) || 0 );
+    // const total = Number(PartyBhara) + Number(charges[charges.length - 1]?.amount);
+    const total = Number(PartyBhara);
+    form.setValue('totalAdditionalCharges',  charges[charges.length - 1]?.amount);
    
     form.setValue("partyBhara", total)
 
