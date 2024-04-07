@@ -477,13 +477,19 @@ export default function ProfileForm() {
                 }}
               />
 
+       
+
+       </div>
+
+       <div className='rounded-xl shadow-md grid grid-cols-1 lg:grid-cols-2 space-x-6 space-y-2 border py-1 px-3'  >
+
        <FormField
                 control={form.control}
                 name="way"
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                      <FormLabel className="px-5 text-nowrap text-sm lg:text-base">
                         Trip :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
@@ -572,9 +578,8 @@ export default function ProfileForm() {
             />
           )}
 
-
-       </div>
-
+      
+</div>     
        <div className='rounded-xl shadow-md grid grid-cols-1  space-x-6 space-y-2 border py-1 px-3'  >
        <CartTable items={CartItems}/>
       

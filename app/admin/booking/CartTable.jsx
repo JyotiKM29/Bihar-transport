@@ -4,10 +4,24 @@ import { ShoppingCart } from 'lucide-react';
 
 const CartTable = ({ items }) => {
   const [cartItems, setCartItems] = useState(items);
+  const [noOfItems , setNoOfItems] = useState(0);
+  const [totalCost , setTotalCost] = useState(0.0) ;
 
   useEffect(() => {
     setCartItems(items); 
-    }, [items]);
+    let length = items.length ? items.length : 0;
+    setNoOfItems(length)
+    
+  
+// Calculate total cost using cartItems directly
+const calculatedTotalCost = Array.isArray(cartItems) ? cartItems.reduce((accumulator, currentValue) => {
+  return accumulator + currentValue.amount;
+}, 0) : 0 ;
+
+// Set the total cost
+setTotalCost(calculatedTotalCost);
+
+    },  [items, cartItems]); 
 
   const handleDelete = (idToRemove) => {
     const updatedItems = cartItems.filter((item, index) => index !== idToRemove);
@@ -17,7 +31,7 @@ const CartTable = ({ items }) => {
   return (
     <div className='px-4 py-2 w-full overflow-x-scroll'>
       <h2 className="font-semibold text-xl flex gap-2 ">
-        <ShoppingCart strokeWidth={2.5} /> Total Item in Cart
+        <ShoppingCart strokeWidth={2.5} /> Total Item in Cart <p> ({noOfItems})</p>
       </h2>
 
       <div className='w-full'>
@@ -47,7 +61,10 @@ const CartTable = ({ items }) => {
                 <td>{item.chargedWeight}{item.chargedWeightUnit}</td>
                 <td>{item.rate}({item.rateUnit})</td>
                 <td>{item.basicAmount}</td>
-                <td>{item.GSTPercentage * 100} % {item.GSTType}</td>
+                <td>
+  {item.GSTPercentage && item.GSTType ? `${item.GSTPercentage * 100} % ${item.GSTType}` : '0%'}
+</td>
+
                 <td>{item.amount}</td>
                 <td>
                   <button  className="font-bold " >Edit</button> / <button className="font-bold " onClick={() => handleDelete(i)}>Delete</button>
@@ -56,6 +73,10 @@ const CartTable = ({ items }) => {
             ))}
           </tbody>
         </table>
+
+        <div className='flex justify-end'>
+        <p className='w-max'>Total: <span className='bg-green-200 ml-2 border border-green-400 rounded px-4 py-1 '> &#8377; {totalCost}  </span></p>
+        </div>
       </div>
     </div>
   );

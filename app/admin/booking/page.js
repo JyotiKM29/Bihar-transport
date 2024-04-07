@@ -16,6 +16,7 @@ import IntransitBooking from "./intransit/page";
 import DeliveredBooking from "./delivered/page";
 import CancelledBooking from "./cancelled/page";
 import { useSearchParams } from "next/navigation";
+import AdvanceBooking from './advanceBooking/page';
 
 function Booking() {
   const [selectedTab, setSelectedTab] = useState(null);
@@ -47,6 +48,12 @@ function Booking() {
             onClick={() => handleTabChange("newbooking")}
           >
             New Booking
+          </TabsTrigger>
+          <TabsTrigger
+            value="advancebooking"
+            onClick={() => handleTabChange("advancebooking")}
+          >
+            Advance Bookings
           </TabsTrigger>
           <TabsTrigger
             value="pending"
@@ -94,6 +101,9 @@ function Booking() {
 
         <TabsContent value="newbooking">
           <NewBooking />
+        </TabsContent>
+        <TabsContent value="advancebooking">
+          <AdvanceBooking />
         </TabsContent>
         <TabsContent value="pending">
           <PendingBooking />

@@ -35,27 +35,44 @@ const MaterialInfo = ({ form, nameValue }) => {
     return totalAmount;
   }
 
-  function calAmount(rate, quantity, GSTPercentage = 0) {
-    const amount = parseFloat(rate) * parseFloat(quantity);
+  function calAmount(rate, quantity, GSTPercentage = 0 , rateMultiple ) {
+    let amount ;
+    if(rateMultiple === 'Actual weight'){
+      const quantity = form.getValues(`${nameValue}[${items.length}].actualWeight`)
+       amount = parseFloat(rate) * parseFloat(quantity);
+    }else if(rateMultiple === 'charged weight'){
+      const quantity = form.getValues(`${nameValue}[${items.length}].chargedWeight`)
+       amount = parseFloat(rate) * parseFloat(quantity);
+    }else if(rateMultiple === 'quantity'){
+      const quantity = form.getValues(`${nameValue}[${items.length}].quantity`)
+       amount = parseFloat(rate) * parseFloat(quantity);
+    }else {
+
+    amount = parseFloat(rate) * parseFloat(quantity);
+    
+    }
     form.setValue(`${nameValue}[${items.length}].basicAmount`, amount);
     const total = parseFloat(amount) * Number(GSTPercentage);
     return parseFloat(amount + total);
   }
-
+  
+  const rateMultiple =form.watch(`${nameValue}[${items.length}].rateAsPer`);
   const quantity = form.watch(`${nameValue}[${items.length}].quantity`);
   const rate = form.watch(`${nameValue}[${items.length}].rate`);
   const GSTPercentage = form.watch(
     `${nameValue}[${items.length}].GSTPercentage`,
+
   );
 
   useEffect(() => {
+
     if (!isNaN(parseFloat(rate)) && !isNaN(parseFloat(quantity))) {
-      let result = calAmount(rate, quantity, GSTPercentage);
+      let result = calAmount(rate, quantity, GSTPercentage , rateMultiple);
 
       form.setValue(`${nameValue}[${items.length}].amount`, result);
     }
     calPartyBhara();
-  }, [rate, quantity, items.length, nameValue, GSTPercentage]);
+  }, [rate, quantity, items.length, nameValue, GSTPercentage , rateMultiple]);
 
   useEffect(() => {
     const fetchUnits = async () => {
@@ -227,12 +244,19 @@ const MaterialInfo = ({ form, nameValue }) => {
                             className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
                           >
                             <option value=""> Quantity Unit</option>
-                            {Array.isArray(data) &&
-                              data.map((unit) => (
-                                <option key={unit.name} value={unit.name}>
-                                  {unit.name}
-                                </option>
-                              ))}
+                            <option value="Box"> Box</option>
+                            <option value="Bag"> Bag</option>
+                            <option value="Basta"> Basta</option>
+                            <option value="Bundle"> Bundle</option>
+                            <option value="Carton"> Carton</option>
+                            <option value="Carate"> Carate</option>
+                            <option value="Drums"> Drums</option>
+                            <option value="Loose"> Loose</option>
+                            <option value="Packet"> Packet</option>
+                            <option value="Roll"> Roll</option>
+                            <option value="TIN"> TIN</option>
+                            <option value="TON"> TON</option>
+                           
                              
                           </select>
                         </FormControl>
@@ -287,14 +311,12 @@ const MaterialInfo = ({ form, nameValue }) => {
                             className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
                           >
                             <option value=""> Select Actual Weight Unit</option>
-                            <option value="Kg">Kg (Kilo gram)</option>
-                            <option value="g">g (gram) </option>
-                            <option value="Ton">Ton</option>
-                            <option value="Quintals">Quintals</option>
-                            <option value="Dozen">Dozen </option>
-                            <option value="Box">Box</option>
-                            <option value="Bundles">Bundles</option>
-                            <option value="pounds">pounds</option>
+                            {Array.isArray(data) &&
+                              data.map((unit) => (
+                                <option key={unit.name} value={unit.name}>
+                                  {unit.name}
+                                </option>
+                              ))}
                           </select>
                         </FormControl>
                         <FormMessage />
@@ -342,17 +364,15 @@ const MaterialInfo = ({ form, nameValue }) => {
                             className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
                           >
                             <option value="">
-                              {" "}
+                          
                               Select Charged Weight Unit
                             </option>
-                            <option value="Kg">Kg (Kilo gram)</option>
-                            <option value="g">g (gram) </option>
-                            <option value="Ton">Ton</option>
-                            <option value="Quintals">Quintals</option>
-                            <option value="Dozen">Dozen </option>
-                            <option value="Box">Box</option>
-                            <option value="Bundles">Bundles</option>
-                            <option value="pounds">pounds</option>
+                            {Array.isArray(data) &&
+                              data.map((unit) => (
+                                <option key={unit.name} value={unit.name}>
+                                  {unit.name}
+                                </option>
+                              ))}
                           </select>
                         </FormControl>
                         <FormMessage />
