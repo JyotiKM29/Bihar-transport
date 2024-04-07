@@ -30,8 +30,13 @@ const MaterialInfo = ({ form, nameValue }) => {
       (acc, item) => acc + parseFloat(item.amount),
       0,
     );
+    // const totalBasicAmount = items.reduce(
+    //   (acc, item) => acc + parseFloat(item.basicAmount),
+    //   0,
+    // );
     console.log(totalAmount);
     form.setValue("partyBhara", totalAmount);
+    // form.setValue("totalMaterialCharges", totalBasicAmount);
     return totalAmount;
   }
 

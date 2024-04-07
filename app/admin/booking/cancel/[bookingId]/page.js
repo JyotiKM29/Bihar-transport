@@ -63,7 +63,7 @@ const EmailSend = ({ params }) => {
 
   return (
     <div className="h-full w-full rounded-3xl bg-white px-6 py-4  shadow-sm">
-      <h2 className="font-semiBold mt-12 text-3xl lg:mt-0 "> Why do you want to cancel the booking ? : </h2>
+      <h2 className="font-semiBold mt-12 text-3xl lg:mt-0 text-blue-600 "> Why do you want to cancel the booking ? : </h2>
 
       <form
         onSubmit={handleSubmit}

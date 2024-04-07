@@ -71,7 +71,7 @@ function Booking() {
             value="intilize"
             onClick={() => handleTabChange("intilize")}
           >
-            Intilize Bookings
+            Pending for Dispatch
           </TabsTrigger>
           <TabsTrigger
             value="dispatch"

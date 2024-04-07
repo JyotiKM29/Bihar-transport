@@ -109,6 +109,9 @@ const formSchema = z.object({
   remarks: z.string({ message: "Field is required" }).min(2),
   itemsList:z.array(itemsSchema),
   additionalCharges: additionalChargeSchema,
+  // totalMaterialCharges:z.coerce.number(),
+  totalAdditionalChargeTax:z.coerce.number(),
+  totalAdditionalCharges:z.coerce.number(),
   adminId: z.string(),
 });
 
@@ -159,6 +162,8 @@ export default function ProfileForm() {
       totalCharge: 0,
       chargers: [],
     },
+    totalAdditionalChargeTax:0,
+    totalAdditionalCharges:0,
     adminId: "",
   };
 
@@ -178,8 +183,10 @@ export default function ProfileForm() {
   const PartyBhara = form.watch('partyBhara',0);
   
   function calPartyBhara(PartyBhara, additionalCharges ) {
-    
-    const total = Number(PartyBhara) + Number(additionalCharges);
+    const totalAdditionalCharges = form.getValues('totalAdditionalCharges')
+    const totalAdditionalChargeTax = form.getValues('totalAdditionalChargeTax')
+    const total = Number(PartyBhara) + Number(totalAdditionalCharges) + Number(totalAdditionalChargeTax);
+
    
     form.setValue("partyBhara", total )
 
@@ -481,15 +488,18 @@ export default function ProfileForm() {
 
        </div>
 
-       <div className='rounded-xl shadow-md grid grid-cols-1 lg:grid-cols-2 space-x-6 space-y-2 border py-1 px-3'  >
+       <div className='rounded-xl shadow-md  border py-1 px-8'  >
+       <h2 className='text-xl text-blue-500  font-medium underline mt-2'>Additional Details</h2>
+       <div className='grid grid-cols-1 lg:grid-cols-2 gap-x-6 '>
 
+      
        <FormField
                 control={form.control}
                 name="way"
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="px-5 text-nowrap text-sm lg:text-base">
+                      <FormLabel className=" text-nowrap text-sm lg:text-base">
                         Trip :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
@@ -578,7 +588,7 @@ export default function ProfileForm() {
             />
           )}
 
-      
+          </div>
 </div>     
        <div className='rounded-xl shadow-md grid grid-cols-1  space-x-6 space-y-2 border py-1 px-3'  >
        <CartTable items={CartItems}/>
@@ -593,35 +603,129 @@ export default function ProfileForm() {
 <AdditionalChargers form ={form} nameValue="additionalCharges.chargers" />
 </div>
 {/* calculation */}
-<div className='lg:w-1/2 rounded-xl shadow-md grid grid-cols-1  space-x-6 space-y-2 border py-1 px-3'>
-<FormField
+<div className='lg:w-1/2 rounded-xl shadow-md  border py-1 px-8'  >
+       <h2 className='text-xl text-red-500  font-medium underline mt-2'>Billing Details</h2>
+       <div className='grid grid-cols-1  gap-x-6 '>
+
+        {/*  Payment Term  */}
+        <FormField
                 control={form.control}
-                name="partyBhara"
+                name="paymentTerm"
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className=" px-5 text-nowrap text-sm lg:text-base">
-                        Party Bhara (Rs):
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Payment Term :
                       </FormLabel>
-                      <div className="flex flex-1 flex-col">
+                      <div className="flex flex-1 flex-col ">
                         <FormControl>
-                          <Input type="number" {...field}  />
+                          <select {...field}>
+                            <option value="">Select a payment term</option>
+                            <option value="Advance">Advance</option>
+                            <option value="Paid">Paid</option>
+                            <option value="To Pay">To Pay</option>
+                            <option value="To be Billed">To be Billed</option>
+                          </select>
                         </FormControl>
-                        <p className="-mt-2 text-[12px] text-slate-700">
-                          Party bhara is Total Amount + 18% gst
-                        </p>
                         <FormMessage />
                       </div>
                     </FormItem>
                   );
                 }}
               />
-                 <FormField
+
+
+<FormField
+                control={form.control}
+                name="remarks"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                       
+                        Remarks:
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input type="text" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+
+
+
+<FormField
+                control={form.control}
+                name="totalAdditionalCharges"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className=" text-nowrap text-sm lg:text-base">
+                       Total Additional Charges (Rs):
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input type="number" {...field}  />
+                        </FormControl>
+                    
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+<FormField
+                control={form.control}
+                name="totalAdditionalChargeTax"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className=" text-nowrap text-sm lg:text-base">
+                       Additional Charge Tax :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input type="number" {...field}  />
+                        </FormControl>
+                       
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+<FormField
+                control={form.control}
+                name="partyBhara"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className=" text-nowrap text-sm lg:text-base">
+                        Party Bhara with Taxes (Rs):
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input type="number" {...field}  />
+                        </FormControl>
+                        {/* <p className="-mt-2 text-[12px] text-slate-700">
+                          Party bhara is Total Amount + 18% gst
+                        </p> */}
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+                 {/* <FormField
                 control={form.control}
                 name="hideBhara"
                 render={({ field }) => {
                   return (
-                    <FormItem className="flex items-center justify-center gap-4">
+                    <FormItem className=" flex items-center justify-center gap-4">
                       <FormLabel className="text-nowrap text-sm lg:text-base">
                         Hide Bhara :
                       </FormLabel>
@@ -634,7 +738,7 @@ export default function ProfileForm() {
                     </FormItem>
                   );
                 }}
-              />
+              /> */}
 
               <FormField
                 control={form.control}
@@ -681,32 +785,7 @@ export default function ProfileForm() {
                   );
                 }}
               />
-              {/*  Payment Term  */}
-              <FormField
-                control={form.control}
-                name="paymentTerm"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Payment Term :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col ">
-                        <FormControl>
-                          <select {...field}>
-                            <option value="">Select a payment term</option>
-                            <option value="Advance">Advance</option>
-                            <option value="Paid">Paid</option>
-                            <option value="To Pay">To Pay</option>
-                            <option value="To be Billed">To be Billed</option>
-                          </select>
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
+             
               <FormField
                 control={form.control}
                 name="advanceAmount"
@@ -785,26 +864,8 @@ export default function ProfileForm() {
                   );
                 }}
               />
-              <FormField
-                control={form.control}
-                name="remarks"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        {" "}
-                        Remarks:
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="text" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
+             
+</div>
 </div>
        </div>
 

@@ -64,7 +64,7 @@ const IntransitBooking = () => {
      shadow-sm md:px-6 xl:h-[95%]"
       >
         
-        <h1 className="hidden text-4xl  lg:block font-semibold">In Transit Bookings</h1>
+        <h1 className="hidden text-4xl text-blue-600 lg:block font-semibold">In Transit Bookings</h1>
 
        {loading ? (<div className="max-w max-h  bg-white"><h2
        className="text-xl"

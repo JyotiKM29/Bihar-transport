@@ -57,7 +57,7 @@ const NewBooking = () => {
       space-y-2 rounded-2xl  bg-white px-4 py-4 
      shadow-sm md:px-6 xl:h-[95%]"
       >
-       <h1 className="hidden text-4xl font-semibold lg:block ">New Booking Form </h1>
+       <h1 className="hidden text-4xl font-semibold text-blue-600 lg:block ">New Booking Form </h1>
         
          <BookingForm />
 

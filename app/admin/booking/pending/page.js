@@ -64,7 +64,7 @@ const PendingBooking = () => {
      shadow-sm md:px-6 xl:h-[95%]"
       >
         
-        <h1 className="hidden text-4xl  lg:block font-semibold">Pending Bookings</h1>
+        <h1 className="hidden text-4xl  lg:block text-blue-600 font-semibold">Pending Bookings</h1>
 
        {loading ? (<div className="max-w max-h  bg-white"><h2
        className="text-xl"

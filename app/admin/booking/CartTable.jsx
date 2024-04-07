@@ -75,7 +75,7 @@ setTotalCost(calculatedTotalCost);
         </table>
 
         <div className='flex justify-end'>
-        <p className='w-max'>Total: <span className='bg-green-200 ml-2 border border-green-400 rounded px-4 py-1 '> &#8377; {totalCost}  </span></p>
+        <p className='w-max'>Total: <span className='bg-green-200 ml-2 border border-green-400 rounded px-4 py-1 '> &#8377; {totalCost.toFixed(2)}  </span></p>
         </div>
       </div>
     </div>
