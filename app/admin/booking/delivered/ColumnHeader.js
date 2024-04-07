@@ -57,7 +57,24 @@ export default function ColumnHeader() {
       },
       {
         accessorKey: "orderNumber",
-        header: "Order Id",
+        header: "Order No & Date",
+        cell: ({ row }) =>
+        <div >
+      <p className="text-blue-500 underline font-medium">
+
+      
+        {row.original.orderNumber}
+        </p>
+        & 
+        <p>
+
+        
+        {
+          new Date(row.original.date).toLocaleDateString()
+        }</p>
+        </div>
+       
+        
       },
 
       {
@@ -72,11 +89,38 @@ export default function ColumnHeader() {
       {
         accessorKey: "consignorName",
         header: "Consignor",
+        cell: ({ row }) =>
+        <div >
+      <p className="text-blue-500 underline font-medium">
+
+      
+        {row.original.consignorName}
+        </p>
+        
+        <p>
+        {row.original.consignorMobileNumber}
+        
+        </p>
+        </div>
+       
       },
 
       {
-        accessorKey: "status",
-        header: "status",
+        accessorKey: "consigneeName",
+        header: "consigneeName",
+        cell: ({ row }) =>
+        <div >
+      <p className="text-blue-500 underline font-medium">
+
+      
+        {row.original.consigneeName}
+        </p>
+        
+        <p>
+        {row.original.consigneeMobileNumber}
+        
+        </p>
+        </div>
       },
       {
         accessorKey: "loadingPoints",
@@ -87,6 +131,19 @@ export default function ColumnHeader() {
         accessorKey: "unloadingPoints",
 
         header: "To",
+        cell: ({ row }) =>
+        <div >
+      <p >
+
+      
+        {row.original.unloadingPoints}
+        </p>
+        <hr/>
+        <p>
+        {row.original.way}
+        
+        </p>
+        </div>
       },
 
       {
@@ -94,8 +151,21 @@ export default function ColumnHeader() {
         header: "Weight",
       },
       {
-        accessorKey: "createdBy.name",
-        header: "Created By",
+        accessorKey: "partyBhara",
+        header: "Party Bhara ",
+        cell: ({ row }) =>
+        <div >
+      <p >
+
+      
+        {row.original.partyBhara}
+        </p>
+        <hr/>
+        <p>
+        {row.original.paymentTerm}
+        
+        </p>
+        </div>
       },
       {
         id: "actions",

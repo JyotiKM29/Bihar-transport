@@ -17,14 +17,13 @@ import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 
-
 export default function ColumnHeader() {
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
 
   const [columns, setColumns] = useState([]);
- 
+
   const displayToast = (title, action, description = "") => {
     toast({
       title,
@@ -33,17 +32,15 @@ export default function ColumnHeader() {
     });
   };
 
-
   useEffect(() => {
-    async function handleConfirm(status , bookingId){
+    async function handleConfirm(status, bookingId) {
       const requestData = {
-        "adminId": user?._id,
-        "status": status,
-        "bookingId": bookingId
+        adminId: user?._id,
+        status: status,
+        bookingId: bookingId,
       };
 
       try {
-
         console.log(requestData);
 
         const response = await fetch("/api/bookingstatus", {
@@ -54,15 +51,14 @@ export default function ColumnHeader() {
           body: JSON.stringify(requestData),
         });
         console.log(response);
-      
+
         const newResult = await response.json();
-      
+
         if (response.ok) {
           setIsLoading(false);
           displayToast(`Successfully ${status}`, "✅");
-         
         } else {
-          console.log(newResult," ",response);
+          console.log(newResult, " ", response);
           console.error("Error:", newResult.message);
           displayToast("Error", "❌", newResult.message);
           setIsLoading(false);
@@ -72,7 +68,6 @@ export default function ColumnHeader() {
         displayToast("Error while sending data", "❌", newResult.message);
         setIsLoading(false);
       }
-
     }
 
     setColumns([
@@ -102,7 +97,24 @@ export default function ColumnHeader() {
       },
       {
         accessorKey: "orderNumber",
-        header: "Order Id",
+        header: "Order No & Date",
+        cell: ({ row }) =>
+        <div >
+      <p className="text-blue-500 underline font-medium">
+
+      
+        {row.original.orderNumber}
+        </p>
+        & 
+        <p>
+
+        
+        {
+          new Date(row.original.date).toLocaleDateString()
+        }</p>
+        </div>
+       
+        
       },
 
       {
@@ -117,11 +129,38 @@ export default function ColumnHeader() {
       {
         accessorKey: "consignorName",
         header: "Consignor",
+        cell: ({ row }) =>
+        <div >
+      <p className="text-blue-500 underline font-medium">
+
+      
+        {row.original.consignorName}
+        </p>
+        
+        <p>
+        {row.original.consignorMobileNumber}
+        
+        </p>
+        </div>
+       
       },
 
       {
-        accessorKey: "status",
-        header: "status",
+        accessorKey: "consigneeName",
+        header: "consigneeName",
+        cell: ({ row }) =>
+        <div >
+      <p className="text-blue-500 underline font-medium">
+
+      
+        {row.original.consigneeName}
+        </p>
+        
+        <p>
+        {row.original.consigneeMobileNumber}
+        
+        </p>
+        </div>
       },
       {
         accessorKey: "loadingPoints",
@@ -132,6 +171,19 @@ export default function ColumnHeader() {
         accessorKey: "unloadingPoints",
 
         header: "To",
+        cell: ({ row }) =>
+        <div >
+      <p >
+
+      
+        {row.original.unloadingPoints}
+        </p>
+        <hr/>
+        <p>
+        {row.original.way}
+        
+        </p>
+        </div>
       },
 
       {
@@ -139,8 +191,21 @@ export default function ColumnHeader() {
         header: "Weight",
       },
       {
-        accessorKey: "createdBy.name",
-        header: "Created By",
+        accessorKey: "partyBhara",
+        header: "Party Bhara ",
+        cell: ({ row }) =>
+        <div >
+      <p >
+
+      
+        {row.original.partyBhara}
+        </p>
+        <hr/>
+        <p>
+        {row.original.paymentTerm}
+        
+        </p>
+        </div>
       },
       {
         id: "actions",
@@ -158,12 +223,13 @@ export default function ColumnHeader() {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Link href={`/admin/booking/pending/${row.original._id}`}>
+                  <Link
+                    href={`/admin/booking/advanceBooking/${row.original._id}`}
+                  >
                     View Detail
                   </Link>
                 </DropdownMenuItem>
 
-               
                 {/* 
                 commented area because client asked 
                 <DropdownMenuItem>
@@ -175,14 +241,18 @@ export default function ColumnHeader() {
                 </DropdownMenuItem> 
                 */}
                 <DropdownMenuItem>
-                   <button onClick={()=>handleConfirm('Confirmed',`${row.original._id}` )}>Confirm Booking</button> 
+                  <button
+                    onClick={() =>
+                      handleConfirm("Confirmed", `${row.original._id}`)
+                    }
+                  >
+                    Confirm Booking
+                  </button>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                <Link 
-href={`/admin/booking/cancel/${row.original._id}`}
- >
-    Cancel Booking
-   </Link>
+                  <Link href={`/admin/booking/cancel/${row.original._id}`}>
+                    Cancel Booking
+                  </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -194,4 +264,3 @@ href={`/admin/booking/cancel/${row.original._id}`}
 
   return columns;
 }
-
