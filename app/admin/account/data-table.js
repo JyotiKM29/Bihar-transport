@@ -116,12 +116,12 @@ export function DataTable({ columns, data  }) {
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} >
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className='bg-blue-50'>
+                    <TableHead key={header.id} className='bg-blue-50 border'>
                     <div className="-space-y-1 ">
-                    <div className="text-nowrap text-base text-slate-700 mt-2">
+                    <div className="text-nowrap  text-base text-slate-700 mt-2">
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -150,9 +150,10 @@ export function DataTable({ columns, data  }) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+              
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id}     className='border'>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -246,7 +247,7 @@ function Filter({ column, table }) {
 
  if (typeof firstValue === "number") {
     return (
-      <div className="flex space-x-2">
+      
         <Input
           type="number"
           value={columnFilterValue?.[0] ?? ""}
@@ -254,10 +255,10 @@ function Filter({ column, table }) {
             column.setFilterValue((old) => [e.target.value, old?.[1]])
           }
           placeholder="min"
-          className="h-8 w-14 rounded border shadow"
+          className="h-8 w-full rounded border shadow"
         />
        
-      </div>
+     
     );
   } else {
     return (

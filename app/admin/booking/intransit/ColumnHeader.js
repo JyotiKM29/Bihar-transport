@@ -99,29 +99,32 @@ export default function ColumnHeader() {
       },
       {
         accessorKey: "orderNumber",
-        header: "Order No & Date",
-        cell: ({ row }) =>
-        <div >
-      <p className="text-blue-500 underline font-medium">
-
-      
-        {row.original.orderNumber}
-        </p>
-        & 
-        <p>
-
-        
-        {
-          new Date(row.original.date).toLocaleDateString()
-        }</p>
-        </div>
-       
-        
+        header: (
+          <div className="text-center">
+            <p>Order No</p>
+            <p>& </p>
+            <p> Date</p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p className="font-medium text-blue-500 underline">
+              {row.original.orderNumber}
+            </p>
+            &<p>{new Date(row.original.date).toLocaleDateString()}</p>
+          </div>
+        ),
       },
 
       {
         accessorKey: "vehicleRequiredDate",
-        header: "Date Req",
+        header: (
+          <div className="text-center">
+            <p>LR No.</p>
+            <p> &</p>
+            <p> Date of Disp</p>
+          </div>
+        ),
         cell: ({ row }) => {
           const date = new Date(row.original.vehicleRequiredDate);
           return date.toLocaleDateString();
@@ -130,85 +133,156 @@ export default function ColumnHeader() {
 
       {
         accessorKey: "consignorName",
-        header: "Consignor",
-        cell: ({ row }) =>
-        <div >
-      <p className="text-blue-500 underline font-medium">
 
-      
-        {row.original.consignorName}
-        </p>
-        
-        <p>
-        {row.original.consignorMobileNumber}
-        
-        </p>
-        </div>
-       
+        header: (
+          <div className="text-center">
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>CONSINGOR</p>
+           
+     
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p className="font-medium text-blue-500 underline">
+              {row.original.consignorName}
+            </p>
+
+            <p>{row.original.consignorMobileNumber}</p>
+          </div>
+        ),
       },
 
       {
         accessorKey: "consigneeName",
-        header: "consigneeName",
-        cell: ({ row }) =>
-        <div >
-      <p className="text-blue-500 underline font-medium">
 
-      
-        {row.original.consigneeName}
-        </p>
-        
-        <p>
-        {row.original.consigneeMobileNumber}
-        
-        </p>
-        </div>
+        header: (
+          <div className="text-center">
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+           
+           <p>CONSIGNEE</p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p className="font-medium text-blue-500 underline">
+              {row.original.consigneeName}
+            </p>
+
+            <p>{row.original.consigneeMobileNumber}</p>
+          </div>
+        ),
+      },
+      {
+        accessorKey: "allotedVehicle[0].vehicleNo",
+
+        header: (
+          <div className="text-center">
+           <p>&nbsp;</p>
+            <p>&nbsp;</p>
+           
+            <p>Vehicle Details</p>
+           
+         
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p>{row.original.allotedVehicle[0]?.vehicleNo}</p>
+
+            <p>{row.original.noOfVehicle}</p>
+          </div>
+        ),
       },
       {
         accessorKey: "loadingPoints",
 
-        header: "From",
+        header: (
+          <div className="text-center ">
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p className="w-[10rem]">From</p>
+          </div>
+        ),
       },
       {
         accessorKey: "unloadingPoints",
 
-        header: "To",
-        cell: ({ row }) =>
-        <div >
-      <p >
-
-      
-        {row.original.unloadingPoints}
-        </p>
-        <hr/>
-        <p>
-        {row.original.way}
-        
-        </p>
-        </div>
-      },
-
-      {
-        accessorKey: "actualWeight",
-        header: "Weight",
+        header: (
+          <div className="text-center  ">
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p className="w-[10rem]">To</p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p>{row.original.unloadingPoints}</p>
+            <hr />
+            <p>{row.original.way}</p>
+          </div>
+        ),
       },
       {
-        accessorKey: "partyBhara",
-        header: "Party Bhara ",
-        cell: ({ row }) =>
-        <div >
-      <p >
+        accessorKey: "currentLocation",
 
-      
-        {row.original.partyBhara}
-        </p>
-        <hr/>
-        <p>
-        {row.original.paymentTerm}
-        
-        </p>
-        </div>
+        header: (
+          <div className="text-center  ">
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p className="w-[10rem]">Current Location</p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p>{row.original.unloadingPoints}</p>
+            <hr />
+            <p>{row.original.way}</p>
+          </div>
+        ),
       },
+      {
+        accessorKey: "updatedLocation",
+
+        header: (
+          <div className="text-center  ">
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p className="w-[10rem]">Updated Location</p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p>{row.original.unloadingPoints}</p>
+            <hr />
+            <p>{row.original.way}</p>
+          </div>
+        ),
+      },
+      
+      {
+        accessorKey: "viewLocation",
+
+        header: (
+          <div className="text-center  ">
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p className="w-[10rem]">View Location</p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p>{row.original.unloadingPoints}</p>
+            <hr />
+            <p>{row.original.way}</p>
+          </div>
+        ),
+      },
+      
+     
+    
       {
         id: "actions",
         enableHiding: false,

@@ -17,14 +17,13 @@ import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 
-
 export default function ColumnHeader() {
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
 
   const [columns, setColumns] = useState([]);
- 
+
   const displayToast = (title, action, description = "") => {
     toast({
       title,
@@ -33,17 +32,15 @@ export default function ColumnHeader() {
     });
   };
 
-
   useEffect(() => {
-    async function handleConfirm(status , bookingId){
+    async function handleConfirm(status, bookingId) {
       const requestData = {
-        "adminId": user?._id,
-        "status": status,
-        "bookingId": bookingId
+        adminId: user?._id,
+        status: status,
+        bookingId: bookingId,
       };
 
       try {
-
         const response = await fetch("/api/bookingstatus", {
           method: "POST",
           headers: {
@@ -52,13 +49,12 @@ export default function ColumnHeader() {
           body: JSON.stringify(requestData),
         });
         console.log(response);
-      
+
         const newResult = await response.json();
-      
+
         if (response.ok) {
           setIsLoading(false);
           displayToast(`Successfully ${status}`, "✅");
-         
         } else {
           console.error("Error:", newResult.message);
           displayToast("Error", "❌", newResult.message);
@@ -69,7 +65,6 @@ export default function ColumnHeader() {
         displayToast("Error while sending data", "❌", newResult.message);
         setIsLoading(false);
       }
-
     }
 
     setColumns([
@@ -99,29 +94,32 @@ export default function ColumnHeader() {
       },
       {
         accessorKey: "orderNumber",
-        header: "Order No & Date",
-        cell: ({ row }) =>
-        <div >
-      <p className="text-blue-500 underline font-medium">
-
-      
-        {row.original.orderNumber}
-        </p>
-        & 
-        <p>
-
-        
-        {
-          new Date(row.original.date).toLocaleDateString()
-        }</p>
-        </div>
-       
-        
+        header: (
+          <div className="text-center">
+            <p>Order No</p>
+            <p>& </p>
+            <p> Date</p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p className="font-medium text-blue-500 underline">
+              {row.original.orderNumber}
+            </p>
+            &<p>{new Date(row.original.date).toLocaleDateString()}</p>
+          </div>
+        ),
       },
 
       {
         accessorKey: "vehicleRequiredDate",
-        header: "Date Req",
+        header: (
+          <div className="text-center">
+            <p>Date</p>
+            <p> Vehicle</p>
+            <p> Require</p>
+          </div>
+        ),
         cell: ({ row }) => {
           const date = new Date(row.original.vehicleRequiredDate);
           return date.toLocaleDateString();
@@ -130,85 +128,210 @@ export default function ColumnHeader() {
 
       {
         accessorKey: "consignorName",
-        header: "Consignor",
-        cell: ({ row }) =>
-        <div >
-      <p className="text-blue-500 underline font-medium">
 
-      
-        {row.original.consignorName}
-        </p>
-        
-        <p>
-        {row.original.consignorMobileNumber}
-        
-        </p>
-        </div>
-       
+        header: (
+          <div className="text-center">
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>Consignor</p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p className="font-medium text-blue-500 underline">
+              {row.original.consignorName}
+            </p>
+
+            <p>{row.original.consignorMobileNumber}</p>
+          </div>
+        ),
       },
 
       {
         accessorKey: "consigneeName",
-        header: "consigneeName",
-        cell: ({ row }) =>
-        <div >
-      <p className="text-blue-500 underline font-medium">
 
-      
-        {row.original.consigneeName}
-        </p>
-        
-        <p>
-        {row.original.consigneeMobileNumber}
-        
-        </p>
-        </div>
+        header: (
+          <div className="text-center">
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>Consignee</p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p className="font-medium text-blue-500 underline">
+              {row.original.consigneeName}
+            </p>
+
+            <p>{row.original.consigneeMobileNumber}</p>
+          </div>
+        ),
       },
       {
         accessorKey: "loadingPoints",
 
-        header: "From",
+        header: (
+          <div className="text-center ">
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p className="w-[10rem]">From</p>
+          </div>
+        ),
       },
       {
         accessorKey: "unloadingPoints",
 
-        header: "To",
-        cell: ({ row }) =>
-        <div >
-      <p >
-
-      
-        {row.original.unloadingPoints}
-        </p>
-        <hr/>
-        <p>
-        {row.original.way}
-        
-        </p>
-        </div>
+        header: (
+          <div className="text-center  ">
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p className="w-[10rem]">To</p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p>{row.original.unloadingPoints}</p>
+            <hr />
+            <p>{row.original.way}</p>
+          </div>
+        ),
       },
-
       {
-        accessorKey: "actualWeight",
-        header: "Weight",
+        accessorKey: "allotedVehicle[0].vehicleNo",
+
+        header: (
+          <div className="text-center">
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>Material Details</p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p>
+              {row.original.itemsList[0]?.material}({" "}
+              {row.original.itemsList[0]?.quantity}
+              {row.original.itemsList[0]?.quantityUnit} )
+            </p>
+
+            <p>
+              {row.original.itemsList[0]?.actualWeight}
+              {row.original.itemsList[0]?.actualWeightUnit}
+            </p>
+          </div>
+        ),
+      },
+      {
+        accessorKey: "allotedVehicle[0].vehicleNo",
+
+        header: (
+          <div className="text-center">
+            <p>Veh. Req</p>
+            <p>&</p>
+            <p>No. of Veh.</p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p>{row.original.allotedVehicle[0]?.vehicleNo}</p>
+
+            <p>{row.original.noOfVehicle}</p>
+          </div>
+        ),
+      },
+      {
+        accessorKey: "row.original.allotedVehicle[0].rateAsPer",
+
+        header: (
+          <div className="text-center">
+            <p>Rate As per</p>
+            <p>& </p>
+            <p> Rate </p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p>{row.original.allotedVehicle[0]?.rateAsPer}</p>
+
+            <p>
+              {row.original.allotedVehicle[0]?.rate} Per
+              {row.original.allotedVehicle[0]?.rateUnit}
+            </p>
+          </div>
+        ),
       },
       {
         accessorKey: "partyBhara",
-        header: "Party Bhara ",
-        cell: ({ row }) =>
-        <div >
-      <p >
 
-      
-        {row.original.partyBhara}
-        </p>
-        <hr/>
-        <p>
-        {row.original.paymentTerm}
-        
-        </p>
-        </div>
+        header: (
+          <div className="text-center">
+            <p>Party Bhara</p>
+            <p>& </p>
+            <p> Payment liabilities </p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p>{row.original.partyBhara}</p>
+            <hr />
+            <p>{row.original.paymentLiability}</p>
+          </div>
+        ),
       },
+      {
+        accessorKey: "totalBillingAmount",
+
+        header: (
+          <div className="text-center">
+            <p>&nbsp;</p>
+            <p>Total Billing</p>
+
+            <p> Amount </p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p>{row.original.totalBillingAmount}</p>
+          </div>
+        ),
+      },
+      {
+        id: "actions",
+        enableHiding: false,
+
+        header: (
+          <div className="text-center">
+            <p>&nbsp;</p>
+            <p>Reason Of</p>
+
+            <p> Cancelation </p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p>{row.original.totalBillingAmount}</p>
+          </div>
+        ),
+      },
+      {
+        id: "actions",
+        enableHiding: false,
+
+        header: (
+          <div className="text-center">
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div  className='bg-green-200 px-3 py-1 rounded' onClick={() => handleConfirm("Restart", `${row.original._id}`)}>
+            Reassign This Order
+          </div>
+        ),
+      },
+
       {
         id: "actions",
         enableHiding: false,
@@ -230,17 +353,20 @@ export default function ColumnHeader() {
                   </Link>
                 </DropdownMenuItem>
 
-               
                 <DropdownMenuItem>
-                <Link 
-               href={`/admin/booking/sendInvoice/${row.original._id}`}
-                >
-                   Send Invoice
+                  <Link href={`/admin/booking/sendInvoice/${row.original._id}`}>
+                    Send Invoice
                   </Link>
                 </DropdownMenuItem>
-              
+
                 <DropdownMenuItem>
-                <button onClick={()=>handleConfirm('Restart',`${row.original._id}` )}>Restart Booking</button> 
+                  <button
+                    onClick={() =>
+                      handleConfirm("Restart", `${row.original._id}`)
+                    }
+                  >
+                    Restart Booking
+                  </button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -252,4 +378,3 @@ export default function ColumnHeader() {
 
   return columns;
 }
-

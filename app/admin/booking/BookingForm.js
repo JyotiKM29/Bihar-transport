@@ -112,6 +112,7 @@ const formSchema = z.object({
   // totalMaterialCharges:z.coerce.number(),
   totalAdditionalChargeTax:z.coerce.number(),
   totalAdditionalCharges:z.coerce.number(),
+  totalBillingAmount: z.coerce.number(),
   adminId: z.string(),
 });
 
@@ -164,6 +165,7 @@ export default function ProfileForm() {
     },
     totalAdditionalChargeTax:0,
     totalAdditionalCharges:0,
+    totalBillingAmount: 0,
     adminId: "",
   };
 
@@ -181,17 +183,17 @@ export default function ProfileForm() {
   const advanceAmount = form.watch("advanceAmount", 0);
   const additionalCharges = form.watch("additionalCharges.totalCharge");
   const PartyBhara = form.watch('partyBhara',0);
+  
+
   const totalAdditionalCharges = form.getValues('totalAdditionalCharges')
     const totalAdditionalChargeTax = form.getValues('totalAdditionalChargeTax')
 
 
   function calPartyBhara(PartyBhara) {
     
-    const total = Number(PartyBhara) + Number(totalAdditionalCharges) + Number(totalAdditionalChargeTax);
+    const total = Number(PartyBhara) ;
 
-   console.log('total1',totalAdditionalCharges)
-   console.log('total2',totalAdditionalChargeTax)
-   console.log('total',PartyBhara)
+   
     form.setValue("partyBhara", total )
  return  total;
     
@@ -199,6 +201,11 @@ export default function ProfileForm() {
   
   function calBalanceAmount(advanceAmount = 0, partyBhara = 0) {
     return partyBhara - advanceAmount;
+  }
+
+  function caltotalBillingAmount(totalAdditionalCharges,PartyBhara,totalAdditionalChargeTax ){
+      const total = Number(totalAdditionalCharges) + Number(PartyBhara) + Number(totalAdditionalChargeTax);
+      form.setValue('totalBillingAmount',total )
   }
   
   useEffect(() => {
@@ -212,7 +219,9 @@ export default function ProfileForm() {
     form.setValue("balanceAmount",balanceAmount);
   }, [PartyBhara, totalAdditionalCharges , totalAdditionalChargeTax]);
   
-
+useEffect(()=>{
+  caltotalBillingAmount(totalAdditionalCharges,PartyBhara,totalAdditionalChargeTax );
+},[totalAdditionalCharges,PartyBhara,totalAdditionalChargeTax])
 
 
   function generateUniqueId() {
@@ -718,6 +727,27 @@ export default function ProfileForm() {
                         {/* <p className="-mt-2 text-[12px] text-slate-700">
                           Party bhara is Total Amount + 18% gst
                         </p> */}
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+
+<FormField
+                control={form.control}
+                name="totalBillingAmount"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className=" text-nowrap text-sm lg:text-base">
+                       Total billing Amount :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input type="number" {...field}  />
+                        </FormControl>
+                       
                         <FormMessage />
                       </div>
                     </FormItem>
