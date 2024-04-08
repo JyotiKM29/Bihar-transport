@@ -83,7 +83,7 @@ const AdditionalChargers = ({ form, nameValue }) => {
       
       <h2 className="font-semibold text-xl ">  Additional Chargers :</h2>
       {/* Close and Reset button */}
-      <div className="flex items-center gap-3 w-full my-2">
+      <div className="flex flex-col md:flex-row md:items-center gap-3 w-full my-2">
         <Button
           type="button"
           variant="secondary"

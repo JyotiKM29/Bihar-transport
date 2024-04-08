@@ -331,6 +331,126 @@ const MaterialInfo = ({ form, nameValue }) => {
                 }}
               />
             </div>
+          
+            <div className="flex w-full items-center gap-0">
+              <FormField
+                control={form.control}
+                name={`${nameValue}[${items.length}].rateAsPer`}
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex flex-1 items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Rate as Per :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <select
+                            {...field}
+                            className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
+                          >
+                            <option value=""> Select Rate as Rate</option>
+                           
+                            <option value="Actual weight">Actual weight</option>
+                            <option value="charged weight">
+                              charged weight
+                            </option>
+                            <option value="quantity">quantity</option>
+                            <option value="distance ">distance </option>
+                            <option value=" fixed "> fixed </option>
+                            <option value="Per trip"> Per trip</option>
+                            <option value="per kg"> per kg </option>
+                            <option value="Per ton">Per ton</option>
+                            <option value="Bundles">Bundles</option>
+                            <option value="pounds">pounds</option>
+                          </select>
+                        </FormControl>
+
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+              {/* <FormField
+                control={form.control}
+                name={`${nameValue}[${items.length}].rateAsPerOption`}
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center ">
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <select
+                            {...field}
+                            className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                          >
+                            <option value=""> Select Rate as Rate By</option>
+                            <option value="Fixed">Fixed</option>
+                            <option value="Trip">Trip</option>
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              /> */}
+            </div>
+            <div className="flex w-full items-center gap-0">
+              <FormField
+                control={form.control}
+                name={`${nameValue}[${items.length}].rate`}
+                render={({ field }) => {
+                  return (
+                    <FormItem className=" flex flex-1 items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Rate :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input
+                            type="text"
+                            {...field}
+                            className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
+                          />
+                        </FormControl>
+
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+              
+              <FormField
+                control={form.control}
+                name={`${nameValue}[${items.length}].rateUnit`}
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center ">
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <select
+                            {...field}
+                            className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                          >
+                            <option value=""> Select Rate Unit</option>
+                            <option value="Kg">Kg (Kilo gram)</option>
+                            <option value="g">g (gram) </option>
+                            <option value="Ton">Ton</option>
+                            <option value="Quintals">Quintals</option>
+                            <option value="Dozen">Dozen </option>
+                            <option value="Box">Box</option>
+                            <option value="Bundles">Bundles</option>
+                            <option value="pounds">pounds</option>
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+            </div>
             <div className="flex w-full items-center gap-0">
               <FormField
                 control={form.control}
@@ -387,125 +507,6 @@ const MaterialInfo = ({ form, nameValue }) => {
                 }}
               />
             </div>
-            <div className="flex w-full items-center gap-0">
-              <FormField
-                control={form.control}
-                name={`${nameValue}[${items.length}].rateAsPer`}
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex flex-1 items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Rate as Per :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <select
-                            {...field}
-                            className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
-                          >
-                            <option value=""> Select Rate as Rate</option>
-                           
-                            <option value="Actual weight">Actual weight</option>
-                            <option value="charged weight">
-                              charged weight
-                            </option>
-                            <option value="quantity">quantity</option>
-                            <option value="distance ">distance </option>
-                            <option value=" fixed "> fixed </option>
-                            <option value="Per trip"> Per trip</option>
-                            <option value="per kg"> per kg </option>
-                            <option value="Per ton">Per ton</option>
-                            <option value="Bundles">Bundles</option>
-                            <option value="pounds">pounds</option>
-                          </select>
-                        </FormControl>
-
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-              <FormField
-                control={form.control}
-                name={`${nameValue}[${items.length}].rateAsPerOption`}
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center ">
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <select
-                            {...field}
-                            className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
-                          >
-                            <option value=""> Select Rate as Rate By</option>
-                            <option value="Fixed">Fixed</option>
-                            <option value="Trip">Trip</option>
-                          </select>
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-            </div>
-            <div className="flex w-full items-center gap-0">
-              <FormField
-                control={form.control}
-                name={`${nameValue}[${items.length}].rate`}
-                render={({ field }) => {
-                  return (
-                    <FormItem className=" flex flex-1 items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Rate :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input
-                            type="text"
-                            {...field}
-                            className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
-                          />
-                        </FormControl>
-
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-              <FormField
-                control={form.control}
-                name={`${nameValue}[${items.length}].rateUnit`}
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center ">
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <select
-                            {...field}
-                            className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
-                          >
-                            <option value=""> Select Rate Unit</option>
-                            <option value="Kg">Kg (Kilo gram)</option>
-                            <option value="g">g (gram) </option>
-                            <option value="Ton">Ton</option>
-                            <option value="Quintals">Quintals</option>
-                            <option value="Dozen">Dozen </option>
-                            <option value="Box">Box</option>
-                            <option value="Bundles">Bundles</option>
-                            <option value="pounds">pounds</option>
-                          </select>
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-            </div>
-
             <FormField
               control={form.control}
               name={`${nameValue}[${items.length}].GSTPercentage`}

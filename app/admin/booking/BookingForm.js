@@ -98,14 +98,14 @@ const formSchema = z.object({
   ]),
   billTo: z.string({ message: "Field is required" }),
   paymentTerm: z.enum(["Advance", "Paid", "To Pay", "To be Billed"]),
-  advanceAmount: z.coerce.number({
-    message: "Field is required",
-  }),
-  balanceAmount: z.coerce.number({
-    message: "Field is required",
-  }),
-  payMode: z.string({ message: "Field is required" }).min(2),
-  transactionId: z.string().optional(),
+  // advanceAmount: z.coerce.number({
+  //   message: "Field is required",
+  // }),
+  // balanceAmount: z.coerce.number({
+  //   message: "Field is required",
+  // }),
+  // payMode: z.string({ message: "Field is required" }).min(2),
+  // transactionId: z.string().optional(),
   remarks: z.string({ message: "Field is required" }).min(2),
   itemsList:z.array(itemsSchema),
   additionalCharges: additionalChargeSchema,
@@ -137,10 +137,10 @@ export default function ProfileForm() {
     paymentLiability: "",
     billTo: "",
     paymentTerm: "",
-    advanceAmount: 0,
-    balanceAmount: 0,
-    payMode: "",
-    transactionId: "",
+    // advanceAmount: 0,
+    // balanceAmount: 0,
+    // payMode: "",
+    // transactionId: "",
     remarks: "",
     itemsList:{
       material: undefined,
@@ -501,9 +501,25 @@ useEffect(()=>{
 
        </div>
 
-       <div className='rounded-xl shadow-md  border py-1 px-8'  >
+           
+       <div className='rounded-xl shadow-md grid grid-cols-1  space-x-6 space-y-2 border py-1 px-3'  >
+       <CartTable items={CartItems}/>
+      
+</div>     
+
+       <div className='flex flex-col lg:flex-row gap-6 '>
+    
+       {/* form */}
+<div className='lg:w-1/2 flex gap-3 flex-col rounded-xl shadow-md   border py-3 px-6'>
+<MaterialInfo form={form} nameValue='itemsList' />
+<AdditionalChargers form ={form} nameValue="additionalCharges.chargers" />
+</div>
+{/* calculation */}
+
+<div className='lg:w-1/2 flex flex-col gap-4 '  >
+<div className='rounded-xl shadow-md  border py-1 px-8'  >
        <h2 className='text-xl text-blue-500  font-medium underline mt-2'>Additional Details</h2>
-       <div className='grid grid-cols-1 lg:grid-cols-2 gap-x-6 '>
+       <div className='grid grid-cols-1 '>
 
       
        <FormField
@@ -602,21 +618,8 @@ useEffect(()=>{
           )}
 
           </div>
-</div>     
-       <div className='rounded-xl shadow-md grid grid-cols-1  space-x-6 space-y-2 border py-1 px-3'  >
-       <CartTable items={CartItems}/>
-      
-</div>     
-
-       <div className='flex flex-col lg:flex-row gap-6 '>
-    
-       {/* form */}
-<div className='lg:w-1/2 flex gap-3 flex-col rounded-xl shadow-md   border py-3 px-6'>
-<MaterialInfo form={form} nameValue='itemsList' />
-<AdditionalChargers form ={form} nameValue="additionalCharges.chargers" />
 </div>
-{/* calculation */}
-<div className='lg:w-1/2 rounded-xl shadow-md  border py-1 px-8'  >
+<div className='rounded-xl shadow-md  border py-1 px-8'>
        <h2 className='text-xl text-red-500  font-medium underline mt-2'>Billing Details</h2>
        <div className='grid grid-cols-1  gap-x-6 '>
 
@@ -754,6 +757,7 @@ useEffect(()=>{
                   );
                 }}
               />
+             
                  {/* <FormField
                 control={form.control}
                 name="hideBhara"
@@ -820,7 +824,7 @@ useEffect(()=>{
                 }}
               />
              
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="advanceAmount"
                 render={({ field }) => {
@@ -897,7 +901,9 @@ useEffect(()=>{
                     </FormItem>
                   );
                 }}
-              />
+              /> */}
+
+              </div>
              
 </div>
 </div>
