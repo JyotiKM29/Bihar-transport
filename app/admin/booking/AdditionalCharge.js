@@ -11,9 +11,34 @@ import {
     FormMessage,
   } from "../../components/ui/form";
 
-const AdditionalChargers = ({ form, nameValue }) => {
+const AdditionalChargers = ({ form, nameValue ,items }) => {
   const [charges, setCharges] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [cartItems, setCartItems] = useState(items);
+  const [noOfItems , setNoOfItems] = useState(0);
+  const [totalCost , setTotalCost] = useState(0.0) ;
+
+  useEffect(() => {
+    setCartItems(items); 
+    let length = Array.isArray(items) && items.length ? items.length : 0;
+    setNoOfItems(length)
+    
+  
+// Calculate total cost using cartItems directly
+const calculatedTotalCost = Array.isArray(charges) ? charges.reduce((accumulator, currentValue) => {
+  return accumulator + currentValue.amount;
+}, 0) : 0 ;
+
+// Set the total cost
+setTotalCost(calculatedTotalCost);
+
+    },  [items, charges]); 
+
+  const handleDelete = (idToRemove) => {
+    const updatedItems = cartItems.filter((item, index) => index !== idToRemove);
+    setCartItems(updatedItems);
+  };
+
  
 
   function calTotalCharge(charges) {
@@ -81,7 +106,7 @@ const AdditionalChargers = ({ form, nameValue }) => {
   return (
     <div>
       
-      <h2 className="font-semibold text-xl ">  Additional Chargers :</h2>
+      <h2 className="font-semibold text-xl ">  Additional Charges :</h2>
       {/* Close and Reset button */}
       <div className="flex flex-col md:flex-row md:items-center gap-3 w-full my-2">
         <Button
@@ -96,7 +121,7 @@ const AdditionalChargers = ({ form, nameValue }) => {
             form.setValue(nameValue, []);
           }}
         >
-         Delete All Additional Chargers
+         Delete All Additional Charge
         </Button>
         <Button
           type="button"
@@ -110,15 +135,15 @@ const AdditionalChargers = ({ form, nameValue }) => {
 
       {/* Table display */}
       <div>
-        {charges && charges.length > 0 && (
+        { (
           <table className="mx-2 my-4 w-full border">
             <thead>
               <tr className="w-full border bg-slate-50">
-                <th>Charges Name</th>
-                <th>Qty</th>
-                <th>Rate</th>
-                <th>Amount</th>
-               
+                <th className="font-medium pr-3 text-nowrap ">Charges Name</th>
+                <th className="font-medium pr-3 text-nowrap ">Qty</th>
+                <th className="font-medium pr-3 text-nowrap ">Rate</th>
+                <th className="font-medium pr-3 text-nowrap ">Amount</th>
+                <th className="font-medium pr-3 text-nowrap ">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -127,13 +152,19 @@ const AdditionalChargers = ({ form, nameValue }) => {
                   <td>{items.name}</td>
                   <td>{items.qty}</td>
                   <td>{items.rate}</td>
-                  <td>{items.amount}</td>  <td>{items.remarks}</td>
+                  <td>{items.amount}</td>  
+                  <td>
+                  <button  className="font-bold " >Edit</button> / <button className="font-bold " onClick={() => handleDelete(i)}>Delete</button>
+                </td>
                 </tr>
               ))}
             </tbody>
           </table>
         )}
       </div>
+      <div className='flex justify-end'>
+        <p className='w-max'>Total Additional Charge: <span className='bg-green-200 ml-2 border border-green-400 rounded px-4 py-1 '> &#8377; {totalCost.toFixed(2)}  </span></p>
+        </div>
 
       {/* Form */}
       <div>
@@ -192,6 +223,7 @@ const AdditionalChargers = ({ form, nameValue }) => {
               type="number"
             />
            
+        
             <Button
               className='flex-1 w-full  text-blue-500 bg-blue-100 border-2 border-blue-200 hover:bg-blue-200 hover:text-blue-700 '
               type="button"

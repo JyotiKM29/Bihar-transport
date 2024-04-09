@@ -512,7 +512,7 @@ useEffect(()=>{
        {/* form */}
 <div className='lg:w-1/2 flex gap-3 flex-col rounded-xl shadow-md   border py-3 px-6'>
 <MaterialInfo form={form} nameValue='itemsList' />
-<AdditionalChargers form ={form} nameValue="additionalCharges.chargers" />
+<AdditionalChargers form ={form} nameValue="additionalCharges.chargers" items={additionalCharges.chargers} />
 </div>
 {/* calculation */}
 
