@@ -41,13 +41,13 @@ export async function POST(req, res) {
       return Response.json({ message: "Booking not found" }, { status: 404 });
     }
 
-    if (existingBooking.status !== "Confirmed") {
-      console.log(existingBooking.status);
-      return Response.json(
-        { message: "Booking is not confirmed" },
-        { status: 400 },
-      );
-    }
+    // if (existingBooking.status !== "Confirmed") {
+    //   console.log(existingBooking.status);
+    //   return Response.json(
+    //     { message: "Booking is not confirmed" },
+    //     { status: 400 },
+    //   );
+    // }
 
     if (
       existingBooking.allotedVehicle.length &&
@@ -59,20 +59,39 @@ export async function POST(req, res) {
       );
     }
 
-    if (existingBooking.vehicleRequiredDate < Date.now()) {
-      return Response.json(
-        { message: "Booking is already expired" },
-        { status: 400 },
-      );
-    }
+    // removing the date check
 
-    // within 24 hrs
-    if (existingBooking.vehicleRequiredDate < Date.now() + 86400000) {
-      return Response.json(
-        { message: "Booking should be urgent" },
-        { status: 400 },
-      );
-    }
+    // if (existingBooking.vehicleRequiredDate < Date.now()) {
+    //   return Response.json(
+    //     { message: "Booking is already expired" },
+    //     { status: 400 },
+    //   );
+    // }
+
+    // // within 24 hrs
+    // if (existingBooking.vehicleRequiredDate < Date.now() + 86400000) {
+    //   return Response.json(
+    //     { message: "Booking should be urgent" },
+    //     { status: 400 },
+    //   );
+    // }
+
+    let totalWeight = 0;
+    existingBooking.itemList.forEach((item) => {
+
+      if(item.actualWeightUnit === "KG")
+        totalWeight += item.actualWeight;
+      
+      if (item.actualWeightUnit === "quintal")
+        totalWeight += item.actualWeight * 100;
+      
+      if (item.actualWeightUnit === "ton")
+        totalWeight += item.actualWeight * 1000;
+      
+    });
+
+
+
 
     const newOrder = new Order({
       booking: {
@@ -84,6 +103,8 @@ export async function POST(req, res) {
         },
         loadingPoints: existingBooking.loadingPoints,
         unloadingPoints: existingBooking.unloadingPoints,
+        totalWeight,
+        totalWeightUnit:"KG"
       },
       vehicle: {
         id: existingVehicle._id,
@@ -115,7 +136,30 @@ export async function POST(req, res) {
       newOrder.isUrgent = true;
     }
 
+    
+
     existingVehicle.allotmentStatus = true;
+
+    // reducing the capacity of the
+    
+    if (existingVehicle.filledWeight + totalWeight > existingVehicle.maxCapacity * 100) {
+     
+      // total weight is greater than the capacity
+
+      let weight = existingVehicle.filledWeight + totalWeight - existingVehicle.maxCapacity * 100;
+      existingVehicle.filledWeight = existingVehicle.maxCapacity * 100;
+      // so fill the max capacity , now vehicle at the max capacity
+      // but booking is still un alloted for
+      // so we need to reduce the total weight
+      // so that the vehicle can be alloted
+
+      if (!existingBooking.allotedWeight)
+        existingBooking.allotedWeight = 0;
+        existingBooking.allotedWeight += (totalWeight - weight);
+      existingBooking.itemList.totalWeight = totalWeight;
+
+   }
+    existingVehicle.filledWeight = existingVehicle.maxCapacity * 100 - totalWeight;
 
     existingVehicle.bookedBy.push({
       bookingId: existingBooking._id,
@@ -124,6 +168,7 @@ export async function POST(req, res) {
         ownerName: existingVehicle.owner.name,
         ownerMobNo: existingVehicle.owner.phone,
       },
+      weight: totalWeight,
       arrangedBy: arrangedBy,
       transporterDetails: transporterDetails,
       ledgerBalance: ledgerBalance,
