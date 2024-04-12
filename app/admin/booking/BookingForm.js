@@ -682,11 +682,14 @@ useEffect(()=>{
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
                       <FormLabel className=" text-nowrap text-sm lg:text-base">
-                       Total Additional Charges (Rs):
+                       Total Additional Charges :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="number" {...field}  />
+                        <div className='flex gap-1 justify-center items-center bg-yellow-100 pl-2 rounded h-12 mb-2'>
+                        &#8377;
+                          <Input type="number" {...field} className='border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 '  readOnly/>
+                          </div>
                         </FormControl>
                     
                         <FormMessage />
@@ -706,7 +709,10 @@ useEffect(()=>{
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="number" {...field}  />
+                        <div className='flex gap-1 justify-center items-center bg-yellow-100 pl-2 rounded h-12 mb-2'>
+                        &#8377;
+                          <Input type="number" className='border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ' {...field}  />
+                          </div>
                         </FormControl>
                        
                         <FormMessage />
@@ -722,21 +728,24 @@ useEffect(()=>{
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
                       <FormLabel className=" text-nowrap text-sm lg:text-base">
-                        Party Bhara with Taxes (Rs):
+                        Party Bhara with Taxes :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="number" {...field}  />
+                        <div className='flex gap-1 justify-center items-center bg-yellow-100 pl-2 rounded h-12 mb-2'>
+                        &#8377;
+                          <Input type="number" {...field} className='border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ' readOnly />
+                          </div>
                         </FormControl>
-                        {/* <p className="-mt-2 text-[12px] text-slate-700">
-                          Party bhara is Total Amount + 18% gst
-                        </p> */}
+                     
                         <FormMessage />
                       </div>
                     </FormItem>
                   );
                 }}
               />
+<div className='  bg-amber-200  px-3 py-1 rounded mb-3'>
+
 
 <FormField
                 control={form.control}
@@ -749,7 +758,11 @@ useEffect(()=>{
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="number" {...field}  />
+                        <div className='flex gap-1 justify-center items-center bg-yellow-100 pl-2 rounded h-12 mb-2'>
+                        &#8377;
+                        
+                          <Input type="number" {...field}  className='border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ' readOnly/>
+                          </div> 
                         </FormControl>
                        
                         <FormMessage />
@@ -758,7 +771,7 @@ useEffect(()=>{
                   );
                 }}
               />
-             
+ </div>            
                  {/* <FormField
                 control={form.control}
                 name="hideBhara"
@@ -779,7 +792,7 @@ useEffect(()=>{
                 }}
               /> */}
 
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="paymentLiability"
                 render={({ field }) => {
@@ -803,8 +816,8 @@ useEffect(()=>{
                     </FormItem>
                   );
                 }}
-              />
-              <FormField
+              /> */}
+              {/* <FormField
                 control={form.control}
                 name="billTo"
                 render={({ field }) => {
@@ -823,7 +836,7 @@ useEffect(()=>{
                     </FormItem>
                   );
                 }}
-              />
+              /> */}
              
               {/* <FormField
                 control={form.control}
