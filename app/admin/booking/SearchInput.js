@@ -12,7 +12,8 @@ const SearchInput = ({ form, field, personName }) => {
   const { user } = useContext(UserContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
-  const [isEdit, setEdit] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+
 
   async function fetchData(value) {
     try {
@@ -21,7 +22,7 @@ const SearchInput = ({ form, field, personName }) => {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
       const result = await res.json();
-      // console.log('result my love',result);
+      
 
       if (result && Array.isArray(result.newdata)) {
         const results = result.newdata.filter((booking) => {
@@ -51,12 +52,9 @@ const SearchInput = ({ form, field, personName }) => {
     }
   }
 
-  useEffect(() => {
-    // Log the updated searchResult state
-    console.log("Result:", searchResult);
-  }, [searchResult]);
 
   function handleChange(value) {
+    setInputValue(value);
     setSearchTerm(value);
     fetchData(value);
   }
@@ -70,21 +68,12 @@ const SearchInput = ({ form, field, personName }) => {
         <FormControl>
           <Input
             placeholder="Type to search..."
-            value={field.value || searchTerm}
+            value={inputValue}
             onChange={(e) => handleChange(e.target.value)}
           />
         </FormControl>
-        {isEdit && (
-          <div
-            onClick={() => {
-              form.setValue(field.value, searchTerm);
-              setEdit(false);
-            }}
-            className="absolute right-0 top-[.5rem] rounded-md border bg-slate-100 p-2 px-4"
-          >
-            Edit
-          </div>
-        )}
+       
+      
         <FormMessage />
 
         <div className="min-h absolute top-12 z-20 w-full overflow-y-scroll rounded-sm bg-slate-100">
@@ -95,10 +84,10 @@ const SearchInput = ({ form, field, personName }) => {
                 field.onChange(searchTerm);
 
                 setSearchTerm("");
-                setEdit(true);
+               
               }}
             >
-              {searchTerm}
+              {searchTerm} ( not found)
             </div>
           )}
           {searchResult &&
@@ -109,11 +98,12 @@ const SearchInput = ({ form, field, personName }) => {
                 key={id}
                 className="w-full cursor-pointer px-3 py-2 hover:bg-slate-200"
                 onClick={() => {
-                  // field.onChange(result[personName]);
+                  
                   setSearchResult([]);
                   setSearchTerm("");
                   if (personName === "consignorName") {
                     if (result?.type === "company") {
+                      setInputValue(result?.company?.consignorName);
                       form.setValue(
                         "consignorMobileNumber",
                         result?.company?.officeNo,
@@ -123,6 +113,7 @@ const SearchInput = ({ form, field, personName }) => {
                         result?.company?.consignorName,
                       );
                     } else if (result?.type === "personal") {
+                      setInputValue(result.personal.consignorName);
                       form.setValue(
                         "consignorMobileNumber",
                         result.personal.contactNo,
@@ -134,6 +125,7 @@ const SearchInput = ({ form, field, personName }) => {
                     }
                   } else {
                     if (result?.type === "company") {
+                      setInputValue(result?.company?.consignorName);
                       form.setValue(
                         "consigneeMobileNumber",
                         result?.company?.officeNo,
@@ -143,6 +135,7 @@ const SearchInput = ({ form, field, personName }) => {
                         result?.company?.consignorName,
                       );
                     } else if (result?.type === "personal") {
+                      setInputValue(result.personal.consignorName);
                       form.setValue(
                         "consigneeMobileNumber",
                         result.personal.contactNo,
