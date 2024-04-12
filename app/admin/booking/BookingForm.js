@@ -83,20 +83,22 @@ const formSchema = z.object({
   way: z.enum(["one way", "two way", "return"]),
   vehicleType: z.string({ message: "Field is required" }).min(3),
   noOfVehicle: z.enum(["1", "2", "3", "others"]),
+  vehicleLength: z.string(),
+  WeightCapacity:z.string(),
   customNoOfVehicle: z.number().optional(),
   partyBhara: z.coerce
     .number({
       message: "Field is required",
     }),
-  hideBhara: z.coerce.boolean({}),
+  // hideBhara: z.coerce.boolean({}),
   
-  paymentLiability: z.enum([
-    "Consignor",
-    "Consignee",
-    "Third Party",
-    "Vehicle Owner",
-  ]),
-  billTo: z.string({ message: "Field is required" }),
+  // paymentLiability: z.enum([
+  //   "Consignor",
+  //   "Consignee",
+  //   "Third Party",
+  //   "Vehicle Owner",
+  // ]),
+  // billTo: z.string({ message: "Field is required" }),
   paymentTerm: z.enum(["Advance", "Paid", "To Pay", "To be Billed"]),
   // advanceAmount: z.coerce.number({
   //   message: "Field is required",
@@ -133,9 +135,9 @@ export default function ProfileForm() {
     vehicleType: "",
     noOfVehicle:1,
     partyBhara: 0,
-    hideBhara: false,
-    paymentLiability: "",
-    billTo: "",
+    // hideBhara: false,
+    // paymentLiability: "",
+    // billTo: "",
     paymentTerm: "",
     // advanceAmount: 0,
     // balanceAmount: 0,
@@ -617,6 +619,50 @@ useEffect(()=>{
               }}
             />
           )}
+
+
+          <FormField
+                control={form.control}
+                name="vehicleLength"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        {" "}
+                        Vehicle Length:
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input type="text" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+
+
+<FormField
+                control={form.control}
+                name="WeightCapacity"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        {" "}
+                        Vehicle Weight Capacity:
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input type="text" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
 
           </div>
 </div>
