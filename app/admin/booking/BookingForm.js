@@ -385,121 +385,122 @@ useEffect(()=>{
                   );
                 }}
               />
-       </div>
-       <div className='rounded-xl shadow-md grid grid-cols-1 lg:grid-cols-2 space-x-6 space-y-2 border py-1 px-3'  >
 
-       <div className="px-5 flex items-center gap-0">
+
+<div className="px-5 flex items-center gap-0">
 <FormField
-                control={form.control}
-                name="consignorName"
-                
-                render={({ field }) => (
-                  <SearchInput
-                 
-                    form={form}
-                    field={field}
-                    personName="consignorName"
-                  />
-                )}
-              />
-              <Link href='/admin/booking/new-regesitration' className="border h-10 text-base text-nowrap px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">
-              <FiPlus  className="h-full w-full"/>
+         control={form.control}
+         name="consignorName"
+         
+         render={({ field }) => (
+           <SearchInput
+          
+             form={form}
+             field={field}
+             personName="consignorName"
+           />
+         )}
+       />
+       <Link href='/admin/booking/new-regesitration' className="border h-10 text-base text-nowrap px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">
+       <FiPlus  className="h-full w-full"/>
 
-              </Link>
+       </Link>
 </div>
-  <div className="flex items-center gap-0">
- <FormField
-                control={form.control}
-                name="consigneeName"
-                render={({ field }) => (
-                  <SearchInput
-                    form={form}
-                    field={field}
-                    personName="consigneeName"
-                  />
-                  
-                )}
-              />
-               <Link href='/admin/booking/new-regesitration' className="border h-10 text-base text-nowrap px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">
-              <FiPlus  className="h-full w-full"/>
+<div className="flex items-center gap-0">
+<FormField
+         control={form.control}
+         name="consigneeName"
+         render={({ field }) => (
+           <SearchInput
+             form={form}
+             field={field}
+             personName="consigneeName"
+           />
+           
+         )}
+       />
+        <Link href='/admin/booking/new-regesitration' className="border h-10 text-base text-nowrap px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">
+       <FiPlus  className="h-full w-full"/>
 
-              </Link>
-              </div>
+       </Link>
+       </div>
 
-              <FormField
-                control={form.control}
-                name="consignorMobileNumber"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-base ">
-                        Consignor Mobile No :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="text" value={field.value} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-               <FormField
-                control={form.control}
-                name="consigneeMobileNumber"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Consignee Mobile Number :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="text" value={field.value} {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-              <FormField
-                control={form.control}
-                name="loadingPoints"
-                render={({ field }) => {
-                  return (
-                    <LocationAdd
-                      field={field}
-                      form={form}
-                      nameValue={"loadingPoints"}
-                      label="Loading Points"
-                    />
-                  );
-                }}
-              />
+       <FormField
+         control={form.control}
+         name="consignorMobileNumber"
+         render={({ field }) => {
+           return (
+             <FormItem className="flex items-center justify-center gap-4">
+               <FormLabel className="text-nowrap text-base ">
+                 Consignor Mobile No :
+               </FormLabel>
+               <div className="flex flex-1 flex-col">
+                 <FormControl>
+                   <Input type="text" value={field.value} {...field} />
+                 </FormControl>
+                 <FormMessage />
+               </div>
+             </FormItem>
+           );
+         }}
+       />
+        <FormField
+         control={form.control}
+         name="consigneeMobileNumber"
+         render={({ field }) => {
+           return (
+             <FormItem className="flex items-center justify-center gap-4">
+               <FormLabel className="text-nowrap text-sm lg:text-base">
+                 Consignee Mobile Number :
+               </FormLabel>
+               <div className="flex flex-1 flex-col">
+                 <FormControl>
+                   <Input type="text" value={field.value} {...field} />
+                 </FormControl>
+                 <FormMessage />
+               </div>
+             </FormItem>
+           );
+         }}
+       />
+       <FormField
+         control={form.control}
+         name="loadingPoints"
+         render={({ field }) => {
+           return (
+             <LocationAdd
+               field={field}
+               form={form}
+               nameValue={"loadingPoints"}
+               label="Loading Points"
+             />
+           );
+         }}
+       />
 
-             
+      
 
-             
-              <FormField
-                control={form.control}
-                name="unloadingPoints"
-                render={({ field }) => {
-                  return (
-                    <LocationAdd
-                      field={field}
-                      form={form}
-                      nameValue={"unloadingPoints"}
-                      label="Unloading Points"
-                    />
-                  );
-                }}
-              />
+      
+       <FormField
+         control={form.control}
+         name="unloadingPoints"
+         render={({ field }) => {
+           return (
+             <LocationAdd
+               field={field}
+               form={form}
+               nameValue={"unloadingPoints"}
+               label="Unloading Points"
+             />
+           );
+         }}
+       />
 
-       
+
+
 
        </div>
+       
 
            
        <div className='rounded-xl shadow-md grid grid-cols-1  space-x-6 space-y-2 border py-1 px-3'  >

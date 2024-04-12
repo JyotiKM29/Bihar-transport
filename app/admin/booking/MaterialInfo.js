@@ -40,44 +40,57 @@ const MaterialInfo = ({ form, nameValue }) => {
     return totalAmount;
   }
 
-  function calAmount(rate, quantity, GSTPercentage = 0 , rateMultiple ) {
-    let amount ;
-    if(rateMultiple === 'Actual weight'){
-      const quantity = form.getValues(`${nameValue}[${items.length}].actualWeight`)
-       amount = parseFloat(rate) * parseFloat(quantity);
-    }else if(rateMultiple === 'charged weight'){
-      const quantity = form.getValues(`${nameValue}[${items.length}].chargedWeight`)
-       amount = parseFloat(rate) * parseFloat(quantity);
-    }else if(rateMultiple === 'quantity'){
-      const quantity = form.getValues(`${nameValue}[${items.length}].quantity`)
-       amount = parseFloat(rate) * parseFloat(quantity);
-    }else {
-
-    amount = parseFloat(rate) * parseFloat(quantity);
-    
+  function calAmount(rate, quantity, GSTPercentage = 0, rateMultiple) {
+    let amount;
+    if (rateMultiple === "Actual weight") {
+      const quantity = form.getValues(
+        `${nameValue}[${items.length}].actualWeight`,
+      );
+      amount = parseFloat(rate) * parseFloat(quantity);
+    } else if (rateMultiple === "charged weight") {
+      const quantity = form.getValues(
+        `${nameValue}[${items.length}].chargedWeight`,
+      );
+      amount = parseFloat(rate) * parseFloat(quantity);
+    } else if (rateMultiple === "quantity") {
+      const quantity = form.getValues(`${nameValue}[${items.length}].quantity`);
+      amount = parseFloat(rate) * parseFloat(quantity);
+    } else {
+      amount = parseFloat(rate) * parseFloat(quantity);
     }
     form.setValue(`${nameValue}[${items.length}].basicAmount`, amount);
     const total = parseFloat(amount) * Number(GSTPercentage);
     return parseFloat(amount + total);
   }
-  
-  const rateMultiple =form.watch(`${nameValue}[${items.length}].rateAsPer`);
+
+  const rateMultiple = form.watch(`${nameValue}[${items.length}].rateAsPer`);
   const quantity = form.watch(`${nameValue}[${items.length}].quantity`);
   const rate = form.watch(`${nameValue}[${items.length}].rate`);
+  
+
   const GSTPercentage = form.watch(
     `${nameValue}[${items.length}].GSTPercentage`,
-
+  );
+  const GSTType = form.watch(
+    `${nameValue}[${items.length}].GSTType`,
   );
 
-  useEffect(() => {
+  useEffect (()=>{
 
+    if(GSTType === "FCM"){
+      form.setValue(`${nameValue}[${items.length}].GSTPercentage`, 0.0)
+    }
+
+  },[GSTType])
+
+  useEffect(() => {
     if (!isNaN(parseFloat(rate)) && !isNaN(parseFloat(quantity))) {
-      let result = calAmount(rate, quantity, GSTPercentage , rateMultiple);
+      let result = calAmount(rate, quantity, GSTPercentage, rateMultiple);
 
       form.setValue(`${nameValue}[${items.length}].amount`, result);
     }
     calPartyBhara();
-  }, [rate, quantity, items.length, nameValue, GSTPercentage , rateMultiple]);
+  }, [rate, quantity, items.length, nameValue, GSTPercentage, rateMultiple ,GSTType]);
 
   useEffect(() => {
     const fetchUnits = async () => {
@@ -179,7 +192,7 @@ const MaterialInfo = ({ form, nameValue }) => {
       <div>
         {showForm && (
           <>
-            <p>Fill in the details below:</p>
+            <p className="mb-1">Fill in the details below:</p>
             <div className="flex items-center">
               <div className="flex-1">
                 <FormField
@@ -260,9 +273,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                             <option value="Packet"> Packet</option>
                             <option value="Roll"> Roll</option>
                             <option value="TIN"> TIN</option>
-                            <option value="TON"> TON</option>
-                           
-                             
+                            <option value="TON"> TON</option> 
                           </select>
                         </FormControl>
                         <FormMessage />
@@ -331,7 +342,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                 }}
               />
             </div>
-          
+
             <div className="flex w-full items-center gap-0">
               <FormField
                 control={form.control}
@@ -349,14 +360,14 @@ const MaterialInfo = ({ form, nameValue }) => {
                             className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
                           >
                             <option value=""> Select Rate as Rate</option>
-                           
+
                             <option value="Actual weight">Actual weight</option>
                             <option value="charged weight">
                               charged weight
                             </option>
                             <option value="quantity">quantity</option>
                             <option value="distance ">distance </option>
-                            <option value=" fixed "> fixed </option>
+                            <option value="fixed"> fixed </option>
                             <option value="Per trip"> Per trip</option>
                             <option value="per kg"> per kg </option>
                             <option value="Per ton">Per ton</option>
@@ -371,146 +382,131 @@ const MaterialInfo = ({ form, nameValue }) => {
                   );
                 }}
               />
-              {/* <FormField
-                control={form.control}
-                name={`${nameValue}[${items.length}].rateAsPerOption`}
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center ">
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <select
-                            {...field}
-                            className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
-                          >
-                            <option value=""> Select Rate as Rate By</option>
-                            <option value="Fixed">Fixed</option>
-                            <option value="Trip">Trip</option>
-                          </select>
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              /> */}
             </div>
-            <div className="flex w-full items-center gap-0">
-              <FormField
-                control={form.control}
-                name={`${nameValue}[${items.length}].rate`}
-                render={({ field }) => {
-                  return (
-                    <FormItem className=" flex flex-1 items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Rate :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input
-                            type="text"
-                            {...field}
-                            className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
-                          />
-                        </FormControl>
 
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-              
-              <FormField
-                control={form.control}
-                name={`${nameValue}[${items.length}].rateUnit`}
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center ">
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <select
-                            {...field}
-                            className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
-                          >
-                            <option value=""> Select Rate Unit</option>
-                            <option value="Kg">Kg (Kilo gram)</option>
-                            <option value="g">g (gram) </option>
-                            <option value="Ton">Ton</option>
-                            <option value="Quintals">Quintals</option>
-                            <option value="Dozen">Dozen </option>
-                            <option value="Box">Box</option>
-                            <option value="Bundles">Bundles</option>
-                            <option value="pounds">pounds</option>
-                          </select>
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-            </div>
-            <div className="flex w-full items-center gap-0">
-              <FormField
-                control={form.control}
-                name={`${nameValue}[${items.length}].chargedWeight`}
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex flex-1 items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Charged Weight :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input
-                            type="text"
-                            {...field}
-                            className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
-                          />
-                        </FormControl>
+            {form.watch(`${nameValue}[${items.length}].rateAsPer`) !==
+              "fixed" && (
+              <>
+                <div className="flex w-full items-center gap-0">
+                  <FormField
+                    control={form.control}
+                    name={`${nameValue}[${items.length}].rate`}
+                    render={({ field }) => {
+                      return (
+                        <FormItem className=" flex flex-1 items-center justify-center gap-4">
+                          <FormLabel className="text-nowrap text-sm lg:text-base">
+                            Rate :
+                          </FormLabel>
+                          <div className="flex flex-1 flex-col">
+                            <FormControl>
+                              <Input
+                                type="text"
+                                {...field}
+                                className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
+                              />
+                            </FormControl>
 
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-              <FormField
-                control={form.control}
-                name={`${nameValue}[${items.length}].chargedWeightUnit`}
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center ">
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <select
-                            {...field}
-                            className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
-                          >
-                            <option value="">
-                          
-                              Select Charged Weight Unit
-                            </option>
-                            {Array.isArray(data) &&
-                              data.map((unit) => (
-                                <option key={unit.name} value={unit.name}>
-                                  {unit.name}
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      );
+                    }}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name={`${nameValue}[${items.length}].rateUnit`}
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="flex items-center justify-center ">
+                          <div className="flex flex-1 flex-col">
+                            <FormControl>
+                              <select
+                                {...field}
+                                className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                              >
+                                <option value=""> Select Rate Unit</option>
+                                <option value="Kg">Kg (Kilo gram)</option>
+                                <option value="g">g (gram) </option>
+                                <option value="Ton">Ton</option>
+                                <option value="Quintals">Quintals</option>
+                                <option value="Dozen">Dozen </option>
+                                <option value="Box">Box</option>
+                                <option value="Bundles">Bundles</option>
+                                <option value="pounds">pounds</option>
+                              </select>
+                            </FormControl>
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      );
+                    }}
+                  />
+                </div>
+                <div className="flex w-full items-center gap-0">
+                  <FormField
+                    control={form.control}
+                    name={`${nameValue}[${items.length}].chargedWeight`}
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="flex flex-1 items-center justify-center gap-4">
+                          <FormLabel className="text-nowrap text-sm lg:text-base">
+                            Charged Weight :
+                          </FormLabel>
+                          <div className="flex flex-1 flex-col">
+                            <FormControl>
+                              <Input
+                                type="text"
+                                {...field}
+                                className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
+                              />
+                            </FormControl>
+
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      );
+                    }}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`${nameValue}[${items.length}].chargedWeightUnit`}
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="flex items-center justify-center ">
+                          <div className="flex flex-1 flex-col">
+                            <FormControl>
+                              <select
+                                {...field}
+                                className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                              >
+                                <option value="">
+                                  Select Charged Weight Unit
                                 </option>
-                              ))}
-                          </select>
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-            </div>
+                                {Array.isArray(data) &&
+                                  data.map((unit) => (
+                                    <option key={unit.name} value={unit.name}>
+                                      {unit.name}
+                                    </option>
+                                  ))}
+                              </select>
+                            </FormControl>
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      );
+                    }}
+                  />
+                </div>
+              </>
+            )}
+
             <FormField
               control={form.control}
               name={`${nameValue}[${items.length}].GSTPercentage`}
               render={({ field }) => {
+               
+               
                 return (
                   <FormItem className="flex items-center justify-center gap-4">
                     <FormLabel className="text-nowrap text-sm lg:text-base">
@@ -520,6 +516,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                       <FormControl>
                         <select {...field}>
                           <option value="">Select Tax Percentage</option>
+
                           <option value="0.0">0%</option>
                           <option value="0.02">2%</option>
                           <option value="0.05 ">5%</option>
@@ -557,6 +554,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                 );
               }}
             />
+
             <FieldForm
               form={form}
               name={`${nameValue}[${items.length}].amount`}
