@@ -64,7 +64,7 @@ const LocationAdd = ({ form, field, label, nameValue }) => {
           );
         });
 
-        setSearchResult(results);
+        setSearchResult(results.slice(0,5));
         console.log("Result:" ,searchResult);
       } else {
         console.log("No suggested locations found");
@@ -76,10 +76,10 @@ const LocationAdd = ({ form, field, label, nameValue }) => {
     }
   }
 
-  useEffect(() => {
+  // useEffect(() => {
     // Log the updated searchResult state
-    console.log("Result:", searchResult);
-  }, [searchResult]); 
+  //   console.log("Result:", searchResult);
+  // }, [searchResult]); 
 
   function handleChange(e) {
     e.preventDefault();
@@ -91,6 +91,9 @@ const LocationAdd = ({ form, field, label, nameValue }) => {
   }
 
   return (
+    <div className="relative ">
+
+  
     <FormItem className="min-w flex items-center justify-center gap-4 ">
       <FormLabel className="self-start pt-6 text-nowrap text-sm lg:text-base">
         {label} :
@@ -106,26 +109,11 @@ const LocationAdd = ({ form, field, label, nameValue }) => {
               handleChange(e);
             }}
 
-            // onKeyDown={(e) => {
-            //   if (e.key === "Enter") {
-            //     e.preventDefault();
-
-            //     let inputValue = e.target.value.trim();
-
-            //     if (inputValue !== "") {
-            //       // fetchLocation(inputValue);
-            //       addLocation(inputValue);
-            //       form.setValue(nameValue, "");
-            //       e.target.value = "";
-            //     }
-
-            //   }
-            // }}
           />
         </FormControl>
 
         <FormMessage />
-        <div className="min-h  z-20 absolute top-12 w-full overflow-y-scroll rounded-sm bg-slate-100">
+        <div className="min-h  z-20 absolute top-16 max-w-full overflow-y-scroll rounded-sm bg-slate-100">
           {searchResult &&
             Array.isArray(searchResult) &&
             searchResult.length > 0 &&
@@ -172,6 +160,7 @@ const LocationAdd = ({ form, field, label, nameValue }) => {
 
       </div>
     </FormItem>
+    </div>
   );
 };
 

@@ -389,7 +389,7 @@ useEffect(()=>{
               />
 
 
-<div className="px-5 flex items-center gap-0">
+<div className=" flex items-center gap-0">
 <FormField
          control={form.control}
          name="consignorName"

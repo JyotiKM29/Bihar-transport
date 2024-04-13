@@ -24,6 +24,7 @@ setTotalCost(calculatedTotalCost);
     },  [items, cartItems]); 
 
   const handleDelete = (idToRemove) => {
+    console.log('delete',idToRemove)
     const updatedItems = cartItems.filter((item, index) => index !== idToRemove);
     setCartItems(updatedItems);
   };
@@ -53,7 +54,7 @@ setTotalCost(calculatedTotalCost);
           </thead>
           <tbody>
             {Array.isArray(cartItems) && cartItems.map((item, i) => (
-              <tr key={i} className="w-full text-center">
+              <tr key={item.hsnNo} className="w-full text-center">
                 <td>{item.material}</td>
                 <td>{item.hsnNo}</td>
                 <td>{item.quantity} {item.quantityUnit}</td>
@@ -67,7 +68,7 @@ setTotalCost(calculatedTotalCost);
 
                 <td>{item.amount}</td>
                 <td>
-                  <button  className="font-bold " >Edit</button> / <button className="font-bold " onClick={() => handleDelete(i)}>Delete</button>
+                  <button type='button' className="font-bold " >Edit</button> / <button type='button' className="font-bold " onClick={() => handleDelete(item.hsnNo)}>Delete</button>
                 </td>
               </tr>
             ))}
