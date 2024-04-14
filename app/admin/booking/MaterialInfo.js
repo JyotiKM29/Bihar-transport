@@ -311,7 +311,7 @@ const MaterialInfo = ({ form, nameValue }) => {
 
                         <FormMessage />
                       </div>
-                    </FormItem>
+                    </FormItem> 
                   );
                 }}
               />
