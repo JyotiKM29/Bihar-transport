@@ -30,8 +30,13 @@ const MaterialInfo = ({ form, nameValue }) => {
       (acc, item) => acc + parseFloat(item.amount),
       0,
     );
+    // const totalBasicAmount = items.reduce(
+    //   (acc, item) => acc + parseFloat(item.basicAmount),
+    //   0,
+    // );
     console.log(totalAmount);
     form.setValue("partyBhara", totalAmount);
+    // form.setValue("totalMaterialCharges", totalBasicAmount);
     return totalAmount;
   }
 
@@ -39,65 +44,64 @@ const MaterialInfo = ({ form, nameValue }) => {
     let amount;
     if (rateMultiple === "Actual weight") {
       const quantity = form.getValues(
-        `${nameValue}[${items.length}].actualWeight`,
+        ${nameValue}[${items.length}].actualWeight,
       );
       amount = parseFloat(rate) * parseFloat(quantity);
     } else if (rateMultiple === "charged weight") {
       const quantity = form.getValues(
-        `${nameValue}[${items.length}].chargedWeight`,
+        ${nameValue}[${items.length}].chargedWeight,
       );
       amount = parseFloat(rate) * parseFloat(quantity);
     } else if (rateMultiple === "quantity") {
-      const quantity = form.getValues(`${nameValue}[${items.length}].quantity`);
+      const quantity = form.getValues(${nameValue}[${items.length}].quantity);
       amount = parseFloat(rate) * parseFloat(quantity);
     } else {
       amount = parseFloat(rate) * parseFloat(quantity);
     }
-    form.setValue(`${nameValue}[${items.length}].basicAmount`, amount);
+    form.setValue(${nameValue}[${items.length}].basicAmount, amount);
     const total = parseFloat(amount) * Number(GSTPercentage);
     return parseFloat(amount + total);
   }
 
-  const rateMultiple = form.watch(`${nameValue}[${items.length}].rateAsPer`);
-  const quantity = form.watch(`${nameValue}[${items.length}].quantity`);
-  const rate = form.watch(`${nameValue}[${items.length}].rate`);
-  const GSTPercentage = form.watch(
-    `${nameValue}[${items.length}].GSTPercentage`,
-  );
-  const GSTType = form.watch(`${nameValue}[${items.length}].GSTType`);
+  const rateMultiple = form.watch(${nameValue}[${items.length}].rateAsPer);
+  const quantity = form.watch(${nameValue}[${items.length}].quantity);
+  const rate = form.watch(${nameValue}[${items.length}].rate);
+  
 
-  useEffect(() => {
-    if (GSTType === "FCM") {
-      form.setValue(`${nameValue}[${items.length}].GSTPercentage`, 0.0);
+  const GSTPercentage = form.watch(
+    ${nameValue}[${items.length}].GSTPercentage,
+  );
+  const GSTType = form.watch(
+    ${nameValue}[${items.length}].GSTType,
+  );
+
+  useEffect (()=>{
+
+    if(GSTType === "FCM"){
+      form.setValue(${nameValue}[${items.length}].GSTPercentage, 0.0)
     }
-  }, [GSTType]);
+
+  },[GSTType])
 
   useEffect(() => {
     if (!isNaN(parseFloat(rate)) && !isNaN(parseFloat(quantity))) {
       let result = calAmount(rate, quantity, GSTPercentage, rateMultiple);
-      form.setValue(`${nameValue}[${items.length}].amount`, result);
+
+      form.setValue(${nameValue}[${items.length}].amount, result);
     }
     calPartyBhara();
-  }, [
-    rate,
-    quantity,
-    items.length,
-    nameValue,
-    GSTPercentage,
-    rateMultiple,
-    GSTType,
-  ]);
+  }, [rate, quantity, items.length, nameValue, GSTPercentage, rateMultiple ,GSTType]);
 
   useEffect(() => {
     const fetchUnits = async () => {
       try {
         if (userId) {
-          const response = await fetch(`/api/getunits/${userId}`, {
+          const response = await fetch(/api/getunits/${userId}, {
             method: "GET",
           });
 
           if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(HTTP error! Status: ${response.status});
           }
 
           const data = await response.json();
@@ -117,36 +121,36 @@ const MaterialInfo = ({ form, nameValue }) => {
 
   function handleAdditionalItem() {
     const newItem = {
-      material: form.getValues(`${nameValue}[${items.length}].material`),
-      hsnNo: form.getValues(`${nameValue}[${items.length}].hsnNo`),
-      quantity: form.getValues(`${nameValue}[${items.length}].quantity`),
+      material: form.getValues(${nameValue}[${items.length}].material),
+      hsnNo: form.getValues(${nameValue}[${items.length}].hsnNo),
+      quantity: form.getValues(${nameValue}[${items.length}].quantity),
       quantityUnit: form.getValues(
-        `${nameValue}[${items.length}].quantityUnit`,
+        ${nameValue}[${items.length}].quantityUnit,
       ),
       actualWeight: form.getValues(
-        `${nameValue}[${items.length}].actualWeight`,
+        ${nameValue}[${items.length}].actualWeight,
       ),
       actualWeightUnit: form.getValues(
-        `${nameValue}[${items.length}].actualWeightUnit`,
+        ${nameValue}[${items.length}].actualWeightUnit,
       ),
       chargedWeight: form.getValues(
-        `${nameValue}[${items.length}].chargedWeight`,
+        ${nameValue}[${items.length}].chargedWeight,
       ),
       chargedWeightUnit: form.getValues(
-        `${nameValue}[${items.length}].chargedWeightUnit`,
+        ${nameValue}[${items.length}].chargedWeightUnit,
       ),
-      rateAsPer: form.getValues(`${nameValue}[${items.length}].rateAsPer`),
+      rateAsPer: form.getValues(${nameValue}[${items.length}].rateAsPer),
       rateAsPerOption: form.getValues(
-        `${nameValue}[${items.length}].rateAsPerOption`,
+        ${nameValue}[${items.length}].rateAsPerOption,
       ),
-      rate: form.getValues(`${nameValue}[${items.length}].rate`),
-      rateUnit: form.getValues(`${nameValue}[${items.length}].rateUnit`),
+      rate: form.getValues(${nameValue}[${items.length}].rate),
+      rateUnit: form.getValues(${nameValue}[${items.length}].rateUnit),
       GSTPercentage: form.getValues(
-        `${nameValue}[${items.length}].GSTPercentage`,
+        ${nameValue}[${items.length}].GSTPercentage,
       ),
-      GSTType: form.getValues(`${nameValue}[${items.length}].GSTType`),
-      amount: form.getValues(`${nameValue}[${items.length}].amount`),
-      basicAmount: form.getValues(`${nameValue}[${items.length}].basicAmount`),
+      GSTType: form.getValues(${nameValue}[${items.length}].GSTType),
+      amount: form.getValues(${nameValue}[${items.length}].amount),
+      basicAmount: form.getValues(${nameValue}[${items.length}].basicAmount),
     };
 
     console.log(newItem);
@@ -193,7 +197,7 @@ const MaterialInfo = ({ form, nameValue }) => {
               <div className="flex-1">
                 <FormField
                   control={form.control}
-                  name={`${nameValue}[${items.length}].material`}
+                  name={${nameValue}[${items.length}].material}
                   render={({ field }) => (
                     <SearchItem
                       nameValue={nameValue}
@@ -214,11 +218,16 @@ const MaterialInfo = ({ form, nameValue }) => {
               </Link>
             </div>
 
-            {/* Quantity and Quantity Unit */}
+            {/* <FieldForm
+              form={form}
+              name={${nameValue}[${items.length}].hsnNo}
+              label="HSN No"
+              type="text"
+            /> */}
             <div className="flex w-full items-center gap-0">
               <FormField
                 control={form.control}
-                name={`${nameValue}[${items.length}].quantity`}
+                name={${nameValue}[${items.length}].quantity}
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
@@ -242,7 +251,7 @@ const MaterialInfo = ({ form, nameValue }) => {
               />
               <FormField
                 control={form.control}
-                name={`${nameValue}[${items.length}].quantityUnit`}
+                name={${nameValue}[${items.length}].quantityUnit}
                 render={({ field }) => {
                   return (
                     <FormItem className="flex flex-1 items-center justify-center ">
@@ -264,7 +273,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                             <option value="Packet"> Packet</option>
                             <option value="Roll"> Roll</option>
                             <option value="TIN"> TIN</option>
-                            <option value="TON"> TON</option>
+                            <option value="TON"> TON</option> 
                           </select>
                         </FormControl>
                         <FormMessage />
@@ -280,12 +289,64 @@ const MaterialInfo = ({ form, nameValue }) => {
                 +
               </Link>
             </div>
-
-            {/* Rate as Per */}
             <div className="flex w-full items-center gap-0">
               <FormField
                 control={form.control}
-                name={`${nameValue}[${items.length}].rateAsPer`}
+                name={${nameValue}[${items.length}].actualWeight}
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Actual Weight :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input
+                            type="text"
+                            {...field}
+                            className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
+                          />
+                        </FormControl>
+
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+              <FormField
+                control={form.control}
+                name={${nameValue}[${items.length}].actualWeightUnit}
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex flex-1 items-center justify-center ">
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <select
+                            {...field}
+                            className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                          >
+                            <option value=""> Select Actual Weight Unit</option>
+                            {Array.isArray(data) &&
+                              data.map((unit) => (
+                                <option key={unit.name} value={unit.name}>
+                                  {unit.name}
+                                </option>
+                              ))}
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+            </div>
+
+            <div className="flex w-full items-center gap-0">
+              <FormField
+                control={form.control}
+                name={${nameValue}[${items.length}].rateAsPer}
                 render={({ field }) => {
                   return (
                     <FormItem className="flex flex-1 items-center justify-center gap-4">
@@ -299,6 +360,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                             className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
                           >
                             <option value=""> Select Rate as Rate</option>
+
                             <option value="Actual weight">Actual weight</option>
                             <option value="charged weight">
                               charged weight
@@ -322,14 +384,13 @@ const MaterialInfo = ({ form, nameValue }) => {
               />
             </div>
 
-            {/* Conditional rendering for Rate and Charged Weight */}
-            {rateMultiple !== "fixed" && (
+            {form.watch(${nameValue}[${items.length}].rateAsPer) !==
+              "fixed" && (
               <>
-                {/* Rate */}
                 <div className="flex w-full items-center gap-0">
                   <FormField
                     control={form.control}
-                    name={`${nameValue}[${items.length}].rate`}
+                    name={${nameValue}[${items.length}].rate}
                     render={({ field }) => {
                       return (
                         <FormItem className=" flex flex-1 items-center justify-center gap-4">
@@ -352,10 +413,9 @@ const MaterialInfo = ({ form, nameValue }) => {
                     }}
                   />
 
-                  {/* Rate Unit */}
                   <FormField
                     control={form.control}
-                    name={`${nameValue}[${items.length}].rateUnit`}
+                    name={${nameValue}[${items.length}].rateUnit}
                     render={({ field }) => {
                       return (
                         <FormItem className="flex items-center justify-center ">
@@ -383,12 +443,10 @@ const MaterialInfo = ({ form, nameValue }) => {
                     }}
                   />
                 </div>
-
-                {/* Charged Weight */}
                 <div className="flex w-full items-center gap-0">
                   <FormField
                     control={form.control}
-                    name={`${nameValue}[${items.length}].chargedWeight`}
+                    name={${nameValue}[${items.length}].chargedWeight}
                     render={({ field }) => {
                       return (
                         <FormItem className="flex flex-1 items-center justify-center gap-4">
@@ -410,10 +468,9 @@ const MaterialInfo = ({ form, nameValue }) => {
                       );
                     }}
                   />
-                  {/* Charged Weight Unit */}
                   <FormField
                     control={form.control}
-                    name={`${nameValue}[${items.length}].chargedWeightUnit`}
+                    name={${nameValue}[${items.length}].chargedWeightUnit}
                     render={({ field }) => {
                       return (
                         <FormItem className="flex items-center justify-center ">
@@ -446,8 +503,10 @@ const MaterialInfo = ({ form, nameValue }) => {
 
             <FormField
               control={form.control}
-              name={`${nameValue}[${items.length}].GSTPercentage`}
+              name={${nameValue}[${items.length}].GSTPercentage}
               render={({ field }) => {
+               
+               
                 return (
                   <FormItem className="flex items-center justify-center gap-4">
                     <FormLabel className="text-nowrap text-sm lg:text-base">
@@ -457,6 +516,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                       <FormControl>
                         <select {...field}>
                           <option value="">Select Tax Percentage</option>
+
                           <option value="0.0">0%</option>
                           <option value="0.02">2%</option>
                           <option value="0.05 ">5%</option>
@@ -473,7 +533,7 @@ const MaterialInfo = ({ form, nameValue }) => {
             />
             <FormField
               control={form.control}
-              name={`${nameValue}[${items.length}].GSTType`}
+              name={${nameValue}[${items.length}].GSTType}
               render={({ field }) => {
                 return (
                   <FormItem className="flex items-center justify-center gap-4">
@@ -497,7 +557,7 @@ const MaterialInfo = ({ form, nameValue }) => {
 
             <FieldForm
               form={form}
-              name={`${nameValue}[${items.length}].amount`}
+              name={${nameValue}[${items.length}].amount}
               label="Amount"
               type="text"
             />
