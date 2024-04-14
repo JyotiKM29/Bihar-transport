@@ -30,13 +30,8 @@ const MaterialInfo = ({ form, nameValue }) => {
       (acc, item) => acc + parseFloat(item.amount),
       0,
     );
-    // const totalBasicAmount = items.reduce(
-    //   (acc, item) => acc + parseFloat(item.basicAmount),
-    //   0,
-    // );
     console.log(totalAmount);
     form.setValue("partyBhara", totalAmount);
-    // form.setValue("totalMaterialCharges", totalBasicAmount);
     return totalAmount;
   }
 
@@ -66,31 +61,32 @@ const MaterialInfo = ({ form, nameValue }) => {
   const rateMultiple = form.watch(`${nameValue}[${items.length}].rateAsPer`);
   const quantity = form.watch(`${nameValue}[${items.length}].quantity`);
   const rate = form.watch(`${nameValue}[${items.length}].rate`);
-  
-
   const GSTPercentage = form.watch(
     `${nameValue}[${items.length}].GSTPercentage`,
   );
-  const GSTType = form.watch(
-    `${nameValue}[${items.length}].GSTType`,
-  );
+  const GSTType = form.watch(`${nameValue}[${items.length}].GSTType`);
 
-  useEffect (()=>{
-
-    if(GSTType === "FCM"){
-      form.setValue(`${nameValue}[${items.length}].GSTPercentage`, 0.0)
+  useEffect(() => {
+    if (GSTType === "FCM") {
+      form.setValue(`${nameValue}[${items.length}].GSTPercentage`, 0.0);
     }
-
-  },[GSTType])
+  }, [GSTType]);
 
   useEffect(() => {
     if (!isNaN(parseFloat(rate)) && !isNaN(parseFloat(quantity))) {
       let result = calAmount(rate, quantity, GSTPercentage, rateMultiple);
-
       form.setValue(`${nameValue}[${items.length}].amount`, result);
     }
     calPartyBhara();
-  }, [rate, quantity, items.length, nameValue, GSTPercentage, rateMultiple ,GSTType]);
+  }, [
+    rate,
+    quantity,
+    items.length,
+    nameValue,
+    GSTPercentage,
+    rateMultiple,
+    GSTType,
+  ]);
 
   useEffect(() => {
     const fetchUnits = async () => {
@@ -218,12 +214,7 @@ const MaterialInfo = ({ form, nameValue }) => {
               </Link>
             </div>
 
-            {/* <FieldForm
-              form={form}
-              name={`${nameValue}[${items.length}].hsnNo`}
-              label="HSN No"
-              type="text"
-            /> */}
+            {/* Quantity and Quantity Unit */}
             <div className="flex w-full items-center gap-0">
               <FormField
                 control={form.control}
@@ -273,7 +264,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                             <option value="Packet"> Packet</option>
                             <option value="Roll"> Roll</option>
                             <option value="TIN"> TIN</option>
-                            <option value="TON"> TON</option> 
+                            <option value="TON"> TON</option>
                           </select>
                         </FormControl>
                         <FormMessage />
@@ -289,60 +280,8 @@ const MaterialInfo = ({ form, nameValue }) => {
                 +
               </Link>
             </div>
-            <div className="flex w-full items-center gap-0">
-              <FormField
-                control={form.control}
-                name={`${nameValue}[${items.length}].actualWeight`}
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Actual Weight :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input
-                            type="text"
-                            {...field}
-                            className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
-                          />
-                        </FormControl>
 
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-              <FormField
-                control={form.control}
-                name={`${nameValue}[${items.length}].actualWeightUnit`}
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex flex-1 items-center justify-center ">
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <select
-                            {...field}
-                            className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
-                          >
-                            <option value=""> Select Actual Weight Unit</option>
-                            {Array.isArray(data) &&
-                              data.map((unit) => (
-                                <option key={unit.name} value={unit.name}>
-                                  {unit.name}
-                                </option>
-                              ))}
-                          </select>
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-            </div>
-
+            {/* Rate as Per */}
             <div className="flex w-full items-center gap-0">
               <FormField
                 control={form.control}
@@ -360,7 +299,6 @@ const MaterialInfo = ({ form, nameValue }) => {
                             className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
                           >
                             <option value=""> Select Rate as Rate</option>
-
                             <option value="Actual weight">Actual weight</option>
                             <option value="charged weight">
                               charged weight
@@ -384,9 +322,10 @@ const MaterialInfo = ({ form, nameValue }) => {
               />
             </div>
 
-            {form.watch(`${nameValue}[${items.length}].rateAsPer`) !==
-              "fixed" && (
+            {/* Conditional rendering for Rate and Charged Weight */}
+            {rateMultiple !== "fixed" && (
               <>
+                {/* Rate */}
                 <div className="flex w-full items-center gap-0">
                   <FormField
                     control={form.control}
@@ -413,6 +352,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                     }}
                   />
 
+                  {/* Rate Unit */}
                   <FormField
                     control={form.control}
                     name={`${nameValue}[${items.length}].rateUnit`}
@@ -443,6 +383,8 @@ const MaterialInfo = ({ form, nameValue }) => {
                     }}
                   />
                 </div>
+
+                {/* Charged Weight */}
                 <div className="flex w-full items-center gap-0">
                   <FormField
                     control={form.control}
@@ -468,6 +410,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                       );
                     }}
                   />
+                  {/* Charged Weight Unit */}
                   <FormField
                     control={form.control}
                     name={`${nameValue}[${items.length}].chargedWeightUnit`}
@@ -505,8 +448,6 @@ const MaterialInfo = ({ form, nameValue }) => {
               control={form.control}
               name={`${nameValue}[${items.length}].GSTPercentage`}
               render={({ field }) => {
-               
-               
                 return (
                   <FormItem className="flex items-center justify-center gap-4">
                     <FormLabel className="text-nowrap text-sm lg:text-base">
@@ -516,7 +457,6 @@ const MaterialInfo = ({ form, nameValue }) => {
                       <FormControl>
                         <select {...field}>
                           <option value="">Select Tax Percentage</option>
-
                           <option value="0.0">0%</option>
                           <option value="0.02">2%</option>
                           <option value="0.05 ">5%</option>
