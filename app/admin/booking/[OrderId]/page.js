@@ -5,6 +5,7 @@ import { Button } from "../../../components/ui/button";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
 import AllocateVehicle from './AllocateVehicle';
+import Link from "next/link";
 
 const Allocation = ({ params }) => {
   const [loading, setLoading] = useState(true);
@@ -54,6 +55,8 @@ const Allocation = ({ params }) => {
     
   const   vehicleDataSlice =  filterData.slice(0,4);
 
+  
+
  
 
 
@@ -70,7 +73,7 @@ const Allocation = ({ params }) => {
           </label>
           <div className="flex gap-3 items-center">
           <label className="flex items-center justify-start gap-4 text-nowrap">
-            Vehicle Number:
+            Search by Vehicle No:
             <Input
               className='w-[20rem]'
               type="text"
@@ -83,11 +86,12 @@ const Allocation = ({ params }) => {
          
 
 
-          <Button className="w-[8rem] self-center"
+          <Link href='/admin/vehicle' className="bg-blue-600 text-white w-fit px-4 py-2 rounded text-nowrap  self-center"
           type='submit'
+
           >
-            {loading ? "loading ..." : "Submit"}
-          </Button>
+           Add New Vehicle 
+          </Link>
           </div>
           
         </div>
@@ -95,15 +99,16 @@ const Allocation = ({ params }) => {
          {/* data table */}
         
   <table className="min-w-full divide-y divide-gray-200 border rounder-lg">
-    <thead className="bg-gray-50">
+    <thead className="bg-gray-50 ">
       <tr>
-        <th className="px-4 py-2 text-left">Vehicle No</th>
-        <th className="px-4 py-2 text-left">Driver Name</th>
-        <th className="px-4 py-2 text-left">Vehicle Type</th>
-        <th className="px-4 py-2 text-left">Fuel Name</th>
-        <th className="px-4 py-2 text-left">Vehicle Age</th>
-        <th className="px-4 py-2 text-left">Allocation</th>
-        <th className="px-4 py-2 text-left">Owner Name</th>
+        <th className="px-4 py-2 font-medium text-left">Vehicle No</th>
+        <th className="px-4 py-2 font-medium text-left">Driver Name</th>
+        <th className="px-4 py-2 font-medium text-left">Vehicle Type</th>
+        <th className="px-4 py-2  font-medium text-left">Capacity </th>
+        <th className="px-4 py-2  font-medium text-left">Filled</th>
+        <th className="px-4 py-2 font-medium text-left">Vehicle Age</th>
+        <th className="px-4 py-2 font-medium text-left">Allocation</th>
+        <th className="px-4 py-2 font-medium text-left">Owner Name</th>
       </tr>
     </thead>
     <tbody>
@@ -112,7 +117,8 @@ const Allocation = ({ params }) => {
           <td className="px-4 py-2 whitespace-nowrap">{data.vehicleNo}</td>
           <td className="px-4 py-2 whitespace-nowrap">{data.driver.name}</td>
           <td className="px-4 py-2 whitespace-nowrap">{data.vehicleType}</td>
-          <td className="px-4 py-2 whitespace-nowrap">{data.fuelName}</td>
+          <td className="px-4 py-2 whitespace-nowrap">{data.maxCapacity} ton</td>
+          <td className="px-4 py-2 whitespace-nowrap">{ data.maxCapacity * 100 -  data.filledWeight} kg</td>
           <td className="px-4 py-2 whitespace-nowrap">{data.vehicleAge}</td>
           <td className="px-4 py-2 whitespace-nowrap">{data.allotmentStatus ? "Booked" :"UnBooked"}</td>
           <td className="px-4 py-2 whitespace-nowrap">{data.owner.name}</td>

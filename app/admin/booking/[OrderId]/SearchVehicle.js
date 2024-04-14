@@ -13,6 +13,7 @@ const SearchVehicle = ({ form, field, label }) => {
   const { user } = useContext(UserContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  const [inputValue , setInputValue] = useState("");
 
   async function fetchData(value) {
     try {
@@ -31,7 +32,7 @@ const SearchVehicle = ({ form, field, label }) => {
             vehicle.vehicleNo.toLowerCase().includes(value.toLowerCase())
           );
         });
-        console.log(results);
+        
 
         setSearchResult(results.slice(0, 5));
       } else {
@@ -54,6 +55,7 @@ const SearchVehicle = ({ form, field, label }) => {
 
   function handleChange(value) {
     setSearchTerm(value);
+    setInputValue(value);
     fetchData(value);
   }
 
@@ -66,7 +68,7 @@ const SearchVehicle = ({ form, field, label }) => {
         <FormControl>
           <Input
             placeholder="Type to search..."
-            value={field.value || searchTerm}
+           value={inputValue}
             onChange={(e) => handleChange(e.target.value)}
           />
         </FormControl>
@@ -96,18 +98,40 @@ const SearchVehicle = ({ form, field, label }) => {
                 className="w-full cursor-pointer px-3 py-2 hover:bg-slate-200"
                 onClick={() => {
                   form.setValue("vehicleNo", result?.vehicleNo);
-                  form.setValue(
-                    "transporterDetails.personName",
-                    result?.transporterDetails[0]?.ifOther?.name,
-                  );
-                  form.setValue(
-                    "transporterDetails.transporterMobNo",
-                    result?.transporterDetails[0]?.ifOther?.mobileNo,
-                  );
+
+                  setInputValue(result?.vehicleNo)
+                  form.setValue("vehicleType",result?.vehicleType)
+                  form.setValue("DriverDetails.driverName",result?.driver?.name)
+                  form.setValue("DriverDetails.driverMobNo",result?.driver?.phone)
+
+                  const availableWgt = result?.maxCapacity * 100 - result?.filledWeight;
+                  form.setValue("materialDetails.availableWgt",availableWgt)
+
+                  if(result?.payment){
+                    const pay =result?.payment;
+                    const value =pay.reduce((total, payment) => total + payment.recieveAmount, 0) || 0;
+
+                    console.log("Total avalaible capcity" ,value);
+                    form.setValue("materialDetails.ledgerBalance",value);
+                  }
+
+                  
+
+
+
+                  // form.setValue(
+                  //   "transporterDetails.personName",
+                  //   result?.transporterDetails[0]?.ifOther?.name,
+                  // );
+                  // form.setValue(
+                  //   "transporterDetails.transporterMobNo",
+                  //   result?.transporterDetails[0]?.ifOther?.mobileNo,
+                  // );
               
 
                   setSearchResult([]);
                   setSearchTerm("");
+                 
                 }}
               >
                 {result.vehicleNo}
