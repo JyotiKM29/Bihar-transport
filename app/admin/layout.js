@@ -47,7 +47,7 @@ const DashboardLayout = ({ children }) => {
         <Sidebar />
       </div>
 
-      <div className="min-h-full w-full  overflow-y-scroll bg-blue-50 p-4 md:p-8">
+      <div className="min-h-fit overflow-hidden w-full  overflow-y-scroll bg-blue-50 p-4 md:p-8">
         {children}
       </div>
       <div className="fixed lg:hidden ">{renderSidebar()}</div>

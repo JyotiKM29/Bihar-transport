@@ -11,6 +11,9 @@ import { Input } from "../../components/ui/input";
 
 const FieldForm = ({ form, name, label, type, options }) => {
   return (
+    <div>
+
+   
     <FormField
       control={form?.control}
       name={name}
@@ -30,6 +33,7 @@ const FieldForm = ({ form, name, label, type, options }) => {
         );
       }}
     />
+     </div>
   );
 };
 

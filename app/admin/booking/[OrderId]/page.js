@@ -58,7 +58,7 @@ const Allocation = ({ params }) => {
 
 
   return (
-    <div className="min-h-full w-full rounded-3xl bg-white px-6 py-4  shadow-sm">
+    <div className=" h-fit  w-full overflow-hidden rounded-3xl bg-white px-6 py-4  shadow-sm">
       <h2 className="font-bold  text-blue-700  text-4xl p-1">Vehicle Allocation : </h2>
       <div className="flex flex-col mt-6 h-full w-full ">
         <div 
