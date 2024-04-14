@@ -230,7 +230,7 @@ setTotalCost(calculatedTotalCost);
               variant="secondary"
               onClick={handleAdditionalCharge}
             >
-              Add Additional Charger
+              Add Additional Charges
             </Button>
           </>
         )}

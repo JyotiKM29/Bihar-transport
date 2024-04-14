@@ -41,13 +41,19 @@ export async function POST(req, res) {
       return Response.json({ message: "Booking not found" }, { status: 404 });
     }
 
-    // if (existingBooking.status !== "Confirmed") {
-    //   console.log(existingBooking.status);
-    //   return Response.json(
-    //     { message: "Booking is not confirmed" },
-    //     { status: 400 },
-    //   );
-    // }
+    if (existingBooking.status === "Pending") {
+     
+      existingBooking.status = "Confirmed";
+      
+    }
+
+    if (existingBooking.status !== "Confirmed") {
+      console.log(existingBooking.status);
+      return Response.json(
+        { message: "Booking is not confirmed" },
+        { status: 400 },
+      );
+    }
 
     if (
       existingBooking.allotedVehicle.length &&
@@ -141,24 +147,47 @@ export async function POST(req, res) {
     existingVehicle.allotmentStatus = true;
 
     // reducing the capacity of the
+
+    // worst case
     
     if (existingVehicle.filledWeight + totalWeight > existingVehicle.maxCapacity * 100) {
      
       // total weight is greater than the capacity
 
+      // how much weight is left for booking
       let weight = existingVehicle.filledWeight + totalWeight - existingVehicle.maxCapacity * 100;
       existingVehicle.filledWeight = existingVehicle.maxCapacity * 100;
-      // so fill the max capacity , now vehicle at the max capacity
-      // but booking is still un alloted for
-      // so we need to reduce the total weight
-      // so that the vehicle can be alloted
 
       if (!existingBooking.allotedWeight)
         existingBooking.allotedWeight = 0;
-        existingBooking.allotedWeight += (totalWeight - weight);
+      existingBooking.allotedWeight += (totalWeight - weight);
+      
+      // check if not total weight in item list
+      if (!existingBooking.itemList.totalWeight)
+        existingBooking.itemList.totalWeight = 0;
+        
+      existingBooking.itemList.totalWeight = totalWeight;
+    }
+
+    // best case
+
+    if (existingVehicle.filledWeight + totalWeight <= existingVehicle.maxCapacity * 100) {
+     
+      // add the weight to vehicle
+
+      existingVehicle.filledWeight += totalWeight;
+      
+      if (!existingBooking.allotedWeight)
+        existingBooking.allotedWeight = 0;
+      
+      existingBooking.allotedWeight = totalWeight;
       existingBooking.itemList.totalWeight = totalWeight;
 
-   }
+    }
+
+
+
+    
     existingVehicle.filledWeight = existingVehicle.maxCapacity * 100 - totalWeight;
 
     existingVehicle.bookedBy.push({
