@@ -1,5 +1,6 @@
 "use client";
-import ProductList from './ProductList';
+import ProductList from './ProductAdd';
+import UnitAdd from './UnitAdd';
 import React, { useContext, useEffect, useState } from "react";
 import FieldForm from "../component/FieldForm";
 import { Button } from "../../components/ui/button";
@@ -211,12 +212,12 @@ const MaterialInfo = ({ form, nameValue }) => {
                 />
               </div>
               <ProductList />
-              <Link
+              {/* <Link
                 href="/admin/booking/addproduct"
                 className="flex h-10 w-10 items-center justify-center rounded border bg-gray-100 text-xl"
               >
                 +
-              </Link>
+              </Link> */}
             </div>
 
             {/* <FieldForm
@@ -283,12 +284,13 @@ const MaterialInfo = ({ form, nameValue }) => {
                   );
                 }}
               />
-              <Link
+              <UnitAdd />
+              {/* <Link
                 href="/admin/settings/newunit"
                 className="flex h-10 w-10 items-center justify-center rounded border bg-gray-100 text-xl"
               >
                 +
-              </Link>
+              </Link> */}
             </div>
             <div className="flex w-full items-center gap-0">
               <FormField

@@ -4,14 +4,11 @@
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
+
   DialogTrigger,
 } from "../../components/ui/dialog"
 import { Input } from "../../components/ui/input"
-import { Label } from "../../components/ui/label"
+
 
 import React, { useContext, useState } from "react";
 
@@ -70,7 +67,7 @@ const formSchema = z.object({
 });
 
 
-const ProductList = () => {
+const ProductAdd = () => {
     const initialFormState = {
         productName: "",
         hsnNo: "",
@@ -350,4 +347,4 @@ const ProductList = () => {
   )
 }
 
-export default ProductList
+export default ProductAdd
