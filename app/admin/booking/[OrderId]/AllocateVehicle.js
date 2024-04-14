@@ -238,7 +238,7 @@ const AllocateVehicle = ({ params  }) => {
       </h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(myhandleSubmit)}>
-          <div className="grid w-full  grid-cols-1  gap-6 xl:grid-cols-2 xl:grid-rows-4 xl:space-x-6">
+          <div className="grid w-full  grid-cols-1  gap-6 xl:grid-cols-2  xl:space-x-6">
             <div className=" row-span-3 rounded-xl border px-6 py-4 shadow-md ">
               <h2 className="text-2xl font-medium text-blue-500 underline">
                 Hired Vehicle Details

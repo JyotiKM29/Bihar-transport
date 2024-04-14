@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import FieldForm from "../component/FieldForm";
 import { Button } from "../../components/ui/button";
 import SearchItem from "./SearchItem";
+import ProductList from './ProductList';
 import {
   Form,
   FormControl,
@@ -209,13 +210,13 @@ const MaterialInfo = ({ form, nameValue }) => {
                   )}
                 />
               </div>
-
-              <Link
+<ProductList />
+              {/* <Link
                 href="/admin/booking/addproduct"
                 className="flex h-10 w-10 items-center justify-center rounded border bg-gray-100 text-xl"
               >
                 +
-              </Link>
+              </Link> */}
             </div>
 
             {/* <FieldForm
