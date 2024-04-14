@@ -96,8 +96,12 @@ export default function ColumnHeader() {
         header: "Vehicle Type",
       },
       {
+        accessorKey: "filledWeight",
+        header: "Booked (in KG) ",
+      },
+      {
         accessorKey: "maxCapacity",
-        header: " Max Capacity",
+        header: " Max Capacity (In Tons)",
       },
       {
         accessorKey: "registrationAuthority",
