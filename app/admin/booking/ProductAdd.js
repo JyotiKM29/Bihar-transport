@@ -130,11 +130,11 @@ const ProductAdd = () => {
   return (
     <Dialog>
     <DialogTrigger asChild>
-      <Button variant="outline">Add</Button>
+      <Button variant="outline"> + </Button>
     </DialogTrigger>
     <DialogContent >
-    <div className="h-full w-full rounded-3xl bg-white px-6 py-4 shadow-sm">
-      <h2 className="font-semiBold mt-12 text-3xl lg:mt-4 text-green-800 lg:font-medium">
+    <div className="h-full w-full rounded-3xl bg-white px-6 py-4 ">
+      <h2 className="font-semiBold text-center mt-12 text-3xl lg:mt-4 text-green-800 lg:font-medium">
         Add a New Product:
       </h2>
 
@@ -334,10 +334,10 @@ const ProductAdd = () => {
             }}
           />
            </div>
-           <div className="flex justify-start ml-4 ">
+           <div className="flex justify-start ml-4 w-full">
 
           
-          <Button type="submit" className='text-lg mt-10 px-20 py-6 bg-green-700 hover:bg-green-800'>{loading ? "Adding..." : "Add Product"}</Button>
+          <Button type="submit" className='text-lg w-full mt-10 px-20 py-6 bg-green-700 hover:bg-green-800'>{loading ? "Adding..." : "Add Product"}</Button>
           </div>
         </form>
       </Form>

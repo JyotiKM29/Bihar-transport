@@ -20,7 +20,33 @@ import Link from "next/link";
 const MaterialInfo = ({ form, nameValue }) => {
   const [items, setItems] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [unitsData, setUnitsData] = useState([]);
+
+    useEffect(() => {
+        fetchUnits(); // Initial fetch when component mounts
+    }, []);
+
+    const fetchUnits = async () => {
+        // Fetch units data from API
+        try {
+            const response = await fetch(`/api/getunits/${userId}`, {
+                method: "GET",
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            setUnitsData(data.data);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+    const handleUnitAdded = () => {
+        fetchUnits(); // Fetch units data after a new unit is added
+    };
 
   const { user } = useContext(UserContext);
 
@@ -32,13 +58,10 @@ const MaterialInfo = ({ form, nameValue }) => {
       (acc, item) => acc + parseFloat(item.amount),
       0,
     );
-    // const totalBasicAmount = items.reduce(
-    //   (acc, item) => acc + parseFloat(item.basicAmount),
-    //   0,
-    // );
+
     console.log(totalAmount);
     form.setValue("partyBhara", totalAmount);
-    // form.setValue("totalMaterialCharges", totalBasicAmount);
+
     return totalAmount;
   }
 
@@ -94,32 +117,32 @@ const MaterialInfo = ({ form, nameValue }) => {
     calPartyBhara();
   }, [rate, quantity, items.length, nameValue, GSTPercentage, rateMultiple ,GSTType]);
 
-  useEffect(() => {
-    const fetchUnits = async () => {
-      try {
-        if (userId) {
-          const response = await fetch(`/api/getunits/${userId}`, {
-            method: "GET",
-          });
+  // useEffect(() => {
+  //   const fetchUnits = async () => {
+  //     try {
+  //       if (userId) {
+  //         const response = await fetch(`/api/getunits/${userId}`, {
+  //           method: "GET",
+  //         });
 
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
+  //         if (!response.ok) {
+  //           throw new Error(`HTTP error! Status: ${response.status}`);
+  //         }
 
-          const data = await response.json();
+  //         const data = await response.json();
 
-          setLoading(false);
+  //         setLoading(false);
 
-          setData(data.data);
-          console.log(data);
-        }
-      } catch (error) {
-        setLoading(false);
-        console.error("Error:", error);
-      }
-    };
-    fetchUnits();
-  }, [userId]);
+  //         setData(data.data);
+  //         console.log(data);
+  //       }
+  //     } catch (error) {
+  //       setLoading(false);
+  //       console.error("Error:", error);
+  //     }
+  //   };
+  //   fetchUnits();
+  // }, [userId ]);
 
   function handleAdditionalItem() {
     const newItem = {
@@ -284,7 +307,9 @@ const MaterialInfo = ({ form, nameValue }) => {
                   );
                 }}
               />
-              <UnitAdd />
+             
+             <UnitAdd onUnitAdded={handleUnitAdded} />
+             
               {/* <Link
                 href="/admin/settings/newunit"
                 className="flex h-10 w-10 items-center justify-center rounded border bg-gray-100 text-xl"
@@ -330,8 +355,8 @@ const MaterialInfo = ({ form, nameValue }) => {
                             className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
                           >
                             <option value=""> Select Actual Weight Unit</option>
-                            {Array.isArray(data) &&
-                              data.map((unit) => (
+                            {Array.isArray(unitsData) &&
+                              unitsData.map((unit) => (
                                 <option key={unit.name} value={unit.name}>
                                   {unit.name}
                                 </option>
@@ -486,8 +511,8 @@ const MaterialInfo = ({ form, nameValue }) => {
                                 <option value="">
                                   Select Charged Weight Unit
                                 </option>
-                                {Array.isArray(data) &&
-                                  data.map((unit) => (
+                                {Array.isArray(unitsData) &&
+                                  unitsData.map((unit) => (
                                     <option key={unit.name} value={unit.name}>
                                       {unit.name}
                                     </option>
