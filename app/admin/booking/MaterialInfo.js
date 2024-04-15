@@ -117,32 +117,7 @@ const MaterialInfo = ({ form, nameValue }) => {
     calPartyBhara();
   }, [rate, quantity, items.length, nameValue, GSTPercentage, rateMultiple ,GSTType]);
 
-  // useEffect(() => {
-  //   const fetchUnits = async () => {
-  //     try {
-  //       if (userId) {
-  //         const response = await fetch(`/api/getunits/${userId}`, {
-  //           method: "GET",
-  //         });
-
-  //         if (!response.ok) {
-  //           throw new Error(`HTTP error! Status: ${response.status}`);
-  //         }
-
-  //         const data = await response.json();
-
-  //         setLoading(false);
-
-  //         setData(data.data);
-  //         console.log(data);
-  //       }
-  //     } catch (error) {
-  //       setLoading(false);
-  //       console.error("Error:", error);
-  //     }
-  //   };
-  //   fetchUnits();
-  // }, [userId ]);
+  
 
   function handleAdditionalItem() {
     const newItem = {
@@ -282,24 +257,20 @@ const MaterialInfo = ({ form, nameValue }) => {
                     <FormItem className="flex flex-1 items-center justify-center ">
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <select
+                        
+                           <select
                             {...field}
                             className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
                           >
-                            <option value=""> Quantity Unit</option>
-                            <option value="Box"> Box</option>
-                            <option value="Bag"> Bag</option>
-                            <option value="Basta"> Basta</option>
-                            <option value="Bundle"> Bundle</option>
-                            <option value="Carton"> Carton</option>
-                            <option value="Carate"> Carate</option>
-                            <option value="Drums"> Drums</option>
-                            <option value="Loose"> Loose</option>
-                            <option value="Packet"> Packet</option>
-                            <option value="Roll"> Roll</option>
-                            <option value="TIN"> TIN</option>
-                            <option value="TON"> TON</option> 
+                            <option value=""> Select Quantity Unit</option>
+                            {Array.isArray(unitsData) &&
+                              unitsData.map((unit) => (
+                                <option key={unit.name} value={unit.name}>
+                                  {unit.name}
+                                </option>
+                              ))}
                           </select>
+                          
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -350,18 +321,28 @@ const MaterialInfo = ({ form, nameValue }) => {
                     <FormItem className="flex flex-1 items-center justify-center ">
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <select
-                            {...field}
-                            className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
-                          >
-                            <option value=""> Select Actual Weight Unit</option>
-                            {Array.isArray(unitsData) &&
-                              unitsData.map((unit) => (
-                                <option key={unit.name} value={unit.name}>
-                                  {unit.name}
+                        <select
+                                {...field}
+                                className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                              >
+                                <option value="">
+                                  Select Charged Weight Unit
                                 </option>
-                              ))}
-                          </select>
+                                <option value=""> Quantity Unit</option>
+                            <option value="Box"> Box</option>
+                            <option value="Bag"> Bag</option>
+                            <option value="Basta"> Basta</option>
+                            <option value="Bundle"> Bundle</option>
+                            <option value="Carton"> Carton</option>
+                            <option value="Carate"> Carate</option>
+                            <option value="Drums"> Drums</option>
+                            <option value="Loose"> Loose</option>
+                            <option value="Packet"> Packet</option>
+                            <option value="Roll"> Roll</option>
+                            <option value="TIN"> TIN</option>
+                            <option value="TON"> TON</option> 
+                         
+                              </select>
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -511,12 +492,20 @@ const MaterialInfo = ({ form, nameValue }) => {
                                 <option value="">
                                   Select Charged Weight Unit
                                 </option>
-                                {Array.isArray(unitsData) &&
-                                  unitsData.map((unit) => (
-                                    <option key={unit.name} value={unit.name}>
-                                      {unit.name}
-                                    </option>
-                                  ))}
+                                <option value=""> Quantity Unit</option>
+                            <option value="Box"> Box</option>
+                            <option value="Bag"> Bag</option>
+                            <option value="Basta"> Basta</option>
+                            <option value="Bundle"> Bundle</option>
+                            <option value="Carton"> Carton</option>
+                            <option value="Carate"> Carate</option>
+                            <option value="Drums"> Drums</option>
+                            <option value="Loose"> Loose</option>
+                            <option value="Packet"> Packet</option>
+                            <option value="Roll"> Roll</option>
+                            <option value="TIN"> TIN</option>
+                            <option value="TON"> TON</option> 
+                         
                               </select>
                             </FormControl>
                             <FormMessage />
