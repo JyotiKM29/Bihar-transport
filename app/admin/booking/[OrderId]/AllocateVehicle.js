@@ -36,7 +36,7 @@ const formSchema = z.object({
     driverName: z.string(),
     driverMobNo: z.coerce.number(),
   }),
-  // orderNo: z.coerce.number(),
+  orderNo: z.string(),
   arrangedBy: z.string(),
 
   arrangedByName: z.string().optional(),
@@ -80,11 +80,13 @@ const AllocateVehicle = ({ params  }) => {
 
   const [data, setData] = useState(null);
   const userId = user?._id;
+  
 
  
 
   const initialFormState = {
     adminId: "",
+    orderNo:params.OrderId,
     date: new Date().toISOString()?.split("T")[0],
     vehicleNo: undefined,
     vehicleType: undefined,
@@ -244,6 +246,7 @@ const AllocateVehicle = ({ params  }) => {
                 Hired Vehicle Details
               </h2>
 
+              <FieldForm form={form} name="orderNo" label="Order No" type="string" />
               <FieldForm form={form} name="date" label="Date " type="date" />
               <FormField
                 control={form.control}
@@ -312,6 +315,7 @@ const AllocateVehicle = ({ params  }) => {
 
                       <FormControl>
                         <select {...field}>
+                        <option value=''>Select Arranged By </option>
                           <option value="Self">Self</option>
                           <option value="Other transporter">
                             Other transporter
@@ -439,12 +443,7 @@ const AllocateVehicle = ({ params  }) => {
                               className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
                             >
                               <option value=""> Select Unit of Weight </option>
-                              {Array.isArray(data) &&
-                                data.map((unit) => (
-                                  <option key={unit.name} value={unit.name}>
-                                    {unit.name}
-                                  </option>
-                                ))}
+                              <option value="kg">Kg</option>
                             </select>
                           </FormControl>
                           <FormMessage />
@@ -518,12 +517,7 @@ const AllocateVehicle = ({ params  }) => {
                               className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
                             >
                               <option value=""> Select Unit of Weight </option>
-                              {Array.isArray(data) &&
-                                data.map((unit) => (
-                                  <option key={unit.name} value={unit.name}>
-                                    {unit.name}
-                                  </option>
-                                ))}
+                             <option value='kg'>Kg</option>
                             </select>
                           </FormControl>
                           <FormMessage />
