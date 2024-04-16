@@ -109,10 +109,9 @@ const validateRcPhoto = function (value) {
   return typeof value === "string" && value.trim().length > 0;
 };
 
-
 const allotmentSchema = new mongoose.Schema(
   {
-    bookingId:{type:String,required:true},
+    bookingId: { type: String, required: true },
     vehicleType: { type: String, required: true },
     ownerDetails: {
       ownerName: { type: String, required: true },
@@ -127,8 +126,6 @@ const allotmentSchema = new mongoose.Schema(
 
     rateAsPer: {
       type: String,
-      enum: ["fixed", "weight", "distance"],
-      required: true,
     },
     rate: { type: String }, // Show only if rateAsPer is not "fixed"
     driverBhara: { type: Number },
@@ -137,15 +134,6 @@ const allotmentSchema = new mongoose.Schema(
 
     paymentLiability: {
       type: String,
-      enum: ["Consignor", "Consignee", "Third Party"],
-      required: true,
-    },
-    billTo: {
-      type: String,
-      // enum: ["Consignor", "Consignee", "Third Party"],
-      // required: function () {
-      //   return this.paymentLiability === "Third Party";
-      // },
     },
     ledgerBalanceParty: { type: String }, // Assuming it can be both debit or credit
 
@@ -210,8 +198,6 @@ const transporterDetailsSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-
-
 const vehicleSchema = new mongoose.Schema(
   {
     vehicleNo: { type: String, required: true },
@@ -225,7 +211,7 @@ const vehicleSchema = new mongoose.Schema(
     maxCapacity: { type: Number, required: true },
     maxCapacityUnit: { type: String, default: "TON" },
     filledWeight: { type: Number, default: 0 },
-    filledWeightUnit:{type:String, default: "KG"},
+    filledWeightUnit: { type: String, default: "KG" },
     chassisNo: { type: String, required: true },
     EngineNo: { type: String, required: true },
     fitnessValidUpTo: { type: Date, required: true },
@@ -269,11 +255,10 @@ const vehicleSchema = new mongoose.Schema(
         date: { type: Date },
       },
     ],
-    payment:[],
+    payment: [],
   },
   { timestamps: true },
 );
-
 
 // Adding timestamps for each entry in the updatedBy array
 // vehicleSchema.path('updatedBy').schema.add({ timestamps: true });
