@@ -65,11 +65,7 @@ const itemsSchema = z.object({
 })
 
 const formSchema = z.object({
-  orderNumber: z.coerce
-    .number({
-      message: "order ID is required",
-    })
-    .positive(),
+  orderNumber: z.string(),
   date: z.coerce.date({ message: "Date is require" }),
   vehicleRequiredDate: z.coerce.date({ message: "Date is require" }),
   bookingType: z.enum(["personal", "general", "comapany"]),
@@ -227,7 +223,7 @@ useEffect(()=>{
 
 
   function generateUniqueId() {
-    return Math.floor(100000 + Math.random() * 900000);
+    return BT + Math.floor(100000 + Math.random() * 900000);
   }
 
  

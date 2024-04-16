@@ -63,7 +63,7 @@ const formSchema = z.object({
     commission: z.coerce.number(),
     netBhara: z.coerce.number(),
 
-    ledgerBalance: z.string(),
+    ledgerBalance: z.coerce.number(),
     remarks: z.string(),
   }),
 
@@ -85,7 +85,7 @@ const AllocateVehicle = ({ params  }) => {
 
   const initialFormState = {
     adminId: "",
-    date: new Date().toISOString().split("T")[0],
+    date: new Date().toISOString()?.split("T")[0],
     vehicleNo: undefined,
     vehicleType: undefined,
     DriverDetails: {
@@ -286,7 +286,7 @@ const AllocateVehicle = ({ params  }) => {
 
                           <FormControl>
                             <Input
-                              type="text"
+                              type="number"
                               {...field}
                               placeholder="Driver Mobile No"
                             />
@@ -327,13 +327,13 @@ const AllocateVehicle = ({ params  }) => {
                 <>
                   <FieldForm
                     form={form}
-                    name="arrangedBy.name"
+                    name="arrangedByName"
                     label="Name "
                     type="text"
                   />
                   <FieldForm
                     form={form}
-                    name="arrangedBy.phoneNo"
+                    name="arrangedByPhoneNo"
                     label="Mobile No"
                     type="number"
                   />

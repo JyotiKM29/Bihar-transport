@@ -102,17 +102,17 @@ const SearchVehicle = ({ form, field, label }) => {
                   setInputValue(result?.vehicleNo)
                   form.setValue("vehicleType",result?.vehicleType)
                   form.setValue("DriverDetails.driverName",result?.driver?.name)
-                  form.setValue("DriverDetails.driverMobNo",result?.driver?.phone)
+                  form.setValue("DriverDetails.driverMobNo",Number(result?.driver?.phone))
 
                   const availableWgt = result?.maxCapacity * 100 - result?.filledWeight;
-                  form.setValue("materialDetails.availableWgt",availableWgt)
+                  form.setValue("materialDetails.availableWgt",Number(availableWgt))
 
                   if(result?.payment){
                     const pay =result?.payment;
                     const value =pay.reduce((total, payment) => total + payment.recieveAmount, 0) || 0;
 
                     console.log("Total avalaible capcity" ,value);
-                    form.setValue("materialDetails.ledgerBalance",value);
+                    form.setValue("materialDetails.ledgerBalance",Number(value));
                   }
 
                   
