@@ -42,9 +42,7 @@ export async function POST(req, res) {
     }
 
     if (existingBooking.status === "Pending") {
-     
       existingBooking.status = "Confirmed";
-      
     }
 
     if (existingBooking.status !== "Confirmed") {
@@ -82,113 +80,109 @@ export async function POST(req, res) {
     //   );
     // }
 
-    let totalWeight = 0;
-    existingBooking.itemList.forEach((item) => {
+    console.log(existingBooking.itemsList);
 
-      if(item.actualWeightUnit === "KG")
-        totalWeight += item.actualWeight;
-      
+    let totalWeight = 0;
+    existingBooking.itemsList?.forEach((item) => {
+      if (item.actualWeightUnit === "KG") totalWeight += item.actualWeight;
+
       if (item.actualWeightUnit === "quintal")
         totalWeight += item.actualWeight * 100;
-      
+
       if (item.actualWeightUnit === "ton")
         totalWeight += item.actualWeight * 1000;
-      
     });
 
+    // const newOrder = new Order({
+    //   booking: {
+    //     id: existingBooking._id,
+    //     date: existingBooking.vehicleRequiredDate,
+    //     client: {
+    //       name: existingBooking.consignorName,
+    //       phone: existingBooking.consigneeMobileNumber,
+    //     },
+    //     loadingPoints: existingBooking.loadingPoints,
+    //     unloadingPoints: existingBooking.unloadingPoints,
+    //     totalWeight,
+    //     totalWeightUnit:"KG"
+    //   },
+    //   vehicle: {
+    //     id: existingVehicle._id,
+    //     number: existingVehicle.vehicleNo,
+    //     driver: {
+    //       name: existingVehicle.driver.name,
+    //       phone: existingVehicle.driver.phone,
+    //     },
+    //     owner: {
+    //       name: existingVehicle.owner.name,
+    //       phone: existingVehicle.owner.phone,
+    //     },
+    //   },
+    //   payment: {
+    //     mode: existingBooking.payMode,
+    //     amount: existingBooking.advanceAmount + existingBooking.balanceAmount,
+    //     advance: existingBooking.advanceAmount,
+    //     balance: existingBooking.balanceAmount,
+    //   },
+    //   status: "Initialized",
+    //   createdBY: {
+    //     id: adminId,
+    //     name: admin.name,
+    //     date: Date.now(),
+    //   },
+    // });
 
-
-
-    const newOrder = new Order({
-      booking: {
-        id: existingBooking._id,
-        date: existingBooking.vehicleRequiredDate,
-        client: {
-          name: existingBooking.consignorName,
-          phone: existingBooking.consigneeMobileNumber,
-        },
-        loadingPoints: existingBooking.loadingPoints,
-        unloadingPoints: existingBooking.unloadingPoints,
-        totalWeight,
-        totalWeightUnit:"KG"
-      },
-      vehicle: {
-        id: existingVehicle._id,
-        number: existingVehicle.vehicleNo,
-        driver: {
-          name: existingVehicle.driver.name,
-          phone: existingVehicle.driver.phone,
-        },
-        owner: {
-          name: existingVehicle.owner.name,
-          phone: existingVehicle.owner.phone,
-        },
-      },
-      payment: {
-        mode: existingBooking.payMode,
-        amount: existingBooking.advanceAmount + existingBooking.balanceAmount,
-        advance: existingBooking.advanceAmount,
-        balance: existingBooking.balanceAmount,
-      },
-      status: "Initialized",
-      createdBY: {
-        id: adminId,
-        name: admin.name,
-        date: Date.now(),
-      },
-    });
-
-    if (existingBooking.isUrgent) {
-      newOrder.isUrgent = true;
-    }
-
-    
+    // if (existingBooking.isUrgent) {
+    //   newOrder.isUrgent = true;
+    // }
 
     existingVehicle.allotmentStatus = true;
 
     // reducing the capacity of the
 
     // worst case
-    
-    if (existingVehicle.filledWeight + totalWeight > existingVehicle.maxCapacity * 100) {
-     
+
+    if (
+      existingVehicle.filledWeight + totalWeight >
+      existingVehicle.maxCapacity * 100
+    ) {
       // total weight is greater than the capacity
 
       // how much weight is left for booking
-      let weight = existingVehicle.filledWeight + totalWeight - existingVehicle.maxCapacity * 100;
+      let weight =
+        existingVehicle.filledWeight +
+        totalWeight -
+        existingVehicle.maxCapacity * 100;
       existingVehicle.filledWeight = existingVehicle.maxCapacity * 100;
 
-      if (!existingBooking.allotedWeight)
-        existingBooking.allotedWeight = 0;
-      existingBooking.allotedWeight += (totalWeight - weight);
-      
+      if (!existingBooking.allotedWeight) existingBooking.allotedWeight = 0;
+      existingBooking.allotedWeight += totalWeight - weight;
+
       // check if not total weight in item list
-      if (!existingBooking.itemList.totalWeight)
-        existingBooking.itemList.totalWeight = 0;
-        
-      existingBooking.itemList.totalWeight = totalWeight;
+      if (!existingBooking.itemsList.totalWeight)
+        existingBooking.itemsList.totalWeight = 0;
+
+      existingBooking.itemsList.totalWeight = totalWeight;
     }
 
     // best case
 
-    if (existingVehicle.filledWeight + totalWeight <= existingVehicle.maxCapacity * 100) {
-     
+    if (
+      existingVehicle.filledWeight + totalWeight <=
+      existingVehicle.maxCapacity * 100
+    ) {
       // add the weight to vehicle
 
       existingVehicle.filledWeight += totalWeight;
-      
-      if (!existingBooking.allotedWeight)
-        existingBooking.allotedWeight = 0;
-      
-      existingBooking.allotedWeight = totalWeight;
-      existingBooking.itemList.totalWeight = totalWeight;
 
+      if (!existingBooking.allotedWeight) existingBooking.allotedWeight = 0;
+
+      existingBooking.allotedWeight = totalWeight;
+      existingBooking.itemsList.totalWeight = totalWeight;
     }
 
-
-
-    
-    existingVehicle.filledWeight = existingVehicle.maxCapacity * 100 - totalWeight;
+    existingVehicle.filledWeight =
+      existingVehicle.maxCapacity * 100 - totalWeight;
 
     existingVehicle.bookedBy.push({
       bookingId: existingBooking._id,
@@ -225,11 +219,17 @@ export async function POST(req, res) {
       date: Date.now(),
     });
 
-    await existingVehicle.save();
-    await existingBooking.save();
-    const savedOrder = await newOrder.save();
+    await Promise.all([existingBooking.save(), existingVehicle.save()]);
 
-    return Response.json({ savedOrder }, { status: 200 });
+    // await existingVehicle.save();
+    // await existingBooking.save();
+    // const savedOrder = await newOrder.save();
+
+    return Response.json(
+      { message: existingBooking },
+      { sucess: true },
+      { status: 200 },
+    );
   } catch (error) {
     console.log(error);
     return Response.json({ message: error.message }, { status: 400 });
