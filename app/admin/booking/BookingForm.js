@@ -223,7 +223,9 @@ useEffect(()=>{
 
 
   function generateUniqueId() {
-    return BT + Math.floor(100000 + Math.random() * 900000);
+   const value = Math.floor(100000 + Math.random() * 900000);
+
+   return "BT" + value;
   }
 
  
@@ -309,7 +311,7 @@ useEffect(()=>{
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="number" {...field} />
+                          <Input type="string" {...field} />
                         </FormControl>
                         <FormMessage />
                       </div>
