@@ -6,13 +6,7 @@ import * as z from "zod";
 import FieldForm from "../../component/FieldForm";
 
 import { Button } from "../../../components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../components/ui/select";
+
 import {
   Form,
   FormControl,
@@ -24,8 +18,9 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
-import PhotoForm from "../../vehicle/FieldForm";
+
 import { Input } from "../../../components/ui/input";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   adminId: z.string(),
@@ -41,11 +36,6 @@ const formSchema = z.object({
 
   arrangedByName: z.string().optional(),
   arrangedByPhoneNo: z.coerce.number().optional(),
-
-  // transporterDetails: z.object({
-  //   personName: z.string(),
-  //   transporterMobNo: z.coerce.number(),
-  // }),
 
   materialDetails: z.object({
     qty: z.coerce.number(),
@@ -77,15 +67,18 @@ const AllocateVehicle = ({ params  }) => {
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
-
+  const [allocate , setAllocate] = useState(false);
+  const route = useRouter();
   const [data, setData] = useState(null);
   const userId = user?._id;
+  const orderId = params.OrderId;
   
 
  
 
   const initialFormState = {
     adminId: "",
+    
     orderNo:params.OrderId,
     date: new Date().toISOString()?.split("T")[0],
     vehicleNo: undefined,
@@ -134,7 +127,8 @@ const AllocateVehicle = ({ params  }) => {
     resolver: zodResolver(formSchema),
     defaultValues: initialFormState,
   });
-
+  
+  const bookingID = form.getValues("bookingID");
   const DriverBhara = form.watch("materialDetails.driverBhara" , 0);
   const vehicleNo = form.watch("vehicleNo");
   let availableWgt = form.getValues("materialDetails.availableWgt");
@@ -176,14 +170,19 @@ const AllocateVehicle = ({ params  }) => {
         },
         body: JSON.stringify(value),
       });
-      // console.log(response);
+      
 
       const newResult = await response.json();
 
       if (response.ok) {
         setIsLoading(false);
         displayToast("Successfully allocated vehicle", "✅");
-        // const userDetail = newResult.user;
+    
+
+        if(allocate){
+          console.log(allocate ,orderId  )
+          route.push(`/admin/booking/${orderId}/print/${orderId}`);
+        }
         form.reset(initialFormState);
       } else {
         console.error("Error:", newResult.message);
@@ -245,6 +244,7 @@ const AllocateVehicle = ({ params  }) => {
               <h2 className="text-2xl font-medium text-blue-500 underline">
                 Hired Vehicle Details
               </h2>
+        
 
               <FieldForm form={form} name="orderNo" label="Order No" type="string" />
               <FieldForm form={form} name="date" label="Date " type="date" />
@@ -721,7 +721,10 @@ const AllocateVehicle = ({ params  }) => {
           </div>
 
           <div className="mt-4  grid w-full grid-cols-1 gap-4 p-4 xl:grid-cols-2 xl:gap-14">
-            <Button type="submit">
+            <Button type="submit"   onClick={(e) => {
+                setAllocate(true);
+
+              }}>
               {isloading ? "Loading..." : "Assign Vehicle Only"}
             </Button>
             <Button type="submit">

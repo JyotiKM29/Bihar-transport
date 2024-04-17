@@ -106,7 +106,9 @@ const SearchVehicle = ({ form, field, label }) => {
 
                   const availableWgt = result?.maxCapacity * 100 - result?.filledWeight;
                   form.setValue("materialDetails.availableWgt",Number(availableWgt))
-
+                  // form.setValue("bookingID",result._id );
+                  // console.log("Result ", result);
+ 
                   if(result?.payment){
                     const pay =result?.payment;
                     const value =pay.reduce((total, payment) => total + payment.recieveAmount, 0) || 0;
