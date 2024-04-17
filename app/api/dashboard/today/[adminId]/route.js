@@ -34,7 +34,7 @@ export async function GET(req, context) {
       advanceBooking: 0,
     };
 
-    log(data);
+    // log(data);
     const booking = await Booking.find();
     const dvehicle = await Vehicle.find();
     log(booking.length);
@@ -72,14 +72,37 @@ export async function GET(req, context) {
     data.pendingInvoice = booking.length - data.generatedInvoice;
 
     booking.forEach((item) => {
-      data.advanceAmount += item.advanceAmount;
-      data.totalAmount += item.balanceAmount + item.advanceAmount;
-    });
+    //  console.log(item.advanceAmount);
+    //  console.log(item.balanceAmount);
+     // Ensure that advanceAmount and balanceAmount are treated as numbers
+
+      if(isNaN(item.advanceAmount) || isNaN(item.balanceAmount)){
+        
+        console.log("not a no error because of this data ", item._id, item.advanceAmount, item.balanceAmount, item.status)
+        // Booking.deleteOne({_id:item._id}).then((results)=>{console.log("deleted")})
+        
+      }
+     const advanceAmount = parseFloat(item.advanceAmount);
+     const balanceAmount = parseFloat(item.balanceAmount);
+
+     // Check if the parsed values are valid numbers
+     if (!isNaN(advanceAmount)) {
+      // console.log(data);
+       data.advanceAmount += advanceAmount;
+     }
+
+     if (!isNaN(balanceAmount)) {
+       // Add balanceAmount and advanceAmount to get totalAmount
+      //  console.log(item._id);
+      
+       data.totalAmount += balanceAmount + advanceAmount;
+     }
+   });
 
     data.advanceBooking = booking.filter(
       (item) => item.paymentTerm === "Advance",
     ).length;
-    log(data);
+    // log(data);
 
     return Response.json({ data, adminId }, { status: 200 });
   } catch (error) {
