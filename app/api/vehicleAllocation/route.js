@@ -41,6 +41,10 @@ export async function POST(req, res) {
       return Response.json({ message: "Booking not found" }, { status: 404 });
     }
 
+    if (existingBooking.status === "Initialized") {
+      return Response.json({ message: "Booking is already initialized" }, { status: 400 })
+    }
+
     if (existingBooking.status === "Pending") {
       existingBooking.status = "Confirmed";
     }
