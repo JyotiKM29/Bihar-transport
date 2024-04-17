@@ -39,6 +39,12 @@ export async function GET(req, context) {
         //   { status: 400 },
         // );
 
+      if(adminId === "undefined"){
+        return Response.json({message:"adminId is important to call this api"},{status:400});
+      }
+      if(id === "undefined"){
+        return Response.json({message:"adminId is important to call this api"},{status:400});
+      }
 
         await connectDB();
 
