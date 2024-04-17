@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
 import { useEffect, useState } from "react";
-import FieldComponent from "../booking/FieldComponent";
+import FieldComponent from "./fieldComponent"; // Update the path to the correct location
 import { Button } from "../../components/ui/button";
 
 const ViewDetail = ({ bookingDetails, heading }) => {
@@ -39,13 +39,21 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           {/* Render basic details */}
           <div className="mb-4 mt-3 flex items-center justify-between border-b">
             <h2 className="mr-3 text-nowrap text-lg font-semibold ">
-              Order Id :
+              Quotation NO :
             </h2>
             <h2> {bookingDetails?.quoteNo}</h2>
           </div>
           <div className="mb-4 mt-3 flex items-center justify-between border-b">
-            <h2 className="mr-3 text-nowrap text-lg font-semibold ">Date :</h2>
+            <h2 className="mr-3 text-nowrap text-lg font-semibold ">Quote Date :</h2>
             <h2> {new Date(bookingDetails?.quoteDate).toLocaleDateString()}</h2>
+          </div>
+          <div className="mb-4 mt-3 flex items-center justify-between border-b">
+            <h2 className="mr-3 text-nowrap text-lg font-semibold ">Created Date :</h2>
+            <h2> {new Date(bookingDetails?.createdAt).toLocaleDateString()}</h2>
+          </div>
+          <div className="mb-4 mt-3 flex items-center justify-between border-b">
+            <h2 className="mr-3 text-nowrap text-lg font-semibold ">Updated Date :</h2>
+            <h2> {new Date(bookingDetails?.updatedAt).toLocaleDateString()}</h2>
           </div>
           <div className="mt-3 flex items-center justify-between border-b ">
             <h2 className="mr-3 text-nowrap text-lg font-semibold ">

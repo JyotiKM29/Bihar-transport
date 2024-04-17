@@ -77,7 +77,7 @@ const Page = ({ params }) => {
         "Loading..."
       ) : (
         // "suraj"
-        <ViewDetail bookingDetails={bookingDetails} heading={"Quotation Details"} />
+        <ViewDetail bookingDetails={bookingDetails} heading={"Quotation "} />
       )}
     </div>
   );
