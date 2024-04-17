@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
 import { useEffect, useState } from "react";
-import FieldComponent from "./fieldComponent"; // Update the path to the correct location
+import FieldComponent from "./FieldComponent"; // Update the path to the correct location
 import { Button } from "../../components/ui/button";
 
 const ViewDetail = ({ bookingDetails, heading }) => {
