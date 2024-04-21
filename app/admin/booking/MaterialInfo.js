@@ -210,12 +210,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                 />
               </div>
               <ProductList />
-              {/* <Link
-                href="/admin/booking/addproduct"
-                className="flex h-10 w-10 items-center justify-center rounded border bg-gray-100 text-xl"
-              >
-                +
-              </Link> */}
+           
             </div>
 
             {/* <FieldForm

@@ -1,4 +1,6 @@
 "use client";
+import SearchvehicleType from './SearchvehicleType';
+import VehicleTypePop from './VehicleTypePop';
 import CartTable from './CartTable';
 import MaterialInfo from './MaterialInfo';
 import { FaPlus } from "react-icons/fa6";
@@ -548,7 +550,27 @@ useEffect(()=>{
                 }}
               />
 
-              <FormField
+<div className="flex items-center">
+              <div className="flex-1">
+                <FormField
+                  control={form.control}
+                  name="vehicleType"
+                  render={({ field }) => (
+                    <SearchvehicleType
+                      nameValue="vehicleType"
+                      items="items"
+                      form={form}
+                      field={field}
+                      label="Vehicle Type"
+                    />
+                  )}
+                />
+              </div>
+              <VehicleTypePop />
+           
+            </div>
+
+              {/* <FormField
                 control={form.control}
                 name="vehicleType"
                 render={({ field }) => {
@@ -568,6 +590,9 @@ useEffect(()=>{
                   );
                 }}
               />
+               */}
+
+<div className='hidden'>
 
 
  <FormField
@@ -661,6 +686,8 @@ useEffect(()=>{
                   );
                 }}
               />
+
+</div>
 
           </div>
 </div>
