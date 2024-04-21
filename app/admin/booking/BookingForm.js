@@ -1,5 +1,6 @@
 "use client";
 import SearchvehicleType from './SearchvehicleType';
+// import SearchvehicleType from './SearchvehicleType';
 import VehicleTypePop from './VehicleTypePop';
 import CartTable from './CartTable';
 import MaterialInfo from './MaterialInfo';
