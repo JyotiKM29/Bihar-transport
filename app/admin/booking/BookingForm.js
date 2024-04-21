@@ -184,7 +184,7 @@ export default function ProfileForm() {
   
 
   const totalAdditionalCharges = form.getValues('totalAdditionalCharges')
-    const totalAdditionalChargeTax = form.getValues('totalAdditionalChargeTax')
+    const totalAdditionalChargeTax = form.watch('totalAdditionalChargeTax' ,0)
 
 
   function calPartyBhara(PartyBhara) {
