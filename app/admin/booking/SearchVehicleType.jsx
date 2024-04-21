@@ -10,7 +10,7 @@ import { Input } from "../../components/ui/input";
 import { UserContext } from "../../context/UserContextProvider";
 import { useToast } from "../../components/ui/use-toast";
 
-const SearchvehicleType = ({ form, field, label , items,nameValue  }) => {
+const SearchVehicleType = ({ form, field, label , items,nameValue  }) => {
   const { user } = useContext(UserContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
@@ -123,4 +123,4 @@ const SearchvehicleType = ({ form, field, label , items,nameValue  }) => {
   );
 };
 
-export default SearchvehicleType;
+export default SearchVehicleType;

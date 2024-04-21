@@ -102,8 +102,9 @@ const MaterialInfo = ({ form, nameValue }) => {
 
   useEffect (()=>{
 
-    if(GSTType === "FCM"){
+    if(GSTType === "RCM"){
       form.setValue(`${nameValue}[${items.length}].GSTPercentage`, 0.0)
+      // form.setValue(`${nameValue}[${items.length}].GSTType`, "RCM")
     }
 
   },[GSTType])
@@ -513,7 +514,39 @@ const MaterialInfo = ({ form, nameValue }) => {
               </>
             )}
 
+            
             <FormField
+              control={form.control}
+              name={`${nameValue}[${items.length}].GSTType`}
+              render={({ field }) => {
+                return (
+                  <FormItem className="flex items-center justify-center gap-4">
+                    <FormLabel className="text-nowrap text-sm lg:text-base">
+                      GST Type:
+                    </FormLabel>
+                    <div className="flex flex-1 flex-col">
+                      <FormControl>
+                        <select {...field}>
+                          <option value="">Select GST Type</option>
+                          <option value="RCM">RCM</option>
+                          <option value="FCM">FCM</option>
+                        </select>
+                      </FormControl>
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                );
+              }}
+            />
+
+            {form.watch(`${nameValue}[${items.length}].GSTType`) === 'RCM' ?
+
+            (<>
+            
+            <p className='bg-orange-100 text-center font-light p-1'> if you select RCM , GST percentage is 0%</p>
+            </>) :
+             (
+              <FormField
               control={form.control}
               name={`${nameValue}[${items.length}].GSTPercentage`}
               render={({ field }) => {
@@ -543,29 +576,9 @@ const MaterialInfo = ({ form, nameValue }) => {
                 );
               }}
             />
-            <FormField
-              control={form.control}
-              name={`${nameValue}[${items.length}].GSTType`}
-              render={({ field }) => {
-                return (
-                  <FormItem className="flex items-center justify-center gap-4">
-                    <FormLabel className="text-nowrap text-sm lg:text-base">
-                      GST Type:
-                    </FormLabel>
-                    <div className="flex flex-1 flex-col">
-                      <FormControl>
-                        <select {...field}>
-                          <option value="">Select GST Type</option>
-                          <option value="RCM">RCM</option>
-                          <option value="FCM">FCM</option>
-                        </select>
-                      </FormControl>
-                      <FormMessage />
-                    </div>
-                  </FormItem>
-                );
-              }}
-            />
+            )}
+
+
 
             <FieldForm
               form={form}
