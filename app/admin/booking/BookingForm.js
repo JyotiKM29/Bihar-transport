@@ -1,6 +1,5 @@
 "use client";
-import SearchvehicleType from './SearchvehicleType';
-// import SearchvehicleType from './SearchvehicleType';
+import SearchVehicleType from './SearchVehicleType'
 import VehicleTypePop from './VehicleTypePop';
 import CartTable from './CartTable';
 import MaterialInfo from './MaterialInfo';
@@ -557,7 +556,7 @@ useEffect(()=>{
                   control={form.control}
                   name="vehicleType"
                   render={({ field }) => (
-                    <SearchvehicleType
+                    <SearchVehicleType
                       nameValue="vehicleType"
                       items="items"
                       form={form}
