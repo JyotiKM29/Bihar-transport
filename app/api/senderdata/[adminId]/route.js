@@ -1,6 +1,7 @@
 import connectDB from "../../../middleware/connectDB";
 import user from "../../../models/usermodel";
 import consigee from "../../../models/consigermodel";
+import ledger from "../../../models/accounting/ledgerModel";
 
 export async function GET(req, context) {
   try {
@@ -8,13 +9,18 @@ export async function GET(req, context) {
     console.log("yes");
     const { params } = context;
 
-      const admin = await user.findOne({ $and: [{ _id: params.adminId }, {$or:[{isAdmin:true},{isOwner:true}]}]});
+    const admin = await user.findOne({
+      $and: [
+        { _id: params.adminId },
+        { $or: [{ isAdmin: true }, { isOwner: true }] },
+      ],
+    });
 
-    console.log(admin);
+    // console.log(admin);
     if (admin) {
       // Create a new booking
 
-      const newdata = await consigee.find();
+      const newdata = await ledger.find({}, { basicInfo: 1 });
       return Response.json(
         {
           newdata,
