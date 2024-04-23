@@ -280,7 +280,7 @@ export default function ColumnHeader() {
           <div className="text-center">
             <p>Party Bhara</p>
             <p>& </p>
-            <p> Payment liabilities </p>
+            <p> Payment Term </p>
           </div>
         ),
         cell: ({ row }) => (
