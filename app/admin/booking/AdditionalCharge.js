@@ -216,7 +216,7 @@ setTotalCost(calculatedTotalCost);
               form={form}
               name={`${nameValue}[${charges.length}].rate`}
               label="Rate"
-              type="number"
+              type="text"
             />
             <FieldForm
               form={form}

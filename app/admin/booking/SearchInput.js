@@ -22,14 +22,13 @@ const SearchInput = ({ form, field, personName }) => {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
       const result = await res.json();
+      console.log("data: ", result);
       
 
       if (result && Array.isArray(result.newdata)) {
         const results = result.newdata.filter((booking) => {
-          const consignorNameToSearch =
-            booking.type === "personal"
-              ? booking.personal?.consignorName
-              : booking.company?.consignorName;
+          const consignorNameToSearch = booking.basicInfo.accountName;
+           
 
           return (
             value &&
@@ -39,6 +38,7 @@ const SearchInput = ({ form, field, personName }) => {
         });
 
         setSearchResult(results.slice(0, 5));
+        console.log("here: ", result);
       } else {
         console.log("Person not found");
         if (personName === "consignorName") {
@@ -101,56 +101,37 @@ const SearchInput = ({ form, field, personName }) => {
                   
                   setSearchResult([]);
                   setSearchTerm("");
+                
                   if (personName === "consignorName") {
-                    if (result?.type === "company") {
-                      setInputValue(result?.company?.consignorName);
-                      form.setValue(
-                        "consignorMobileNumber",
-                        result?.company?.officeNo,
-                      );
-                      form.setValue(
-                        "consignorName",
-                        result?.company?.consignorName,
-                      );
-                    } else if (result?.type === "personal") {
-                      setInputValue(result.personal.consignorName);
-                      form.setValue(
-                        "consignorMobileNumber",
-                        result.personal.contactNo,
-                      );
-                      form.setValue(
-                        "consignorName",
-                        result.personal.consignorName,
-                      );
-                    }
+                    setInputValue(result?.basicInfo?.accountName);
+                    form.setValue(
+                      "consignorMobileNumber",
+                      result?.basicInfo?.contactNo,
+                    );
+                    form.setValue(
+                      "consignorName",
+                      result?.basicInfo?.accountName,
+                    );
+                      
                   } else {
-                    if (result?.type === "company") {
-                      setInputValue(result?.company?.consignorName);
-                      form.setValue(
-                        "consigneeMobileNumber",
-                        result?.company?.officeNo,
-                      );
-                      form.setValue(
-                        "consigneeName",
-                        result?.company?.consignorName,
-                      );
-                    } else if (result?.type === "personal") {
-                      setInputValue(result.personal.consignorName);
-                      form.setValue(
-                        "consigneeMobileNumber",
-                        result.personal.contactNo,
-                      );
-                      form.setValue(
-                        "consigneeName",
-                        result.personal.consignorName,
-                      );
-                    }
-                   
+                  
+                     setInputValue(result?.basicInfo?.accountName);
+                     form.setValue(
+                       "consigneeMobileNumber",
+                       result?.basicInfo?.contactNo,
+                     );
+                     form.setValue(
+                       "consigneeName",
+                       result?.basicInfo?.accountName,
+                     );
+                  
                   }
-                }}
+                
+                    }}
               >
-                {result?.type === "company" && result?.company.consignorName}
-                {result?.type === "personal" && result?.personal.consignorName}
+                {/* {result?.type === "company" && result?.company.consignorName}
+                {result?.type === "personal" && result?.personal.consignorName} */}
+                {result?.basicInfo?.accountName } ,  {result?.basicInfo?.contactNo} , {result?.basicInfo?.officeAddress}
               </div>
             ))}
         </div>
