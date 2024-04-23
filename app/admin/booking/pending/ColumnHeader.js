@@ -331,16 +331,16 @@ export default function ColumnHeader() {
                 </DropdownMenuItem>
 
                
-                {/* 
-                commented area because client asked 
+               
+              {/* //  commented area because client asked  */}
                 <DropdownMenuItem>
                 <Link 
-               href={`/admin/booking/sendInvoice/${row.original._id}`}
+               href={`/admin/booking/${row.original.orderNumber}`}
                 >
-                   Send Invoice
+                   Allocate Vehicle
                   </Link>
                 </DropdownMenuItem> 
-                */}
+                
                 <DropdownMenuItem>
                    <button onClick={()=>handleConfirm('Confirmed',`${row.original._id}` )}>Confirm Booking</button> 
                 </DropdownMenuItem>
