@@ -174,6 +174,7 @@ export default function ProfileForm() {
   const[allocateVehicle, setAllocateVehicle] = useState(false);
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
+  const [isloadin2, setIsLoading2] = useState();
 
   const { reset, ...form } = useForm({
     resolver: zodResolver(formSchema),
@@ -239,6 +240,7 @@ useEffect(()=>{
     console.log(value);
 
     setIsLoading(true);
+    setIsLoading2(true);
     try {
       if (allocateVehicle) {
         value.status = "Confirmed";
@@ -259,6 +261,7 @@ useEffect(()=>{
         if(allocateVehicle){
           console.log("hey", newResult.Booking.orderNumber)
           setIsLoading(false);
+           setIsLoading2(false);
          displayToast(
           "Successfully Booked,Ok",
           "✅",
@@ -278,11 +281,13 @@ useEffect(()=>{
         console.error("Error:", newResult.message);
         displayToast("Error", "❌", newResult.message);
         setIsLoading(false);
+         setIsLoading2(false);
       }
     } catch (error) {
       console.error("Error:", error);
       displayToast("Error while sending data", "❌", newResult.message);
       setIsLoading(false);
+       setIsLoading2(false);
     }
   }
 
@@ -388,6 +393,8 @@ useEffect(()=>{
                 }}
               />
 
+</div>
+<div className='rounded-xl shadow-md grid grid-cols-2 space-x-6 space-y-1 border py-1 px-3'  >
 
 <div className=" flex items-center gap-0">
 <FormField
@@ -501,8 +508,8 @@ useEffect(()=>{
 
 
 
+       {/* </div> */}
        </div>
-       
 
            
        <div className='rounded-xl shadow-md grid grid-cols-1  space-x-6 space-y-2 border py-1 px-3'  >
@@ -565,8 +572,13 @@ useEffect(()=>{
                     />
                   )}
                 />
-              </div>
+                    </div>
               <VehicleTypePop />
+
+
+                    
+
+                    
            
             </div>
 
