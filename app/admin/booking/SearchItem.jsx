@@ -86,7 +86,7 @@ const SearchItem = ({ form, field, label , items,nameValue  }) => {
                 // setEdit(true);
               }}
             >
-              {searchTerm}  ( not found)
+              {searchTerm} ( not found)
             </div>
           )}
           {searchResult &&
@@ -104,6 +104,8 @@ const SearchItem = ({ form, field, label , items,nameValue  }) => {
 
                   form.setValue(`${nameValue}[${items.length}].material`, result?.name);
                   form.setValue(`${nameValue}[${items.length}].hsnNo`, result?.hsnNo);
+                  form.setValue(`${nameValue}[${items.length}].quantityUnit`, result?.quantityUnit);
+                  form.setValue(`${nameValue}[${items.length}].GSTPercentage`, result?.GSTPercentage);
                   
                   setSearchResult([]);
                   setSearchTerm("");

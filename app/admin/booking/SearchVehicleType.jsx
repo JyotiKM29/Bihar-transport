@@ -10,7 +10,7 @@ import { Input } from "../../components/ui/input";
 import { UserContext } from "../../context/UserContextProvider";
 import { useToast } from "../../components/ui/use-toast";
 
-const SearchVehicleType = ({ form, field, label , items,nameValue  }) => {
+const SearchVehicleType = ({ form, field, label  }) => {
   const { user } = useContext(UserContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
@@ -19,15 +19,15 @@ const SearchVehicleType = ({ form, field, label , items,nameValue  }) => {
 
   async function fetchData(value) {
     try {
-      const res = await fetch(`/api/getProduct/${user._id}`);
+      const res = await fetch(`/api/type/get/${user._id}`);
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
       const result = await res.json();
       console.log("result my love", result);
 
-      if (result && Array.isArray(result.data)) {
-        const results = result.data.filter((item) => {
+      if (result && Array.isArray(result)) {
+        const results = result.filter((item) => {
             return (
                 value &&
                 item.name &&
@@ -98,23 +98,23 @@ const SearchVehicleType = ({ form, field, label , items,nameValue  }) => {
                 className="w-full cursor-pointer px-3 py-2 hover:bg-slate-200"
                 onClick={() => {
 
-                    if(result?.name){
+                   
                         setInputValue(result?.name)
                       
 
-                  form.setValue(`${nameValue}[${items.length}].material`, result?.name);
-                  form.setValue(`${nameValue}[${items.length}].hsnNo`, result?.hsnNo);
+                  form.setValue("vehicleType", result?.name);
+                  form.setValue("vehicleLength", result?.length);
+                  form.setValue("WeightCapacity", result?.weight);
+                  form.setValue("vehicleLengthUnit", result?.lengthUnit);
+                  form.setValue("WeightCapacityUnit", result?.weightUnit);
                   
                   setSearchResult([]);
                   setSearchTerm("");
-                    }else{
-
-                        displayToast("Can't set ledger ", "❌" ,'ledger not found')
-                    }
+                   
                    
                 }}
               >
-                {result.name}
+                {result.name} , {result.length}{result.lengthUnit} , {result.weight}{result.weightUnit} , {result.capacity}
               </div>
             ))}
         </div>

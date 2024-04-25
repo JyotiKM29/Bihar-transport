@@ -10,7 +10,7 @@ import {
 import { Input } from "../../components/ui/input"
 
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { Button } from "../../components/ui/button";
 import { UserContext } from "../../context/UserContextProvider";
@@ -28,28 +28,68 @@ import {
 import * as z from "zod";
 
 const formSchema = z.object({
-    vehicleType: z.string(),
-    noOfVehicle: z.coerce.number(),
-    customNoOfVehicle: z.number().optional(),
-    vehicleLength:  z.string(),
-    vehicleCapacity: z.string(),
+  name :z.string(),
+  length:z.coerce.number(),
+
+  lengthUnit:z.string(),
+  width:z.coerce.number(),
+  widthUnit:z.string(),
+  height:z.coerce.number(),
+  heightUnit:z.string(),
+  weight:z.coerce.number(),
+  weightUnit:z.string(),
+  capacity:z.string(),
+  adminId:z.string(),
+
+
+
 })
 
 const VehicleTypePop = () => {
     const initialFormState = {
-        vehicleType: undefined,
-        noOfVehicle: undefined,
-        customNoOfVehicle: undefined,
-        vehicleLength:  undefined,
-        vehicleCapacity: undefined,
+      name: undefined,
+      length: undefined,
+      lengthUnit: undefined,
+      width: undefined,
+      widthUnit: undefined,
+      height: undefined,
+      heightUnit: undefined,
+      weight: undefined,
+      weightUnit: undefined,
+      capacity: undefined,
+      adminId: "",
       };
     
 
       const [loading, setLoading] = useState(false);
       const { toast } = useToast();
       const { user } = useContext(UserContext);
-    
+      const [unitsData, setUnitsData] = useState([]);
       const userId = user?._id;
+
+      
+    useEffect(() => {
+        fetchUnits(); // Initial fetch when component mounts
+    }, []);
+
+    const fetchUnits = async () => {
+        // Fetch units data from API
+        try {
+            const response = await fetch(`/api/getunits/${userId}`, {
+                method: "GET",
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            setUnitsData(data.data);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+      
       // user id
     
       const { reset, ...form } = useForm({
@@ -67,14 +107,15 @@ const VehicleTypePop = () => {
     
       async function MyHandleSubmit(value) {
         console.log("hey");
+        
+        value.userId = userId;
         console.log(value);
-    
         setLoading(true);
     
         try {
           setLoading(true);
     
-          const response = await fetch("/api/addproduct", {
+          const response = await fetch("/api/type/create", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -85,7 +126,7 @@ const VehicleTypePop = () => {
           const result = await response.json();
     
           if (response.ok) {
-            displayToast("Product Added Successfully", "✅");
+            displayToast("Product Added Successfully", "✅" );
           } else {
             console.error("Error:", result.message);
             displayToast("Failed to add product", "❌", result.message);
@@ -100,12 +141,13 @@ const VehicleTypePop = () => {
 
       
   return (
-     <Dialog>
+    
+     <Dialog >
     <DialogTrigger asChild>
       <Button variant="outline"> + </Button>
     </DialogTrigger>
-    <DialogContent >
-    <div className="h-full w-full rounded-3xl bg-white px-6 py-4 ">
+    <DialogContent className='w-[80vw]' >
+    <div className="h-full w-full rounded-3xl  bg-white ">
       <h2 className="font-semiBold text-center mt-12 text-3xl lg:mt-4 text-orange-800 lg:font-medium">
         Add a New Vehicle Type:
       </h2>
@@ -115,12 +157,12 @@ const VehicleTypePop = () => {
           onSubmit={form.handleSubmit(MyHandleSubmit)}
           className="flex flex-col "
         >
-        <div className="flex flex-col  gap-1 px-4 ">
+        <div className="grid    px-4 ">
 
        
           <FormField
             control={form.control}
-            name="vehicleType"
+            name="name"
             render={({ field }) => {
               return (
                 <FormItem className="flex items-center justify-center gap-4">
@@ -137,26 +179,39 @@ const VehicleTypePop = () => {
               );
             }}
           />
+              <FormField
+                control={form.control}
+                name="capacity"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                      Capacity :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input type="text" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
 
-
+<div className="flex w-full items-center gap-0">
  <FormField
             control={form.control}
-            name="noOfVehicle"
+            name="length"
             render={({ field }) => {
               return (
                 <FormItem className="flex items-center justify-center gap-4">
                   <FormLabel className="text-nowrap text-sm lg:text-base">
-                    No of Vehicle :
+                    Length:
                   </FormLabel>
                   <div className="flex flex-1 flex-col">
                     <FormControl>
-                      <select {...field}>
-                        <option value="">Select No of Vehicle</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="others">Others</option>
-                      </select>
+                    <Input type="number" {...field}  className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"/>
                     </FormControl>
                     <FormMessage />
                   </div>
@@ -165,42 +220,30 @@ const VehicleTypePop = () => {
             }}
           />
 
-          {form.watch("noOfVehicle") === "others" && (
-            <FormField
-              control={form.control}
-              name="customNoOfVehicle"
-              render={({ field }) => {
-                return (
-                  <FormItem className="flex items-center justify-center gap-4">
-                    <FormLabel className="text-nowrap text-sm lg:text-base">
-                      Specify No of Vehicle :
-                    </FormLabel>
-                    <div className="flex flex-1 flex-col">
-                      <FormControl>
-                        <Input type="number" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </div>
-                  </FormItem>
-                );
-              }}
-            />
-          )}
+       
 
 
           <FormField
                 control={form.control}
-                name="vehicleLength"
+                name="lengthUnit"
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        {" "}
-                        Vehicle Length:
-                      </FormLabel>
+                    
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                        <select
+                            {...field}
+                            className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                          >
+                            <option value=""> Select Quantity Unit</option>
+                            {Array.isArray(unitsData) &&
+                              unitsData.map((unit) => (
+                                <option key={unit.name} value={unit.name}>
+                                  {unit.name}
+                                </option>
+                              ))}
+                          </select>
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -208,21 +251,22 @@ const VehicleTypePop = () => {
                   );
                 }}
               />
-
+              </div>
+ <div className="flex w-full items-center gap-0">
 
 <FormField
                 control={form.control}
-                name="vehicleCapacity"
+                name="width"
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
                       <FormLabel className="text-nowrap text-sm lg:text-base">
                         {" "}
-                        Vehicle Weight Capacity:
+                        Width :
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <Input type="text" {...field} />
+                          <Input type="number" {...field} className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]" />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -231,20 +275,147 @@ const VehicleTypePop = () => {
                 }}
               />
 
-         
-         
-           </div>
-           <div className="flex justify-start ml-4 w-full">
+<FormField
+                control={form.control}
+                name="widthUnit"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                 
+                      <div className="flex flex-1 flex-col">
+                      <select
+                            {...field}
+                            className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                          >
+                            <option value=""> Select Quantity Unit</option>
+                            {Array.isArray(unitsData) &&
+                              unitsData.map((unit) => (
+                                <option key={unit.name} value={unit.name}>
+                                  {unit.name}
+                                </option>
+                              ))}
+                          </select>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+              </div>
+               <div className="flex w-full items-center gap-0">
 
-          
-          <Button type="submit" className='text-lg w-full mt-10 px-20 py-6 bg-orange-700 hover:bg-orange-800'>
+<FormField
+                control={form.control}
+                name="height"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        {" "}
+                        Height :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input type="number" {...field} className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]" />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+
+<FormField
+                control={form.control}
+                name="heightUnit"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                     
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                        <select
+                            {...field}
+                            className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                          >
+                            <option value=""> Select Quantity Unit</option>
+                            {Array.isArray(unitsData) &&
+                              unitsData.map((unit) => (
+                                <option key={unit.name} value={unit.name}>
+                                  {unit.name}
+                                </option>
+                              ))}
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+                </div>
+ <div className="flex w-full items-center gap-0">
+<FormField
+                control={form.control}
+                name="weight"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        {" "}
+                        Weight :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input type="number" {...field}   className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"/>
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+
+<FormField
+                control={form.control}
+                name="weightUnit"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                    
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                        <select
+                            {...field}
+                            className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                          >
+                            <option value=""> Select Quantity Unit</option>
+                            {Array.isArray(unitsData) &&
+                              unitsData.map((unit) => (
+                                <option key={unit.name} value={unit.name}>
+                                  {unit.name}
+                                </option>
+                              ))}
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+         
+         </div> 
+         <Button type="submit" className='text-lg w-full mt-10 px-20 py-6 bg-orange-700 hover:bg-orange-800'>
           {loading ? "Adding..." : "Add Vehicle Type"}</Button>
-          </div>
+           </div>
+          
         </form>
       </Form>
     </div>
     </DialogContent>
   </Dialog>
+  
   )
 }
 

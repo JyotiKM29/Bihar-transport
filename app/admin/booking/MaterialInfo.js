@@ -543,7 +543,7 @@ const MaterialInfo = ({ form, nameValue }) => {
 
             (<>
             
-            <p className='bg-orange-100 text-center font-light p-1'> if you select RCM , GST percentage is 0%</p>
+            <p className='bg-orange-100 text-center font-light p-1'>if you select RCM , GST percentage is 0%</p>
             </>) :
              (
               <FormField
