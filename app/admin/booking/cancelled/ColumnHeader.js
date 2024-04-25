@@ -226,7 +226,7 @@ export default function ColumnHeader() {
 
         header: (
           <div className="text-center">
-            <p>Veh. Req</p>
+            <p>Vehicle Details</p>
             <p>&</p>
             <p>No. of Veh.</p>
           </div>
