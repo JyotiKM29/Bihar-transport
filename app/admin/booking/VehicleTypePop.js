@@ -1,17 +1,11 @@
 'use client'
-
-
 import {
   Dialog,
   DialogContent,
-
   DialogTrigger,
 } from "../../components/ui/dialog"
 import { Input } from "../../components/ui/input"
-
-
 import React, { useContext, useEffect, useState } from "react";
-
 import { Button } from "../../components/ui/button";
 import { UserContext } from "../../context/UserContextProvider";
 import { useToast } from "../../components/ui/use-toast";
@@ -27,10 +21,11 @@ import {
 } from "../../components/ui/form";
 import * as z from "zod";
 
+
+
 const formSchema = z.object({
   name :z.string(),
   length:z.coerce.number(),
-
   lengthUnit:z.string(),
   width:z.coerce.number(),
   widthUnit:z.string(),
@@ -40,9 +35,6 @@ const formSchema = z.object({
   weightUnit:z.string(),
   capacity:z.string(),
   adminId:z.string(),
-
-
-
 })
 
 const VehicleTypePop = () => {
@@ -58,7 +50,7 @@ const VehicleTypePop = () => {
       weightUnit: undefined,
       capacity: undefined,
       adminId: "",
-      };
+      }; 
     
 
       const [loading, setLoading] = useState(false);
@@ -69,7 +61,7 @@ const VehicleTypePop = () => {
 
       
     useEffect(() => {
-        fetchUnits(); // Initial fetch when component mounts
+        fetchUnits(); 
     }, []);
 
     const fetchUnits = async () => {
@@ -90,8 +82,7 @@ const VehicleTypePop = () => {
         }
     };
       
-      // user id
-    
+      
       const { reset, ...form } = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: initialFormState,
@@ -108,7 +99,7 @@ const VehicleTypePop = () => {
       async function MyHandleSubmit(value) {
         console.log("hey");
         
-        value.userId = userId;
+        value.adminId = userId;
         console.log(value);
         setLoading(true);
     

@@ -106,7 +106,9 @@ const SearchItem = ({ form, field, label , items,nameValue  }) => {
                   form.setValue(`${nameValue}[${items.length}].hsnNo`, result?.hsnNo);
                   form.setValue(`${nameValue}[${items.length}].quantityUnit`, result?.quantityUnit);
                   form.setValue(`${nameValue}[${items.length}].GSTPercentage`, result?.GSTPercentage);
+
                   
+                   
                   setSearchResult([]);
                   setSearchTerm("");
                     }else{

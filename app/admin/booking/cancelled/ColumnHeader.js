@@ -303,7 +303,6 @@ export default function ColumnHeader() {
           <div className="text-center">
             <p>&nbsp;</p>
             <p>Reason Of</p>
-
             <p> Cancelation </p>
           </div>
         ),

@@ -1,5 +1,6 @@
 "use client";
 
+import CancellationPop from './../CancellationPop';
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "../../../components/ui/button";
 import { Checkbox } from "../../../components/ui/checkbox";
@@ -325,9 +326,10 @@ export default function ColumnHeader() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link href={`/admin/booking/cancel/${row.original._id}`}>
+                  {/* <Link href={`/admin/booking/cancel/${row.original._id}`}>
                     Cancel Booking
-                  </Link>
+                  </Link> */}
+                  <CancellationPop />
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

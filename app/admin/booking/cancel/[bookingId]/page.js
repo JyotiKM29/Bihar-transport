@@ -6,8 +6,8 @@ import { UserContext } from "../../../../context/UserContextProvider";
 import { useToast } from "../../../../components/ui/use-toast";
 
 const EmailSend = ({ params }) => {
-  const [email, setEmail] = useState("");
-  const [userName, setUserName] = useState("");
+  
+  const [reason ,setReason] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const { user } = useContext(UserContext);
@@ -24,7 +24,7 @@ const EmailSend = ({ params }) => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(userId,email,userName,bookingId);
+    console.log(userId,reason,bookingId);
 
     try {
         setLoading(true);
@@ -32,7 +32,7 @@ const EmailSend = ({ params }) => {
           JSON.stringify({
             adminId: userId,
             bookingId,
-            reason: email,
+            reason,
           }),
         );
 
@@ -41,7 +41,7 @@ const EmailSend = ({ params }) => {
         body: JSON.stringify({
           adminId: userId,
           bookingId,
-          reason:email,
+          reason,
         }),
       });
 
@@ -63,22 +63,21 @@ const EmailSend = ({ params }) => {
 
   return (
     <div className="h-full w-full rounded-3xl bg-white px-6 py-4  shadow-sm">
-      <h2 className="font-semiBold mt-12 text-3xl lg:mt-0 text-blue-600 "> Why do you want to cancel the booking ? : </h2>
+      <h2 className="font-semiBold mt-12 text-3xl lg:mt-0 text-blue-600 "> Why do you want to cancel the booking ?  </h2>
 
       <form
         onSubmit={handleSubmit}
         className="mt-8 flex w-full flex-col items-start justify-between self-end rounded-xl border px-6 py-4  shadow-md"
       >
         <label className="w-full items-center gap-4 md:flex">
-          {/* <p className="font-semiBold text-nowrap text-lg">User Name :</p> */}
           <Input
             label="Reason"
             placeholder="Enter your Reason"
             id="email"
             type="text"
             required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
             className="w-full"
           />
         </label>

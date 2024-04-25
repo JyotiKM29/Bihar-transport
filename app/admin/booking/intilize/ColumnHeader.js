@@ -1,5 +1,6 @@
 "use client";
 
+import CancellationPop from './../CancellationPop';
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "../../../components/ui/button";
 import { Checkbox } from "../../../components/ui/checkbox";
@@ -17,14 +18,13 @@ import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 
-
 export default function ColumnHeader() {
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
 
   const [columns, setColumns] = useState([]);
- 
+
   const displayToast = (title, action, description = "") => {
     toast({
       title,
@@ -33,17 +33,15 @@ export default function ColumnHeader() {
     });
   };
 
-
   useEffect(() => {
-    async function handleConfirm(status , bookingId){
+    async function handleConfirm(status, bookingId) {
       const requestData = {
-        "adminId": user?._id,
-        "status": status,
-        "bookingId": bookingId
+        adminId: user?._id,
+        status: status,
+        bookingId: bookingId,
       };
 
       try {
-
         const response = await fetch("/api/bookingstatus", {
           method: "POST",
           headers: {
@@ -52,13 +50,12 @@ export default function ColumnHeader() {
           body: JSON.stringify(requestData),
         });
         console.log(response);
-      
+
         const newResult = await response.json();
-      
+
         if (response.ok) {
           setIsLoading(false);
           displayToast(`Successfully ${status}`, "✅");
-         
         } else {
           console.error("Error:", newResult.message);
           displayToast("Error", "❌", newResult.message);
@@ -69,7 +66,6 @@ export default function ColumnHeader() {
         displayToast("Error while sending data", "❌", newResult.message);
         setIsLoading(false);
       }
-
     }
 
     setColumns([
@@ -139,7 +135,6 @@ export default function ColumnHeader() {
             <p>&nbsp;</p>
             <p>&nbsp;</p>
             <p>Consignor</p>
-     
           </div>
         ),
         cell: ({ row }) => (
@@ -161,7 +156,6 @@ export default function ColumnHeader() {
             <p>&nbsp;</p>
             <p>&nbsp;</p>
             <p>CONSIGNEE</p>
-           
           </div>
         ),
         cell: ({ row }) => (
@@ -211,7 +205,6 @@ export default function ColumnHeader() {
             <p>&nbsp;</p>
             <p>&nbsp;</p>
             <p>Material Details</p>
-        
           </div>
         ),
         cell: ({ row }) => (
@@ -237,7 +230,6 @@ export default function ColumnHeader() {
             <p>&nbsp;</p>
             <p>&nbsp;</p>
             <p>Vehicle Details</p>
-         
           </div>
         ),
         cell: ({ row }) => (
@@ -286,7 +278,8 @@ export default function ColumnHeader() {
             <p>{row.original.paymentTerm}</p>
           </div>
         ),
-      },  {
+      },
+      {
         id: "actions",
         enableHiding: false,
         cell: ({ row }) => {
@@ -307,28 +300,24 @@ export default function ColumnHeader() {
                   </Link>
                 </DropdownMenuItem>
 
-               
                 <DropdownMenuItem>
-                <Link 
-               href={`/admin/booking/sendInvoice/${row.original._id}`}
-                >
-                   Send Invoice
+                  <Link href={`/admin/booking/sendInvoice/${row.original._id}`}>
+                    Send Invoice
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  
-<Link 
-href={`/admin/booking/dispatedVehicle/${row.original._id}`}
->
-   Dispatch Vehicle
-  </Link> 
+                  <Link
+                    href={`/admin/booking/dispatedVehicle/${row.original._id}`}
+                  >
+                    Dispatch Vehicle
+                  </Link>
                 </DropdownMenuItem>
-                 <DropdownMenuItem>
-                <Link 
-href={`/admin/booking/cancel/${row.original._id}`}
- >
-    cancel Booking
-   </Link>
+                <DropdownMenuItem>
+                  {/* <Link href={`/admin/booking/cancel/${row.original._id}`}>
+                    cancel Booking
+                  </Link> */}
+               
+                  <CancellationPop bookingId={`${row.original._id}`} />
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -340,6 +329,3 @@ href={`/admin/booking/cancel/${row.original._id}`}
 
   return columns;
 }
-
-
-
