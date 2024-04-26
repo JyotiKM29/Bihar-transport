@@ -104,8 +104,8 @@ const SearchItem = ({ form, field, label , items,nameValue  }) => {
 
                   form.setValue(`${nameValue}[${items.length}].material`, result?.name);
                   form.setValue(`${nameValue}[${items.length}].hsnNo`, result?.hsnNo);
-                  form.setValue(`${nameValue}[${items.length}].quantityUnit`, result?.quantityUnit);
-                  form.setValue(`${nameValue}[${items.length}].GSTPercentage`, result?.GSTPercentage);
+                  form.setValue(`${nameValue}[${items.length}].quantityUnit`, result?.weightType);
+                  form.setValue(`${nameValue}[${items.length}].GSTPercentage`, result?.tax);
 
                   
                    
