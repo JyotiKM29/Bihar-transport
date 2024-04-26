@@ -16,6 +16,8 @@ export async function POST(req, res) {
     } = await req.json();
     await connectDB();
 
+    console.log(" weightType :", weightType);
+
     const admin = await user.find({
       $and: [
         { _id: adminId },
@@ -47,6 +49,7 @@ export async function POST(req, res) {
       tax,
       conversionFactor,
     });
+    console.log("product : ", product);
 
     await product.save();
     console.log("no problem");

@@ -24,8 +24,8 @@ function Booking() {
   const searchParams = useSearchParams();
   let tabValue = searchParams.get("tab");
   if (!tabValue) tabValue = "newbooking";
-  console.log('search :',tabValue);
-  console.log('selectedTab :',selectedTab);
+  // console.log('search :',tabValue);
+  // console.log('selectedTab :',selectedTab);
 
   useEffect(() => {
    
