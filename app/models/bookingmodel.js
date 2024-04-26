@@ -212,6 +212,7 @@ const bookingSchema = new mongoose.Schema(
       invoiceRemarks: { type: String },
 
     },
+    reasonToCancel:{type:String},
     invoice: [],
     dispatch: {
       isDispatched: { type: Boolean, default: false },

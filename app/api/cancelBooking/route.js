@@ -21,23 +21,20 @@ export async function POST(req, res) {
             return Response.json({ message: "Booking not found" }, { status: 404 });
         }
 
+        if(!reason){
+            return Response.json({ message: "reason is compulsory to cancel a booking" }, { status: 400 });
+        }
+
         if (booking.status === "Cancelled") {
             return Response.json({ message: "Booking already cancelled" }, { status: 400 });
         }
 
         booking.status = "Cancelled";
        
-        const data = {
-            name: admin.name,
-            id: admin._id,
-            reason: reason,
-            action: "Cancelled",
-            date: Date.now()
-        };
+        booking.reasonToCancel = reason;
 
-        booking.updatedBy.push(data);
-
-        await booking.save();
+        const nedata = await booking.save();
+        console.log(nedata);
 
 
         return Response.json({ message: "Booking cancelled successfully" }, { status: 200 });

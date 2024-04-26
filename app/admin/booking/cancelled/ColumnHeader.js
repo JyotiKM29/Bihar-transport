@@ -308,7 +308,7 @@ export default function ColumnHeader() {
         ),
         cell: ({ row }) => (
           <div>
-            <p>{row.original.totalBillingAmount}</p>
+            <p>{row.original.reasonToCancel}</p>
           </div>
         ),
       },
