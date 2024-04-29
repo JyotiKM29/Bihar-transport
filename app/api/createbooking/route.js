@@ -98,8 +98,9 @@ export async function POST(req, res) {
       // }
 
       // Save the new booking
+       const savedBooking = await newBooking.save();
       
-      const update = await ledger.findOne({ "basicInfo.contax`ctNo": consignorMobileNumber });
+      const update = await ledger.findOne({ "basicInfo.contactNo": consignorMobileNumber });
       console.log(update);
       if (update) {
 
@@ -117,8 +118,10 @@ export async function POST(req, res) {
         console.log("Ledger Updated:", update);
       }
       
+      // console.log("not saved till now")
          await update.save();
-        const savedBooking = await newBooking.save();
+        console.log("saved")
+       
 
 
       // // console.log(updatedVehicle);
