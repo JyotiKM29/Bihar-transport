@@ -1,6 +1,6 @@
 "use client";
-import ProductList from './ProductAdd';
-import UnitAdd from './UnitAdd';
+import ProductList from "./ProductAdd";
+import UnitAdd from "./UnitAdd";
 import React, { useContext, useEffect, useState } from "react";
 import FieldForm from "../component/FieldForm";
 import { Button } from "../../components/ui/button";
@@ -22,31 +22,31 @@ const MaterialInfo = ({ form, nameValue }) => {
   const [showForm, setShowForm] = useState(false);
   const [unitsData, setUnitsData] = useState([]);
 
-    useEffect(() => {
-        fetchUnits(); // Initial fetch when component mounts
-    }, []);
+  useEffect(() => {
+    fetchUnits(); // Initial fetch when component mounts
+  }, []);
 
-    const fetchUnits = async () => {
-        // Fetch units data from API
-        try {
-            const response = await fetch(`/api/getunits/${userId}`, {
-                method: "GET",
-            });
+  const fetchUnits = async () => {
+    // Fetch units data from API
+    try {
+      const response = await fetch(`/api/getunits/${userId}`, {
+        method: "GET",
+      });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
-            const data = await response.json();
-            setUnitsData(data.data);
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
+      const data = await response.json();
+      setUnitsData(data.data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
-    const handleUnitAdded = () => {
-        fetchUnits(); // Fetch units data after a new unit is added
-    };
+  const handleUnitAdded = () => {
+    fetchUnits(); // Fetch units data after a new unit is added
+  };
 
   const { user } = useContext(UserContext);
 
@@ -84,7 +84,7 @@ const MaterialInfo = ({ form, nameValue }) => {
       amount = parseFloat(rate) * parseFloat(quantity);
     }
     form.setValue(`${nameValue}[${items.length}].basicAmount`, amount);
-    console.log("GST oercentage",GSTPercentage )
+    console.log("GST oercentage", GSTPercentage);
     const total = parseFloat(amount) * Number(GSTPercentage);
     return parseFloat(amount + total);
   }
@@ -92,23 +92,19 @@ const MaterialInfo = ({ form, nameValue }) => {
   const rateMultiple = form.watch(`${nameValue}[${items.length}].rateAsPer`);
   const quantity = form.watch(`${nameValue}[${items.length}].quantity`);
   const rate = form.watch(`${nameValue}[${items.length}].rate`);
-  
+  const qtyUnit = form.watch(`${nameValue}[${items.length}].quantityUnit`, "");
 
   const GSTPercentage = form.watch(
     `${nameValue}[${items.length}].GSTPercentage`,
-  );
-  const GSTType = form.watch(
-    `${nameValue}[${items.length}].GSTType`,
-  );
+  '');
+  const GSTType = form.watch(`${nameValue}[${items.length}].GSTType`);
 
-  useEffect (()=>{
-
-    if(GSTType === "RCM"){
-      form.setValue(`${nameValue}[${items.length}].GSTPercentage`, 0.0)
+  useEffect(() => {
+    if (GSTType === "RCM") {
+      form.setValue(`${nameValue}[${items.length}].GSTPercentage`, GSTPercentage);
       // form.setValue(`${nameValue}[${items.length}].GSTType`, "RCM")
     }
-
-  },[GSTType])
+  }, [GSTType]);
 
   useEffect(() => {
     if (!isNaN(parseFloat(rate)) && !isNaN(parseFloat(quantity))) {
@@ -117,9 +113,15 @@ const MaterialInfo = ({ form, nameValue }) => {
       form.setValue(`${nameValue}[${items.length}].amount`, result);
     }
     calPartyBhara();
-  }, [rate, quantity, items.length, nameValue, GSTPercentage, rateMultiple ,GSTType]);
-
-  
+  }, [
+    rate,
+    quantity,
+    items.length,
+    nameValue,
+    GSTPercentage,
+    rateMultiple,
+    GSTType,
+  ]);
 
   function handleAdditionalItem() {
     const newItem = {
@@ -212,7 +214,6 @@ const MaterialInfo = ({ form, nameValue }) => {
                 />
               </div>
               <ProductList />
-           
             </div>
 
             {/* <FieldForm
@@ -254,12 +255,12 @@ const MaterialInfo = ({ form, nameValue }) => {
                     <FormItem className="flex flex-1 items-center justify-center ">
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                        
-                           <select
+                          <select
                             {...field}
                             className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
                           >
-                            <option value=""> Select Quantity Unit</option>
+                            {/* <option value=""> Select Quantity Unit</option> */}
+                            <option key={qtyUnit}>{qtyUnit ? qtyUnit : "Select Quantity Unit"}  </option>
                             {Array.isArray(unitsData) &&
                               unitsData.map((unit) => (
                                 <option key={unit.name} value={unit.name}>
@@ -267,7 +268,6 @@ const MaterialInfo = ({ form, nameValue }) => {
                                 </option>
                               ))}
                           </select>
-                          
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -275,9 +275,9 @@ const MaterialInfo = ({ form, nameValue }) => {
                   );
                 }}
               />
-             
-             <UnitAdd onUnitAdded={handleUnitAdded} />
-             
+
+              <UnitAdd onUnitAdded={handleUnitAdded} />
+
               {/* <Link
                 href="/admin/settings/newunit"
                 className="flex h-10 w-10 items-center justify-center rounded border bg-gray-100 text-xl"
@@ -306,7 +306,7 @@ const MaterialInfo = ({ form, nameValue }) => {
 
                         <FormMessage />
                       </div>
-                    </FormItem> 
+                    </FormItem>
                   );
                 }}
               />
@@ -318,14 +318,12 @@ const MaterialInfo = ({ form, nameValue }) => {
                     <FormItem className="flex flex-1 items-center justify-center ">
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                        <select
-                                {...field}
-                                className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
-                              >
-                                <option value="">
-                                  Select Charged Weight Unit
-                                </option>
-                                <option value=""> Quantity Unit</option>
+                          <select
+                            {...field}
+                            className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                          >
+                            <option value="">Select Charged Weight Unit</option>
+                            
                             <option value="Box"> Box</option>
                             <option value="Bag"> Bag</option>
                             <option value="Basta"> Basta</option>
@@ -338,8 +336,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                             <option value="Roll"> Roll</option>
                             <option value="TIN"> TIN</option>
                             <option value="TON"> TON</option> 
-                         
-                              </select>
+                          </select>
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -365,7 +362,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                             {...field}
                             className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
                           >
-                            <option value=""> Select Rate as Rate</option>
+                            <option value="fixed"> fixed </option>
 
                             <option value="Actual weight">Actual weight</option>
                             <option value="charged weight">
@@ -373,7 +370,7 @@ const MaterialInfo = ({ form, nameValue }) => {
                             </option>
                             <option value="quantity">quantity</option>
                             <option value="distance ">distance </option>
-                            <option value="fixed"> fixed </option>
+
                             <option value="Per trip"> Per trip</option>
                             <option value="per kg"> per kg </option>
                             <option value="Per ton">Per ton</option>
@@ -489,20 +486,19 @@ const MaterialInfo = ({ form, nameValue }) => {
                                 <option value="">
                                   Select Charged Weight Unit
                                 </option>
-                                <option value=""> Quantity Unit</option>
-                            <option value="Box"> Box</option>
-                            <option value="Bag"> Bag</option>
-                            <option value="Basta"> Basta</option>
-                            <option value="Bundle"> Bundle</option>
-                            <option value="Carton"> Carton</option>
-                            <option value="Carate"> Carate</option>
-                            <option value="Drums"> Drums</option>
-                            <option value="Loose"> Loose</option>
-                            <option value="Packet"> Packet</option>
-                            <option value="Roll"> Roll</option>
-                            <option value="TIN"> TIN</option>
-                            <option value="TON"> TON</option> 
-                         
+                            
+                                <option value="Box"> Box</option>
+                                <option value="Bag"> Bag</option>
+                                <option value="Basta"> Basta</option>
+                                <option value="Bundle"> Bundle</option>
+                                <option value="Carton"> Carton</option>
+                                <option value="Carate"> Carate</option>
+                                <option value="Drums"> Drums</option>
+                                <option value="Loose"> Loose</option>
+                                <option value="Packet"> Packet</option>
+                                <option value="Roll"> Roll</option>
+                                <option value="TIN"> TIN</option>
+                                <option value="TON"> TON</option> 
                               </select>
                             </FormControl>
                             <FormMessage />
@@ -515,7 +511,6 @@ const MaterialInfo = ({ form, nameValue }) => {
               </>
             )}
 
-            
             <FormField
               control={form.control}
               name={`${nameValue}[${items.length}].GSTType`}
@@ -540,46 +535,42 @@ const MaterialInfo = ({ form, nameValue }) => {
               }}
             />
 
-            {form.watch(`${nameValue}[${items.length}].GSTType`) === 'RCM' ?
-
-            (<>
-            
-            <p className='bg-orange-100 text-center font-light p-1'>if you select RCM , GST percentage is 0%</p>
-            </>) :
-             (
+            {form.watch(`${nameValue}[${items.length}].GSTType`) === "RCM" ? (
+              <>
+                <p className="bg-orange-100 p-1 text-center font-light">
+                  if you select RCM , GST percentage is 0%
+                </p>
+              </>
+            ) : (
               <FormField
-              control={form.control}
-              name={`${nameValue}[${items.length}].GSTPercentage`}
-              render={({ field }) => {
-               
-               
-                return (
-                  <FormItem className="flex items-center justify-center gap-4">
-                    <FormLabel className="text-nowrap text-sm lg:text-base">
-                      GST Percentage:
-                    </FormLabel>
-                    <div className="flex flex-1 flex-col">
-                      <FormControl>
-                        <select {...field}>
-                          <option value="">Select Tax Percentage</option>
+                control={form.control}
+                name={`${nameValue}[${items.length}].GSTPercentage`}
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        GST Percentage:
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <select {...field}>
+                            <option value={GSTPercentage}>{GSTPercentage ? `${GSTPercentage * 100}%` : "Select GST percentage" }</option>
 
-                          <option value="0.0">0%</option>
-                          <option value="0.02">2%</option>
-                          <option value="0.05 ">5%</option>
-                          <option value="0.08 ">8%</option>
-                          <option value="0.12 ">12%</option>
-                          <option value="0.18">18%</option>
-                        </select>
-                      </FormControl>
-                      <FormMessage />
-                    </div>
-                  </FormItem>
-                );
-              }}
-            />
+                            <option value="0.0">0%</option>
+                            <option value="0.02">2%</option>
+                            <option value="0.05 ">5%</option>
+                            <option value="0.08 ">8%</option>
+                            <option value="0.12 ">12%</option>
+                            <option value="0.18">18%</option>
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
             )}
-
-
 
             <FieldForm
               form={form}

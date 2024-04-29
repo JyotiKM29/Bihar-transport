@@ -25,7 +25,8 @@ import Link from "next/link";
 import { FiPlus } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import AdditionalChargers from './AdditionalCharge';
-import { UserContext } from '@/app/context/UserContextProvider';
+import { UserContext } from '../../context/UserContextProvider';
+
 
 const chargersSchema = z.object({
   name: z.string({ message: "Field is required" }),
