@@ -136,7 +136,7 @@ const bookingSchema = new mongoose.Schema(
     orderNumber: { type: String, required: true },
     date: { type: Date, default: Date.now },
     vehicleRequiredDate: { type: Date, default: Date.now },
-    bookingType: { type: String },  
+    bookingType: { type: String },
     consignorName: { type: String, required: true },
     consignorMobileNumber: { type: Number },
     loadingPoints: [
@@ -152,14 +152,19 @@ const bookingSchema = new mongoose.Schema(
       },
     ],
     way: { type: String, default: "One Way" },
-    itemsList:[itemlistSchema],
+    itemsList: {
+      itemList: [itemlistSchema], // Array of items
+      totalActualWeight: { type: Number, default: 0 }, // Total actual weight
+      totalAmount: { type: Number, default: 0 }, // Total amount
+    },
+
     vehicleType: { type: String, required: true },
-    noOfVehicle:{type:Number},
+    noOfVehicle: { type: Number },
     partyBhara: { type: Number, default: 0 },
-    totalAdditionalChargeTax: {type:Number, default:0},
-    totalAdditionalCharges : {type:Number, default:0},
-    totalBillingAmount: {type:Number, default:0},
-    vehicleType: {type:String},
+    totalAdditionalChargeTax: { type: Number, default: 0 },
+    totalAdditionalCharges: { type: Number, default: 0 },
+    totalBillingAmount: { type: Number, default: 0 },
+    vehicleType: { type: String },
     hideBhara: { type: Boolean, default: false },
     paymentLiability: {
       type: String,
@@ -173,7 +178,7 @@ const bookingSchema = new mongoose.Schema(
     advanceAmount: { type: Number },
     balanceAmount: { type: Number },
     GSTPercentage: { type: Number },
-    GSTType: { type: String, enum:["RCM", "FCM"] },
+    GSTType: { type: String, enum: ["RCM", "FCM"] },
     payMode: { type: String },
     transactionId: { type: String },
     remarks: { type: String },
@@ -207,16 +212,14 @@ const bookingSchema = new mongoose.Schema(
     ],
     invoiceStatus: { type: Boolean, default: false },
     generatedInvoice: {
-
-      invoiceNumber: { type: Number, unique: true},
+      invoiceNumber: { type: Number, unique: true },
       invoiceDate: { type: Date },
       invoiceAmount: { type: Number },
       invoiceGST: { type: Number },
       invoiceTotal: { type: Number },
       invoiceRemarks: { type: String },
-
     },
-    reasonToCancel:{type:String},
+    reasonToCancel: { type: String },
     invoice: [],
     dispatch: {
       isDispatched: { type: Boolean, default: false },
@@ -240,6 +243,7 @@ const bookingSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
 
 // Add 2dsphere index to enable spatial queries
 bookingSchema.index({ "loadingPoints.location.coordinates": "2dsphere" });
