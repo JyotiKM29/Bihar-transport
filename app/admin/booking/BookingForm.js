@@ -176,6 +176,7 @@ export default function ProfileForm() {
 
   const route = useRouter();
   const[allocateVehicle, setAllocateVehicle] = useState(false);
+  const [materialItems , setMaterialItems] = useState([]);
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const [isloadin2, setIsLoading2] = useState();
@@ -186,10 +187,37 @@ export default function ProfileForm() {
     resolver: zodResolver(formSchema),
     defaultValues: initialFormState,
   });
-  const CartItems = form.getValues("itemsList");
+  let CartItems = form.watch("itemsList");
   const advanceAmount = form.watch("advanceAmount", 0);
   const additionalCharges = form.watch("additionalCharges.totalCharge");
   const PartyBhara = form.watch('partyBhara',0);
+
+  // ==========
+
+  useEffect(()=>{
+    console.log("cart")
+ setMaterialItems(CartItems)
+  },[CartItems])
+
+  //  materialItems = CartItems;
+
+  function onAddItem ( newItem){
+   setMaterialItems([...materialItems ,newItem ])
+  }
+
+  function onDeleteItem (hsnRemove){
+  //   console.log('delete', hsnRemove)
+  //  setMaterialItems((prevItems)=> prevItems.filter((item)=>
+  //     item.hsnNo !== hsnRemove
+  // ))
+    const updatedItems = materialItems.filter((item)=>
+    item.hsnNo !== hsnRemove
+  )
+
+  form.setValue("itemsList", updatedItems);
+  }
+
+  //======
   
 
   const totalAdditionalCharges = form.getValues('totalAdditionalCharges')
@@ -306,6 +334,11 @@ console.log(newResult);
       description,
     });
   };
+
+
+  // const handleDeleteItem = (hsnRemove) => {
+  //   CartItems = CartItems.filter((item) => item.hsnNo !== hsnRemove); 
+  //  };
 
   return (
     <div className="max-w max-h  bg-white px-0 ">
@@ -521,7 +554,7 @@ console.log(newResult);
 
            
        <div className='rounded-xl shadow-md grid grid-cols-1  space-x-6 space-y-2 border py-1 px-3'  >
-       <CartTable items={CartItems}/>
+       <CartTable items={materialItems} onDelete={onDeleteItem}/>
       
 </div>     
 

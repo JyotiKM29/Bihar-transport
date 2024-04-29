@@ -157,9 +157,10 @@ const MaterialInfo = ({ form, nameValue }) => {
       basicAmount: form.getValues(`${nameValue}[${items.length}].basicAmount`),
     };
 
-    console.log(newItem);
+    // console.log(newItem);
+    const updatedItem = form.getValues("itemsList") && [];
 
-    setItems([...items, newItem]);
+    setItems([...updatedItem, newItem]);
     form.setValue(nameValue, [...items, newItem]);
     setShowForm(false);
   }
