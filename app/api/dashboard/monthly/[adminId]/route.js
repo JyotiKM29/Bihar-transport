@@ -22,7 +22,7 @@ export async function GET(req, context) {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentYearStartDate = new Date(currentYear, 0, 1); 
-      const currentYearEndDate = new Date(currentYear, 11, 31); 
+    const currentYearEndDate = new Date(currentYear, 11, 31); 
       
 
   
@@ -93,7 +93,9 @@ export async function GET(req, context) {
       monthlyData.push(data);
     }
 
-    log(monthlyData);
+    // log(monthlyData);
+
+    console.log(monthlyData[0].totalOrder);
 
     return Response.json({ monthlyData, adminId });
   } catch (error) {

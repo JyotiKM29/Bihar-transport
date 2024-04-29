@@ -239,7 +239,7 @@ export const WeekBarChartOptions = {
   },
 
   xaxis: {
-    categories: ["Mon", "Tues", "Thur", "Fri ", "Sat", "Sun"],
+    categories: ["Mon", "Tues", "Wed", "Thur", "Fri ", "Sat", "Sun"],
 
     position: "top",
     axisBorder: {
@@ -471,15 +471,15 @@ export const YearBarChartOptions = {
 export const WeekStackColumnSeries = [
   {
     name: "Pending Order",
-    data: [44, 55, 41, 67, 22, 43],
+    data: [44, 55, 41, 51, 67, 22, 43],
   },
   {
     name: "Dispatch Order",
-    data: [13, 23, 20, 8, 13, 27],
+    data: [13, 23, 20, 22, 8, 13, 27],
   },
   {
     name: "Loory in campus",
-    data: [11, 17, 15, 15, 21, 14],
+    data: [11, 17, 15, 20, 15, 21, 14],
   },
 
 ];
@@ -525,7 +525,7 @@ export const WeekStackColumnOptions = {
   },
   xaxis: {
   
-    categories: ["Mon", "Tues", "Thur", "Fri ", "Sat", "Sun"],
+    categories: ["Mon", "Tues", "Wed", "Thur", "Fri ", "Sat", "Sun"],
   },
   legend: {
     position: "bottom",
@@ -770,7 +770,7 @@ export const  WeekStackRowOptions = {
     }
   },
   xaxis: {
-    categories: ["Mon", "Tues", "Thur", "Fri ", "Sat", "Sun"],
+    categories: ["Mon", "Tues", "Wed", "Thur", "Fri ", "Sat", "Sun"],
     labels: {
       formatter: function (val) {
         return val + "K";
