@@ -21,14 +21,14 @@ const startDate = new Date();
 const numberOfDays = 15;
 const dateLabels = generateDateLabels(startDate, numberOfDays);
 
-export const WeekAreaChartSeries = [
+export const WeekAreaChartSeries = (orderDelivered,pendingPOD)=> [
   {
     name: "Order Delivery",
-    data: [3, 6, 8, 10, 5, 9, 11],
+    data: orderDelivered,
   },
   {
     name: "Pending Delivery",
-    data: [7, 3, 5, 6, 4, 8, 9],
+    data: pendingPOD,
   },
 ];
 
@@ -206,12 +206,13 @@ export const YearAreaChartOptions = {
   },
 };
 
-export const WeekBarChartSeries = [
+export const WeekBarChartSeries = (InflationData) => [
   {
     name: "Inflation",
-    data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6],
+    data: InflationData,
   },
 ];
+
 
 export const WeekBarChartOptions = {
   chart: {
@@ -468,21 +469,21 @@ export const YearBarChartOptions = {
   },
 };
 
-export const WeekStackColumnSeries = [
+export const WeekStackColumnSeries = (pendingData, dispatchData, looryData) => [
   {
     name: "Pending Order",
-    data: [44, 55, 41, 51, 67, 22, 43],
+    data: pendingData,
   },
   {
     name: "Dispatch Order",
-    data: [13, 23, 20, 22, 8, 13, 27],
+    data: dispatchData,
   },
   {
     name: "Loory in campus",
-    data: [11, 17, 15, 20, 15, 21, 14],
+    data: looryData,
   },
-
 ];
+
 
 export const WeekStackColumnOptions = {
   chart: {
@@ -720,18 +721,18 @@ export const YearStackColumnOptions = {
   },
 };
 
-export const WeekStackRowSeries = [
+export const WeekStackRowSeries = (orderDelivered,pendingPOD,inTransit) => [
   {
     name: "Order Delivered",
-    data: [44, 55, 41, 37, 22, 43, 21],
+    data: orderDelivered,
   },
   {
     name: "Pending POD",
-    data: [53, 32, 33, 52, 13, 43, 32],
+    data: pendingPOD,
   },
   {
     name: "In Transit",
-    data: [12, 17, 11, 9, 15, 11, 20],
+    data: inTransit,
   },
 
 ];
