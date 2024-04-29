@@ -136,7 +136,7 @@ const bookingSchema = new mongoose.Schema(
     orderNumber: { type: String, required: true },
     date: { type: Date, default: Date.now },
     vehicleRequiredDate: { type: Date, default: Date.now },
-    bookingType: { type: String },
+    bookingType: { type: String },  
     consignorName: { type: String, required: true },
     consignorMobileNumber: { type: Number },
     loadingPoints: [
@@ -156,6 +156,10 @@ const bookingSchema = new mongoose.Schema(
     vehicleType: { type: String, required: true },
     noOfVehicle:{type:Number},
     partyBhara: { type: Number, default: 0 },
+    totalAdditionalChargeTax: {type:Number, default:0},
+    totalAdditionalCharges : {type:Number, default:0},
+    totalBillingAmount: {type:Number, default:0},
+    vehicleType: {type:String},
     hideBhara: { type: Boolean, default: false },
     paymentLiability: {
       type: String,

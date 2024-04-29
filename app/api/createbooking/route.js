@@ -29,6 +29,8 @@ export async function POST(req, res) {
       billTo,
       paymentTerm,
       totalBillingAmount,
+      totalAdditionalCharges,
+      totalAdditionalChargeTax,
       payMode,
       transactionId,
       remarks,
@@ -74,6 +76,8 @@ export async function POST(req, res) {
         paymentTerm,
         // advanceAmount,
         totalBillingAmount,
+        totalAdditionalCharges,
+        totalAdditionalChargeTax,
         payMode,
         transactionId,
         remarks,
@@ -99,6 +103,7 @@ export async function POST(req, res) {
 
       // Save the new booking
        const savedBooking = await newBooking.save();
+      console.log(savedBooking);
       
       const update = await ledger.findOne({ "basicInfo.contactNo": consignorMobileNumber });
       console.log(update);
