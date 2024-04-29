@@ -28,8 +28,7 @@ export async function POST(req, res) {
       paymentLiability,
       billTo,
       paymentTerm,
-      advanceAmount,
-      balanceAmount,
+      totalBillingAmount,
       payMode,
       transactionId,
       remarks,
@@ -73,8 +72,8 @@ export async function POST(req, res) {
         paymentLiability,
         billTo,
         paymentTerm,
-        advanceAmount,
-        balanceAmount,
+        // advanceAmount,
+        totalBillingAmount,
         payMode,
         transactionId,
         remarks,
@@ -99,13 +98,14 @@ export async function POST(req, res) {
       // }
 
       // Save the new booking
-      const savedBooking = await newBooking.save();
-      const update = await ledger.findOne({ "basicInfo.contactNo": consignorMobileNumber });
+      
+      const update = await ledger.findOne({ "basicInfo.contax`ctNo": consignorMobileNumber });
+      log(update);
       if (update) {
 
-        update.totalAmount += balanceAmount;
-        if (update.advanceAmount) update.advanceAmount += advanceAmount;
-        else update.advanceAmount = advanceAmount;
+        update.totalAmount += totalBillingAmount;
+        // if (update.advanceAmount) update.advanceAmount += advanceAmount;
+        // else update.advanceAmount = advanceAmount;
         
        if(!update.booking )
           update.booking = [];
@@ -113,10 +113,12 @@ export async function POST(req, res) {
             savedBooking,
           });
         
-        await update.save();
+        
         console.log("Ledger Updated:", update);
       }
       
+         await update.save();
+        const savedBooking = await newBooking.save();
 
 
       // // console.log(updatedVehicle);

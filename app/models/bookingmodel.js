@@ -133,7 +133,7 @@ const additionalChargeSchema = mongoose.Schema({
 
 const bookingSchema = new mongoose.Schema(
   {
-    orderNumber: { type: Number, required: true },
+    orderNumber: { type: String, required: true },
     date: { type: Date, default: Date.now },
     vehicleRequiredDate: { type: Date, default: Date.now },
     bookingType: { type: String },
