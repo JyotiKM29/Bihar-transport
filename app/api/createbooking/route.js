@@ -49,6 +49,23 @@ export async function POST(req, res) {
       );
     }
 
+    function calculateTotalActualWeight(itemsList) {
+  let totalActualWeight = 0;
+  itemsList.forEach(item => {
+    totalActualWeight += item.actualWeight || 0;
+  });
+  return totalActualWeight;
+}
+
+// Define a function to calculate the total amount
+function calculateTotalAmount(itemsList) {
+  let totalAmount = 0;
+  itemsList.forEach(item => {
+    totalAmount += item.amount || 0;
+  });
+  return totalAmount;
+}
+
     const admin = await user.findOne({ _id: adminId });
     if (admin && (admin.isAdmin || admin.isOwner)) {
    
@@ -67,7 +84,11 @@ export async function POST(req, res) {
         unloadingPoints,
         way,
         noOfVehicle: noOfVehicle === "others" ? customNoOfVehicle : noOfVehicle,
-        itemsList,
+        itemsList: {
+    itemList: itemsList, // Assuming itemsList is an array of items
+    totalActualWeight: calculateTotalActualWeight(itemsList),
+    totalAmount: calculateTotalAmount(itemsList),
+  },
         vehicleType,
         partyBhara,
         hideBhara,
