@@ -31,7 +31,9 @@ const currentWeekEndDate = new Date(
   currentWeekStartDate.getFullYear(),
   currentWeekStartDate.getMonth(),
   currentWeekStartDate.getDate() - 7
-      );
+    );
+    
+
       
 
       console.log("Current Week Start Date:", currentWeekStartDate.toISOString());
@@ -39,12 +41,24 @@ const currentWeekEndDate = new Date(
       
 
     // Loop through the current week and the previous 5 weeks
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 7; i++) {
       const startDate = new Date(
         currentWeekStartDate.getFullYear(),
         currentWeekStartDate.getMonth(),
         currentWeekStartDate.getDate() - 7 * i,
       );
+
+      // const dayOfWeek = startDate.getDay();
+      // Array to map the day number to its name
+      const days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
 
       // Calculate end date for the current iteration
       const endDate = new Date(
@@ -82,27 +96,42 @@ const currentWeekEndDate = new Date(
 
       // Update data based on the fetched data
       data.totalOrder = booking.length;
-      data.pendingOrder = booking.filter((item) => item.status === "Pending").length;
-      data.orderDispatched = booking.filter((item) => item.status === "Dispatched").length;
+      data.pendingOrder = booking.filter(
+        (item) => item.status === "Pending",
+      ).length;
+      data.orderDispatched = booking.filter(
+        (item) => item.status === "Dispatched",
+      ).length;
       data.lorryInCampus = dvehicle.length;
-      data.inTransit = booking.filter((item) => item.status === "In Transit").length;
-      data.orderDelivered = booking.filter((item) => item.status === "delevered").length;
-      data.pendingPOD = booking.filter((item) => item.status === "Pending").length;
+      data.inTransit = booking.filter(
+        (item) => item.status === "In Transit",
+      ).length;
+      data.orderDelivered = booking.filter(
+        (item) => item.status === "delevered",
+      ).length;
+      data.pendingPOD = booking.filter(
+        (item) => item.status === "Pending",
+      ).length;
       data.invoice = booking.filter((item) => item.status === "Pending").length;
-      data.pendingInvoice = booking.filter((item) => item.invoiceStatus === false).length;
+      data.pendingInvoice = booking.filter(
+        (item) => item.invoiceStatus === false,
+      ).length;
 
       booking.forEach((item) => {
         data.advanceAmount += item.advanceAmount;
         data.totalAmount += item.balanceAmount + item.advanceAmount;
       });
 
-      data.advanceBooking = booking.filter((item) => item.paymentTerm === "Advance").length;
+      data.advanceBooking = booking.filter(
+        (item) => item.paymentTerm === "Advance",
+      ).length;
 
       // Add the data for the current week to the weeklyData array
-      weeklyData.push(data);
+     weeklyData.push({ [days[i]]: data });
+
     }
 
-    log(weeklyData);
+    log(weeklyData[1].totalOrder);
 
     return Response.json({ weeklyData, adminId });
     // return Response.json({ data, adminId }, { status: 200 });
