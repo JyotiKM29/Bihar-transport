@@ -260,10 +260,10 @@ useEffect(()=>{
         },
         body: JSON.stringify(value),
       });
-    
+    console.log(response);
 
       const newResult = await response.json();
-
+console.log(newResult);
       if (response.ok) {
         if(allocateVehicle){
           console.log("hey", newResult.Booking.orderNumber)
