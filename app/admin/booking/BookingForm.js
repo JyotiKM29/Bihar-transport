@@ -19,12 +19,13 @@ import SearchInput from "./SearchInput";
 import * as z from "zod";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import { useToast } from "../../components/ui/use-toast";
 import Link from "next/link";
 import { FiPlus } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import AdditionalChargers from './AdditionalCharge';
+import { UserContext } from '@/app/context/UserContextProvider';
 
 const chargersSchema = z.object({
   name: z.string({ message: "Field is required" }),
@@ -177,6 +178,8 @@ export default function ProfileForm() {
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const [isloadin2, setIsLoading2] = useState();
+  const { user } = useContext(UserContext);
+
 
   const { reset, ...form } = useForm({
     resolver: zodResolver(formSchema),
@@ -239,8 +242,10 @@ useEffect(()=>{
     
 
     console.log("hey");
-    console.log(value);
+    
+    value.adminId = user._id;
 
+    console.log(value);
     setIsLoading(true);
     setIsLoading2(true);
     try {
