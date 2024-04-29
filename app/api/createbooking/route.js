@@ -142,7 +142,7 @@ export async function POST(req, res) {
 
     return Response.json(
       {
-        message: "Error adding booking ",
+        message: error.message,
         error: error.message,
       },
       { status: 404 },
