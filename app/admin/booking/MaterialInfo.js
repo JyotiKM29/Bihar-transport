@@ -84,6 +84,7 @@ const MaterialInfo = ({ form, nameValue }) => {
       amount = parseFloat(rate) * parseFloat(quantity);
     }
     form.setValue(`${nameValue}[${items.length}].basicAmount`, amount);
+    console.log("GST oercentage",GSTPercentage )
     const total = parseFloat(amount) * Number(GSTPercentage);
     return parseFloat(amount + total);
   }

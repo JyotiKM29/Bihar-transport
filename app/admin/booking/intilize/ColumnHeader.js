@@ -313,11 +313,11 @@ export default function ColumnHeader() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  {/* <Link href={`/admin/booking/cancel/${row.original._id}`}>
+                  <Link href={`/admin/booking/cancel/${row.original._id}`}>
                     cancel Booking
-                  </Link> */}
+                  </Link>
                
-                  <CancellationPop bookingId={`${row.original._id}`} />
+                  {/* <CancellationPop bookingId={`${row.original._id}`} /> */}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

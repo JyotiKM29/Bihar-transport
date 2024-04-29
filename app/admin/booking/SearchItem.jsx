@@ -24,7 +24,7 @@ const SearchItem = ({ form, field, label , items,nameValue  }) => {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
       const result = await res.json();
-      console.log("result my love", result);
+      // console.log("result my love", result);
 
       if (result && Array.isArray(result.data)) {
         const results = result.data.filter((item) => {
@@ -35,7 +35,7 @@ const SearchItem = ({ form, field, label , items,nameValue  }) => {
                 item.name.toLowerCase().includes(value.toLowerCase())
             );
         });
-        console.log("Filter data:", results);
+        // console.log("Filter data:", results);
 
         setSearchResult(results.slice(0, 5));
       } 
@@ -104,8 +104,10 @@ const SearchItem = ({ form, field, label , items,nameValue  }) => {
 
                   form.setValue(`${nameValue}[${items.length}].material`, result?.name);
                   form.setValue(`${nameValue}[${items.length}].hsnNo`, result?.hsnNo);
-                  form.setValue(`${nameValue}[${items.length}].quantityUnit`, result?.quantityUnit);
-                  form.setValue(`${nameValue}[${items.length}].GSTPercentage`, result?.GSTPercentage);
+                  form.setValue(`${nameValue}[${items.length}].quantityUnit`, result?.weightType);
+                 
+                  form.setValue(`${nameValue}[${items.length}].GSTPercentage`, result?.tax);
+                  console.log("tax --->", form.getValues(`${nameValue}[${items.length}].GSTPercentage`));
 
                   
                    

@@ -4,8 +4,19 @@ import productmodel from "../../models/productmodel";
 
 export async function POST(req, res) {
   try {
-    const { adminId, productName, hsnNo } = await req.json();
+    const {
+      adminId,
+      productName,
+      hsnNo,
+      packageGroup,
+      packageType,
+      weightType,
+      tax,
+      conversionFactor,
+    } = await req.json();
     await connectDB();
+
+    console.log(" weightType :", weightType);
 
     const admin = await user.find({
       $and: [
@@ -32,11 +43,17 @@ export async function POST(req, res) {
     const product = new productmodel({
       name: productName,
       hsnNo,
+      packageGroup,
+      packageType,
+      weightType,
+      tax,
+      conversionFactor,
     });
+    console.log("product : ", product);
 
     await product.save();
     console.log("no problem");
-// yhey 
+    // yhey
     return Response.json(
       { message: "Product added successfully" },
       { status: 200 },
