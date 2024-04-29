@@ -253,7 +253,7 @@ export default function ColumnHeader() {
         ),
       },
       {
-        accessorKey: "row.original.allotedVehicle[0].rateAsPer",
+        accessorKey: "row.original.itemsList[0].rateAsPer" || "row.orignal.itemsList.itemsList[0].rateAsPer",
 
         header: (
           <div className="text-center">
@@ -267,8 +267,7 @@ export default function ColumnHeader() {
             <p>{row.original.allotedVehicle[0]?.rateAsPer}</p>
 
             <p>
-              {row.original.allotedVehicle[0]?.rate} Per
-              {row.original.allotedVehicle[0]?.rateUnit}
+              {row.original.itemsList[0].rateAsPer || row.orignal.itemsList?.itemList[0]?.rateAsPer} Per {row.original.itemsList[0]?.rateUnit || row.original.itemsList.itemsList[0].rateUnit}
             </p>
           </div>
         ),

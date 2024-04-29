@@ -261,10 +261,10 @@ export default function ColumnHeader() {
           <div>
             <p>{row.original.allotedVehicle[0]?.rateAsPer}</p>
 
-            <p>
-              {row.original.allotedVehicle[0]?.rate} Per
-              {row.original.allotedVehicle[0]?.rateUnit}
-            </p>
+                  <p>
+  {row.original.itemsList && row.original.itemsList.length > 0 &&
+    `${row.original.itemsList[0]?.rateAsPer || row.original.itemsList?.[0]?.rateAsPer} Per ${row.original.itemsList[0]?.rateUnit || row.original.itemsList?.[0]?.rateUnit}`}
+</p>
           </div>
         ),
       },
