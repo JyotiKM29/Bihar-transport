@@ -100,7 +100,7 @@ export async function POST(req, res) {
       // Save the new booking
       
       const update = await ledger.findOne({ "basicInfo.contax`ctNo": consignorMobileNumber });
-      log(update);
+      console.log(update);
       if (update) {
 
         update.totalAmount += totalBillingAmount;
