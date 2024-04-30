@@ -13,7 +13,8 @@ const WeekData = () => {
 
    const [loading, setLoading] = useState(true);
    const { user } = useContext(UserContext);
-   const [data, setData] = useState(null);
+  const [data, setData] = useState(null);
+  const [amount, setAmount] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,6 +25,7 @@ const WeekData = () => {
 
         console.log("form : ", result.metrics);
         setData(result.metrics);
+        setAmount(result.amount);
         // Remove the console.log here
 
         if (response.ok) {
@@ -89,8 +91,9 @@ const WeekData = () => {
                   Total Amounts
                 </h2>
                 <div className=" flex flex-grow   flex-col justify-end ">
-                  <p className="text-lg xl:text-2xl">Received - 40K</p>
-                  <p className="text-lg xl:text-2xl  ">Balance - 90K</p>
+                  <p className="text-lg xl:text-2xl">Received - {parseFloat((amount.receivedAmount / 1000).toFixed(1))}K</p>
+                  <p className="text-lg xl:text-2xl  ">Pending - {parseFloat((amount.balanceAmount / 1000).toFixed(1))}K</p>
+                  <p className="text-lg xl:text-2xl  ">Total - {parseFloat((amount.totalAmount / 1000).toFixed(1))}K</p>
                 </div>
               </div>
             </div>
