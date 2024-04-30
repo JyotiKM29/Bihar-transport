@@ -64,6 +64,11 @@ export async function GET(req, context) {
       advanceBooking: [],
     };
 
+   
+    let totalAmount = 0;
+      let receivedAmount = 0;
+
+
     // Loop through the current week and the previous 5 weeks
     for (let i = 0; i < 7; i++) {
       const startDate = new Date(
@@ -87,6 +92,9 @@ export async function GET(req, context) {
         createdAt: { $gte: startDate, $lte: endDate },
       });
 
+
+     
+    
       // Initialize data object for the current week
       const data = {
         totalOrder: booking.length,
@@ -114,13 +122,39 @@ export async function GET(req, context) {
       Object.keys(data).forEach((key) => {
         metrics[key].push(data[key]);
       });
-    }
-
+    
     // Log the metrics
-    // log(metrics);
+    // console.log(metrics);
     console.log(metrics.totalOrder[5]);
 
-    return Response.json({ metrics, adminId });
+    
+
+     
+   booking.forEach(bookingItem => {
+    console.log("billling amount : ",bookingItem.totalBillingAmount);
+    if(bookingItem.totalBillingAmount)
+        totalAmount += bookingItem.totalBillingAmount;
+    else totalAmount += bookingItem.partyBhara;
+
+    
+    if (bookingItem.paymentHistory && bookingItem.paymentHistory.paidAmount) {
+      receivedAmount += bookingItem.paymentHistory.paidAmount;
+    }
+
+   });
+  }
+
+  let balanceAmount = totalAmount - receivedAmount;
+
+  const amount ={
+    balanceAmount,
+    totalAmount,
+    receivedAmount
+  }
+
+
+
+    return Response.json({ metrics, amount });
   } catch (error) {
     console.log(error);
     return Response.json({ message: error.message }, { status: 400 });
