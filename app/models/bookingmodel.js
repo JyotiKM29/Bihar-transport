@@ -131,6 +131,17 @@ const additionalChargeSchema = mongoose.Schema({
 });
 
 
+const itemsListSchema = new mongoose.Schema({
+  items: {
+    type: [itemlistSchema], // Array of items
+    default: [],
+  },
+  totalActualWeight: { type: Number, default: 0 }, // Total actual weight
+  totalAmount: { type: Number, default: 0 }, // Total amount
+});
+
+
+
 const bookingSchema = new mongoose.Schema(
   {
     orderNumber: { type: String, required: true },
@@ -152,11 +163,7 @@ const bookingSchema = new mongoose.Schema(
       },
     ],
     way: { type: String, default: "One Way" },
-    itemsList: {
-      itemList: [itemlistSchema], // Array of items
-      totalActualWeight: { type: Number, default: 0 }, // Total actual weight
-      totalAmount: { type: Number, default: 0 }, // Total amount
-    },
+    itemsList: itemsListSchema,
 
     vehicleType: { type: String, required: true },
     noOfVehicle: { type: Number },

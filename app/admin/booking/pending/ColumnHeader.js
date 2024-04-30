@@ -35,7 +35,10 @@ export default function ColumnHeader() {
 
 
   useEffect(() => {
-    async function handleConfirm(status , bookingId){
+    async function handleConfirm(status, bookingId, e) {
+      
+       e.preventDefault(); // Prevent the default action of the click event
+
       const requestData = {
         "adminId": user?._id,
         "status": status,
@@ -142,7 +145,6 @@ export default function ColumnHeader() {
             <p>&nbsp;</p>
             <p>&nbsp;</p>
             <p>CONSINGOR</p>
-     
           </div>
         ),
         cell: ({ row }) => (
@@ -164,7 +166,6 @@ export default function ColumnHeader() {
             <p>&nbsp;</p>
             <p>&nbsp;</p>
             <p>CONSIGNEE</p>
-           
           </div>
         ),
         cell: ({ row }) => (
@@ -214,20 +215,18 @@ export default function ColumnHeader() {
             <p>&nbsp;</p>
             <p>&nbsp;</p>
             <p>Material Details</p>
-        
           </div>
         ),
         cell: ({ row }) => (
           <div>
             <p>
-              {row.original.itemsList[0]?.material}({" "}
-              {row.original.itemsList[0]?.quantity}
-              {row.original.itemsList[0]?.quantityUnit} )
+              {row.original?.itemsList?.item[0].material} (
+              {row.original?.itemsList?.item[0]?.quantity}
+              {row.original?.itemsList?.item[0]?.quantityUnit})
             </p>
-
             <p>
-              {row.original.itemsList[0]?.actualWeight}
-              {row.original.itemsList[0]?.actualWeightUnit}
+              {row.original?.itemsList?.item[0]?.actualWeight}
+              {row.original?.itemsList?.item[0]?.actualWeightUnit}
             </p>
           </div>
         ),
@@ -237,11 +236,9 @@ export default function ColumnHeader() {
 
         header: (
           <div className="text-center">
-         
             <p>Vehicle Deatils</p>
             <p>&</p>
             <p>No. of Veh.</p>
-         
           </div>
         ),
         cell: ({ row }) => (
@@ -253,7 +250,9 @@ export default function ColumnHeader() {
         ),
       },
       {
-        accessorKey: "row.original.itemsList[0].rateAsPer" || "row.orignal.itemsList.itemsList[0].rateAsPer",
+        accessorKey:
+          "row.original.itemsList[0].rateAsPer" ||
+          "row.orignal.itemsList.itemsList[0].rateAsPer",
 
         header: (
           <div className="text-center">
@@ -265,9 +264,10 @@ export default function ColumnHeader() {
         cell: ({ row }) => (
           <div>
             <p>{row.original.allotedVehicle[0]?.rateAsPer}</p>
-
             <p>
-              {row.original.itemsList[0].rateAsPer || row.orignal.itemsList?.itemList[0]?.rateAsPer} Per {row.original.itemsList[0]?.rateUnit || row.original.itemsList.itemsList[0].rateUnit}
+              {row.original.itemsList &&
+                row.original.itemsList.length > 0 &&
+                `${row.original.itemsList[0]?.rateAsPer || row.original.itemsList?.[0]?.rateAsPer} Per ${row.original.itemsList[0]?.rateUnit || row.original.itemsList?.[0]?.rateUnit}`}
             </p>
           </div>
         ),
@@ -289,25 +289,24 @@ export default function ColumnHeader() {
             <p>{row.original.paymentLiability}</p>
           </div>
         ),
-      }, 
+      },
       {
         accessorKey: "totalBillingAmount",
 
         header: (
           <div className="text-center">
-           <p>&nbsp;</p>
+            <p>&nbsp;</p>
             <p>Total Billing</p>
-         
+
             <p> Amount </p>
           </div>
         ),
         cell: ({ row }) => (
           <div>
             <p>{row.original.totalBillingAmount}</p>
-         
           </div>
         ),
-      }, 
+      },
       {
         id: "actions",
         enableHiding: false,
@@ -329,26 +328,26 @@ export default function ColumnHeader() {
                   </Link>
                 </DropdownMenuItem>
 
-               
-               
-              {/* //  commented area because client asked  */}
+                {/* //  commented area because client asked  */}
                 <DropdownMenuItem>
-                <Link 
-               href={`/admin/booking/${row.original.orderNumber}`}
-                >
-                   Allocate Vehicle
+                  <Link href={`/admin/booking/${row.original.orderNumber}`}>
+                    Allocate Vehicle
                   </Link>
-                </DropdownMenuItem> 
-                
+                </DropdownMenuItem>
+
                 <DropdownMenuItem>
-                   <button onClick={()=>handleConfirm('Confirmed',`${row.original._id}` )}>Confirm Booking</button> 
+                  <button
+                    onClick={(e) =>
+                      handleConfirm("Confirmed", `${row.original._id}`, e)
+                    }
+                  >
+                    Confirm Booking
+                  </button>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                <Link 
-href={`/admin/booking/cancel/${row.original._id}`}
- >
-    Cancel Booking
-   </Link>
+                  <Link href={`/admin/booking/cancel/${row.original._id}`}>
+                    Cancel Booking
+                  </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

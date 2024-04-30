@@ -85,10 +85,10 @@ function calculateTotalAmount(itemsList) {
         way,
         noOfVehicle: noOfVehicle === "others" ? customNoOfVehicle : noOfVehicle,
         itemsList: {
-    itemList: itemsList, // Assuming itemsList is an array of items
-    totalActualWeight: calculateTotalActualWeight(itemsList),
-    totalAmount: calculateTotalAmount(itemsList),
-  },
+          items: itemsList,
+          totalActualWeight,
+          totalAmount,
+        },
         vehicleType,
         partyBhara,
         hideBhara,
