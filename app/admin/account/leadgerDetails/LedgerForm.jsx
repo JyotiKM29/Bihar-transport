@@ -44,7 +44,7 @@ const basicInfoSchema = z.object({
     legalName: z.string(),
     GSTINStatus: z.string(),
     principalPlaceOfBusiness: z.string(),
-    rating: z.string(),
+    rating: z.coerce.number(),
     remarks: z.string(),
     alert: z.coerce.boolean(),
   }),
