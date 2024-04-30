@@ -210,16 +210,15 @@ export default function ColumnHeader() {
           </div>
         ),
         cell: ({ row }) => (
-          <div>
+           <div>
             <p>
-              {row.original.itemsList[0]?.material}({" "}
-              {row.original.itemsList[0]?.quantity}
-              {row.original.itemsList[0]?.quantityUnit} )
+              {row.original?.itemsList?.item[0].material} (
+              {row.original?.itemsList?.item[0]?.quantity}
+              {row.original?.itemsList?.item[0]?.quantityUnit})
             </p>
-
             <p>
-              {row.original.itemsList[0]?.actualWeight}
-              {row.original.itemsList[0]?.actualWeightUnit}
+              {row.original?.itemsList?.item[0]?.actualWeight}
+              {row.original?.itemsList?.item[0]?.actualWeightUnit}
             </p>
           </div>
         ),
@@ -255,10 +254,10 @@ export default function ColumnHeader() {
         cell: ({ row }) => (
           <div>
             <p>{row.original.allotedVehicle[0]?.rateAsPer}</p>
-            <p>
-              {row.original.itemsList &&
-                row.original.itemsList.length > 0 &&
-                `${row.original.itemsList[0]?.rateAsPer || row.original.itemsList?.[0]?.rateAsPer} Per ${row.original.itemsList[0]?.rateUnit || row.original.itemsList?.[0]?.rateUnit}`}
+             <p>
+              {row.original.itemsList.item &&
+                row.original.itemsList.item.length > 0 &&
+                `${row.original.itemsList.item[0]?.rateAsPer || row.original.itemsList?.item[0]?.rateAsPer} Per ${row.original.itemsList.item[0]?.rateUnit || row.original.itemsList?.item[0]?.rateUnit}`}
             </p>
           </div>
         ),

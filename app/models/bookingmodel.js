@@ -132,7 +132,7 @@ const additionalChargeSchema = mongoose.Schema({
 
 
 const itemsListSchema = new mongoose.Schema({
-  items: {
+  item: {
     type: [itemlistSchema], // Array of items
     default: [],
   },
@@ -219,7 +219,7 @@ const bookingSchema = new mongoose.Schema(
     ],
     invoiceStatus: { type: Boolean, default: false },
     generatedInvoice: {
-      invoiceNumber: { type: Number, unique: true },
+      invoiceNumber: { type: Number , unique:true},
       invoiceDate: { type: Date },
       invoiceAmount: { type: Number },
       invoiceGST: { type: Number },
