@@ -71,7 +71,6 @@ export default function ColumnHeader() {
     }
 
     setColumns([
-      
       {
         id: "select",
         header: ({ table }) => (
@@ -135,7 +134,6 @@ export default function ColumnHeader() {
 
         header: (
           <div className="text-center">
-          
             <p>&nbsp;</p>
             <p>&nbsp;</p>
             <p>CONSIGNOR</p>
@@ -157,7 +155,6 @@ export default function ColumnHeader() {
 
         header: (
           <div className="text-center">
-         
             <p>&nbsp;</p>
             <p>&nbsp;</p>
             <p>CONSIGNEE</p>
@@ -210,7 +207,6 @@ export default function ColumnHeader() {
             <p>&nbsp;</p>
             <p>&nbsp;</p>
             <p>Material Details</p>
-         
           </div>
         ),
         cell: ({ row }) => (
@@ -257,11 +253,12 @@ export default function ColumnHeader() {
           </div>
         ),
         cell: ({ row }) => (
-           <div>
+          <div>
             <p>{row.original.allotedVehicle[0]?.rateAsPer}</p>
-
             <p>
-              {row.original.itemsList[0].rateAsPer || row.orignal.itemsList?.itemList[0]?.rateAsPer} Per {row.original.itemsList[0]?.rateUnit || row.original.itemsList.itemsList[0].rateUnit}
+              {row.original.itemsList &&
+                row.original.itemsList.length > 0 &&
+                `${row.original.itemsList[0]?.rateAsPer || row.original.itemsList?.[0]?.rateAsPer} Per ${row.original.itemsList[0]?.rateUnit || row.original.itemsList?.[0]?.rateUnit}`}
             </p>
           </div>
         ),
@@ -289,20 +286,19 @@ export default function ColumnHeader() {
 
         header: (
           <div className="text-center">
-           <p>&nbsp;</p>
+            <p>&nbsp;</p>
             <p>Total Billing</p>
-         
+
             <p> Amount </p>
           </div>
         ),
         cell: ({ row }) => (
           <div>
             <p>{row.original.totalBillingAmount}</p>
-         
           </div>
         ),
       },
-     {
+      {
         id: "actions",
         enableHiding: false,
         cell: ({ row }) => {
