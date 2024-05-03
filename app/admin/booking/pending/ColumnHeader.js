@@ -286,7 +286,7 @@ export default function ColumnHeader() {
           <div>
             <p>{row.original.partyBhara}</p>
             <hr />
-            <p>{row.original.paymentLiability}</p>
+            <p>{row.original.paymentTerm}</p>
           </div>
         ),
       },
