@@ -15,7 +15,7 @@ export async function GET(req,context) {
     if (admin && (admin.isAdmin || admin.isOwner)) {
       // Create a new booking
 
-      const data = await Booking.find();
+      const data = await Booking.find().sort({_id: -1});
       return Response.json(
         {
           data,
