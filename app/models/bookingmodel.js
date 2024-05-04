@@ -39,6 +39,17 @@ import mongoose from "mongoose";
 //   enabled: { type: Boolean, default: true },
 // });
 
+
+const locationSchema = new mongoose.Schema({
+  location: { type: String },
+  time: { type: String, default: () => new Date().toLocaleTimeString() },
+  date: { type: Date, default: Date.now },
+  updatedBy: {
+    adminId: { type: String },
+    name: { type: String },
+  }
+});
+
 const charge = new mongoose.Schema({
   name: { type: String, required: true },
   rate: { type: Number },
@@ -240,6 +251,9 @@ const bookingSchema = new mongoose.Schema(
       adminId: { type: String },
       date: { type: Date, default: Date.now },
     },
+
+    location: [locationSchema],
+
     updatedBy: [
       {
         name: { type: String },
