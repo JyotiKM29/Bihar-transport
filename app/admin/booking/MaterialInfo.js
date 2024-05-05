@@ -17,7 +17,7 @@ import { Input } from "../../components/ui/input";
 import { UserContext } from "../../context/UserContextProvider";
 
 
-const MaterialInfo = ({ form, nameValue , onAddItem}) => {
+const MaterialInfo = ({ form, nameValue , onAddItem , materialItems}) => {
   const [items, setItems] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [unitsData, setUnitsData] = useState([]);
@@ -50,17 +50,18 @@ const MaterialInfo = ({ form, nameValue , onAddItem}) => {
 
   const { user } = useContext(UserContext);
 
-  const [data, setData] = useState(null);
+ 
   const userId = user?._id;
 
   function calPartyBhara() {
     const totalAmount = items.reduce(
-      (acc, item) => acc + parseFloat(item.amount),
+      (acc, item) =>parseFloat(acc) + parseFloat(item.amount),
       0,
     );
 
-    console.log("paty bhara from material info :" ,totalAmount);
-    form.setValue("partyBhara", totalAmount);
+  
+    // form.setValue("partyBhara", totalAmount);
+    // console.log("paty bhara from material info :" ,form.getValues("partyBhara"));
 
     return totalAmount;
   }
@@ -84,7 +85,6 @@ const MaterialInfo = ({ form, nameValue , onAddItem}) => {
       amount = parseFloat(rate) * parseFloat(quantity);
     }
     form.setValue(`${nameValue}[${items.length}].basicAmount`, amount);
-    // console.log("GST oercentage", GSTPercentage);
     const total = parseFloat(amount) * Number(GSTPercentage);
     return parseFloat(amount + total);
   }
@@ -113,19 +113,10 @@ const MaterialInfo = ({ form, nameValue , onAddItem}) => {
       form.setValue(`${nameValue}[${items.length}].amount`, result);
     }
     calPartyBhara();
-  }, [
-    rate,
-    quantity,
-    items.length,
-    nameValue,
-    GSTPercentage,
-    rateMultiple,
-    GSTType,
-  ]);
+  }, [rate, quantity, items.length,nameValue,  GSTPercentage,  rateMultiple,  GSTType ]);
 
   function handleAdditionalItem() {
     
-  
 
     const newItem = {
       material: form.getValues(`${nameValue}[${items.length}].material`),

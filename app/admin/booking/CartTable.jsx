@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { ShoppingCart } from "lucide-react";
 
-const CartTable = ({ items , onDelete }) => {
+const CartTable = ({ form , items , onDelete , materialItems }) => {
   // const [itemNew , setItemNew] = useState([...items])
   const [cartItems, setCartItems] = useState(items);
   const [noOfItems, setNoOfItems] = useState(0);
@@ -15,11 +15,18 @@ const CartTable = ({ items , onDelete }) => {
 
     const calculatedTotalCost = Array.isArray(items)
       ? items.reduce((accumulator, currentValue) => {
-          return accumulator + currentValue.amount;
+          return parseFloat(accumulator) + parseFloat(currentValue.amount);
         }, 0)
       : 0;
 
     setTotalCost(calculatedTotalCost);
+
+
+    form.setValue("partyBhara", totalCost );
+    console.log("partyBhara Jyoti KM" , form.getValues("partyBhara"))
+    
+  
+    
   }, [items]);
 
   // const handleDelete = (hsnRemove) => {
@@ -56,7 +63,7 @@ const CartTable = ({ items , onDelete }) => {
           <tbody>
             {Array.isArray(cartItems) &&
               cartItems.map((item, i) => (
-                <tr key={item.hsnNo} className="w-full text-center">
+                <tr key={i} className="w-full text-center">
                   <td>{item.material}</td>
                   <td>{item.hsnNo}</td>
                   <td>

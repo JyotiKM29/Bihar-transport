@@ -64,7 +64,7 @@ const itemsSchema = z.object({
   GSTPercentage: z.coerce.number().optional(),
   GSTType: z.enum(["RCM", "FCM"]),
   basicAmount: z.coerce.number(),
-  amount: z.coerce.number().optional(),
+  amount: z.string().optional(),
 });
 
 const formSchema = z.object({
@@ -87,9 +87,7 @@ const formSchema = z.object({
   WeightCapacity: z.coerce.number().optional(),
   WeightCapacityUnit: z.string().optional(),
   customNoOfVehicle: z.number().optional(),
-  partyBhara: z.coerce.number({
-    message: "Field is required",
-  }),
+  partyBhara: z.coerce.number(),
   // hideBhara: z.coerce.boolean({}),
 
   // paymentLiability: z.enum([
@@ -147,18 +145,18 @@ export default function ProfileForm() {
     itemsList: {
       material: undefined,
       quantity: undefined,
-      quantityUnit: undefined,
+      quantityUnit: 0,
       actualWeight: undefined,
       actualWeightUnit: undefined,
-      chargedWeight: undefined,
+      chargedWeight: 0,
       chargedWeightUnit: undefined,
-      rateAsPer: undefined,
+      rateAsPer: 0,
       rateAsPerOption: undefined,
-      rate: undefined,
+      rate: 0,
       rateUnit: undefined,
       GSTPercentage: 0,
       GSTType: "",
-      amount: undefined,
+      amount: 0,
     },
     additionalCharges: {
       enabled: false,
@@ -184,12 +182,11 @@ export default function ProfileForm() {
     defaultValues: initialFormState,
   });
   let CartItems = form.watch("itemsList");
-  const advanceAmount = form.watch("advanceAmount", 0);
-  const additionalCharges = form.watch("additionalCharges.totalCharge");
-  const PartyBhara = form.watch("partyBhara", 0);
+  // const advanceAmount = form.watch("advanceAmount", 0);
+  // const additionalCharges = form.watch("additionalCharges.totalCharge");
+  const PartyBhara = form.watch("partyBhara",0);
 
-  // ==========
-
+//==========================================================
   useEffect(() => {
     // console.log("cart")
     setMaterialItems(CartItems);
@@ -212,23 +209,28 @@ export default function ProfileForm() {
   });
 }
 
-
-  //======
+//=======================================================================
 
   const totalAdditionalCharges = form.getValues("totalAdditionalCharges");
   const totalAdditionalChargeTax = form.watch("totalAdditionalChargeTax", 0);
 
-  function calPartyBhara(PartyBhara) {
-    const total = Number(PartyBhara);
-    console.log("party Bhara  :", total);
+  // useEffect(()=>{
+  //   function calPartyBhara(PartyBhara) {
 
-    form.setValue("partyBhara", total);
-    return total;
-  }
+  //     // const total =  PartyBhara ;
+  //     // console.log("party Bhara jyoti  :", total);
+  
+  //     form.setValue("partyBhara", total);
+  //     return total;
+  //   }
 
-  // function calBalanceAmount(advanceAmount = 0, partyBhara = 0) {
-  //   return partyBhara - advanceAmount;
-  // }
+  //   calPartyBhara();
+
+  // }, [PartyBhara])
+
+
+  
+
 
   function caltotalBillingAmount(
     totalAdditionalCharges,
@@ -239,20 +241,12 @@ export default function ProfileForm() {
       Number(totalAdditionalCharges) +
       Number(PartyBhara) +
       Number(totalAdditionalChargeTax);
-    console.log("Total Billing :", isNaN(total) ? 0 : total);
+
+      console.log( totalAdditionalCharges , PartyBhara , totalAdditionalChargeTax)
+    // console.log("Total Billing :", isNaN(total) ? 0 : total);
     form.setValue("totalBillingAmount", isNaN(total) ? 0 : total);
   }
 
-  // useEffect(() => {
-  //   // console.log('hello ')
-  //   calPartyBhara(PartyBhara);
-
-  // }, [PartyBhara ]);
-
-  // useEffect(() => {
-  // const balanceAmount = calBalanceAmount( PartyBhara);
-  // form.setValue("balanceAmount",balanceAmount);
-  // }, [PartyBhara, totalAdditionalCharges , totalAdditionalChargeTax]);
 
   useEffect(() => {
     caltotalBillingAmount(
@@ -541,7 +535,7 @@ export default function ProfileForm() {
           </div>
 
           <div className="grid grid-cols-1 space-x-6 space-y-2  rounded-xl border px-3 py-1 shadow-md">
-            <CartTable items={materialItems} onDelete={onDeleteItem} />
+            <CartTable items={materialItems} onDelete={onDeleteItem} form={form} />
           </div>
 
           <div className="flex flex-col gap-6 lg:flex-row ">
@@ -551,11 +545,15 @@ export default function ProfileForm() {
                 form={form}
                 nameValue="itemsList"
                 onAddItem={handleAddItem}
+                materialItems={materialItems}
+                
               />
               <AdditionalChargers
                 form={form}
                 nameValue="additionalCharges.chargers"
-                items={additionalCharges.chargers}
+                items={PartyBhara}
+                materialItems={materialItems}
+
               />
             </div>
             {/* calculation */}
@@ -874,6 +872,7 @@ export default function ProfileForm() {
                       );
                     }}
                   />
+                
                   <FormField
                     control={form.control}
                     name="partyBhara"
@@ -885,13 +884,12 @@ export default function ProfileForm() {
                           </FormLabel>
                           <div className="flex flex-1 flex-col">
                             <FormControl>
-                              <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-yellow-100 pl-2">
+                            <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-yellow-100 pl-2">
                                 &#8377;
                                 <Input
                                   type="number"
-                                  {...field}
                                   className="border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
-                                  readOnly
+                                  {...field}
                                 />
                               </div>
                             </FormControl>
