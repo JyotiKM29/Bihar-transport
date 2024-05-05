@@ -60,6 +60,7 @@ const CartTable = ({ items , onDelete }) => {
                   <td>{item.material}</td>
                   <td>{item.hsnNo}</td>
                   <td>
+
                     {item.quantity} {item.quantityUnit}
                   </td>
                   <td>

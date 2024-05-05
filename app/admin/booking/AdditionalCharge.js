@@ -55,12 +55,14 @@ setTotalCost(calculatedTotalCost);
     // const total = Number(PartyBhara) + Number(charges[charges.length - 1]?.amount);
     const total = Number(PartyBhara);
     const prevtotalAdditionalCharges = form.getValues("totalAdditionalCharges") ? form.getValues("totalAdditionalCharges")  : 0 ;
-    // console.log("prevtotalAdditionalCharges", prevtotalAdditionalCharges)
-    form.setValue('totalAdditionalCharges', prevtotalAdditionalCharges + charges[charges.length - 1]?.amount);
+
+    let additionalChargerTotal =charges.length === 0  ? 0 : prevtotalAdditionalCharges + charges[charges.length - 1]?.amount;
+   
+    form.setValue('totalAdditionalCharges',additionalChargerTotal );
    
     form.setValue("partyBhara", total)
 
-    console.log('additional hi',form.getValues("additionalCharges.totalCharge"))
+    // console.log('additional hi',form.getValues("additionalCharges.totalCharge"))
    
   }
 

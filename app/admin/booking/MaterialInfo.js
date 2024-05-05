@@ -15,9 +15,9 @@ import {
 } from "../../components/ui/form";
 import { Input } from "../../components/ui/input";
 import { UserContext } from "../../context/UserContextProvider";
-import Link from "next/link";
 
-const MaterialInfo = ({ form, nameValue }) => {
+
+const MaterialInfo = ({ form, nameValue , onAddItem}) => {
   const [items, setItems] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [unitsData, setUnitsData] = useState([]);
@@ -59,7 +59,7 @@ const MaterialInfo = ({ form, nameValue }) => {
       0,
     );
 
-    console.log(totalAmount);
+    console.log("paty bhara from material info :" ,totalAmount);
     form.setValue("partyBhara", totalAmount);
 
     return totalAmount;
@@ -84,7 +84,7 @@ const MaterialInfo = ({ form, nameValue }) => {
       amount = parseFloat(rate) * parseFloat(quantity);
     }
     form.setValue(`${nameValue}[${items.length}].basicAmount`, amount);
-    console.log("GST oercentage", GSTPercentage);
+    // console.log("GST oercentage", GSTPercentage);
     const total = parseFloat(amount) * Number(GSTPercentage);
     return parseFloat(amount + total);
   }
@@ -124,6 +124,9 @@ const MaterialInfo = ({ form, nameValue }) => {
   ]);
 
   function handleAdditionalItem() {
+    
+  
+
     const newItem = {
       material: form.getValues(`${nameValue}[${items.length}].material`),
       hsnNo: form.getValues(`${nameValue}[${items.length}].hsnNo`),
@@ -157,11 +160,20 @@ const MaterialInfo = ({ form, nameValue }) => {
       basicAmount: form.getValues(`${nameValue}[${items.length}].basicAmount`),
     };
 
+    onAddItem(newItem);
+    const data = form.getValues(nameValue);
+    console.log("item list after update:" , data)
+
+
+    // if(newItem.material === '' && newItem.hsnNo ==='' && newItem.quantity === undefined &&  newItem.quantityUnit=== undefined && newItem.actualWeight===undefined && newItem.actualWeightUnit=== undefined && newItem.chargedWeight=== undefined  && newItem.chargedWeightUnit=== undefined  && newItem.rateAsPer=== undefined  &&  newItem.rateAsPerOption=== undefined  && newItem.rate=== undefined  && newItem.rateUnit=== undefined  && newItem.GSTPercentage=== undefined  &&  newItem.GSTType=== undefined  ){
+    //   console.log("Fill all details")
+    // }
     // console.log(newItem);
     const updatedItem = form.getValues("itemsList") && [];
 
     setItems([...updatedItem, newItem]);
     form.setValue(nameValue, [...items, newItem]);
+   
     setShowForm(false);
   }
 
@@ -388,7 +400,7 @@ const MaterialInfo = ({ form, nameValue }) => {
               />
             </div>
 
-            {form.watch(`${nameValue}[${items.length}].rateAsPer`) !==
+            {form.watch(`${nameValue}[${items.length}].rateAsPer` , "fixed") !==
               "fixed" && (
               <>
                 <div className="flex w-full items-center gap-0">
