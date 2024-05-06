@@ -1,8 +1,8 @@
 "use client";
-import SearchVehicleType from './SearchVehicleType'
-import VehicleTypePop from './VehicleTypePop';
-import CartTable from './CartTable';
-import MaterialInfo from './MaterialInfo';
+import SearchVehicleType from "./SearchVehicleType";
+import VehicleTypePop from "./VehicleTypePop";
+import CartTable from "./CartTable";
+import MaterialInfo from "./MaterialInfo";
 import { FaPlus } from "react-icons/fa6";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -24,23 +24,22 @@ import { useToast } from "../../components/ui/use-toast";
 import Link from "next/link";
 import { FiPlus } from "react-icons/fi";
 import { useRouter } from "next/navigation";
-import AdditionalChargers from './AdditionalCharge';
-import { UserContext } from '../../context/UserContextProvider';
-
+import AdditionalChargers from "./AdditionalCharge";
+import { UserContext } from "../../context/UserContextProvider";
 
 const chargersSchema = z.object({
   name: z.string({ message: "Field is required" }),
   amount: z.coerce.number({
-        message: "Field is required",
-       }),
+    message: "Field is required",
+  }),
 
   rate: z.coerce.number({
     message: "Field is required",
-   }),
+  }),
 
   qty: z.coerce.number({
     message: "Field is required",
-   }),
+  }),
 });
 
 const additionalChargeSchema = z.object({
@@ -50,23 +49,23 @@ const additionalChargeSchema = z.object({
 });
 
 const itemsSchema = z.object({
-  material: z.string().optional(),
-  hsnNo:z.string(),
-  quantity: z.coerce.number().optional(),
-  quantityUnit:  z.string().optional(),
-  actualWeight:  z.coerce.number().optional(),
-  actualWeightUnit: z.string().optional(),
+  material: z.string(),
+  hsnNo: z.string(),
+  quantity: z.coerce.number(),
+  quantityUnit: z.string(),
+  actualWeight: z.coerce.number(),
+  actualWeightUnit: z.string(),
   chargedWeight: z.coerce.number().optional(),
-  chargedWeightUnit:  z.string().optional(),
-  rateAsPer:   z.string().optional(),
+  chargedWeightUnit: z.string().optional(),
+  rateAsPer: z.string().optional(),
   rateAsPerOption: z.string().optional(),
   rate: z.coerce.number().optional(),
-  rateUnit:  z.string().optional(),
+  rateUnit: z.string().optional(),
   GSTPercentage: z.coerce.number().optional(),
-  GSTType:z.enum(['RCM','FCM']),
-  basicAmount:z.coerce.number(),
-  amount: z.coerce.number().optional(),
-})
+  GSTType: z.enum(["RCM", "FCM"]),
+  basicAmount: z.coerce.number(),
+  amount: z.string().optional(),
+});
 
 const formSchema = z.object({
   orderNumber: z.string(),
@@ -86,14 +85,11 @@ const formSchema = z.object({
   vehicleLength: z.coerce.number().optional(),
   vehicleLengthUnit: z.string().optional(),
   WeightCapacity: z.coerce.number().optional(),
-  WeightCapacityUnit:z.string().optional(),
+  WeightCapacityUnit: z.string().optional(),
   customNoOfVehicle: z.number().optional(),
-  partyBhara: z.coerce
-    .number({
-      message: "Field is required",
-    }),
+  partyBhara: z.coerce.number(),
   // hideBhara: z.coerce.boolean({}),
-  
+
   // paymentLiability: z.enum([
   //   "Consignor",
   //   "Consignee",
@@ -110,12 +106,12 @@ const formSchema = z.object({
   // }),
   // payMode: z.string({ message: "Field is required" }).min(2),
   // transactionId: z.string().optional(),
-  remarks: z.string({ message: "Field is required" }).min(2),
-  itemsList:z.array(itemsSchema),
+  remarks: z.string().optional(),
+  itemsList: z.array(itemsSchema),
   additionalCharges: additionalChargeSchema,
   // totalMaterialCharges:z.coerce.number(),
-  totalAdditionalChargeTax:z.coerce.number(),
-  totalAdditionalCharges:z.coerce.number(),
+  totalAdditionalChargeTax: z.coerce.number(),
+  totalAdditionalCharges: z.coerce.number(),
   totalBillingAmount: z.coerce.number(),
   adminId: z.string(),
 });
@@ -135,7 +131,7 @@ export default function ProfileForm() {
     way: "",
     material: "",
     vehicleType: "",
-    noOfVehicle:1,
+    noOfVehicle: 1,
     partyBhara: 0,
     // hideBhara: false,
     // paymentLiability: "",
@@ -146,132 +142,129 @@ export default function ProfileForm() {
     // payMode: "",
     // transactionId: "",
     remarks: "",
-    itemsList:{
+    itemsList: {
       material: undefined,
       quantity: undefined,
-      quantityUnit:  undefined,
+      quantityUnit: 0,
       actualWeight: undefined,
       actualWeightUnit: undefined,
-      chargedWeight:undefined,
-      chargedWeightUnit:  undefined,
-      rateAsPer:  undefined,
+      chargedWeight: 0,
+      chargedWeightUnit: undefined,
+      rateAsPer: 0,
       rateAsPerOption: undefined,
-      rate: undefined,
+      rate: 0,
       rateUnit: undefined,
       GSTPercentage: 0,
-      GSTType:'',
-      amount:undefined,
+      GSTType: "",
+      amount: 0,
     },
     additionalCharges: {
       enabled: false,
       totalCharge: 0,
       chargers: [],
     },
-    totalAdditionalChargeTax:0,
-    totalAdditionalCharges:0,
+    totalAdditionalChargeTax: 0,
+    totalAdditionalCharges: 0,
     totalBillingAmount: 0,
     adminId: "",
   };
 
-
   const route = useRouter();
-  const[allocateVehicle, setAllocateVehicle] = useState(false);
-  const [materialItems , setMaterialItems] = useState([]);
+  const [allocateVehicle, setAllocateVehicle] = useState(false);
+  const [materialItems, setMaterialItems] = useState([]);
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const [isloadin2, setIsLoading2] = useState();
   const { user } = useContext(UserContext);
-
 
   const { reset, ...form } = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: initialFormState,
   });
   let CartItems = form.watch("itemsList");
-  const advanceAmount = form.watch("advanceAmount", 0);
-  const additionalCharges = form.watch("additionalCharges.totalCharge");
-  const PartyBhara = form.watch('partyBhara',0);
+  // const advanceAmount = form.watch("advanceAmount", 0);
+  // const additionalCharges = form.watch("additionalCharges.totalCharge");
+  const PartyBhara = form.watch("partyBhara",0);
 
-  // ==========
-
-  useEffect(()=>{
-    console.log("cart")
- setMaterialItems(CartItems)
-  },[CartItems])
-
-  //  materialItems = CartItems;
-
-  function onAddItem ( newItem){
-   setMaterialItems([...materialItems ,newItem ])
-  }
-
-  function onDeleteItem (hsnRemove){
-  //   console.log('delete', hsnRemove)
-  //  setMaterialItems((prevItems)=> prevItems.filter((item)=>
-  //     item.hsnNo !== hsnRemove
-  // ))
-    const updatedItems = materialItems.filter((item)=>
-    item.hsnNo !== hsnRemove
-  )
-
-  form.setValue("itemsList", updatedItems);
-  }
-
-  //======
-  
-
-  const totalAdditionalCharges = form.getValues('totalAdditionalCharges')
-    const totalAdditionalChargeTax = form.watch('totalAdditionalChargeTax' ,0)
-
-
-  function calPartyBhara(PartyBhara) {
-    
-    const total = Number(PartyBhara) ;
-
-   
-    form.setValue("partyBhara", total )
- return  total;
-    
-  }
-  
-  function calBalanceAmount(advanceAmount = 0, partyBhara = 0) {
-    return partyBhara - advanceAmount;
-  }
-
-  function caltotalBillingAmount(totalAdditionalCharges,PartyBhara,totalAdditionalChargeTax ){
-      const total = Number(totalAdditionalCharges) + Number(PartyBhara) + Number(totalAdditionalChargeTax);
-      form.setValue('totalBillingAmount',total )
-  }
-  
+//==========================================================
   useEffect(() => {
-    console.log('hello ')
-    calPartyBhara(PartyBhara, additionalCharges);
-    
-  }, [additionalCharges, ]);
-  
-  useEffect(() => {
-    const balanceAmount = calBalanceAmount( PartyBhara);
-    form.setValue("balanceAmount",balanceAmount);
-  }, [PartyBhara, totalAdditionalCharges , totalAdditionalChargeTax]);
-  
-useEffect(()=>{
-  caltotalBillingAmount(totalAdditionalCharges,PartyBhara,totalAdditionalChargeTax );
-},[totalAdditionalCharges,PartyBhara,totalAdditionalChargeTax])
+    // console.log("cart")
+    setMaterialItems(CartItems);
+  }, [CartItems]);
 
+  function onDeleteItem(hsnRemove) {
+    console.log("delete :",hsnRemove )
+    const updatedItems = materialItems.filter(
+      (item) => item.hsnNo !== hsnRemove,
+    );
+
+    form.setValue("itemsList", updatedItems);
+  }
+
+
+  function handleAddItem(newItem) {
+    setMaterialItems(prevItems => {
+      const items = Array.isArray(prevItems) ? prevItems : [];
+      return [...items, newItem];
+  });
+}
+
+//=======================================================================
+
+  const totalAdditionalCharges = form.getValues("totalAdditionalCharges");
+  const totalAdditionalChargeTax = form.watch("totalAdditionalChargeTax", 0);
+
+  // useEffect(()=>{
+  //   function calPartyBhara(PartyBhara) {
+
+  //     // const total =  PartyBhara ;
+  //     // console.log("party Bhara jyoti  :", total);
+  
+  //     form.setValue("partyBhara", total);
+  //     return total;
+  //   }
+
+  //   calPartyBhara();
+
+  // }, [PartyBhara])
+
+
+  
+
+
+  function caltotalBillingAmount(
+    totalAdditionalCharges,
+    PartyBhara,
+    totalAdditionalChargeTax,
+  ) {
+    const total =
+      Number(totalAdditionalCharges) +
+      Number(PartyBhara) +
+      Number(totalAdditionalChargeTax);
+
+      console.log( totalAdditionalCharges , PartyBhara , totalAdditionalChargeTax)
+    // console.log("Total Billing :", isNaN(total) ? 0 : total);
+    form.setValue("totalBillingAmount", isNaN(total) ? 0 : total);
+  }
+
+
+  useEffect(() => {
+    caltotalBillingAmount(
+      totalAdditionalCharges,
+      PartyBhara,
+      totalAdditionalChargeTax,
+    );
+  }, [totalAdditionalCharges, PartyBhara, totalAdditionalChargeTax]);
 
   function generateUniqueId() {
-   const value = Math.floor(100000 + Math.random() * 900000);
+    const value = Math.floor(100000 + Math.random() * 900000);
 
-   return "BT" + value;
+    return "BT" + value;
   }
 
- 
-
   async function MyHandleSubmit(value) {
-    
+    // console.log("hey");
 
-    console.log("hey");
-    
     value.adminId = user._id;
 
     console.log(value);
@@ -289,41 +282,38 @@ useEffect(()=>{
         },
         body: JSON.stringify(value),
       });
-    console.log(response);
+      console.log(response);
 
       const newResult = await response.json();
-console.log(newResult);
+      console.log(newResult);
       if (response.ok) {
-        if(allocateVehicle){
-          console.log("hey", newResult.Booking.orderNumber)
+        if (allocateVehicle) {
+          console.log("hey", newResult.Booking.orderNumber);
           setIsLoading(false);
-           setIsLoading2(false);
-         displayToast(
-          "Successfully Booked,Ok",
-          "✅",
-        );
-        setAllocateVehicle(false)
-        
-           route.push(`/admin/booking/${newResult.Booking.orderNumber}`);
+          setIsLoading2(false);
+          displayToast("Successfully Booked,Ok", "✅");
+          setAllocateVehicle(false);
+
+          route.push(`/admin/booking/${newResult.Booking.orderNumber}`);
         }
         setIsLoading(false);
         displayToast(
           "Successfully Booked, Click view Booking button to view the booking",
           "✅",
         );
-       
-       reset(initialFormState);
+
+        reset(initialFormState);
       } else {
         console.error("Error:", newResult.message);
         displayToast("Error", "❌", newResult.message);
         setIsLoading(false);
-         setIsLoading2(false);
+        setIsLoading2(false);
       }
     } catch (error) {
       console.error("Error:", error);
       displayToast("Error while sending data", "❌", newResult.message);
       setIsLoading(false);
-       setIsLoading2(false);
+      setIsLoading2(false);
     }
   }
 
@@ -335,9 +325,8 @@ console.log(newResult);
     });
   };
 
-
   // const handleDeleteItem = (hsnRemove) => {
-  //   CartItems = CartItems.filter((item) => item.hsnNo !== hsnRemove); 
+  //   CartItems = CartItems.filter((item) => item.hsnNo !== hsnRemove);
   //  };
 
   return (
@@ -546,17 +535,25 @@ console.log(newResult);
           </div>
 
           <div className="grid grid-cols-1 space-x-6 space-y-2  rounded-xl border px-3 py-1 shadow-md">
-            <CartTable items={materialItems} onDelete={onDeleteItem} />
+            <CartTable items={materialItems} onDelete={onDeleteItem} form={form} />
           </div>
 
           <div className="flex flex-col gap-6 lg:flex-row ">
             {/* form */}
             <div className="flex flex-col gap-3 rounded-xl border px-6   py-3 shadow-md lg:w-1/2">
-              <MaterialInfo form={form} nameValue="itemsList" />
+              <MaterialInfo
+                form={form}
+                nameValue="itemsList"
+                onAddItem={handleAddItem}
+                materialItems={materialItems}
+                
+              />
               <AdditionalChargers
                 form={form}
                 nameValue="additionalCharges.chargers"
-                items={additionalCharges.chargers}
+                items={PartyBhara}
+                materialItems={materialItems}
+
               />
             </div>
             {/* calculation */}
@@ -875,6 +872,7 @@ console.log(newResult);
                       );
                     }}
                   />
+                
                   <FormField
                     control={form.control}
                     name="partyBhara"
@@ -886,13 +884,12 @@ console.log(newResult);
                           </FormLabel>
                           <div className="flex flex-1 flex-col">
                             <FormControl>
-                              <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-yellow-100 pl-2">
+                            <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-yellow-100 pl-2">
                                 &#8377;
                                 <Input
                                   type="number"
-                                  {...field}
                                   className="border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
-                                  readOnly
+                                  {...field}
                                 />
                               </div>
                             </FormControl>
