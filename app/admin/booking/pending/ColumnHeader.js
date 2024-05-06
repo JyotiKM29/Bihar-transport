@@ -16,6 +16,7 @@ import { useToast } from "../../../components/ui/use-toast";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
+import CancellationPop from "../CancellationPop";
 
 
 export default function ColumnHeader() {
@@ -310,6 +311,21 @@ export default function ColumnHeader() {
       {
         id: "actions",
         enableHiding: false,
+        header: (
+          <div className="text-center">
+            <p>&nbsp;</p>
+            <p>Cancel</p>
+            <p> Booking </p>
+          </div>
+        ),
+        cell: ({ row }) => {
+          return ( <CancellationPop bookingId={row.original._id}/> )
+        }
+
+      },
+      {
+        id: "actions",
+        enableHiding: false,
         cell: ({ row }) => {
           return (
             <DropdownMenu>
@@ -344,11 +360,11 @@ export default function ColumnHeader() {
                     Confirm Booking
                   </button>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                {/* <DropdownMenuItem>
                   <Link href={`/admin/booking/cancel/${row.original._id}`}>
                     Cancel Booking
                   </Link>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
               </DropdownMenuContent>
             </DropdownMenu>
           );

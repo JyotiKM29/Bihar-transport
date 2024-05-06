@@ -300,6 +300,21 @@ export default function ColumnHeader() {
       {
         id: "actions",
         enableHiding: false,
+        header: (
+          <div className="text-center">
+            <p>&nbsp;</p>
+            <p>Cancel</p>
+            <p> Booking </p>
+          </div>
+        ),
+        cell: ({ row }) => {
+          return ( <CancellationPop bookingId={row.original._id}/> )
+        }
+
+      },
+      {
+        id: "actions",
+        enableHiding: false,
         cell: ({ row }) => {
           return (
             <DropdownMenu>
@@ -339,11 +354,11 @@ export default function ColumnHeader() {
                     Confirm Booking
                   </button>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                {/* <DropdownMenuItem>
                   <Link href={`/admin/booking/cancel/${row.original._id}`}>
                     Cancel Booking
                   </Link>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
               </DropdownMenuContent>
             </DropdownMenu>
           );

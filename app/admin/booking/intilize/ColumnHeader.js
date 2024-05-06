@@ -261,6 +261,21 @@ export default function ColumnHeader() {
         ),
       },
       {
+        id: "actions",
+        enableHiding: false,
+        header: (
+          <div className="text-center">
+            <p>&nbsp;</p>
+            <p>Cancel</p>
+            <p> Booking </p>
+          </div>
+        ),
+        cell: ({ row }) => {
+          return ( <CancellationPop bookingId={row.original._id}/> )
+        }
+
+      },
+      {
         accessorKey: "partyBhara",
 
         header: (
@@ -311,13 +326,13 @@ export default function ColumnHeader() {
                     Dispatch Vehicle
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                {/* <DropdownMenuItem>
                   <Link href={`/admin/booking/cancel/${row.original._id}`}>
                     cancel Booking
                   </Link>
 
-                  {/* <CancellationPop bookingId={`${row.original._id}`} /> */}
-                </DropdownMenuItem>
+               
+                </DropdownMenuItem> */}
               </DropdownMenuContent>
             </DropdownMenu>
           );
