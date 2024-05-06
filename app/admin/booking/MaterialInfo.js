@@ -536,10 +536,10 @@ const MaterialInfo = ({ form, nameValue }) => {
               }}
             />
 
-            {form.watch(`${nameValue}[${items.length}].GSTType`) === "RCM" ? (
+            {form.watch(`${nameValue}[${items.length}].GSTType`) === "FCM" ? (
               <>
                 <p className="bg-orange-100 p-1 text-center font-light">
-                  if you select RCM , GST percentage is 0%
+                  if you select FCM , GST percentage is 0%
                 </p>
               </>
             ) : (
