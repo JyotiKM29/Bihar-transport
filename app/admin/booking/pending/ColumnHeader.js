@@ -360,11 +360,7 @@ export default function ColumnHeader() {
                     Confirm Booking
                   </button>
                 </DropdownMenuItem>
-                {/* <DropdownMenuItem>
-                  <Link href={`/admin/booking/cancel/${row.original._id}`}>
-                    Cancel Booking
-                  </Link>
-                </DropdownMenuItem> */}
+            
               </DropdownMenuContent>
             </DropdownMenu>
           );

@@ -48,6 +48,7 @@ const additionalChargeSchema = z.object({
   chargers: z.array(chargersSchema),
 });
 
+
 const itemsSchema = z.object({
   material: z.string(),
   hsnNo: z.string(),
@@ -217,8 +218,8 @@ export default function ProfileForm() {
   // useEffect(()=>{
   //   function calPartyBhara(PartyBhara) {
 
-  //     // const total =  PartyBhara ;
-  //     // console.log("party Bhara jyoti  :", total);
+      // const total =  PartyBhara ;
+      // console.log("party Bhara jyoti  :", total);
   
   //     form.setValue("partyBhara", total);
   //     return total;
@@ -261,6 +262,80 @@ export default function ProfileForm() {
 
     return "BT" + value;
   }
+
+  ///=======zod Error Checking====>
+    const submitData = {
+    adminId: "65abcb376d75c0783564ef39",
+      orderNumber: "122431",
+      date: "2024-02-01T12:00:00Z",
+      vehicleRequiredDate: "2024-02-10T12:00:00Z",
+      consignorName: "John Doe",
+      consignorMobileNumber: 1234567890,
+      loadingPoints: ["Point A", "Point B"],
+      consigneeName: "Jane Doe",
+      consigneeMobileNumber: 9876543210,
+      unloadingPoints: ["Point C", "Point D"],
+      way: "One Way",
+      vehicleType:"truck",
+      partyBhara: 200,
+      hideBhara: false,
+      paymentLiability: "Consignor",
+      billTo: "Consignee",
+      paymentTerm: "Advance",
+      advanceAmount: 3000,
+      balanceAmount: 2000,
+      payMode: "Online",
+      transactionId: "abc123",
+      remarks: "Some remarks",
+      additionalCharges: {
+            enabled: false,
+            totalCharge: 21,
+            chargers: [
+                {
+                    name: "loading Charge",
+                    amount: 12,
+                    rate: 1,
+                    qty: 12
+                },
+                {
+                    name: "loading Charge",
+                    amount: 1,
+                    rate: 1,
+                    qty: 1
+                },
+                {
+                    name: "loading Charge",
+                    amount: 8,
+                    rate: 4,
+                    qty: 2
+                }
+            ]
+        },
+      itemsList: [
+        {
+          material: "Material 1",
+          quantity: 10,
+          rate: 50,
+          amount: 500,
+          taxPercentage: 10,
+          quantityUnit: "kg",
+          actualWeight: 100,
+          actualWeightUnit: "kg",
+          chargedWeight: 110,
+          chargedWeightUnit: "kg",
+          rateAsPer: "Fixed",
+          rateAsPerOption: "Option 1",
+          rateUnit: "kg"
+        },
+        
+      ],
+    
+      isUrgent: true
+    }
+    
+
+    console.log(formSchema.safeParse(submitData));
+
 
   async function MyHandleSubmit(value) {
     // console.log("hey");

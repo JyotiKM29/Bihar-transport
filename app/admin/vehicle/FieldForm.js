@@ -75,7 +75,7 @@ const handleCheckboxChange = (e) => {
                      <p> Select number of files to upload  {fileNumber}</p>
                     
                     </label>
-                    <Input    type='file' onChange={onFileChange} multiple />
+                    <Input  type='file' onChange={onFileChange} multiple />
                   </div>
                 ) : (
                   <Input type={type} {...field} placeholder={`Enter value of ${label}`} />
