@@ -161,6 +161,8 @@ const AllocateVehicle = ({ params  }) => {
 
     value.adminId = user?._id;
 
+    console.log("hey bro: ", value);
+
     setIsLoading(true);
     try {
       const response = await fetch("/api/vehicleAllocation", {
