@@ -16,6 +16,7 @@ export async function POST(req, res) {
       // billTo,
       ledgerBalanceParty,
       remarks,
+      
 
       // after changes
       DriverDetails,
@@ -118,7 +119,8 @@ export async function POST(req, res) {
        materialDetails,
        recievableLiability,
        DriverDetails,
-       netBhara: netBhara,
+       arrangedBy: arrangedBy,
+       netBhara: materialDetails.netBhara,
        commision: materialDetails.commision,
        driverBhara: materialDetails.driverBhara,
        quantity: materialDetails.quantity,
