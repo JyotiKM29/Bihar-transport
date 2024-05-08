@@ -119,6 +119,9 @@ const dispatchAdditionalDetailsSchema = new mongoose.Schema({
 
 const itemlistSchema = new mongoose.Schema({
   material: { type: String },
+  hsnNo:{ type: String },
+  
+  
   quantity: { type: Number },
   rate: { type: Number },
   ammount: { type: Number },
@@ -133,6 +136,9 @@ const itemlistSchema = new mongoose.Schema({
   rate: { type: Number },
   rateUnit: { type: String },
   taxPercentage: { type: Number },
+  GSTType:{ type: String },
+  basicAmount: { type: Number },
+
 });
 
 const additionalChargeSchema = mongoose.Schema({

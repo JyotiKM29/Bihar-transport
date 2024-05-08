@@ -124,6 +124,7 @@ const DispatchVehicle = ({ params }) => {
 
   const initialFormState = {
     adminId:'',
+    
     // vehicleNo: undefined,
     bookingId: params?.vehicleno,
     dispatch: {

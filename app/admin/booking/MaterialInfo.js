@@ -580,7 +580,7 @@ const MaterialInfo = ({ form, nameValue , onAddItem , materialItems}) => {
               form={form}
               name={`${nameValue}[${items.length}].amount`}
               label="Amount"
-              type="text"
+              type="number"
             />
 
             <Button

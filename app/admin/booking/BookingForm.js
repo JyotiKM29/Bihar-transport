@@ -48,7 +48,6 @@ const additionalChargeSchema = z.object({
   chargers: z.array(chargersSchema),
 });
 
-
 const itemsSchema = z.object({
   material: z.string(),
   hsnNo: z.string(),
@@ -65,7 +64,7 @@ const itemsSchema = z.object({
   GSTPercentage: z.coerce.number().optional(),
   GSTType: z.enum(["RCM", "FCM"]),
   basicAmount: z.coerce.number(),
-  amount: z.string().optional(),
+  amount: z.coerce.number().optional(),
 });
 
 const formSchema = z.object({
@@ -185,16 +184,16 @@ export default function ProfileForm() {
   let CartItems = form.watch("itemsList");
   // const advanceAmount = form.watch("advanceAmount", 0);
   // const additionalCharges = form.watch("additionalCharges.totalCharge");
-  const PartyBhara = form.watch("partyBhara",0);
+  const PartyBhara = form.watch("partyBhara", 0);
 
-//==========================================================
+  //==========================================================
   useEffect(() => {
     // console.log("cart")
     setMaterialItems(CartItems);
   }, [CartItems]);
 
   function onDeleteItem(hsnRemove) {
-    console.log("delete :",hsnRemove )
+    console.log("delete :", hsnRemove);
     const updatedItems = materialItems.filter(
       (item) => item.hsnNo !== hsnRemove,
     );
@@ -202,15 +201,14 @@ export default function ProfileForm() {
     form.setValue("itemsList", updatedItems);
   }
 
-
   function handleAddItem(newItem) {
-    setMaterialItems(prevItems => {
+    setMaterialItems((prevItems) => {
       const items = Array.isArray(prevItems) ? prevItems : [];
       return [...items, newItem];
-  });
-}
+    });
+  }
 
-//=======================================================================
+  //=======================================================================
 
   const totalAdditionalCharges = form.getValues("totalAdditionalCharges");
   const totalAdditionalChargeTax = form.watch("totalAdditionalChargeTax", 0);
@@ -218,9 +216,9 @@ export default function ProfileForm() {
   // useEffect(()=>{
   //   function calPartyBhara(PartyBhara) {
 
-      // const total =  PartyBhara ;
-      // console.log("party Bhara jyoti  :", total);
-  
+  // const total =  PartyBhara ;
+  // console.log("party Bhara jyoti  :", total);
+
   //     form.setValue("partyBhara", total);
   //     return total;
   //   }
@@ -228,10 +226,6 @@ export default function ProfileForm() {
   //   calPartyBhara();
 
   // }, [PartyBhara])
-
-
-  
-
 
   function caltotalBillingAmount(
     totalAdditionalCharges,
@@ -243,11 +237,10 @@ export default function ProfileForm() {
       Number(PartyBhara) +
       Number(totalAdditionalChargeTax);
 
-      console.log( totalAdditionalCharges , PartyBhara , totalAdditionalChargeTax)
+    console.log(totalAdditionalCharges, PartyBhara, totalAdditionalChargeTax);
     // console.log("Total Billing :", isNaN(total) ? 0 : total);
     form.setValue("totalBillingAmount", isNaN(total) ? 0 : total);
   }
-
 
   useEffect(() => {
     caltotalBillingAmount(
@@ -264,84 +257,109 @@ export default function ProfileForm() {
   }
 
   ///=======zod Error Checking====>
-    const submitData = {
+  const submitData = {
     adminId: "65abcb376d75c0783564ef39",
-      orderNumber: "122431",
-      date: "2024-02-01T12:00:00Z",
-      vehicleRequiredDate: "2024-02-10T12:00:00Z",
-      consignorName: "John Doe",
-      consignorMobileNumber: 1234567890,
-      loadingPoints: ["Point A", "Point B"],
-      consigneeName: "Jane Doe",
-      consigneeMobileNumber: 9876543210,
-      unloadingPoints: ["Point C", "Point D"],
-      way: "One Way",
-      vehicleType:"truck",
-      partyBhara: 200,
-      hideBhara: false,
-      paymentLiability: "Consignor",
-      billTo: "Consignee",
-      paymentTerm: "Advance",
-      advanceAmount: 3000,
-      balanceAmount: 2000,
-      payMode: "Online",
-      transactionId: "abc123",
-      remarks: "Some remarks",
-      additionalCharges: {
-            enabled: false,
-            totalCharge: 21,
-            chargers: [
-                {
-                    name: "loading Charge",
-                    amount: 12,
-                    rate: 1,
-                    qty: 12
-                },
-                {
-                    name: "loading Charge",
-                    amount: 1,
-                    rate: 1,
-                    qty: 1
-                },
-                {
-                    name: "loading Charge",
-                    amount: 8,
-                    rate: 4,
-                    qty: 2
-                }
-            ]
-        },
-      itemsList: [
+    orderNumber: "122431",
+    date: "2024-02-01T12:00:00Z",
+    bookingType: "personal",
+    vehicleRequiredDate: "2024-02-10T12:00:00Z",
+    consignorName: "John Doe",
+    consignorMobileNumber: 1234567890,
+    loadingPoints: ["Point A", "Point B"],
+    consigneeName: "Jane Doe",
+    consigneeMobileNumber: 9876543210,
+    unloadingPoints: ["Point C", "Point D"],
+    way: "one way",
+    noOfVehicle: "2",
+    vehicleType: "truck",
+    partyBhara: 200,
+    hideBhara: false,
+    paymentLiability: "Consignor",
+    billTo: "Consignee",
+    paymentTerm: "Advance",
+    advanceAmount: 3000,
+    balanceAmount: 2000,
+    payMode: "Online",
+    transactionId: "abc123",
+    remarks: "Some remarks",
+    additionalCharges: {
+      enabled: false,
+      totalCharge: 21,
+      chargers: [
         {
-          material: "Material 1",
-          quantity: 10,
-          rate: 50,
-          amount: 500,
-          taxPercentage: 10,
-          quantityUnit: "kg",
-          actualWeight: 100,
-          actualWeightUnit: "kg",
-          chargedWeight: 110,
-          chargedWeightUnit: "kg",
-          rateAsPer: "Fixed",
-          rateAsPerOption: "Option 1",
-          rateUnit: "kg"
+          name: "loading Charge",
+          amount: 12,
+          rate: 1,
+          qty: 12,
         },
-        
+        {
+          name: "loading Charge",
+          amount: 1,
+          rate: 1,
+          qty: 1,
+        },
+        {
+          name: "loading Charge",
+          amount: 8,
+          rate: 4,
+          qty: 2,
+        },
       ],
-    
-      isUrgent: true
-    }
-    
+    },
+    itemsList: [
+      {
+        material: "Material 1",
+        hsnNo: "judvcabkj",
+        quantity: 10,
+        rate: 50,
+        // amount: 500,
+        taxPercentage: 10,
+        quantityUnit: "kg",
+        actualWeight: 100,
+        actualWeightUnit: "kg",
+        chargedWeight: 110,
+        chargedWeightUnit: "kg",
+        rateAsPer: "Fixed",
+        GSTType: "RCM",
+        rateAsPerOption: "Option 1",
+        rateUnit: "kg",
+        basicAmount: 200,
+        amount: 344,
+      },
+    ],
+    totalAdditionalChargeTax: 0,
+    totalAdditionalCharges: 200,
+    totalBillingAmount: 5000,
+    isUrgent: true,
+  };
 
-    console.log(formSchema.safeParse(submitData));
+  const itemsListData = {
+    GSTPercentage: "0.1",
+    GSTType: "FCM",
+    actualWeight: "11",
+    actualWeightUnit: "Basta",
+    amount: "276",
+    basicAmount: 0,
+    chargedWeight: undefined,
+    chargedWeightUnit: undefined,
+    hsnNo: "67yu5i689opo",
+    material: "cotton",
+    quantity: "12",
+    quantityUnit: "KILO GRAMS",
+    rate: undefined,
+    rateAsPer: undefined,
+    rateAsPerOption: undefined,
+    rateUnit: undefined,
+   
+  };
 
+  // console.log(itemsSchema.safeParse(itemsListData));
 
   async function MyHandleSubmit(value) {
-    // console.log("hey");
+    console.log("hey");
+    console.log(formSchema.safeParse(value));
 
     value.adminId = user._id;
-
     console.log(value);
     setIsLoading(true);
     setIsLoading2(true);
@@ -610,7 +628,11 @@ export default function ProfileForm() {
           </div>
 
           <div className="grid grid-cols-1 space-x-6 space-y-2  rounded-xl border px-3 py-1 shadow-md">
-            <CartTable items={materialItems} onDelete={onDeleteItem} form={form} />
+            <CartTable
+              items={materialItems}
+              onDelete={onDeleteItem}
+              form={form}
+            />
           </div>
 
           <div className="flex flex-col gap-6 lg:flex-row ">
@@ -621,14 +643,12 @@ export default function ProfileForm() {
                 nameValue="itemsList"
                 onAddItem={handleAddItem}
                 materialItems={materialItems}
-                
               />
               <AdditionalChargers
                 form={form}
                 nameValue="additionalCharges.chargers"
                 items={PartyBhara}
                 materialItems={materialItems}
-
               />
             </div>
             {/* calculation */}
@@ -947,7 +967,7 @@ export default function ProfileForm() {
                       );
                     }}
                   />
-                
+
                   <FormField
                     control={form.control}
                     name="partyBhara"
@@ -959,7 +979,7 @@ export default function ProfileForm() {
                           </FormLabel>
                           <div className="flex flex-1 flex-col">
                             <FormControl>
-                            <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-yellow-100 pl-2">
+                              <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-yellow-100 pl-2">
                                 &#8377;
                                 <Input
                                   type="number"
