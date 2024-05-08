@@ -17,7 +17,7 @@ import { Input } from "../../components/ui/input";
 import { UserContext } from "../../context/UserContextProvider";
 
 
-const MaterialInfo = ({ form, nameValue , onAddItem , materialItems}) => {
+const MaterialInfo = ({ form, nameValue , onAddItem }) => {
   const [items, setItems] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [unitsData, setUnitsData] = useState([]);
@@ -84,6 +84,7 @@ const MaterialInfo = ({ form, nameValue , onAddItem , materialItems}) => {
     } else {
       amount = parseFloat(rate) * parseFloat(quantity);
     }
+    amount = isNaN(amount)? 0 : amount;
     form.setValue(`${nameValue}[${items.length}].basicAmount`, amount);
     const total = parseFloat(amount) * Number(GSTPercentage);
     return parseFloat(amount + total);
@@ -156,14 +157,10 @@ const MaterialInfo = ({ form, nameValue , onAddItem , materialItems}) => {
     console.log("item list after update:" , data)
 
 
-    // if(newItem.material === '' && newItem.hsnNo ==='' && newItem.quantity === undefined &&  newItem.quantityUnit=== undefined && newItem.actualWeight===undefined && newItem.actualWeightUnit=== undefined && newItem.chargedWeight=== undefined  && newItem.chargedWeightUnit=== undefined  && newItem.rateAsPer=== undefined  &&  newItem.rateAsPerOption=== undefined  && newItem.rate=== undefined  && newItem.rateUnit=== undefined  && newItem.GSTPercentage=== undefined  &&  newItem.GSTType=== undefined  ){
-    //   console.log("Fill all details")
-    // }
-    // console.log(newItem);
-    const updatedItem = form.getValues("itemsList") && [];
+    // const updatedItem = form.getValues("itemsList") && [];
 
-    setItems([...updatedItem, newItem]);
-    form.setValue(nameValue, [...items, newItem]);
+    // setItems([...updatedItem, newItem]);
+    // form.setValue(nameValue, [...items, newItem]);
    
     setShowForm(false);
   }

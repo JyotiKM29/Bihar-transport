@@ -10,7 +10,7 @@ const CartTable = ({ form , items , onDelete , materialItems }) => {
 
   useEffect(() => {
     setCartItems(items);
-    let length = cartItems.length ? cartItems.length : 0;
+    let length =  Array.isArray(cartItems) && cartItems.length ? cartItems.length : 0;
     setNoOfItems(length);
 
     const calculatedTotalCost = Array.isArray(items)

@@ -88,28 +88,12 @@ const formSchema = z.object({
   WeightCapacityUnit: z.string().optional(),
   customNoOfVehicle: z.number().optional(),
   partyBhara: z.coerce.number(),
-  // hideBhara: z.coerce.boolean({}),
 
-  // paymentLiability: z.enum([
-  //   "Consignor",
-  //   "Consignee",
-  //   "Third Party",
-  //   "Vehicle Owner",
-  // ]),
-  // billTo: z.string({ message: "Field is required" }),
   paymentTerm: z.enum(["Advance", "Paid", "To Pay", "To be Billed"]),
-  // advanceAmount: z.coerce.number({
-  //   message: "Field is required",
-  // }),
-  // balanceAmount: z.coerce.number({
-  //   message: "Field is required",
-  // }),
-  // payMode: z.string({ message: "Field is required" }).min(2),
-  // transactionId: z.string().optional(),
   remarks: z.string().optional(),
   itemsList: z.array(itemsSchema),
+  // itemsList : z.array(itemsSchema.or(z.object())), 
   additionalCharges: additionalChargeSchema,
-  // totalMaterialCharges:z.coerce.number(),
   totalAdditionalChargeTax: z.coerce.number(),
   totalAdditionalCharges: z.coerce.number(),
   totalBillingAmount: z.coerce.number(),
@@ -133,31 +117,25 @@ export default function ProfileForm() {
     vehicleType: "",
     noOfVehicle: 1,
     partyBhara: 0,
-    // hideBhara: false,
-    // paymentLiability: "",
-    // billTo: "",
     paymentTerm: "",
-    // advanceAmount: 0,
-    // balanceAmount: 0,
-    // payMode: "",
-    // transactionId: "",
     remarks: "",
-    itemsList: {
-      material: undefined,
-      quantity: undefined,
-      quantityUnit: 0,
-      actualWeight: undefined,
-      actualWeightUnit: undefined,
-      chargedWeight: 0,
-      chargedWeightUnit: undefined,
-      rateAsPer: 0,
-      rateAsPerOption: undefined,
-      rate: 0,
-      rateUnit: undefined,
-      GSTPercentage: 0,
-      GSTType: "",
-      amount: 0,
-    },
+    itemsList:[],
+    // itemsList:[ {
+    //   material: undefined,
+    //   quantity: 0,
+    //   quantityUnit: undefined,
+    //   actualWeight: undefined,
+    //   actualWeightUnit: undefined,
+    //   chargedWeight: 0,
+    //   chargedWeightUnit: undefined,
+    //   rateAsPer: 0,
+    //   rateAsPerOption: undefined,
+    //   rate: undefined,
+    //   rateUnit: undefined,
+    //   GSTPercentage: 0,
+    //   GSTType: "RCM",
+    //   amount: 0,
+    // }],
     additionalCharges: {
       enabled: false,
       totalCharge: 0,
@@ -206,6 +184,10 @@ export default function ProfileForm() {
       const items = Array.isArray(prevItems) ? prevItems : [];
       return [...items, newItem];
     });
+
+    form.setValue("itemsList", materialItems);
+    console.log("materialItems :", materialItems);
+    console.log("ItemsList :", form.getValues("itemsList"));
   }
 
   //=======================================================================
@@ -257,6 +239,7 @@ export default function ProfileForm() {
   }
 
   ///=======zod Error Checking====>
+ 
   const submitData = {
     adminId: "65abcb376d75c0783564ef39",
     orderNumber: "122431",
@@ -306,40 +289,37 @@ export default function ProfileForm() {
         },
       ],
     },
-    itemsList: [
-      {
-        material: "Material 1",
-        hsnNo: "judvcabkj",
-        quantity: 10,
-        rate: 50,
-        // amount: 500,
-        taxPercentage: 10,
-        quantityUnit: "kg",
-        actualWeight: 100,
-        actualWeightUnit: "kg",
-        chargedWeight: 110,
-        chargedWeightUnit: "kg",
-        rateAsPer: "Fixed",
-        GSTType: "RCM",
-        rateAsPerOption: "Option 1",
-        rateUnit: "kg",
-        basicAmount: 200,
-        amount: 344,
-      },
-    ],
+    itemsList:[{
+      GSTPercentage: "0.1",
+      GSTType: "RCM",
+      actualWeight: "12",
+      actualWeightUnit: "Bag",
+      amount: "2335",
+      basicAmount: 0,
+      chargedWeight: undefined,
+      chargedWeightUnit: undefined,
+      hsnNo: "67yu5i689opo",
+      material: "cotton",
+      quantity: "12",
+      quantityUnit: "KILO GRAMS",
+      rate: undefined,
+      rateAsPer: undefined,
+      rateAsPerOption: undefined,
+      rateUnit: undefined,
+    }],
     totalAdditionalChargeTax: 0,
     totalAdditionalCharges: 200,
     totalBillingAmount: 5000,
     isUrgent: true,
   };
 
-  const itemsListData = {
+  const itemsListData = [{
     GSTPercentage: "0.1",
-    GSTType: "FCM",
-    actualWeight: "11",
-    actualWeightUnit: "Basta",
-    amount: "276",
-    basicAmount: 0,
+    GSTType: undefined,
+    actualWeight: "12",
+    actualWeightUnit: "Bag",
+    amount: "2335",
+    basicAmount: undefined,
     chargedWeight: undefined,
     chargedWeightUnit: undefined,
     hsnNo: "67yu5i689opo",
@@ -350,10 +330,9 @@ export default function ProfileForm() {
     rateAsPer: undefined,
     rateAsPerOption: undefined,
     rateUnit: undefined,
-   
-  };
+  }];
 
-  // console.log(itemsSchema.safeParse(itemsListData));
+  // console.log(formSchema.safeParse(submitData));
 
   async function MyHandleSubmit(value) {
     console.log("hey");
@@ -642,7 +621,6 @@ export default function ProfileForm() {
                 form={form}
                 nameValue="itemsList"
                 onAddItem={handleAddItem}
-                materialItems={materialItems}
               />
               <AdditionalChargers
                 form={form}
