@@ -64,7 +64,7 @@ const id = params.id;
 
       <div className="w-[450px]">
         {/* actual receipt */}
-        <div className="actual-receipt h-[842px] w-[595px] relative">
+        <div className="actual-receipt relative h-[842px] w-[595px]">
           <div className="absolute h-full w-full  bg-white ">
             <Image
               src="/BIHAR TRANSPORT.svg"
@@ -72,45 +72,79 @@ const id = params.id;
               layout="fill"
               objectFit="contain"
             />
-           
           </div>
-          <p className="absolute top-[166px] left-[476px]  text-[.7rem]">{data?.date.slice(0,10)}</p>
+          <p className="absolute left-[476px] top-[166px]  text-[.7rem]">
+            {data?.date.slice(0, 10)}
+          </p>
 
-          <p className="absolute top-[235px] left-[55px]  text-[.7rem]">{data?.consigneeName}</p>
-          <p className="absolute top-[235px] left-[418px]  text-[.7rem]">{data?.consigneeMobileNumber}</p>
+          <p className="absolute left-[55px] top-[235px]  text-[.7rem]">
+            {data?.consigneeName}
+          </p>
+          <p className="absolute left-[418px] top-[235px]  text-[.7rem]">
+            {data?.consigneeMobileNumber}
+          </p>
 
-          <p className="absolute w-1/3 top-[312px] left-[49px]  text-[.5rem] ">{data?.loadingPoints}</p>
-          <p className="absolute w-1/3 top-[312px] left-[380px]  text-[.5rem] ">{data?.unloadingPoints}
-</p>
+          <p className="absolute left-[49px] top-[312px] w-1/3  text-[.5rem] ">
+            {data?.loadingPoints}
+          </p>
+          <p className="absolute left-[380px] top-[312px] w-1/3  text-[.5rem] ">
+            {data?.unloadingPoints}
+          </p>
 
-          <p className="absolute  top-[340px] left-[69px]  text-[.7rem] ">{data?.allotedVehicle[0]?.vehicleNo}</p>
-          <p className="absolute top-[340px] left-[424px]  text-[.7rem] ">{data?.vehicleType}</p>
+          <p className="absolute  left-[69px] top-[340px]  text-[.7rem] ">
+            {data?.allotedVehicle[0]?.vehicleNo}
+          </p>
+          <p className="absolute left-[424px] top-[340px]  text-[.7rem] ">
+            {data?.vehicleType}
+          </p>
 
+          <p className="absolute left-[69px] top-[368px]  text-[.7rem] ">
+            {data?.itemsList?.item[0]?.material}
+          </p>
 
-          <p className="absolute top-[368px] left-[69px]  text-[.7rem] ">{data?.material}</p>
-          <p className="absolute top-[368px] left-[408px]  text-[.7rem] ">{data?.chargedWeight}</p>
+          <p className="absolute left-[408px] top-[368px]  text-[.7rem] ">
+            {`${data?.itemsList?.item[0]?.actualWeight}  ${data?.itemsList?.item[0]?.actualWeightUnit}`}
+          </p>
 
-          <p className="absolute top-[439px] left-[55px]  text-[.7rem] ">fare</p>
-          <p className="absolute top-[439px] left-[405px]  text-[.7rem] ">{data?.advanceAmount}</p>
-        
-        
-          <p className="absolute top-[469px] left-[75px]  text-[.7rem] ">detention</p>
-          <p className="absolute top-[469px] left-[405px]  text-[.7rem] ">{data?.balanceAmount}</p>
+          <p className="absolute left-[55px] top-[439px]  text-[.7rem] ">
+            fare
+          </p>
+          <p className="absolute left-[405px] top-[439px]  text-[.7rem] ">
+            {data?.advanceAmount}
+          </p>
 
-          <p className="absolute top-[498px] left-[105px]  text-[.7rem] ">otherChage</p>
-          <p className="absolute top-[498px] left-[430px]  text-[.7rem] ">{data?.partyBhara}</p>
+          <p className="absolute left-[75px] top-[469px]  text-[.7rem] ">
+            detention
+          </p>
+          <p className="absolute left-[405px] top-[469px]  text-[.7rem] ">
+            {data?.balanceAmount}
+          </p>
 
+          <p className="absolute left-[105px] top-[498px]  text-[.7rem] ">
+            otherChage
+          </p>
+          <p className="absolute left-[430px] top-[498px]  text-[.7rem] ">
+            {data?.partyBhara}
+          </p>
 
-          <p className="absolute top-[564px] left-[92px]  text-[.7rem] ">{data?.allotedVehicle[0]?.vehicleDriver}</p>
-          <p className="absolute top-[564px] left-[426px]  text-[.7rem] ">{data?.allotedVehicle[0]?.vehicleOwner}</p>
+          <p className="absolute left-[92px] top-[564px]  text-[.7rem] ">
+            {data?.allotedVehicle[0]?.vehicleDriver}
+          </p>
+          <p className="absolute left-[426px] top-[564px]  text-[.7rem] ">
+            {data?.allotedVehicle[0]?.vehicleOwner}
+          </p>
 
-          <p className="absolute top-[590px] left-[82px]  text-[.7rem] ">{data?.allotedVehicle[0]?.vehicleDriverPhone}</p>
-          <p className="absolute top-[590px] left-[422px]  text-[.7rem] ">{data?.allotedVehicle[0]?.vehicleOwnerPhone}</p>
+          <p className="absolute left-[82px] top-[590px]  text-[.7rem] ">
+            {data?.allotedVehicle[0]?.vehicleDriverPhone}
+          </p>
+          <p className="absolute left-[422px] top-[590px]  text-[.7rem] ">
+            {data?.allotedVehicle[0]?.vehicleOwnerPhone}
+          </p>
 
-          <p className="absolute top-[626px] left-[82px]  text-[.7rem] ">{data?.remarks}</p>
-          
+          <p className="absolute left-[82px] top-[626px]  text-[.7rem] ">
+            {data?.remarks}
+          </p>
         </div>
-       
       </div>
       <div className="self-start">
         <div className="actions-right">

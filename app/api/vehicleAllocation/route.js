@@ -138,6 +138,8 @@ export async function POST(req, res) {
     vehicleId: existingVehicle._id,
     DriverDetails,
     arrangedBy: arrangedBy,
+    vehicleDriver:existingVehicle.driver.name,
+    vehicleOwner:existingVehicle.owner.name,
     vehicleNo: existingVehicle.vehicleNo,
     vehicleDriverPhone: existingVehicle.driver.phone,
     vehicleOwnerPhone: existingVehicle.owner.phone,

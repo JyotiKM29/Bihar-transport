@@ -78,7 +78,7 @@ export async function GET(req, context) {
 
       if(isNaN(item.advanceAmount) || isNaN(item.balanceAmount)){
         
-        console.log("not a no error because of this data ", item._id, item.advanceAmount, item.balanceAmount, item.status)
+        console.log("a no error because of this data ", item._id, item.advanceAmount, item.balanceAmount, item.status)
         // Booking.deleteOne({_id:item._id}).then((results)=>{console.log("deleted")})
         
       }
