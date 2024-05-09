@@ -18,6 +18,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import CancellationPop from "../CancellationPop";
 import UpdateLocationPop from "../updateLocationPop";
+import LocationTable from "../locationTable"
 
 
 export default function ColumnHeader() {
@@ -235,7 +236,12 @@ export default function ColumnHeader() {
         ),
         cell: ({ row }) => (
           <div>
-            <p>{row.original.location?.[row.original.location?.length - 1]?.location}</p>
+            <p>
+              {
+                row.original.location?.[row.original.location?.length - 1]
+                  ?.location
+              }
+            </p>
             <hr />
             {/* <p>{row.original.way}</p> */}
           </div>
@@ -275,24 +281,40 @@ export default function ColumnHeader() {
         },
       },
 
-      {
-        accessorKey: "viewLocation",
+      // {
+      //   accessorKey: "viewLocation",
 
+      //   header: (
+      //     <div className="text-center  ">
+      //       <p>&nbsp;</p>
+      //       <p>&nbsp;</p>
+      //       <p className="w-[10rem]">View Location</p>
+      //     </div>
+      //   ),
+      //   cell: ({ row }) => (
+      //     <div>
+      //       <p>{row.original.locations}</p>
+      //       <hr />
+      //       <p>{row.original.way}</p>
+      //     </div>
+      //   ),
+      // },
+
+      {
+        id: "actions",
+        enableHiding: false,
         header: (
-          <div className="text-center  ">
+          <div className="text-center">
             <p>&nbsp;</p>
-            <p>&nbsp;</p>
-            <p className="w-[10rem]">View Location</p>
+            <p>Update</p>
+            <p> Booking location </p>
           </div>
         ),
-        cell: ({ row }) => (
-          <div>
-            <p>{row.original.unloadingPoints}</p>
-            <hr />
-            <p>{row.original.way}</p>
-          </div>
-        ),
+        cell: ({ row }) => {
+          return <LocationTable locations={row.original.location} />;
+        },
       },
+
       {
         id: "actions",
         enableHiding: false,
