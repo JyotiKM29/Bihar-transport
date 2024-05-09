@@ -23,22 +23,37 @@ const AdvanceBooking = () => {
           const response = await fetch(`/api/getbooking/${userId}`, {
             method: "GET",
           });
-  
+
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
-  
+
           const result = await response.json();
-  
+
           setLoading(false);
-  
-          // Check if result.data is an array before applying filter
-          const pendingOrders = Array.isArray(result.data) ? result.data.filter(
-            (order) => order.status === "Pending",
-          ) : [];
-  
+
+          // // Check if result.data is an array before applying filter
+          // const pendingOrders = Array.isArray(result.data)
+          //   ? result.data.filter((order) => order.status === "Pending")
+          //   : [];
+
+          // Get today's date
+const today = new Date();
+today.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0 for accurate comparison
+
+// Check if result.data is an array before applying filter
+          const pendingOrders = Array.isArray(result.data)
+            ? result.data.filter((order) => {
+              // Parse createdAt date string to Date object
+              const createdAtDate = new Date(order.vehicleRequiredDate);
+
+              // Filter orders with status "Pending" and createdAt date in the future (after today's date)
+              return order.status === "Pending" && createdAtDate > today;
+            })
+            : [];
+
           console.log(pendingOrders);
-  
+
           setData(pendingOrders);
         }
       } catch (error) {
