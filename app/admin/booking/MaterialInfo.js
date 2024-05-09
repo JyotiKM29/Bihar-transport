@@ -461,7 +461,7 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
                           <div className="flex flex-1 flex-col">
                             <FormControl>
                               <Input
-                                type="text"
+                                type="number"
                                 {...field}
                                 className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
                               />
