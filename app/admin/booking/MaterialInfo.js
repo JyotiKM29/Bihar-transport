@@ -17,7 +17,7 @@ import { Input } from "../../components/ui/input";
 import { UserContext } from "../../context/UserContextProvider";
 
 
-const MaterialInfo = ({ form, nameValue , onAddItem }) => {
+const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
   const [items, setItems] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [unitsData, setUnitsData] = useState([]);
@@ -152,15 +152,16 @@ const MaterialInfo = ({ form, nameValue , onAddItem }) => {
       basicAmount: form.getValues(`${nameValue}[${items.length}].basicAmount`),
     };
 
-    onAddItem(newItem);
+    // onAddItem(newItem);
     const data = form.getValues(nameValue);
     console.log("item list after update:" , data)
+    
 
+    const updatedItem = form.getValues("itemsList") && [];
 
-    // const updatedItem = form.getValues("itemsList") && [];
-
-    // setItems([...updatedItem, newItem]);
-    // form.setValue(nameValue, [...items, newItem]);
+    setItems([...updatedItem, newItem]);
+    form.setValue(nameValue, [...items, newItem]);
+    setMaterialItems([...updatedItem, newItem]);
    
     setShowForm(false);
   }

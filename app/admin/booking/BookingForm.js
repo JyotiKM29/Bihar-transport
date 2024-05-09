@@ -62,8 +62,8 @@ const itemsSchema = z.object({
   rate: z.coerce.number().optional(),
   rateUnit: z.string().optional(),
   GSTPercentage: z.coerce.number().optional(),
-  GSTType: z.enum(["RCM", "FCM"]),
-  basicAmount: z.coerce.number(),
+  GSTType: z.enum(["RCM", "FCM"]).optional(),
+  basicAmount: z.coerce.number().optional(),
   amount: z.coerce.number().optional(),
 });
 
@@ -91,7 +91,7 @@ const formSchema = z.object({
 
   paymentTerm: z.enum(["Advance", "Paid", "To Pay", "To be Billed"]),
   remarks: z.string().optional(),
-  itemsList: z.array(itemsSchema),
+  itemsList: z.array(itemsSchema  ),
   // itemsList : z.array(itemsSchema.or(z.object())), 
   additionalCharges: additionalChargeSchema,
   totalAdditionalChargeTax: z.coerce.number(),
@@ -180,10 +180,12 @@ export default function ProfileForm() {
   }
 
   function handleAddItem(newItem) {
-    setMaterialItems((prevItems) => {
-      const items = Array.isArray(prevItems) ? prevItems : [];
-      return [...items, newItem];
-    });
+    // setMaterialItems((prevItems) => {
+    //   const items = Array.isArray(prevItems) ? prevItems : [];
+    //   return [...items, newItem];
+    // });
+
+    setMaterialItems((items)=>[...items, newItem]);
 
     form.setValue("itemsList", materialItems);
     console.log("materialItems :", materialItems);
@@ -306,7 +308,26 @@ export default function ProfileForm() {
       rateAsPer: undefined,
       rateAsPerOption: undefined,
       rateUnit: undefined,
-    }],
+    },
+    {
+      GSTPercentage: "0.1",
+      GSTType: "RCM",
+      actualWeight: "12",
+      actualWeightUnit: "Bag",
+      amount: "2335",
+      basicAmount: 0,
+      chargedWeight: undefined,
+      chargedWeightUnit: undefined,
+      hsnNo: "67yu5i689opo",
+      material: "cotton",
+      quantity: "12",
+      quantityUnit: "KILO GRAMS",
+      rate: undefined,
+      rateAsPer: undefined,
+      rateAsPerOption: undefined,
+      rateUnit: undefined,
+    }
+  ],
     totalAdditionalChargeTax: 0,
     totalAdditionalCharges: 200,
     totalBillingAmount: 5000,
@@ -621,6 +642,7 @@ export default function ProfileForm() {
                 form={form}
                 nameValue="itemsList"
                 onAddItem={handleAddItem}
+                setMaterialItems={setMaterialItems}
               />
               <AdditionalChargers
                 form={form}
