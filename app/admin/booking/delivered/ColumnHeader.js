@@ -172,7 +172,7 @@ export default function ColumnHeader() {
         cell: ({ row }) => (
           <div>
             <p>
-              {row.original?.itemsList?.item[0].material} (
+              {row.original?.itemsList?.item[0]?.material} (
               {row.original?.itemsList?.item[0]?.quantity}
               {row.original?.itemsList?.item[0]?.quantityUnit})
             </p>
