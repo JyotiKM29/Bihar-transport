@@ -58,7 +58,14 @@ export async function POST(req, res) {
         }
         else if (booking.status === 'Cancelled' && status === 'Restart') {
             
-            booking.status = status;
+          booking.status = "Pending";
+if (booking.reasonToCancel !== undefined && booking.reasonToCancel) {
+    // Do something if booking.reasonToCancel exists and is truthy
+        booking.reasonToCancel = "";
+
+} else {
+    booking.reasonToCancel = "";
+}
             booking.updatedBy.push({
               name: admin.name,
               adminId: adminId,
