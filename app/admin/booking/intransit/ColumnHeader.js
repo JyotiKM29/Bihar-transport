@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import CancellationPop from "../CancellationPop";
+import UpdateLocationPop from "../updateLocationPop";
 
 
 export default function ColumnHeader() {
@@ -140,8 +141,6 @@ export default function ColumnHeader() {
             <p>&nbsp;</p>
             <p>&nbsp;</p>
             <p>CONSINGOR</p>
-           
-     
           </div>
         ),
         cell: ({ row }) => (
@@ -162,8 +161,8 @@ export default function ColumnHeader() {
           <div className="text-center">
             <p>&nbsp;</p>
             <p>&nbsp;</p>
-           
-           <p>CONSIGNEE</p>
+
+            <p>CONSIGNEE</p>
           </div>
         ),
         cell: ({ row }) => (
@@ -181,12 +180,10 @@ export default function ColumnHeader() {
 
         header: (
           <div className="text-center">
-           <p>&nbsp;</p>
             <p>&nbsp;</p>
-           
+            <p>&nbsp;</p>
+
             <p>Vehicle Details</p>
-           
-         
           </div>
         ),
         cell: ({ row }) => (
@@ -262,7 +259,22 @@ export default function ColumnHeader() {
           </div>
         ),
       },
-      
+
+      {
+        id: "actions",
+        enableHiding: false,
+        header: (
+          <div className="text-center">
+            <p>&nbsp;</p>
+            <p>Update</p>
+            <p> Booking location </p>
+          </div>
+        ),
+        cell: ({ row }) => {
+          return <UpdateLocationPop bookingId={row.original._id} />;
+        },
+      },
+
       {
         accessorKey: "viewLocation",
 
@@ -292,12 +304,10 @@ export default function ColumnHeader() {
           </div>
         ),
         cell: ({ row }) => {
-          return ( <CancellationPop bookingId={row.original._id}/> )
-        }
-
+          return <CancellationPop bookingId={row.original._id} />;
+        },
       },
-     
-    
+
       {
         id: "actions",
         enableHiding: false,
@@ -319,16 +329,19 @@ export default function ColumnHeader() {
                   </Link>
                 </DropdownMenuItem>
 
-               
                 <DropdownMenuItem>
-                <Link 
-               href={`/admin/booking/sendInvoice/${row.original._id}`}
-                >
-                   Send Invoice
+                  <Link href={`/admin/booking/sendInvoice/${row.original._id}`}>
+                    Send Invoice
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                   <button onClick={()=>handleConfirm('Delivered',`${row.original._id}` )}>Delivered Booking</button> 
+                  <button
+                    onClick={() =>
+                      handleConfirm("Delivered", `${row.original._id}`)
+                    }
+                  >
+                    Delivered Booking
+                  </button>
                 </DropdownMenuItem>
                 {/* <DropdownMenuItem>
                 <Link 
