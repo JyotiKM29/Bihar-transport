@@ -110,21 +110,21 @@ const id = params.id;
             fare
           </p>
           <p className="absolute left-[405px] top-[439px]  text-[.7rem] ">
-            {data?.advanceAmount}
+           ₹ {data?.advanceAmount}
           </p>
 
           <p className="absolute left-[75px] top-[469px]  text-[.7rem] ">
             detention
           </p>
           <p className="absolute left-[405px] top-[469px]  text-[.7rem] ">
-            {data?.balanceAmount}
+           ₹ {data?.balanceAmount}
           </p>
 
           <p className="absolute left-[105px] top-[498px]  text-[.7rem] ">
             otherChage
           </p>
           <p className="absolute left-[430px] top-[498px]  text-[.7rem] ">
-            {data?.partyBhara}
+            ₹ {data?.totalBillingAmount} 
           </p>
 
           <p className="absolute left-[92px] top-[564px]  text-[.7rem] ">
