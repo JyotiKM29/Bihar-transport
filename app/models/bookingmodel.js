@@ -60,10 +60,10 @@ const charge = new mongoose.Schema({
 
 
 const dispatchChargeSchema = new mongoose.Schema({
-  chargesName: { type: String, required: true },
-  days: { type: Number, required: true },
-  rate: { type: Number, required: true },
-  amount: { type: Number, required: true },
+  chargesName: { type: String, },
+  days: { type: Number, },
+  rate: { type: Number,  },
+  amount: { type: Number,  },
   remarks: { type: String },
 });
 
@@ -93,7 +93,7 @@ const dispatchDetailsSchema = new mongoose.Schema({
 });
 
 const dispatchAdditionalRateSchema = new mongoose.Schema({
-  chargesName: { type: String, required: true },
+  chargesName: { type: String, },
   days: { type: Number, default: 1},
   rate: { type: Number, default: 0},
   amount: { type: Number,default: 0},
@@ -199,8 +199,8 @@ const bookingSchema = new mongoose.Schema(
       type: String,
       enum: ["Advance", "Paid", "To Pay", "To be Billed"],
     },
-    advanceAmount: { type: Number },
-    balanceAmount: { type: Number },
+    advanceAmount: { type: Number, default:0 },
+    balanceAmount: { type: Number,},
     GSTPercentage: { type: Number },
     GSTType: { type: String, enum: ["RCM", "FCM"] },
     payMode: { type: String },

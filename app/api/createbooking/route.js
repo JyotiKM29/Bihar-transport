@@ -95,6 +95,7 @@ function calculateTotalAmount(itemsList) {
         paymentLiability,
         billTo,
         paymentTerm,
+        balanceAmount:totalBillingAmount,
         // advanceAmount,
         totalBillingAmount,
         totalAdditionalCharges,

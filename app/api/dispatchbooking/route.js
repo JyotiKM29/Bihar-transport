@@ -8,7 +8,7 @@ import Order from "../../models/orderModel";
 export async function POST(req, res) {
     
     try {
-        const { adminId, bookingId, dispatchDetails } = await req.json();
+        const { adminId, bookingId, dispatch } = await req.json();
         await connectDB();
 
         const admin = await user.findOne({ $and: [{ _id: adminId }, { $or: [{ isAdmin: true }, { isOwner: true }] }] });
@@ -19,27 +19,32 @@ export async function POST(req, res) {
         if (booking.status !== "Initialized") return Response.json({ message: "Booking is not confirmed" }, { status: 400 });
         if (booking.dispatch.isDispatched) return Response.json({ message: "Booking is already dispatched" }, { status: 400 });
 
-        const existingOrder = await Order.findOne({ "booking.id": bookingId });
-        if (!existingOrder) return Response.json({ message: "Order does not exist" }, { status: 400 });
+        // const existingOrder = await Order.findOne({ "booking.id": bookingId });
+        // if (!existingOrder) return Response.json({ message: "Order does not exist" }, { status: 400 });
 
-        const newOrder = await Order.findOneAndUpdate(
-          { "booking.id": bookingId },
-          {
-            dispatch: dispatchDetails,
-            status: "Dispatched",
-            updatedBy: {
-              id: adminId,
-              name: admin.name,
-              date: new Date(),
-            },
-          },
-          { new: true },
-        );
+        // const newOrder = await Order.findOneAndUpdate(
+        //   { "booking.id": bookingId },
+        //   {
+        //     dispatch: dispatch,
+        //     status: "Dispatched",
+        //     updatedBy: {
+        //       id: adminId,
+        //       name: admin.name,
+        //       date: new Date(),
+        //     },
+        //   },
+        //   { new: true },
+        // );
 
+
+      const dispatchInfo = {
+        isDispatch:dispatch.isDispatch
+      }
+ 
         const updatedBooking = await Booking.findOneAndUpdate(
           { _id: bookingId },
           {
-            dispatch: dispatchDetails,
+            dispatch: dispatch,
             status: "Dispatched",
             updatedBy: [
               {
