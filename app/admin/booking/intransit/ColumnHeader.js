@@ -235,30 +235,30 @@ export default function ColumnHeader() {
         ),
         cell: ({ row }) => (
           <div>
-            <p>{row.original.unloadingPoints}</p>
+            <p>{row.original.location?.[row.original.location?.length - 1]?.location}</p>
             <hr />
-            <p>{row.original.way}</p>
+            {/* <p>{row.original.way}</p> */}
           </div>
         ),
       },
-      {
-        accessorKey: "updatedLocation",
+      // {
+      //   accessorKey: "updatedLocation",
 
-        header: (
-          <div className="text-center  ">
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
-            <p className="w-[10rem]">Updated Location</p>
-          </div>
-        ),
-        cell: ({ row }) => (
-          <div>
-            <p>{row.original.unloadingPoints}</p>
-            <hr />
-            <p>{row.original.way}</p>
-          </div>
-        ),
-      },
+      //   header: (
+      //     <div className="text-center  ">
+      //       <p>&nbsp;</p>
+      //       <p>&nbsp;</p>
+      //       <p className="w-[10rem]">Updated Location</p>
+      //     </div>
+      //   ),
+      //   cell: ({ row }) => (
+      //     <div>
+      //       <p>{row.original.unloadingPoints}</p>
+      //       <hr />
+      //       <p>{row.original.way}</p>
+      //     </div>
+      //   ),
+      // },
 
       {
         id: "actions",
