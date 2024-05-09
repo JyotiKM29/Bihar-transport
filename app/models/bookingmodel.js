@@ -60,10 +60,10 @@ const charge = new mongoose.Schema({
 
 
 const dispatchChargeSchema = new mongoose.Schema({
-  chargesName: { type: String, required: true },
-  days: { type: Number, required: true },
-  rate: { type: Number, required: true },
-  amount: { type: Number, required: true },
+  chargesName: { type: String, },
+  days: { type: Number, },
+  rate: { type: Number,  },
+  amount: { type: Number,  },
   remarks: { type: String },
 });
 
@@ -93,7 +93,7 @@ const dispatchDetailsSchema = new mongoose.Schema({
 });
 
 const dispatchAdditionalRateSchema = new mongoose.Schema({
-  chargesName: { type: String, required: true },
+  chargesName: { type: String, },
   days: { type: Number, default: 1},
   rate: { type: Number, default: 0},
   amount: { type: Number,default: 0},

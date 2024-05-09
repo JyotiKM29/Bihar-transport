@@ -36,6 +36,11 @@ export async function POST(req, res) {
         //   { new: true },
         // );
 
+
+      const dispatchInfo = {
+        isDispatch:dispatch.isDispatch
+      }
+ 
         const updatedBooking = await Booking.findOneAndUpdate(
           { _id: bookingId },
           {

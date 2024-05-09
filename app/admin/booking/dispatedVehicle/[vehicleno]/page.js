@@ -66,7 +66,7 @@ const dispatchDetailsSchema = z.object({
 // dispatchAdditionalDetailsSchema
 const insuranceSchema = z
   .object({
-    isInsured: z.enum(["Yes", "No"]),
+    isInsured: z.enum(["Yes", "No"]).transform((val) => val === "Yes"),
     insuranceProvider: z.string().optional(),
     policyNo: z.string().optional(),
     policyAmount: z.coerce.number().optional(),
@@ -122,13 +122,8 @@ const DispatchVehicle = ({ params }) => {
   const { user } = useContext(UserContext);
 
   const initialFormState = {
-<<<<<<< Updated upstream
-    adminId:'',
-    
-=======
     adminId: "",
 
->>>>>>> Stashed changes
     // vehicleNo: undefined,
     bookingId: params?.vehicleno,
     dispatch: {
