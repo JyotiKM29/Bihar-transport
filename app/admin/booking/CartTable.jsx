@@ -2,15 +2,17 @@
 import React, { useEffect, useState } from "react";
 import { ShoppingCart } from "lucide-react";
 
-const CartTable = ({ form , items , onDelete , materialItems }) => {
-  // const [itemNew , setItemNew] = useState([...items])
+const CartTable = ({ form, items, onDelete, onEdit }) => {
   const [cartItems, setCartItems] = useState(items);
   const [noOfItems, setNoOfItems] = useState(0);
   const [totalCost, setTotalCost] = useState(0.0);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentItem, setCurrentItem] = useState(null);
 
   useEffect(() => {
     setCartItems(items);
-    let length =  Array.isArray(cartItems) && cartItems.length ? cartItems.length : 0;
+    const length =
+      Array.isArray(cartItems) && cartItems.length ? cartItems.length : 0;
     setNoOfItems(length);
 
     const calculatedTotalCost = Array.isArray(items)
@@ -21,43 +23,50 @@ const CartTable = ({ form , items , onDelete , materialItems }) => {
 
     setTotalCost(calculatedTotalCost);
 
-
-    form.setValue("partyBhara", totalCost );
-    console.log("partyBhara Jyoti KM" , form.getValues("partyBhara"))
-    
-  
-    
+    form.setValue("partyBhara", totalCost);
+    console.log("partyBhara Jyoti KM", form.getValues("partyBhara"));
   }, [items]);
 
-  // const handleDelete = (hsnRemove) => {
+  const handleEditClick = (item) => {
+    setIsEditing(true);
+    setCurrentItem(item);
+  };
 
-  //  items = items.filter((item) => item.hsnNo !== hsnRemove);
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentItem((prevItem) => ({
+      ...prevItem,
+      [name]: value,
+    }));
+  };
 
-  //   setCartItems([...items]);
-  // };
+  const handleEditSubmit = () => {
+    onEdit(currentItem);
+    setIsEditing(false);
+    setCurrentItem(null);
+  };
 
   return (
     <div className="w-full overflow-x-scroll px-4 py-2">
-      <h2 className="flex gap-2 text-xl font-semibold ">
+      <h2 className="flex gap-2 text-xl font-semibold">
         <ShoppingCart strokeWidth={2.5} /> Total Item in Cart{" "}
-        <p> ({noOfItems})</p>
+        <p>({noOfItems})</p>
       </h2>
 
       <div className="w-full">
         <table className="mx-2 my-4 w-full border">
           <thead>
             <tr className="font-semiBold w-full border bg-slate-50">
-              <th className="text-nowrap pr-3 font-medium ">Material </th>
-              <th className="text-nowrap pr-3 font-medium ">HSN</th>
-              <th className="text-nowrap pr-3 font-medium ">Qty</th>
-              <th className="text-nowrap pr-3 font-medium ">A.Weight</th>
-              <th className="text-nowrap pr-3 font-medium ">C.Weight</th>
-              <th className="text-nowrap pr-3 font-medium ">Rate</th>
-              {/* <th className="font-medium pr-3 text-nowrap ">Rate/Per</th> */}
-              <th className="text-nowrap pr-3 font-medium ">Basic Amount</th>
-              <th className="text-nowrap pr-3 font-medium ">Tax</th>
-              <th className="text-nowrap pr-3 font-medium ">Amount</th>
-              <th className="text-nowrap pr-3 font-medium ">Action</th>
+              <th className="text-nowrap pr-3 font-medium">Material</th>
+              <th className="text-nowrap pr-3 font-medium">HSN</th>
+              <th className="text-nowrap pr-3 font-medium">Qty</th>
+              <th className="text-nowrap pr-3 font-medium">A.Weight</th>
+              <th className="text-nowrap pr-3 font-medium">C.Weight</th>
+              <th className="text-nowrap pr-3 font-medium">Rate</th>
+              <th className="text-nowrap pr-3 font-medium">Basic Amount</th>
+              <th className="text-nowrap pr-3 font-medium">Tax</th>
+              <th className="text-nowrap pr-3 font-medium">Amount</th>
+              <th className="text-nowrap pr-3 font-medium">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -67,7 +76,6 @@ const CartTable = ({ form , items , onDelete , materialItems }) => {
                   <td>{item.material}</td>
                   <td>{item.hsnNo}</td>
                   <td>
-
                     {item.quantity} {item.quantityUnit}
                   </td>
                   <td>
@@ -87,16 +95,19 @@ const CartTable = ({ form , items , onDelete , materialItems }) => {
                       ? `${item.GSTPercentage * 100} % ${item.GSTType}`
                       : "0%"}
                   </td>
-
                   <td>{item.amount}</td>
                   <td>
-                    <button type="button" className="font-bold ">
+                    <button
+                      type="button"
+                      className="font-bold"
+                      onClick={() => handleEditClick(item)}
+                    >
                       Edit
                     </button>{" "}
                     /{" "}
                     <button
                       type="button"
-                      className="font-bold "
+                      className="font-bold"
                       onClick={() => onDelete(item.hsnNo)}
                     >
                       Delete
@@ -107,10 +118,35 @@ const CartTable = ({ form , items , onDelete , materialItems }) => {
           </tbody>
         </table>
 
+        {isEditing && (
+          <div className="edit-form">
+            <h3>Edit Item</h3>
+            <input
+              type="text"
+              name="material"
+              value={currentItem.material}
+              onChange={handleEditChange}
+            />
+            <input
+              type="text"
+              name="quantity"
+              value={currentItem.quantity}
+              onChange={handleEditChange}
+            />
+            {/* Add other fields as necessary */}
+            <button type="button" onClick={handleEditSubmit}>
+              Save
+            </button>
+            <button type="button" onClick={() => setIsEditing(false)}>
+              Cancel
+            </button>
+          </div>
+        )}
+
         <div className="flex justify-end">
           <p className="w-max">
             Total:{" "}
-            <span className="ml-2 rounded border border-green-400 bg-green-200 px-4 py-1 ">
+            <span className="ml-2 rounded border border-green-400 bg-green-200 px-4 py-1">
               {" "}
               &#8377; {parseFloat(totalCost).toFixed(2)}{" "}
             </span>

@@ -179,6 +179,16 @@ export default function ProfileForm() {
     form.setValue("itemsList", updatedItems);
   }
 
+
+  const onEditItem = (updatedItem) => {
+    const updatedItems = materialItems.map((item) =>
+      item.hsnNo === updatedItem.hsnNo ? updatedItem : item,
+    );
+    setMaterialItems(updatedItems);
+    form.setValue("itemsList", updatedItems);
+  };
+
+
   function handleAddItem(newItem) {
     // setMaterialItems((prevItems) => {
     //   const items = Array.isArray(prevItems) ? prevItems : [];
@@ -631,6 +641,7 @@ export default function ProfileForm() {
             <CartTable
               items={materialItems}
               onDelete={onDeleteItem}
+              onEdit={onEditItem}
               form={form}
             />
           </div>
