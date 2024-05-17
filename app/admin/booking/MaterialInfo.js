@@ -262,7 +262,9 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
                             className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
                           >
                             {/* <option value=""> Select Quantity Unit</option> */}
-                            <option key={qtyUnit}>{qtyUnit ? qtyUnit : "Select Quantity Unit"}  </option>
+                            <option key={qtyUnit}>
+                              {qtyUnit ? qtyUnit : "Select Quantity Unit"}{" "}
+                            </option>
                             {Array.isArray(unitsData) &&
                               unitsData.map((unit) => (
                                 <option key={unit.name} value={unit.name}>
@@ -312,7 +314,7 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
                   );
                 }}
               />
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name={`${nameValue}[${items.length}].actualWeightUnit`}
                 render={({ field }) => {
@@ -325,7 +327,6 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
                             className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
                           >
                             <option value="">Select Charged Weight Unit</option>
-                            
                             <option value="Box"> Box</option>
                             <option value="Bag"> Bag</option>
                             <option value="Basta"> Basta</option>
@@ -345,7 +346,44 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
                     </FormItem>
                   );
                 }}
+              /> */}
+
+              <FormField
+                control={form.control}
+                name={`${nameValue}[${items.length}].actualWeightUnit`}
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex flex-1 items-center justify-center ">
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <select
+                            {...field}
+                            className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                          >
+                            {/* <option value=""> Select Actual Weight Unit</option> */}
+                            <option key={qtyUnit}>{qtyUnit ? qtyUnit : "Select Actual Weight Unit"}  </option>
+                            {Array.isArray(unitsData) &&
+                              unitsData.map((unit) => (
+                                <option key={unit.name} value={unit.name}>
+                                  {unit.name}
+                                </option>
+                              ))}
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
               />
+
+              <UnitAdd onUnitAdded={handleUnitAdded} />
+
+
+
+
+
+
             </div>
 
             <div className="flex w-full items-center gap-0">
@@ -389,7 +427,7 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
               />
             </div>
 
-            {form.watch(`${nameValue}[${items.length}].rateAsPer` , "fixed") !==
+            {form.watch(`${nameValue}[${items.length}].rateAsPer`, "fixed") !==
               "fixed" && (
               <>
                 <div className="flex w-full items-center gap-0">
@@ -473,7 +511,41 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
                       );
                     }}
                   />
+
                   <FormField
+                    control={form.control}
+                    name={`${nameValue}[${items.length}].chargedWeightUnit`}
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="flex flex-1 items-center justify-center ">
+                          <div className="flex flex-1 flex-col">
+                            <FormControl>
+                              <select
+                                {...field}
+                                className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                              >
+                                {/* <option value=""> Select Charged Weight Unit</option> */}
+                                <option key={qtyUnit}>
+                                  {qtyUnit ? qtyUnit : "Select Charged Weight Unit"}{" "}
+                                </option>
+                                {Array.isArray(unitsData) &&
+                                  unitsData.map((unit) => (
+                                    <option key={unit.name} value={unit.name}>
+                                      {unit.name}
+                                    </option>
+                                  ))}
+                              </select>
+                            </FormControl>
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      );
+                    }}
+                  />
+
+                  <UnitAdd onUnitAdded={handleUnitAdded} />
+
+                  {/* <FormField
                     control={form.control}
                     name={`${nameValue}[${items.length}].chargedWeightUnit`}
                     render={({ field }) => {
@@ -488,7 +560,6 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
                                 <option value="">
                                   Select Charged Weight Unit
                                 </option>
-                            
                                 <option value="Box"> Box</option>
                                 <option value="Bag"> Bag</option>
                                 <option value="Basta"> Basta</option>
@@ -508,7 +579,7 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
                         </FormItem>
                       );
                     }}
-                  />
+                  /> */}
                 </div>
               </>
             )}
@@ -556,7 +627,11 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
                       <div className="flex flex-1 flex-col">
                         <FormControl>
                           <select {...field}>
-                            <option value={GSTPercentage}>{GSTPercentage ? `${GSTPercentage * 100}%` : "Select GST percentage" }</option>
+                            <option value={GSTPercentage}>
+                              {GSTPercentage
+                                ? `${GSTPercentage * 100}%`
+                                : "Select GST percentage"}
+                            </option>
 
                             <option value="0.0">0%</option>
                             <option value="0.02">2%</option>
