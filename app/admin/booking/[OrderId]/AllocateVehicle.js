@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import FieldForm from "../../component/FieldForm";
+import UnitAdd from "../UnitAdd";
+
 
 import { Button } from "../../../components/ui/button";
 
@@ -198,6 +200,8 @@ const AllocateVehicle = ({ params  }) => {
     }
   }
 
+    
+
   const displayToast = (title, action, description = undefined) => {
     toast({
       title,
@@ -206,8 +210,7 @@ const AllocateVehicle = ({ params  }) => {
     });
   };
 
-  useEffect(() => {
-    const fetchUnits = async () => {
+   const fetchUnits = async () => {
       try {
         if (userId) {
           const response = await fetch(`/api/getunits/${userId}`, {
@@ -230,8 +233,16 @@ const AllocateVehicle = ({ params  }) => {
         console.error("Error:", error);
       }
     };
+
+  useEffect(() => {
     fetchUnits();
   }, [userId]);
+
+  const handleUnitAdded = () => {
+    fetchUnits(); // Fetch units data after a new unit is added
+  };
+
+
 
   return (
     <div className="max-w  mt-14 overflow-hidden rounded-2xl  bg-white px-4 py-4  md:px-10 lg:my-4 ">
@@ -376,7 +387,7 @@ const AllocateVehicle = ({ params  }) => {
                     );
                   }}
                 />
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="materialDetails.qtyUnit"
                   render={({ field }) => {
@@ -402,7 +413,46 @@ const AllocateVehicle = ({ params  }) => {
                       </FormItem>
                     );
                   }}
-                />
+                /> */}
+
+<FormField
+  control={form.control}
+  name="materialDetails.qtyUnit"
+  render={({ field }) => {
+    return (
+      <FormItem className="flex flex-1 items-center justify-center">
+        <div className="flex flex-1 flex-col">
+          <FormControl>
+            <select
+              {...field}
+              className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+            >
+              {/* Default option similar to the first component */}
+              {/* <option key={qtyUnit}>
+                {qtyUnit ? qtyUnit : "Select Quantity Unit"} */}
+              {/* </option> */}
+
+<option> Select QTY unit</option>
+
+              {Array.isArray(data) &&
+                data.map((unit) => (
+                  <option key={unit.name} value={unit.name}>
+                    {unit.name}
+                  </option>
+                ))}
+            </select>
+          </FormControl>
+          <FormMessage />
+        </div>
+      </FormItem>
+    );
+  }}
+/>
+
+  <UnitAdd onUnitAdded={handleUnitAdded} />
+
+
+
               </div>
 
               <div className="flex w-full items-center gap-0">
@@ -456,25 +506,30 @@ const AllocateVehicle = ({ params  }) => {
                 />
               </div>
               <FormField
-                control={form.control}
-                name="materialDetails.rateAsPer"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Rate as Per :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <Input type="text" {...field} />
-                        </FormControl>
+  control={form.control}
+  name="materialDetails.rateAsPer"
+  render={({ field }) => {
+    return (
+      <FormItem className="flex items-center justify-center gap-4">
+        <FormLabel className="text-nowrap text-sm lg:text-base">
+          Rate as Per :
+        </FormLabel>
+        <div className="flex flex-1 flex-col">
+          <FormControl>
+            <select {...field}>
+              <option value="" disabled>Select Rate As Per</option>
+              <option value="actualWeight">Actual Weight</option>
+              <option value="quantity">Quantity</option>
+            </select>
+          </FormControl>
 
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
+          <FormMessage />
+        </div>
+      </FormItem>
+    );
+  }}
+/>
+
               <FieldForm
                 form={form}
                 name="materialDetails.rate"
