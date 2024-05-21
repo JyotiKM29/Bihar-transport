@@ -112,6 +112,7 @@ const SearchInput = ({ form, field, personName }) => {
                       "consignorName",
                       result?.basicInfo?.accountName,
                     );
+                    form.setValue("consignorID", result?._id);
                       
                   } else {
                   

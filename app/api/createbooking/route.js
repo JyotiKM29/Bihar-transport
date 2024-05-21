@@ -16,6 +16,7 @@ export async function POST(req, res) {
       bookingType,
       consignorName,
       consignorMobileNumber,
+      consignorID,
       loadingPoints,
       consigneeName,
       consigneeMobileNumber,
@@ -48,6 +49,9 @@ export async function POST(req, res) {
         { status: 400 },
       );
     }
+
+
+    console.log("consignor Id", consignorID);
 
     function calculateTotalActualWeight(itemsList) {
   let totalActualWeight = 0;

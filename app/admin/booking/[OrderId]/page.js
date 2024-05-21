@@ -42,6 +42,28 @@ const Allocation = ({ params }) => {
       }
     };
 
+
+    const fetchLedgerData = async () => {
+
+      try{
+
+        const ledgerId = params.OrderId;
+
+        const response = await fetch(`/api/getLedgerBalance/${ledgerId}`, {
+        
+
+
+
+
+      }
+      catch(error){
+
+        setLoading(false);
+        console.error("Error: ", error);
+      }
+
+    }
+
     fetchData();
   }, [userId]);
 
