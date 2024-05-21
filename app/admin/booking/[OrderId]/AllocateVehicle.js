@@ -53,7 +53,7 @@ const formSchema = z.object({
     commission: z.coerce.number(),
     netBhara: z.coerce.number(),
 
-    ledgerBalance: z.coerce.number(),
+    newLedgerBalance: z.coerce.number(),
     remarks: z.string(),
   }),
 
@@ -62,7 +62,7 @@ const formSchema = z.object({
   billTo: z.string(),
 });
 
-const AllocateVehicle = ({ params  }) => {
+const AllocateVehicle = ({ params, ledgerBalance  }) => {
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
@@ -72,6 +72,8 @@ const AllocateVehicle = ({ params  }) => {
   const [data, setData] = useState(null);
   const userId = user?._id;
   const orderId = params.OrderId;
+
+  console.log(ledgerBalance);
   
 
  
@@ -114,7 +116,7 @@ const AllocateVehicle = ({ params  }) => {
       commission: 0,
       netBhara: 0,
 
-      ledgerBalance: 0,
+      newLedgerBalance: ledgerBalance,
       remarks: undefined,
     },
 
@@ -424,7 +426,7 @@ const AllocateVehicle = ({ params  }) => {
                             />
                             
                           </FormControl>
-                          <p className="text-[12px] bg-orange-100 absolute bottom-1 w-full">Must less than {availableWgt}</p>
+                          <p className="text-[12px] bg-orange-100 absolute bottom-1 w-full">Must less than {availableWgt} KG</p>
                           <FormMessage />
                          
                         </div>
@@ -594,7 +596,7 @@ const AllocateVehicle = ({ params  }) => {
               />
               <FormField
                 control={form.control}
-                name="materialDetails.ledgerBalance"
+                name="materialDetails.newLedgerBalance"
                 render={({ field }) => {
                   return (
                     <FormItem className="flex items-center justify-center gap-4">
@@ -607,7 +609,7 @@ const AllocateVehicle = ({ params  }) => {
                             <p className="text-xl font-medium">&#8377;</p>
                             <Input
                               type="number"
-                              {...field}
+                              value={Number(ledgerBalance).toFixed(2)} 
                               className="border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
                               readOnly
                             />
