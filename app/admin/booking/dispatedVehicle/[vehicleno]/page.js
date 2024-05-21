@@ -120,6 +120,14 @@ const DispatchVehicle = ({ params }) => {
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
+  const [showEWayBillDetail, setShowEWayBillDetail] = useState(false);
+  const [showConsignorInvoiceDetail, setShowConsignorInvoiceDetail] =
+    useState(false);
+
+    const [showAdditionalDetails, setShowAdditionalDetails] = useState(false);
+  
+
+
 
   const initialFormState = {
     adminId: "",
@@ -278,41 +286,69 @@ const DispatchVehicle = ({ params }) => {
                 label="Total Freight"
                 type="number"
               />
+              {showConsignorInvoiceDetail ? (
+                <div>
+                  <h2
+                    className="mt-6 text-center text-2xl font-semibold"
+                    onClick={() =>
+                      setShowConsignorInvoiceDetail(!showConsignorInvoiceDetail)
+                    }
+                  >
+                    Consignor Invoice Details
+                  </h2>
 
-              <h2 className="mt-6 text-center text-2xl font-semibold">
-                Consignor Invoice Details
-              </h2>
-              <FieldForm
-                form={form}
-                name="dispatch.dispatchDetails.consignorInvoiceDetails.isPODCompulsory"
-                label="POD Compulsory (Yes/No)"
-                type="text"
-              />
-              <FieldForm
-                form={form}
-                name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorInvoiceDate"
-                label="Consignor - Invoice Date"
-                type="date"
-              />
-              <FieldForm
-                form={form}
-                name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorDeliveryNo"
-                label="Consignor - Delivery No"
-                type="text"
-              />
-              <FieldForm
-                form={form}
-                name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorInvoiceNo"
-                label="Consignor - Invoice No"
-                type="text"
-              />
-              <FieldForm
-                form={form}
-                name="dispatch.dispatchDetails.consignorInvoiceDetails.valueOfGoods"
-                label="Value of Goods (Rs.)"
-                type="number"
-              />
+                  <FieldForm
+  form={form}
+  name="dispatch.dispatchDetails.consignorInvoiceDetails.isPODCompulsory"
+  label="POD Compulsory (Yes/No)"
+  type="select"
+  options={[
+    { value: 'yes', label: 'Yes' },
+    { value: 'no', label: 'No' }
+  ]}
+/>
 
+
+                  <FieldForm
+                    form={form}
+                    name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorInvoiceDate"
+                    label="Consignor - Invoice Date"
+                    type="date"
+                  />
+                  <FieldForm
+                    form={form}
+                    name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorDeliveryNo"
+                    label="Consignor - Delivery No"
+                    type="text"
+                  />
+                  <FieldForm
+                    form={form}
+                    name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorInvoiceNo"
+                    label="Consignor - Invoice No"
+                    type="text"
+                  />
+                  <FieldForm
+                    form={form}
+                    name="dispatch.dispatchDetails.consignorInvoiceDetails.valueOfGoods"
+                    label="Value of Goods (Rs.)"
+                    type="number"
+                  />
+                </div>
+              ) : (
+                <p
+                  className="my-6 max-w-full rounded-lg bg-blue-500 px-8 py-2 text-center text-xl font-semibold text-white shadow-md hover:bg-blue-700"
+                  onClick={() =>
+                    setShowConsignorInvoiceDetail(!showConsignorInvoiceDetail)
+                  }
+                >
+                  Consignor Invoice Details
+                </p>
+              )}
+
+              {/* 
+              
+              Modified the style of this component
+              
               <h2 className="mt-6 text-center text-2xl font-semibold">
                 e-way Bill Details
               </h2>
@@ -333,7 +369,43 @@ const DispatchVehicle = ({ params }) => {
                 name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.expDate"
                 label="Exp-Date "
                 type="date"
-              />
+              /> */}
+              {showEWayBillDetail ? (
+                <div>
+                  <h2
+                    className="mt-6 text-center text-2xl font-semibold"
+                    onClick={() => setShowEWayBillDetail(!showEWayBillDetail)}
+                  >
+                    e-way Bill Details
+                  </h2>
+
+                  <FieldForm
+                    form={form}
+                    name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.eWayBillNo"
+                    label="E-Way Bill No"
+                    type="text"
+                  />
+                  <FieldForm
+                    form={form}
+                    name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.eWayBillDate"
+                    label="E-Way Bill Date"
+                    type="date"
+                  />
+                  <FieldForm
+                    form={form}
+                    name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.expDate"
+                    label="Exp-Date"
+                    type="date"
+                  />
+                </div>
+              ) : (
+                <p
+                  className="my-6 max-w-full rounded-lg bg-blue-500 px-8 py-2 text-center text-xl font-semibold text-white shadow-md hover:bg-blue-700"
+                  onClick={() => setShowEWayBillDetail(!showEWayBillDetail)}
+                >
+                  e-way Bill Details
+                </p>
+              )}
             </div>
 
             <div className="flex w-full max-w-xl flex-col gap-0">
@@ -367,107 +439,122 @@ const DispatchVehicle = ({ params }) => {
                 />
               </div>
 
-              <h2 className="mt-6 text-center text-2xl font-semibold">
-                Additional Details
-              </h2>
-              <FieldForm
-                form={form}
-                name="dispatch.dispatchAdditionalDetails.deliveryType"
-                label="Delivery Type"
-                type="text"
-              />
-              <FieldForm
-                form={form}
-                name="dispatch.dispatchAdditionalDetails.manualLRNo"
-                label="Manual LRNo "
-                type="text"
-              />
-              <FieldForm
-                form={form}
-                name="dispatch.dispatchAdditionalDetails.brokerCommission"
-                label="Broker Commission"
-                type="number"
-              />
-              <FieldForm
-                form={form}
-                name="dispatch.dispatchAdditionalDetails.shippingRisk"
-                label="Shipping Risk"
-                type="text"
-              />
-
-              <FormField
-                control={form.control}
-                name="dispatch.dispatchAdditionalDetails.insurance.isInsured"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Insurance :
-                      </FormLabel>
-                      <Select
-                        className="flex flex-1 flex-col"
-                        onValueChange={field.onChange}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select type" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="Yes">Yes</SelectItem>
-                          <SelectItem value="No">No</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
-              />
-
-              {form.getValues(
-                "dispatch.dispatchAdditionalDetails.insurance.isInsured",
-              ) === "Yes" ? (
-                <>
-                  {/* insurance */}
-                  <h2 className="mt-6 text-center text-xl font-semibold">
-                    Insurance Details
+              {showAdditionalDetails ? (
+                <div>
+                  <h2
+                    className="mt-6 text-center text-2xl font-semibold"
+                    onClick={() =>
+                      setShowAdditionalDetails(!showAdditionalDetails)
+                    }
+                  >
+                    Additional Details
                   </h2>
 
                   <FieldForm
                     form={form}
-                    name="dispatch.dispatchAdditionalDetails.insurance.insuranceProvider"
-                    label="Insurance Provider "
+                    name="dispatch.dispatchAdditionalDetails.deliveryType"
+                    label="Delivery Type"
                     type="text"
                   />
                   <FieldForm
                     form={form}
-                    name="dispatch.dispatchAdditionalDetails.insurance.policyNo"
-                    label="Policy No"
+                    name="dispatch.dispatchAdditionalDetails.manualLRNo"
+                    label="Manual LRNo"
                     type="text"
                   />
                   <FieldForm
                     form={form}
-                    name="dispatch.dispatchAdditionalDetails.insurance.policyAmount"
-                    label="Policy Amount"
+                    name="dispatch.dispatchAdditionalDetails.brokerCommission"
+                    label="Broker Commission"
                     type="number"
                   />
                   <FieldForm
                     form={form}
-                    name="dispatch.dispatchAdditionalDetails.insurance.claimAmount"
-                    label="Claim Amount"
-                    type="number"
-                  />
-                  <FieldForm
-                    form={form}
-                    name="dispatch.dispatchAdditionalDetails.insurance.brokerDetails"
-                    label="Broker Details"
+                    name="dispatch.dispatchAdditionalDetails.shippingRisk"
+                    label="Shipping Risk"
                     type="text"
                   />
-                </>
-              ) : (
-                <>{/* Nothing */}</>
-              )}
 
+                  <FormField
+                    control={form.control}
+                    name="dispatch.dispatchAdditionalDetails.insurance.isInsured"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="flex items-center justify-center gap-4">
+                          <FormLabel className="text-nowrap text-sm lg:text-base">
+                            Insurance:
+                          </FormLabel>
+                          <Select
+                            className="flex flex-1 flex-col"
+                            onValueChange={field.onChange}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select type" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="Yes">Yes</SelectItem>
+                              <SelectItem value="No">No</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+
+                  {form.getValues(
+                    "dispatch.dispatchAdditionalDetails.insurance.isInsured",
+                  ) === "Yes" ? (
+                    <>
+                      <h2 className="mt-6 text-center text-xl font-semibold">
+                        Insurance Details
+                      </h2>
+
+                      <FieldForm
+                        form={form}
+                        name="dispatch.dispatchAdditionalDetails.insurance.insuranceProvider"
+                        label="Insurance Provider"
+                        type="text"
+                      />
+                      <FieldForm
+                        form={form}
+                        name="dispatch.dispatchAdditionalDetails.insurance.policyNo"
+                        label="Policy No"
+                        type="text"
+                      />
+                      <FieldForm
+                        form={form}
+                        name="dispatch.dispatchAdditionalDetails.insurance.policyAmount"
+                        label="Policy Amount"
+                        type="number"
+                      />
+                      <FieldForm
+                        form={form}
+                        name="dispatch.dispatchAdditionalDetails.insurance.claimAmount"
+                        label="Claim Amount"
+                        type="number"
+                      />
+                      <FieldForm
+                        form={form}
+                        name="dispatch.dispatchAdditionalDetails.insurance.brokerDetails"
+                        label="Broker Details"
+                        type="text"
+                      />
+                    </>
+                  ) : null}
+                </div>
+              ) : (
+                <p
+                  className="my-6 max-w-full rounded-lg bg-blue-500 px-8 py-2 text-center text-xl font-semibold text-white shadow-md hover:bg-blue-700"
+                  onClick={() =>
+                    setShowAdditionalDetails(!showAdditionalDetails)
+                  }
+                >
+                  Additional Details
+                </p>
+              )}
               <h2 className="mt-6 text-center text-2xl font-semibold">
                 Additional Chargers for Vehicle hired
               </h2>
