@@ -12,6 +12,7 @@ const Allocation = ({ params }) => {
   const {toast} = useToast()
   const { user } = useContext(UserContext);
   const [vehicleData, setVehicleData] = useState([]);
+  const [ledgerBalance, setLedgerBalance] = useState(0);
   const [vehicleNo, setVehicleNo] = useState("");
   const userId = user?._id;
 
@@ -42,6 +43,31 @@ const Allocation = ({ params }) => {
       }
     };
 
+
+    const fetchLedgerData = async () => {
+
+      try {
+
+        const ledgerId = params.OrderId;
+
+        const response = await fetch(`/api/accounting/getLedgerBalance/${ledgerId}`);
+        if (response.ok) {
+         
+          const data = await response.json();
+          console.log(data);
+
+          setLedgerBalance(data.balance);
+        }
+      }
+
+      catch(error){
+
+        setLoading(false);
+        console.error("Error: ", error);
+      }
+
+    }
+    fetchLedgerData();
     fetchData();
   }, [userId]);
 
@@ -128,7 +154,7 @@ const Allocation = ({ params }) => {
   </table>
 
 
-<AllocateVehicle params={params} />
+<AllocateVehicle params={params} ledgerBalance={ledgerBalance} />
       </div>
     </div>
   );
