@@ -49,12 +49,12 @@ const additionalChargeSchema = z.object({
 });
 
 const itemsSchema = z.object({
-  material: z.string(),
-  hsnNo: z.string(),
-  quantity: z.coerce.number(),
-  quantityUnit: z.string(),
-  actualWeight: z.coerce.number(),
-  actualWeightUnit: z.string(),
+  material: z.string().optional(),
+  hsnNo: z.string().optional(),
+  quantity: z.coerce.number().optional(),
+  quantityUnit: z.string().optional(),
+  actualWeight: z.coerce.number().optional(),
+  actualWeightUnit: z.string().optional(),
   chargedWeight: z.coerce.number().optional(),
   chargedWeightUnit: z.string().optional(),
   rateAsPer: z.string().optional(),
@@ -68,38 +68,109 @@ const itemsSchema = z.object({
 });
 
 const formSchema = z.object({
-  orderNumber: z.string(),
-  date: z.coerce.date({ message: "Date is require" }),
-  vehicleRequiredDate: z.coerce.date({ message: "Date is require" }),
-  bookingType: z.enum(["personal", "general", "comapany"]),
-  consignorName: z.string({ message: "Field is required" }),
-  consignorMobileNumber: z.coerce.number(),
-  consignorID:z.string(),
-  loadingPoints: z.array(z.string()),
-  consigneeName: z.string({ message: "Field is required" }).optional(),
-  consigneeMobileNumber: z.coerce.number(),
 
-  unloadingPoints: z.array(z.string()),
-  way: z.enum(["one way", "two way", "return"]),
-  vehicleType: z.string({ message: "Field is required" }).min(3),
-  noOfVehicle: z.enum(["1", "2", "3", "others"]),
+  orderNumber: z.string({
+    required_error: "Order number is required",
+  }),
+  date: z.coerce.date({
+    required_error: "Date is required",
+    invalid_type_error: "Invalid date format",
+  }),
+  vehicleRequiredDate: z.coerce.date({
+    required_error: "Vehicle required date is required",
+    invalid_type_error: "Invalid date format",
+  }),
+  bookingType: z.enum(["personal", "general", "company"], {
+    required_error: "Select Booking Type",
+    invalid_type_error: "Invalid enum value. Expected 'personal' | 'general' | 'company', received ''",
+  }),
+  consignorName: z.string({
+    required_error: "Consignor name is required",
+  }),
+  consignorMobileNumber: z.coerce.number({
+    required_error: "Consignor mobile number is required",
+    invalid_type_error: "Invalid number format",
+  }),
+  loadingPoints: z.array(z.string(), {
+    required_error: "At least one loading point is required",
+  }),
+  consigneeName: z.string().optional({
+    required_error: "Consignee name is required",
+  }),
+  consigneeMobileNumber: z.coerce.number({
+    required_error: "Consignee mobile number is required",
+    invalid_type_error: "Invalid number format",
+  }),
+  unloadingPoints: z.array(z.string(), {
+    required_error: "At least one unloading point is required",
+  }),
+  way: z.enum(["one way", "two way", "return"], {
+    required_error: "Select Way",
+    invalid_type_error: "Invalid enum value. Expected 'one way' | 'two way' | 'return', received ''",
+  }),
+  vehicleType: z.string({
+    required_error: "Vehicle type is required",
+  }).min(3, {
+    message: "Vehicle type must be at least 3 characters long",
+  }),
+  noOfVehicle: z.enum(["1", "2", "3", "others"], {
+    required_error: "Select Number of Vehicles",
+    invalid_type_error: "Invalid enum value. Expected '1' | '2' | '3' | 'others', received ''",
+  }),
+
   vehicleLength: z.coerce.number().optional(),
   vehicleLengthUnit: z.string().optional(),
   WeightCapacity: z.coerce.number().optional(),
   WeightCapacityUnit: z.string().optional(),
   customNoOfVehicle: z.number().optional(),
-  partyBhara: z.coerce.number(),
-
-  paymentTerm: z.enum(["Advance", "Paid", "To Pay", "To be Billed"]),
+  partyBhara: z.coerce.number({
+    required_error: "Party Bhara is required",
+    invalid_type_error: "Invalid number format",
+  }),
+  paymentTerm: z.enum(["Advance", "Paid", "To Pay", "To be Billed"], {
+    required_error: "Select Payment Term",
+    invalid_type_error: "Invalid enum value. Expected 'Advance' | 'Paid' | 'To Pay' | 'To be Billed', received ''",
+  }),
   remarks: z.string().optional(),
-  itemsList: z.array(itemsSchema  ),
-  // itemsList : z.array(itemsSchema.or(z.object())), 
+  itemsList: z.array(itemsSchema, {
+    required_error: "Items list is required",
+  }),
   additionalCharges: additionalChargeSchema,
-  totalAdditionalChargeTax: z.coerce.number(),
-  totalAdditionalCharges: z.coerce.number(),
-  totalBillingAmount: z.coerce.number(),
-  adminId: z.string(),
+  totalAdditionalChargeTax: z.coerce.number({
+    required_error: "Total additional charge tax is required",
+    invalid_type_error: "Invalid number format",
+  }),
+  totalAdditionalCharges: z.coerce.number({
+    required_error: "Total additional charges are required",
+    invalid_type_error: "Invalid number format",
+  }),
+  totalBillingAmount: z.coerce.number({
+    required_error: "Total billing amount is required",
+    invalid_type_error: "Invalid number format",
+  }),
+  adminId: z.string({
+    required_error: "Admin ID is required",
+  }),
+  isActive: z.boolean({
+    required_error: "isActive is required",
+    invalid_type_error: "isActive must be a boolean",
+  }),
 });
+
+
+const customErrorMap = (issue, ctx) => {
+  if (issue.code === z.ZodIssueCode.invalid_type) {
+    if (issue.expected === "string") {
+      return { message: "bad type!" };
+    }
+  }
+  if (issue.code === z.ZodIssueCode.custom) {
+    return { message: `less-than-${(issue.params || {}).minimum}` };
+  }
+  return { message: ctx.defaultError };
+};
+
+z.setErrorMap(customErrorMap);
 
 export default function ProfileForm() {
   const initialFormState = {
