@@ -19,7 +19,7 @@ import SearchInput from "./SearchInput";
 import * as z from "zod";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
-import { useState, useEffect, useCallback, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useToast } from "../../components/ui/use-toast";
 import Link from "next/link";
 import { FiPlus } from "react-icons/fi";
