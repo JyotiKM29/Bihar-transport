@@ -100,12 +100,12 @@ export default function ColumnHeaderPending() {
      
 
       {
-        accessorKey: "chargedWeight",
-        header: "Charged Weight",
+        accessorKey: "itemsList.totalActualWeight",
+        header: "Charged Weight (in KG) ",
       },
       {
-        accessorKey: "partyBhara",
-        header: "Party Bhara",
+        accessorKey: "totalBillingAmount",
+        header: "Total Billing Amount",
       },
       {
         header: "Generate",
