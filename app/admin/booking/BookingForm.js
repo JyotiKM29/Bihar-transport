@@ -80,9 +80,9 @@ const formSchema = z.object({
     required_error: "Vehicle required date is required",
     invalid_type_error: "Invalid date format",
   }),
+ 
   bookingType: z.enum(["personal", "general", "company"], {
-    required_error: "Select Booking Type",
-    invalid_type_error: "Invalid enum value. Expected 'personal' | 'general' | 'company', received ''",
+    errorMap: () => ({ message: "Select Booking Type" }),
   }),
   consignorName: z.string({
     required_error: "Consignor name is required",
@@ -105,17 +105,13 @@ const formSchema = z.object({
     required_error: "At least one unloading point is required",
   }),
   way: z.enum(["one way", "two way", "return"], {
-    required_error: "Select Way",
-    invalid_type_error: "Invalid enum value. Expected 'one way' | 'two way' | 'return', received ''",
+    errorMap: () => ({ message: "Select way" }),
   }),
   vehicleType: z.string({
     required_error: "Vehicle type is required",
-  }).min(3, {
-    message: "Vehicle type must be at least 3 characters long",
   }),
   noOfVehicle: z.enum(["1", "2", "3", "others"], {
-    required_error: "Select Number of Vehicles",
-    invalid_type_error: "Invalid enum value. Expected '1' | '2' | '3' | 'others', received ''",
+    errorMap: () => ({ message: "Select no of Vehicle" }),
   }),
 
   vehicleLength: z.coerce.number().optional(),
@@ -128,8 +124,7 @@ const formSchema = z.object({
     invalid_type_error: "Invalid number format",
   }),
   paymentTerm: z.enum(["Advance", "Paid", "To Pay", "To be Billed"], {
-    required_error: "Select Payment Term",
-    invalid_type_error: "Invalid enum value. Expected 'Advance' | 'Paid' | 'To Pay' | 'To be Billed', received ''",
+    errorMap: () => ({ message: "Select payment term" }),
   }),
   remarks: z.string().optional(),
   itemsList: z.array(itemsSchema, {
@@ -148,13 +143,8 @@ const formSchema = z.object({
     required_error: "Total billing amount is required",
     invalid_type_error: "Invalid number format",
   }),
-  adminId: z.string({
-    required_error: "Admin ID is required",
-  }),
-  isActive: z.boolean({
-    required_error: "isActive is required",
-    invalid_type_error: "isActive must be a boolean",
-  }),
+  adminId: z.string(),
+  // isActive: z.boolean(),
 });
 
 
@@ -178,17 +168,17 @@ export default function ProfileForm() {
     date: new Date().toISOString().split("T")[0],
     vehicleRequiredDate: new Date().toISOString().split("T")[0],
     bookingType: "",
-    consignorName: "",
+    consignorName: undefined,
     consignorMobileNumber: 0,
     consignorID: "",
     loadingPoints: [""],
-    consigneeName: "",
+    consigneeName: undefined,
     consigneeMobileNumber: 0,
     unloadingPoints: [""],
     way: "",
     material: "",
-    vehicleType: "",
-    noOfVehicle: 1,
+    vehicleType: undefined,
+    noOfVehicle: "",
     partyBhara: 0,
     paymentTerm: "",
     remarks: "",
