@@ -1,48 +1,43 @@
 "use client";
 
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "../../../components/ui/button";
 import { Checkbox } from "../../../components/ui/checkbox";
-
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+} from "../../../components/ui/dropdown-menu";
 import Link from "next/link";
+
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
-import { Input } from "../../../components/ui/input";
+import { useToast } from "../../../components/ui/use-toast";
+import { useRouter } from "next/navigation";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
-export default function ColumnHeader() {
+export default function ColumnHeaderPending() {
   const { user } = useContext(UserContext);
   const [columns, setColumns] = useState([]);
-
-  const displayToast = (title, action, description = "") => {
-    toast({
-      title,
-      action,
-      description,
-    });
-  };
+  const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
-    async function deleteData(id) {
-     
-      try {
-        const response = await fetch(`/api/deletebooking`, {
-          method: "DELETE",
-          body: JSON.stringify({ _id: id, adminId: user._id }),
-        });
-        // console.log(response);
+    async function GenerateInvoice(id) {
 
-        if (!response.ok) {
-         console.log('error ', response.statusText)
-          displayToast("Update deleted", "❌" );
-        }else{
-          displayToast("Successfully deleted", "✅");
-          // window.location.reload();
-        }
-      } catch (error) {
-        console.error("There was a problem with the delete request.", error);
-        displayToast("Error", "❌", error.message);
-      }
+       router.push(`/admin/account/invoice/${id}`);
+       
     }
+
+    const displayToast = (title, action, description = "") => {
+      toast({
+        title,
+        action,
+        description,
+      });
+    };
 
     setColumns([
       {
@@ -73,55 +68,43 @@ export default function ColumnHeader() {
         accessorKey: "orderNumber",
         header: "Order Id",
       },
-
-      // {
-      //   accessorKey: "vehicleRequiredDate",
-      //   header: "Date Req",
-      //   cell: ({ row }) => {
-      //     const date = new Date(row.original.vehicleRequiredDate);
-      //     return date.toLocaleDateString();
-      //   },
-      // },
-
       {
-        accessorKey: "consignorName",
-        header: "Consignor",
-      },
-
-      {
-        accessorKey: "status",
-        header: "status",
-      },
-     
-
-      {
-        accessorKey: "partyBhara",
-        header: "party Bhara",
-      },
-      {
-        accessorKey: "generatedInvoice.invoiceNumber",
-        header: "Invoice No",
-      },
-      {
-        accessorKey: "generatedInvoice.invoiceDate",
-        header: "Invoice Date",
+        accessorKey: "vehicleRequiredDate",
+        header: "Date Req",
         cell: ({ row }) => {
-          const date = new Date(row.original.generatedInvoice.invoiceDate);
+          const date = new Date(row.original.vehicleRequiredDate);
           return date.toLocaleDateString();
         },
       },
       {
-        accessorKey: "generatedInvoice.invoiceAmount",
-        header: "Invoice Amount",
+        accessorKey: "consignorName",
+        header: "Consignor",
       },
       {
-        accessorKey: "generatedInvoice.invoiceRemarks",
-        header: "Invoice Remark",
+        accessorKey: "status",
+        header: "Status",
       },
-      
+      {
+        accessorKey: "itemsList.totalActualWeight",
+        header: "Charged Weight (in KG) ",
+      },
+      {
+        accessorKey: "totalBillingAmount",
+        header: "Total Billing Amount",
+      },
+      {
+        header: "Invoice",
+        cell: ({ row }) => (
+          <Button
+            className="rounded-3xl bg-green-300 px-4 text-sm text-black hover:bg-green-500"
+            onClick={() => GenerateInvoice(row.original._id)}
+          >
+            Download
+          </Button>
+        ),
+      },
     ]);
   }, [user]);
 
   return columns;
 }
-
