@@ -133,31 +133,34 @@ if (booking.reasonToCancel !== undefined && booking.reasonToCancel) {
             }
             return Response.json({ message: `Booking ${status}` }, { status: 200 });
         }
-            
-        else if (booking.status === "In Transit" && status === "Delivered") {
-         
-            booking.status = status;
-            booking.updatedBy.push({
-              name: admin.name,
-              adminId: adminId,
-              date: Date.now(),
-            });
-            await booking.save();
-            if(exitingOrder){
-                 exitingOrder.isDelevered = true;
-                exitingOrder.status = status;
-                exitingOrder.updatedBy.push({
-                  name: admin.name,
-                  id: adminId,
-                  date: Date.now(),
-                });
 
-                await exitingOrder.save();
-            }
-           
-            return Response.json({ message: `Booking ${status}` }, { status: 200 });
+        
+        //  removed the code for delievered booking because we are creating a new api specially for this 
             
-        }
+        // else if (booking.status === "In Transit" && status === "Delivered") {
+         
+        //     booking.status = status;
+        //     booking.updatedBy.push({
+        //       name: admin.name,
+        //       adminId: adminId,
+        //       date: Date.now(),
+        //     });
+        //     await booking.save();
+        //     if(exitingOrder){
+        //          exitingOrder.isDelevered = true;
+        //         exitingOrder.status = status;
+        //         exitingOrder.updatedBy.push({
+        //           name: admin.name,
+        //           id: adminId,
+        //           date: Date.now(),
+        //         });
+
+        //         await exitingOrder.save();
+        //     }
+           
+        //     return Response.json({ message: `Booking ${status}` }, { status: 200 });
+            
+        // }
             
 
         else {

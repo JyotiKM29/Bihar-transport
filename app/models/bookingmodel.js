@@ -158,6 +158,49 @@ const itemsListSchema = new mongoose.Schema({
 });
 
 
+// schema for deliever updates
+
+
+const deliveryDetailsSchema = new mongoose.Schema({
+  reporting_date: { type: Date, required: true },
+  unloading_date: { type: Date, required: true },
+  material_received_by: { type: String, required: true },
+  phone_number: { type: String, required: false },
+  stamp: { type: Boolean, required: true },
+  sign: { type: Boolean, required: true },
+});
+
+const paymentDetailsSchema = new mongoose.Schema({
+  lr_dues_amount: { type: Number },
+  payment_modes: { type: String },
+  amount_received: { type: Number },
+  fine: { type: Number },
+  final_due: { type: Number },
+  remarks: { type: String },
+});
+
+const consignmentInfoSchema = new mongoose.Schema({
+  delivery_date: { type: Date },
+  delivery_number: { type: String },
+  from_location: { type: String },
+  to_location: { type: String },
+  quantity: { type: Number },
+  weight: { type: Number },
+  breakage: { type: Number },
+  excess: { type: Number },
+  shortage: { type: Number },
+  remarks: { type: String },
+  pod: { type: String },
+  action: { type: String },
+});
+
+
+const deliverySchema = new mongoose.Schema({
+  delivery_details: deliveryDetailsSchema,
+    payment_details: paymentDetailsSchema,
+    consignment_info: [consignmentInfoSchema]
+});
+
 
 const bookingSchema = new mongoose.Schema(
   {
@@ -188,6 +231,7 @@ const bookingSchema = new mongoose.Schema(
     totalAdditionalChargeTax: { type: Number, default: 0 },
     totalAdditionalCharges: { type: Number, default: 0 },
     totalBillingAmount: { type: Number, default: 0 },
+    totalPaidAmount: { type: Number, default: 0 },
     vehicleType: { type: String },
     hideBhara: { type: Boolean, default: false },
     paymentLiability: {
@@ -199,8 +243,8 @@ const bookingSchema = new mongoose.Schema(
       type: String,
       enum: ["Advance", "Paid", "To Pay", "To be Billed"],
     },
-    advanceAmount: { type: Number, default:0 },
-    balanceAmount: { type: Number,},
+    advanceAmount: { type: Number, default: 0 },
+    balanceAmount: { type: Number },
     GSTPercentage: { type: Number },
     GSTType: { type: String, enum: ["RCM", "FCM"] },
     payMode: { type: String },
@@ -236,7 +280,7 @@ const bookingSchema = new mongoose.Schema(
     ],
     invoiceStatus: { type: Boolean, default: false },
     generatedInvoice: {
-      invoiceNumber: { type: Number , unique:true},
+      invoiceNumber: { type: Number, unique: true },
       invoiceDate: { type: Date },
       invoiceAmount: { type: Number },
       invoiceGST: { type: Number },
@@ -259,7 +303,7 @@ const bookingSchema = new mongoose.Schema(
     },
 
     location: [locationSchema],
-
+    delivery: deliverySchema,
     updatedBy: [
       {
         name: { type: String },
