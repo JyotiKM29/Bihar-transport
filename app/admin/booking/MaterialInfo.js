@@ -21,9 +21,11 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
   const [items, setItems] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [unitsData, setUnitsData] = useState([]);
+  const [rateAsPerData, setRateAsPerData] = useState([]);
 
   useEffect(() => {
     fetchUnits(); // Initial fetch when component mounts
+    fetchRateAsPer();
   }, []);
 
   const fetchUnits = async () => {
@@ -43,6 +45,32 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
       console.error("Error:", error);
     }
   };
+
+
+   const fetchRateAsPer = async () => {
+     // Fetch units data from API
+     try {
+       const response = await fetch(`/api/setting/rateAsPer/get/${userId}`, {
+         method: "GET",
+       });
+
+       if (!response.ok) {
+         throw new Error(`HTTP error! Status: ${response.status}`);
+       }
+
+       const data = await response.json();
+       console.log("rate as per data:", data.data);
+       setRateAsPerData(data.data);
+     } catch (error) {
+       console.error("Error:", error);
+     }
+   };
+
+
+
+
+
+
 
   const handleUnitAdded = () => {
     fetchUnits(); // Fetch units data after a new unit is added
@@ -361,7 +389,9 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
                             className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
                           >
                             {/* <option value=""> Select Actual Weight Unit</option> */}
-                            <option key={qtyUnit}>{qtyUnit ? qtyUnit : "Select Actual Weight Unit"}  </option>
+                            <option key={qtyUnit}>
+                              {qtyUnit ? qtyUnit : "Select Actual Weight Unit"}{" "}
+                            </option>
                             {Array.isArray(unitsData) &&
                               unitsData.map((unit) => (
                                 <option key={unit.name} value={unit.name}>
@@ -378,16 +408,10 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
               />
 
               <UnitAdd onUnitAdded={handleUnitAdded} />
-
-
-
-
-
-
             </div>
 
             <div className="flex w-full items-center gap-0">
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name={`${nameValue}[${items.length}].rateAsPer`}
                 render={({ field }) => {
@@ -424,7 +448,45 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
                     </FormItem>
                   );
                 }}
-              />
+              /> */}
+
+             <FormField
+  control={form.control}
+  name={`${nameValue}[${items.length}].rateAsPer`}
+  render={({ field }) => {
+    return (
+      <FormItem className="flex flex-1 items-center justify-center gap-4">
+
+<FormLabel className="text-nowrap text-sm lg:text-base">
+                        Rate as Per :
+                      </FormLabel>
+
+        <div className="flex flex-1 flex-col">
+          <FormControl>
+            <select
+              {...field}
+              className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
+            >
+              <option value="">
+                {rateAsPerData && rateAsPerData.length > 0
+                  ? "Select Rate As Per"
+                  : "Loading..."}
+              </option>
+              {Array.isArray(rateAsPerData) &&
+                rateAsPerData.map((rate) => (
+                  <option key={rate.value} value={rate.value}>
+                    {rate.name}
+                  </option>
+                ))}
+            </select>
+          </FormControl>
+          <FormMessage />
+        </div>
+      </FormItem>
+    );
+  }}
+/>
+
             </div>
 
             {form.watch(`${nameValue}[${items.length}].rateAsPer`, "fixed") !==
@@ -526,7 +588,9 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
                               >
                                 {/* <option value=""> Select Charged Weight Unit</option> */}
                                 <option key={qtyUnit}>
-                                  {qtyUnit ? qtyUnit : "Select Charged Weight Unit"}{" "}
+                                  {qtyUnit
+                                    ? qtyUnit
+                                    : "Select Charged Weight Unit"}{" "}
                                 </option>
                                 {Array.isArray(unitsData) &&
                                   unitsData.map((unit) => (
