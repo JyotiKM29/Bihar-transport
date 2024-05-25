@@ -104,9 +104,10 @@ const formSchema = z.object({
   unloadingPoints: z.array(z.string(), {
     required_error: "At least one unloading point is required",
   }),
-  way: z.enum(["one way", "two way", "return"], {
-    errorMap: () => ({ message: "Select way" }),
-  }),
+  // way: z.string((), {
+  //   errorMap: () => ({ message: "Select way" }),
+  // }),
+  way:z.string(),
   vehicleType: z.string({
     required_error: "Vehicle type is required",
   }),
@@ -123,9 +124,10 @@ const formSchema = z.object({
     required_error: "Party Bhara is required",
     invalid_type_error: "Invalid number format",
   }),
-  paymentTerm: z.enum(["Advance", "Paid", "To Pay", "To be Billed"], {
-    errorMap: () => ({ message: "Select payment term" }),
-  }),
+  // paymentTerm: z.string(, {
+  //   errorMap: () => ({ message: "Select payment term" }),
+  // }),
+  paymentTerm:z.string(),
   remarks: z.string().optional(),
   itemsList: z.array(itemsSchema, {
     required_error: "Items list is required",
@@ -801,7 +803,7 @@ export default function ProfileForm() {
                       );
                     }}
                   />
-  
+
                   <div className="flex items-center">
                     <div className="flex-1">
                       <FormField
