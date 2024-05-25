@@ -119,6 +119,28 @@ export default function ColumnHeader() {
         ),
       },
 
+
+      {
+        accessorKey: "value",
+
+        header: (
+          <div className="text-center">
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>Trip value</p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p className="font-medium text-blue-500 underline">
+              {row.original.value}
+            </p>
+
+            {/* <p>{row.original.consignorMobileNumber}</p> */}
+          </div>
+        ),
+      },
+
       {
         id: "actions",
         enableHiding: false,
