@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 
-const unitSchema = new mongoose.Schema(
+const additionalChargesSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
+    value:{type:String, required:true},
     addedBy: {
       name: { type: String },
       id: { type: String, required: true },
@@ -13,4 +14,4 @@ const unitSchema = new mongoose.Schema(
 );
 
 mongoose.models = {};
-export default mongoose.model("Unit", unitSchema);
+export default mongoose.model("additionalCharges", additionalChargesSchema);

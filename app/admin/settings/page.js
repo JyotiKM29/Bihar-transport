@@ -27,7 +27,7 @@ function Setting() {
           </Link>
           <Link
 
-            href="/admin/settings/newunit"
+            href="/admin/settings/triptype"
             className="block mb-4 rounded-lg bg-violet-500 px-8 py-2 text-white shadow-md hover:bg-violet-700"
           >
             Trip Type Setting
@@ -39,19 +39,19 @@ function Setting() {
             Material Setting
           </Link>
           <Link
-            href="/admin/settings/newunit"
+            href="/admin/settings/rateasper"
             className="block mb-4 rounded-lg bg-violet-500 px-8 py-2 text-white shadow-md hover:bg-violet-700"
           >
             Rate As Per Setting
           </Link>
           <Link
-            href="/admin/settings/newunit"
+            href="/admin/settings/additionalCharges"
             className="block mb-4 rounded-lg bg-violet-500 px-8 py-2 text-white shadow-md hover:bg-violet-700"
           >
             Additional Charge Setting
           </Link>
           <Link
-            href="/admin/settings/newunit"
+            href="/admin/settings/paymentTerm"
             className="block mb-4 rounded-lg bg-violet-500 px-8 py-2 text-white shadow-md hover:bg-violet-700"
           >
             Payment Term Setting
@@ -61,13 +61,13 @@ function Setting() {
         <div>
           <h1 className="mb-4 text-xl font-semibold">Allocate Vehicle Setting</h1>
           <Link
-            href="/admin/settings/newunit"
+            href="/admin/settings/paymentLibility"
             className="block mb-4 rounded-lg bg-violet-500 px-8 py-2 text-white shadow-md hover:bg-violet-700"
           >
             Payment Liability Setting
           </Link>
           <Link
-            href="/admin/settings/newunit"
+            href="/admin/settings/receivable"
             className="block mb-4 rounded-lg bg-violet-500 px-8 py-2 text-white shadow-md hover:bg-violet-700"
           >
             Receivable Setting
@@ -77,13 +77,13 @@ function Setting() {
         <div>
           <h1 className="mb-4 text-xl font-semibold">Dispatch Setting</h1>
           <Link
-            href="/admin/settings/newunit"
+            href="/admin/settings/bilty"
             className="block mb-4 rounded-lg bg-violet-500 px-8 py-2 text-white shadow-md hover:bg-violet-700"
           >
             Bilty Setting
           </Link>
           <Link
-            href="/admin/settings/newunit"
+            href="/admin/settings/insurence"
             className="block mb-4 rounded-lg bg-violet-500 px-8 py-2 text-white shadow-md hover:bg-violet-700"
           >
             Insurance Provider Setting
@@ -93,7 +93,7 @@ function Setting() {
         <div>
           <h1 className="mb-4 text-xl font-semibold">Delivery Setting</h1>
           <Link
-            href="/admin/settings/newunit"
+            href="/admin/settings/paymentMode"
             className="block mb-4 rounded-lg bg-violet-500 px-8 py-2 text-white shadow-md hover:bg-violet-700"
           >
             Payment Mode Setting
