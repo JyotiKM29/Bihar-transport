@@ -51,7 +51,7 @@ function Setting() {
             Additional Charge Setting
           </Link>
           <Link
-            href="/admin/settings/newunit"
+            href="/admin/settings/paymentTerm"
             className="block mb-4 rounded-lg bg-violet-500 px-8 py-2 text-white shadow-md hover:bg-violet-700"
           >
             Payment Term Setting
@@ -61,7 +61,7 @@ function Setting() {
         <div>
           <h1 className="mb-4 text-xl font-semibold">Allocate Vehicle Setting</h1>
           <Link
-            href="/admin/settings/newunit"
+            href="/admin/settings/paymentLibility"
             className="block mb-4 rounded-lg bg-violet-500 px-8 py-2 text-white shadow-md hover:bg-violet-700"
           >
             Payment Liability Setting

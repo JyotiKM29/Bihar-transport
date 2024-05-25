@@ -19,7 +19,7 @@ export async function GET(req, context) {
 
     const data = await paymentTerm.find({}).sort({ _id: -1 });
 
-    return Response.json({ data }, { status: 200 });
+    return Response.json({data}, { status: 200 });
   } catch (error) {
     console.log(error.message);
     return Response.json({ message: error.message }, { status: 400 });

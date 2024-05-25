@@ -112,7 +112,7 @@ const AddUnit = () => {
   return (
     <div className="min-h-full w-full rounded-3xl bg-white px-6 py-4 shadow-sm">
       <h2 className="font-semiBold mt-12 text-3xl lg:mt-0">
-        Add a New Trip Type:
+        Add a New Rate As Per:
       </h2>
 
       <form

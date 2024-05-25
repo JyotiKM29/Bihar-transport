@@ -36,7 +36,7 @@ const AddUnit = () => {
       try {
         setDataLoading(true);
 
-        const response = await fetch(`/api/setting/additionalCharges/get/${userId}`);
+        const response = await fetch(`/api/setting/paymentLiablity/get/${userId}`);
         const result = await response.json();
 
         console.log("result: ", result);
@@ -70,7 +70,6 @@ const AddUnit = () => {
     setGeneratedValue(generateFieldValue(unitName));
   }, [unitName]);
 
-  // Handle submit
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -78,7 +77,7 @@ const AddUnit = () => {
       setLoading(true);
       console.log(generatedValue);
 
-      const response = await fetch("/api/setting/additionalCharges/create", {
+      const response = await fetch("/api/setting/paymentLiablity/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -112,7 +111,7 @@ const AddUnit = () => {
   return (
     <div className="min-h-full w-full rounded-3xl bg-white px-6 py-4 shadow-sm">
       <h2 className="font-semiBold mt-12 text-3xl lg:mt-0">
-        Add a New Additional Charges:
+        Add a New Payment Libility:
       </h2>
 
       <form
@@ -122,7 +121,7 @@ const AddUnit = () => {
         <label className="w-full items-center gap-4 md:flex">
           <Input
             label="Unit Name"
-            placeholder="Enter Additional Charges"
+            placeholder="Enter Payment Libility"
             id="unitName"
             type="text"
             required
@@ -143,7 +142,7 @@ const AddUnit = () => {
           />
         </label>
         <Button type="submit">
-          {loading ? "Adding..." : "Add Additional Charges"}
+          {loading ? "Adding..." : "Add Payment Libility"}
         </Button>
       </form>
 
@@ -151,7 +150,7 @@ const AddUnit = () => {
       <div className="mt-8 min-h-[90vh] w-full space-y-6">
         <div className="min-h w-full space-y-2 rounded-2xl bg-white px-4 py-4 shadow-sm md:px-6 xl:h-[95%]">
           <h1 className="hidden text-4xl font-semibold text-blue-600 lg:block">
-            Additional Charges Data:{" "}
+            Payment Libility Data:{" "}
           </h1>
 
           <Button onClick={handleRefresh}>Refresh Data</Button>
