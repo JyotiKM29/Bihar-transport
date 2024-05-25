@@ -222,7 +222,7 @@ const bookingSchema = new mongoose.Schema(
         type: String,
       },
     ],
-    way: { type: String, default: "One Way" },
+    way: { type: String, default: "oneWay" },
     itemsList: itemsListSchema,
 
     vehicleType: { type: String, required: true },
