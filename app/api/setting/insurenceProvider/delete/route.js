@@ -5,6 +5,8 @@ import connectDB from "@/app/middleware/connectDB";
 export async function DELETE(req, res) {
   try {
     const { adminId, id } = await req.json();
+
+    console.log("id: ", id);
     await connectDB();
 
     const admin = await usermodel.findOne({
@@ -19,6 +21,7 @@ export async function DELETE(req, res) {
     }
 
     const trip = await insurenceProvider.findByIdAndDelete(id);
+    console.log("deleted");
 
     return Response.json({ message: "Deleted successfully" }, { status: 200 });
   } catch (error) {

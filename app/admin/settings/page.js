@@ -83,7 +83,7 @@ function Setting() {
             Bilty Setting
           </Link>
           <Link
-            href="/admin/settings/newunit"
+            href="/admin/settings/insurence"
             className="block mb-4 rounded-lg bg-violet-500 px-8 py-2 text-white shadow-md hover:bg-violet-700"
           >
             Insurance Provider Setting
