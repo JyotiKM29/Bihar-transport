@@ -5,7 +5,7 @@ import connectDB from "@/app/middleware/connectDB";
 
 export async function POST(req, res) {
   try {
-      const { adminId, name } = await req.json();
+      const { adminId, name, value } = await req.json();
         await connectDB();
 
     const admin = await usermodel.findOne({
@@ -17,6 +17,7 @@ export async function POST(req, res) {
 
     const data = new insurenceProvider({
       name,
+      value,
       addedBy: {
         name: admin.name,
         id: admin._id,
