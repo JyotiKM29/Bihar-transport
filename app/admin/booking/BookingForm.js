@@ -198,10 +198,14 @@ export default function ProfileForm() {
   const route = useRouter();
   const [allocateVehicle, setAllocateVehicle] = useState(false);
   const [materialItems, setMaterialItems] = useState([]);
+  const [tripType, setTripType] = useState([]);
+  const [paymentTerm, setpaymentTerm] = useState([]);
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const [isloadin2, setIsLoading2] = useState();
   const { user } = useContext(UserContext);
+  const userId = user?._id;
+
 
   const { reset, ...form } = useForm({
     resolver: zodResolver(formSchema),
@@ -410,6 +414,57 @@ export default function ProfileForm() {
     rateAsPerOption: undefined,
     rateUnit: undefined,
   }];
+
+
+  // handle trip automation 
+
+  useEffect(()=>{
+      fetchTripType();
+      fetchPaymentTerm();
+    },[]);
+
+
+   const fetchTripType = async () => {
+      try {
+        // setDataLoading(true);
+
+        const response = await fetch(`/api/setting/tripType/get/${userId}`);
+        const result = await response.json();
+
+        console.log("result: ", result);
+        setTripType(result.data);
+        // setDataLoading(false);
+      } catch (error) {
+        // setDataLoading(false);
+        console.error("Error fetching units:", error);
+      }
+    };
+
+
+    //paymentTerm
+
+    const fetchPaymentTerm = async () => {
+      try {
+        // setDataLoading(true);
+
+        const response = await fetch(`/api/setting/paymentTerm/get/${userId}`);
+        const result = await response.json();
+
+        console.log("result: ", result);
+        setpaymentTerm(result.data);
+        // setDataLoading(false);
+      } catch (error) {
+        // setDataLoading(false);
+        console.error("Error fetching units:", error);
+      }
+    };
+
+
+    
+
+
+
+
 
   // console.log(formSchema.safeParse(submitData));
 
@@ -726,12 +781,19 @@ export default function ProfileForm() {
                           </FormLabel>
                           <div className="flex flex-1 flex-col">
                             <FormControl>
-                              <select {...field}>
-                                <option value="">Select Way</option>
-                                <option value="one way">one way</option>
-                                <option value="two way">two way</option>
-                                <option value="return">return</option>
-                              </select>
+                             <select {...field}>
+    <option value="">
+                {tripType && tripType.length > 0
+                  ? "Select Trip "
+                  : "Loading..."}
+              </option>
+              {Array.isArray(tripType) &&
+                tripType.map((trip) => (
+                  <option key={trip.value} value={trip.value}>
+                    {trip.name}
+                  </option>
+                ))}
+            </select>
                             </FormControl>
                             <FormMessage />
                           </div>
@@ -931,15 +993,19 @@ export default function ProfileForm() {
                           </FormLabel>
                           <div className="flex flex-1 flex-col ">
                             <FormControl>
-                              <select {...field}>
-                                <option value="">Select a payment term</option>
-                                <option value="Advance">Advance</option>
-                                <option value="Paid">Paid</option>
-                                <option value="To Pay">To Pay</option>
-                                <option value="To be Billed">
-                                  To be Billed
-                                </option>
-                              </select>
+                             <select {...field}>
+    <option value="">
+                {paymentTerm && paymentTerm.length > 0
+                  ? "Select Payment Term "
+                  : "Loading..."}
+              </option>
+              {Array.isArray(paymentTerm) &&
+                paymentTerm.map((payment) => (
+                  <option key={payment.value} value={payment.value}>
+                    {payment.name}
+                  </option>
+                ))}
+            </select>
                             </FormControl>
                             <FormMessage />
                           </div>
