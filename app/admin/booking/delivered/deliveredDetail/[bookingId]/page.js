@@ -17,6 +17,7 @@ import { Button } from '@/app/components/ui/button';
 import FieldForm from '@/app/admin/component/FieldForm';
 import { UserContext } from '@/app/context/UserContextProvider';
 import { set } from 'mongoose';
+import { Divide } from 'lucide-react';
 
   const chargeScheme = z.object({
     chargeName:z.string(),
@@ -228,7 +229,7 @@ const DeliveryForm = ({params}) => {
         className="flex flex-col gap-5"
       >
       {/* details Show  */}
-      <div className='bg-orange-100 min-h-10 text-orange-500 px-4 py-2 rounded grid grid-cols-2'>
+      <div className='mt-8  md:mt-0 bg-orange-100 min-h-10 text-orange-500 px-4 py-2 rounded grid  grid-cols-1 md:grid-cols-2 '>
       <div className='flex gap-8'>
       <h1 className='text-base  text-amber-600'>CN/LR No :</h1>
       <h1 className='text-base  text-amber-600 font-semibold'>CN/LR No</h1>
@@ -259,27 +260,27 @@ const DeliveryForm = ({params}) => {
       </div>
 
        {/* Additional rate table */}
-      <div className='grid grid-cols-2 gap-8'>
+      <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
       <div>
       <h2 className='bg-yellow-200 h-10 rounded text-center py-2 font-medium'>Additional Rate For Company</h2>
       <table className="mx-2 my-4 w-full border">
             <thead>
               <tr className="w-full border bg-slate-50">
-                <th className="font-medium pr-3 text-nowrap border  ">Charges Name</th>
-                <th className="font-medium pr-3 text-nowrap border  ">Qty</th>
-                <th className="font-medium pr-3 text-nowrap border  ">Rate</th>
-                <th className="font-medium pr-3 text-nowrap border  ">Amount</th>
-                <th className="font-medium pr-3 text-nowrap  border ">Remarks</th>
+                <th className="font-medium pr-3 text-nowrap p-2 text-sm md:text-base  border  ">Charges Name</th>
+                <th className="font-medium pr-3 text-nowrap p-2 text-sm md:text-base  border  ">Qty</th>
+                <th className="font-medium pr-3 text-nowrap p-2 text-sm md:text-base  border  ">Rate</th>
+                <th className="font-medium pr-3 text-nowrap p-2 text-sm md:text-base  border  ">Amount</th>
+                <th className="hidden md:block font-medium pr-3 text-nowrap p-2 text-sm md:text-base  border ">Remarks</th>
               </tr>
             </thead>
             <tbody>
               {data?.itemsList.item.map((items, i) => (
                 <tr key={i} className="w-full text-center">
-                  <td className='border'>{items.material}</td>
-                  <td className='border'>{items.quantity}</td>
-                  <td className='border'>{items.rate}</td>
-                  <td className='border'>{items.basicAmount}</td>  
-                  <td className='border'>
+                  <td className='border p-2'>{items.material}</td>
+                  <td className='border p-2'>{items.quantity}</td>
+                  <td className='border p-2'>{items.rate}</td>
+                  <td className='border p-2'>{items.basicAmount}</td>  
+                  <td className='hidden md:block   p-2'>
                   {items?.remarks}
                 </td>
                 </tr>
@@ -294,25 +295,25 @@ const DeliveryForm = ({params}) => {
       </div>
       <div>
       <h2 className='bg-yellow-200 h-10 rounded text-center py-2 font-medium'>Additional Rate For Vehicle Hired</h2>
-      {/* <FieldForm form={form} name="CN" label="Order No" type="string" /> */}
+     
       <table className="mx-2 my-4 w-full border">
             <thead>
               <tr className="w-full border bg-slate-50">
-                <th className="font-medium pr-3 text-nowrap  border ">Charges Name</th>
-                <th className="font-medium pr-3 text-nowrap border ">Qty</th>
-                <th className="font-medium pr-3 text-nowrap  border">Rate</th>
-                <th className="font-medium pr-3 text-nowrap  border">Amount</th>
-                <th className="font-medium pr-3 text-nowrap  border">Remarks</th>
+                <th className="font-medium pr-3 text-nowrap p-2 text-sm md:text-base   border ">Charges Name</th>
+                <th className="font-medium pr-3 text-nowrap p-2 text-sm md:text-base  border ">Qty</th>
+                <th className="font-medium pr-3 text-nowrap p-2 text-sm md:text-base   border">Rate</th>
+                <th className="font-medium pr-3 text-nowrap p-2 text-sm md:text-base   border">Amount</th>
+                <th className="hidden md:block  font-medium pr-3 text-nowrap p-2 text-sm md:text-base   border">Remarks</th>
               </tr>
             </thead>
             <tbody>
               {data?.additionalCharges.chargers.map((items, i) => (
                 <tr key={i} className="w-full text-center">
-                  <td className='border'>{items.name}</td>
-                  <td className='border'>{items.qty}</td>
-                  <td className='border'>{items.rate}</td>
-                  <td className='border'>{items.amount}</td>  
-                  <td className='border'>
+                  <td className='border p-2'>{items.name}</td>
+                  <td className='border p-2'>{items.qty}</td>
+                  <td className='border p-2'>{items.rate}</td>
+                  <td className='border p-2'>{items.amount}</td>  
+                  <td className='hidden md:block  p-2'>
                   {items?.remarks}
                 </td>
                 </tr>
@@ -329,9 +330,9 @@ const DeliveryForm = ({params}) => {
 
 
       {/* Delivery details */}
-      <div className='grid grid-cols-2 gap-8'>
+      <div className='grid  grid-cols-1 lg:grid-cols-2 gap-8'>
       <div>
-      <h2 className='text-emerald-700 text-2xl font-bold underline text-center'>Delivery Details</h2>
+      <h2 className='text-emerald-700 text-xl md:text-2xl font-bold underline text-center'>Delivery Details</h2>
       <FieldForm form={form} name="CN" label="Reporting Date" type="date" />
       <FieldForm form={form} name="CN" label="Reporting time" type="time" />
 
@@ -391,7 +392,7 @@ const DeliveryForm = ({params}) => {
 
       </div>
       <div>
-      <h2 className='text-emerald-700 text-2xl font-bold underline text-center'>Payment Details</h2>
+      <h2 className='text-emerald-700 text-xl md:text-2xl font-bold underline text-center'>Payment Details</h2>
       <FieldForm form={form} name="CN" label="LR Dues Amt" type="number" />
       <FieldForm form={form} name="CN" label="Payment Modes" type="text" />
       <FieldForm form={form} name="CN" label="Amount Received" type="number" />
@@ -407,41 +408,93 @@ const DeliveryForm = ({params}) => {
 
       {/* Consignment Information */}
       <div>
-      <h2 className='text-emerald-700 text-2xl font-bold underline text-center'>Consignment Information</h2>
-      <table className="mx-2 my-4 w-full border">
+      <h2 className='text-emerald-700 text-xl md:text-2xl font-bold underline text-center'>Consignment Information</h2>
+      <div className='2xl:hidden shadow-lg mt-4'>
+        <div className='flex gap-4 border p-2 pl-4 bg-gray-100  '>
+          <h2 className='pr-8 border-r-2 md:w-48 font-medium'>Date</h2>
+          <p>{formatDate(data?.date)}</p>
+        </div>
+        <div className='flex gap-4 border p-2 pl-4   '>
+          <h2 className='pr-8 border-r-2 md:w-48 font-medium'>Delivery No</h2>
+          <p>{data?.orderNumber}</p>
+        </div>
+        <div className='flex gap-4 border p-2 pl-4 bg-gray-100  '>
+          <h2 className='pr-8 border-r-2 md:w-48 font-medium'>From Location</h2>
+          <p>{data?.loadingPoints}</p>
+        </div>
+
+        <div className='flex gap-4 border p-2 pl-4   '>
+          <h2 className='pr-8 border-r-2 md:w-48 font-medium'>To Location</h2>
+          <p>{formatDate(data?.unloadingPoints)}</p>
+        </div>
+        <div className='flex gap-4 border p-2 pl-4 bg-gray-100  '>
+          <h2 className='pr-8 border-r-2 md:w-48 font-medium'>qty</h2>
+          <p>{totalQty}</p>
+        </div>
+        <div className='flex gap-4 border p-2 pl-4   '>
+          <h2 className='pr-8 border-r-2 md:w-48 font-medium'>Weight</h2>
+          <p>{totalWeight}</p>
+        </div>
+      
+        <div className='flex gap-4 border p-2 pl-4 bg-gray-100  '>
+          <h2 className='pr-8 border-r-2 md:w-48 font-medium'>Breakage</h2>
+          <p>{formatDate(data?.date)}</p>
+        </div>
+        <div className='flex gap-4 border p-2 pl-4  '>
+          <h2 className='pr-8 border-r-2 md:w-48 font-medium'>Excess</h2>
+          <p>{formatDate(data?.date)}</p>
+        </div>
+        <div className='flex gap-4 border p-2 pl-4 bg-gray-100  '>
+          <h2 className='pr-8 border-r-2 md:w-48 font-medium'>Shortage</h2>
+          <p>{formatDate(data?.date)}</p>
+        </div>
+        <div className='flex gap-4 border p-2 pl-4   '>
+          <h2 className='pr-8 border-r-2 md:w-48 font-medium'>remarks</h2>
+          <p>{formatDate(data?.date)}</p>
+        </div>
+        <div className='flex gap-4 border p-2 pl-4 bg-gray-100  '>
+          <h2 className='pr-8 border-r-2 md:w-48 font-medium'>POD</h2>
+          <p>{formatDate(data?.date)}</p>
+        </div>
+        <div className='flex gap-4 border p-2 pl-4   '>
+          <h2 className='pr-8 border-r-2 md:w-48 font-medium'>Action</h2>
+          <p>{formatDate(data?.date)}</p>
+        </div>
+      </div>
+      <table className="hidden 2xl:block mx-2 my-4 w-full border shadow-lg rounded ">
             <thead>
               <tr className="w-full border bg-slate-50">
-                <th className="font-medium pr-3 text-nowrap border">Date</th>
-                <th className="font-medium pr-3 text-nowrap border ">Delivery No</th>
-                <th className="font-medium pr-3 text-nowrap border">From Location</th>
-                <th className="font-medium pr-3 text-nowrap border">To Location</th>
-                <th className="font-medium pr-3 text-nowrap border">qty</th>
-                <th className="font-medium pr-3 text-nowrap border">Weight</th>
-                <th className="font-medium pr-3 text-nowrap border">Breakage</th>
-                <th className="font-medium pr-3 text-nowrap border">Excess</th>
-                <th className="font-medium pr-3 text-nowrap border">Shortage</th>
-                <th className="font-medium pr-3 text-nowrap border">remarks</th>
-                <th className="font-medium pr-3 text-nowrap border">POD</th>
-                <th className="font-medium pr-3 text-nowrap border">Action</th>
+                <th className="p-2 font-medium pr-3 text-nowrap border">Date</th>
+                <th className="p-2 font-medium pr-3 text-nowrap border ">Delivery No</th>
+                <th className="p-2 font-medium pr-3 text-nowrap border">From Location</th>
+                <th className="p-2 font-medium pr-3 text-nowrap border">To Location</th>
+                <th className="p-2 font-medium pr-3 text-nowrap border">qty</th>
+                <th className="p-2 font-medium pr-3 text-nowrap border">Weight</th>
+                <th className="p-2 font-medium pr-3 text-nowrap border">Breakage</th>
+                <th className="p-2 font-medium pr-3 text-nowrap border">Excess</th>
+                <th className="p-2 font-medium pr-3 text-nowrap border">Shortage</th>
+                <th className="p-2 font-medium pr-3 text-nowrap border">remarks</th>
+                <th className="p-2 font-medium pr-3 text-nowrap border">POD</th>
+                <th className="p-2 font-medium pr-3 text-nowrap border">Action</th>
               </tr>
             </thead>
             <tbody>
             
                 <tr  className="w-full text-center">
-                   <td className='border'>{formatDate(data?.date)}</td>
-                   <td className='border'>
+                   <td className='p-2 border'>{formatDate(data?.date)}</td>
+                   <td className='p-2 border'>
                     {data?.orderNumber}
                    </td>
-                   <td className='border'>{data?.loadingPoints}</td>
-                   <td className='border'>{data?.unloadingPoints}</td>
-                   <td className='border'>{totalQty}</td>
-                   <td className='border'>{totalWeight}</td>
+                   <td className='p-2 border'>{data?.loadingPoints}</td>
+                   <td className='p-2 border'>{data?.unloadingPoints}</td>
+                   <td className='p-2 border'>{totalQty}</td>
+                   <td className='p-2 border'>{totalWeight}</td>
 
-                  <td className='border' onDoubleClick={handleTable}>{isEdit ?   <FieldForm form={form} name="CN" label="" type="text" /> :  ""}</td>
-                  <td className='border' onDoubleClick={handleTable}>{isEdit ?   <FieldForm form={form} name="CN" label="" type="text" /> :  ""}</td>
-                  <td className='border' onDoubleClick={handleTable}>{isEdit ?   <FieldForm form={form} name="CN" label="" type="text" /> :  ""}</td>
-                  <td className='border' onDoubleClick={handleTable}>{isEdit ?   <FieldForm form={form} name="CN" label="" type="text" /> :  ""}</td>
-                  <td className='border' onDoubleClick={handleTable}>{isEdit ?   <FieldForm form={form} name="CN" label="" type="text" /> :  ""}</td>
+                  <td className='p-2 border' onDoubleClick={handleTable}>{isEdit ?   <FieldForm form={form} name="CN" label="" type="text" /> :  ""}</td>
+                  <td className='p-2 border' onDoubleClick={handleTable}>{isEdit ?   <FieldForm form={form} name="CN" label="" type="text" /> :  ""}</td>
+                  <td className='p-2 border' onDoubleClick={handleTable}>{isEdit ?   <FieldForm form={form} name="CN" label="" type="text" /> :  ""}</td>
+                  <td className='p-2 border' onDoubleClick={handleTable}>{isEdit ?   <FieldForm form={form} name="CN" label="" type="text" /> :  ""}</td>
+                  <td className='p-2 border' onDoubleClick={handleTable}>{isEdit ?   <FieldForm form={form} name="CN" label="" type="text" /> :  ""}</td>
                     
                    <td>Unload</td>
             
