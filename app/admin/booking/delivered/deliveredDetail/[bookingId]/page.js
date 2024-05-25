@@ -25,7 +25,7 @@ const deliveryDetailsSchema = z.object({
   reporting_date: z.coerce.date(),
   unloading_date: z.coerce.date(),
   material_received_by: z.string(),
-  phone_number: z.string(),
+  phone_number: z.string().optional(),
   stamp: z.enum(["yes", "no"]),
   sign: z.enum(["yes", "no"]),
 });
@@ -267,6 +267,14 @@ const DeliveryForm = ({ params }) => {
     return `${day}/${month}/${year}`;
   }
 
+  const displayToast = (title, action, description = "") => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
+  
   const submitData = {
     adminId:"ihackdac",
     bookingId:"nhac",
@@ -725,7 +733,7 @@ const DeliveryForm = ({ params }) => {
               </table>
             </div>
 
-            <div className="">
+            <div className="hidden">
             <FieldForm form={form} name="consignment_info[0].delivery_date" label="" type="date" />
             <FieldForm form={form} name="consignment_info[0].delivery_number" label="" type="text" />
             <FieldForm form={form} name="consignment_info[0].from_location" label="" type="text" />
