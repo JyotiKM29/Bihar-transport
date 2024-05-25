@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const rateAsPerSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
+    value:{type:String, required:true},
     addedBy: {
       name: { type: String },
       id: { type: String, required: true },

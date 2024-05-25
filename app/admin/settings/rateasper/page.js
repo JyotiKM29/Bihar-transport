@@ -9,6 +9,7 @@ import { DataTable } from "../../account/data-table";
 
 const AddUnit = () => {
   const [unitName, setUnitName] = useState("");
+  const [generatedValue, setGeneratedValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [dataLoading, setDataLoading] = useState(false);
   const [newDataAdded, setnewDataAdded] = useState(false);
@@ -54,12 +55,28 @@ const AddUnit = () => {
     setnewDataAdded(~newDataAdded);
   };
 
-  // Handle delete
+  // Function to generate the field value
+  const generateFieldValue = (input) => {
+    return input
+      .toLowerCase()
+      .split(" ")
+      .map((word, index) =>
+        index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1),
+      )
+      .join("");
+  };
+
+  useEffect(() => {
+    setGeneratedValue(generateFieldValue(unitName));
+  }, [unitName]);
+
+  // Handle submit
   async function handleSubmit(e) {
     e.preventDefault();
 
     try {
       setLoading(true);
+      console.log(generatedValue);
 
       const response = await fetch("/api/setting/rateAsPer/create", {
         method: "POST",
@@ -69,6 +86,7 @@ const AddUnit = () => {
         body: JSON.stringify({
           adminId: userId,
           name: unitName,
+          value: generatedValue, // Add the generated field value here
         }),
       });
 
@@ -104,7 +122,7 @@ const AddUnit = () => {
         <label className="w-full items-center gap-4 md:flex">
           <Input
             label="Unit Name"
-            placeholder="Enter Rate As Per "
+            placeholder="Enter Rate As Per"
             id="unitName"
             type="text"
             required
@@ -113,25 +131,33 @@ const AddUnit = () => {
             className="w-full"
           />
         </label>
-        <Button type="submit">{loading ? "Adding..." : "Add Rate As PER"}</Button>
+        <label className="w-full items-center gap-4 md:flex">
+          <Input
+            label="Generated Value"
+            placeholder="Generated Value"
+            id="generatedValue"
+            type="text"
+            value={generatedValue}
+            readOnly
+            className="mt-4 w-full"
+          />
+        </label>
+        <Button type="submit">
+          {loading ? "Adding..." : "Add Rate As PER"}
+        </Button>
       </form>
 
-      {/* showing data  */}
-
+      {/* Showing data */}
       <div className="mt-8 min-h-[90vh] w-full space-y-6">
-        <div
-          className="min-h w-full 
-      space-y-2 rounded-2xl  bg-white px-4 py-4 
-     shadow-sm md:px-6 xl:h-[95%]"
-        >
-          <h1 className="hidden text-4xl  font-semibold text-blue-600 lg:block">
+        <div className="min-h w-full space-y-2 rounded-2xl bg-white px-4 py-4 shadow-sm md:px-6 xl:h-[95%]">
+          <h1 className="hidden text-4xl font-semibold text-blue-600 lg:block">
             Rate As PER Data:{" "}
           </h1>
 
           <Button onClick={handleRefresh}>Refresh Data</Button>
 
           {dataLoading ? (
-            <div className="max-w max-h  bg-white">
+            <div className="max-w max-h bg-white">
               <h2 className="text-xl">Data Loading...</h2>
             </div>
           ) : (
