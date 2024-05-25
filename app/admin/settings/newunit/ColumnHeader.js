@@ -41,7 +41,6 @@ export default function ColumnHeader() {
 
       const requestData = {
         "adminId": user?._id,
-        "status": status,
         "unitId": unitId
       };
 
@@ -63,7 +62,7 @@ export default function ColumnHeader() {
         if (response.ok) {
           setIsLoading(false);
           displayToast(`Successfully Deleted`, "✅");
-          setDataLoading(~dataLoading);
+          // setDataLoading(~dataLoading);
          
         } else {
           console.log(newResult," ",response);

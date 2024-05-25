@@ -53,16 +53,11 @@ const AddUnit = () => {
     fetchUnits();
   }, [user, newDataAdded]);
 
-  // Handle delete
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`/api/deleteUnit/${id}`);
-      setUnits(units.filter(unit => unit.id !== id));
-    } catch (error) {
-      console.error("Error deleting unit:", error);
-    }
+  const handleRefresh = () => {
+    setnewDataAdded(~newDataAdded);
   };
 
+  // Handle delete
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -101,9 +96,7 @@ const AddUnit = () => {
 
   return (
     <div className="min-h-full w-full rounded-3xl bg-white px-6 py-4 shadow-sm">
-      <h2 className="font-semiBold mt-12 text-3xl lg:mt-0">
-        Add a New Unit:
-      </h2>
+      <h2 className="font-semiBold mt-12 text-3xl lg:mt-0">Add a New Unit:</h2>
 
       <form
         onSubmit={handleSubmit}
@@ -125,24 +118,29 @@ const AddUnit = () => {
       </form>
 
       {/* showing data  */}
-
-      <div className="min-h-[90vh] w-full space-y-6 mt-8">
      
-      <div
-        className="min-h w-full 
+      <div className="mt-8 min-h-[90vh] w-full space-y-6">
+        <div
+          className="min-h w-full 
       space-y-2 rounded-2xl  bg-white px-4 py-4 
      shadow-sm md:px-6 xl:h-[95%]"
-      >
-        
-        <h1 className="hidden text-4xl  lg:block text-blue-600 font-semibold">Units Data: </h1>
+        >
+          <h1 className="hidden text-4xl  font-semibold text-blue-600 lg:block">
+            Units Data:{" "}
+          </h1>
 
-       {dataLoading ? (<div className="max-w max-h  bg-white"><h2
-       className="text-xl"
-       >DataLoading...</h2></div>) :  ( <DataTable columns={columns} data={units} />)}
+           <Button onClick={handleRefresh}>Refresh Data</Button>
+
+
+          {dataLoading ? (
+            <div className="max-w max-h  bg-white">
+              <h2 className="text-xl">Data Loading...</h2>
+            </div>
+          ) : (
+            <DataTable columns={columns} data={units} />
+          )}
+        </div>
       </div>
-    </div>
-
-      
     </div>
   );
 };
