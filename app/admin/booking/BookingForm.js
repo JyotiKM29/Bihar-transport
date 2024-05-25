@@ -183,22 +183,7 @@ export default function ProfileForm() {
     paymentTerm: "",
     remarks: "",
     itemsList:[],
-    // itemsList:[ {
-    //   material: undefined,
-    //   quantity: 0,
-    //   quantityUnit: undefined,
-    //   actualWeight: undefined,
-    //   actualWeightUnit: undefined,
-    //   chargedWeight: 0,
-    //   chargedWeightUnit: undefined,
-    //   rateAsPer: 0,
-    //   rateAsPerOption: undefined,
-    //   rate: undefined,
-    //   rateUnit: undefined,
-    //   GSTPercentage: 0,
-    //   GSTType: "RCM",
-    //   amount: 0,
-    // }],
+    
     additionalCharges: {
       enabled: false,
       totalCharge: 0,
@@ -430,7 +415,7 @@ export default function ProfileForm() {
 
   async function MyHandleSubmit(value) {
     console.log("hey");
-    console.log(formSchema.safeParse(value));
+   
 
     value.adminId = user._id;
     console.log(value);
@@ -491,9 +476,6 @@ export default function ProfileForm() {
     });
   };
 
-  // const handleDeleteItem = (hsnRemove) => {
-  //   CartItems = CartItems.filter((item) => item.hsnNo !== hsnRemove);
-  //  };
 
   return (
     <div className="max-w max-h  bg-white px-0 ">
