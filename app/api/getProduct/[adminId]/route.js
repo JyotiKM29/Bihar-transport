@@ -26,7 +26,7 @@ export async function GET(req,context){
         }
 
 
-        const data = await productmodel.find();
+        const data = await productmodel.find().sort({_id:-1});
 
         return Response.json({ data }, { staus: 200 });
 
