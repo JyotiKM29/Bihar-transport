@@ -101,6 +101,7 @@ const DeliveryForm = ({ params }) => {
 
   useEffect(() => {
     const fetchBooking = async () => {
+      setLoading(true);
       try {
         const response = await fetch(`/api/bookingdetails/${bookingIdParams}`, {
           method: "GET",
@@ -274,7 +275,7 @@ const DeliveryForm = ({ params }) => {
       description,
     });
   };
-  
+
   const submitData = {
     adminId:"ihackdac",
     bookingId:"nhac",
@@ -292,7 +293,7 @@ const DeliveryForm = ({ params }) => {
       >
         {/* <h1 className="hidden text-4xl font-semibold text-emerald-700 lg:block ">Delivery Details </h1> */}
 
-        <Form {...form}>
+       {loading ? "Loading..." : <Form {...form}>
           <form
             onSubmit={form.handleSubmit(MyHandleSubmit)}
             className="flex flex-col gap-5"
@@ -390,7 +391,7 @@ const DeliveryForm = ({ params }) => {
                   </span>
                 </h2>
                 <h2 className="p-4">
-                  Ledger Bal of vehicle :{" "}
+                  Ledger Bal. of Party :{" "}
                   <span className=" rounded border border-green-400 bg-green-100  p-1 px-3 ">
                     {ledgerBalance}{" "}
                   </span>
@@ -442,7 +443,9 @@ const DeliveryForm = ({ params }) => {
                     {data?.additionalCharges.totalCharge}
                   </span>
                 </h2>
-                <h2 className="p-4">Ledger Bal of vehicle : {}</h2>
+                <h2 className="p-4">Ledger Bal. of vehicle :  <span className=" rounded border border-green-400 bg-green-100 p-1 px-3 ">
+                    0.0
+                  </span></h2>
               </div>
             </div>
 
@@ -749,7 +752,7 @@ const DeliveryForm = ({ params }) => {
               {isloading ? "Loading..." : " Deliver Material"}
             </Button>
           </form>
-        </Form>
+        </Form>}
       </div>
     </div>
   );

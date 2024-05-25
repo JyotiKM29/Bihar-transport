@@ -60,7 +60,7 @@ const handleCheckboxChange = (e) => {
         name={nameValue}
         render={({ field }) => (
           <FormItem className="flex items-center justify-center gap-4 ">
-            <FormLabel className="text-nowrap text-sm lg:text-base">{label}:</FormLabel>
+            <FormLabel className="text-nowrap text-sm lg:text-base">{label} </FormLabel>
             <div className="flex flex-1 flex-col ">
               <FormControl>
                 {type === 'checkbox' ? (
