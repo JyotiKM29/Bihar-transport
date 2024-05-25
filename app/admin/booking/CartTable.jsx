@@ -1,6 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { ShoppingCart } from "lucide-react";
+import { UserContext } from "../../context/UserContextProvider";
+
 
 const CartTable = ({ form, items, onDelete, onEdit }) => {
   const [cartItems, setCartItems] = useState(items);
@@ -8,9 +10,15 @@ const CartTable = ({ form, items, onDelete, onEdit }) => {
   const [totalCost, setTotalCost] = useState(0.0);
   const [isEditing, setIsEditing] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
+  const [rateAsPerData, setRateAsPerData] = useState([]);
   const [ok, setOk] = useState(true);
+    const { user } = useContext(UserContext);
+
+ 
+  const userId = user?._id;
 
   useEffect(() => {
+   
     setCartItems(items);
     const length = Array.isArray(cartItems) && cartItems.length ? cartItems.length : 0;
     setNoOfItems(length);
@@ -27,6 +35,33 @@ const CartTable = ({ form, items, onDelete, onEdit }) => {
     console.log("partyBhara Jyoti KM", form.getValues("partyBhara"));
   }, [items]);
 
+  useEffect(()=>{
+    console.log("it's started...");
+   fetchRateAsPer();
+},[]);
+
+
+  const fetchRateAsPer = async () => {
+     // Fetch units data from API
+     console.log("it's workiing now...")
+     try {
+       const response = await fetch(`/api/setting/rateAsPer/get/${userId}`, {
+         method: "GET",
+       });
+
+       if (!response.ok) {
+         throw new Error(`HTTP error! Status: ${response.status}`);
+       }
+
+       const data = await response.json();
+       console.log("rate as per data:", data.data);
+       setRateAsPerData(data.data);
+     } catch (error) {
+       console.error("Error:", error);
+     }
+   };
+
+
   const handleEditClick = (item) => {
     setIsEditing(true);
     setCurrentItem(item);
@@ -41,6 +76,9 @@ const CartTable = ({ form, items, onDelete, onEdit }) => {
     basicAmount: value,
   }));
 };
+
+
+
 
 // useEffect(() => {
 //   // Call your function here
@@ -85,13 +123,13 @@ const CartTable = ({ form, items, onDelete, onEdit }) => {
 
         }
 
-        if(rateAsPer === "Actual weight"){
+        if(rateAsPer === "actualWeight"){
 
           basicAmount = (actualWeight*rate)
 
         }
 
-        if(rateAsPer === "charged weight"){
+        if(rateAsPer === "chargedWeight"){
 
            basicAmount = (chargedWeight*rate)
         }
@@ -166,10 +204,10 @@ const CartTable = ({ form, items, onDelete, onEdit }) => {
                     {item.chargedWeightUnit}
                   </td>
                   <td>
-                    {item.rateAsPer}
+                    {item.rate}
                   </td>
                   <td>
-                    {item.rate}({item.rateUnit})
+                    {item.rateAsPer}({item.rateUnit})
                   </td>
                   <td>{item.basicAmount}</td>
                   <td>
@@ -253,18 +291,61 @@ const CartTable = ({ form, items, onDelete, onEdit }) => {
     onChange={handleEditChange}
     className="w-full p-2 border rounded"
   >
-    <option value="fixed">Fixed</option>
-    <option value="Actual weight">Actual weight</option>
-    <option value="charged weight">Charged weight</option>
-    <option value="quantity">Quantity</option>
-    <option value="distance">Distance</option>
-    <option value="Per trip">Per trip</option>
-    <option value="per kg">Per kg</option>
-    <option value="Per ton">Per ton</option>
-    <option value="Bundles">Bundles</option>
-    <option value="pounds">Pounds</option>
-  </select>
+    <option value="">
+                {rateAsPerData && rateAsPerData.length > 0
+                  ? "Select Rate As Per"
+                  : "Loading..."}
+              </option>
+              {Array.isArray(rateAsPerData) &&
+                rateAsPerData.map((rate) => (
+                  <option key={rate.value} value={rate.value}>
+                    {rate.name}
+                  </option>
+                ))}
+            </select>
 </div>
+
+{/* <FormField
+  control={form.control}
+  name={`${nameValue}[${items.length}].rateAsPer`}
+  render={({ field }) => {
+    return (
+      <FormItem className="flex flex-1 items-center justify-center gap-4">
+
+<FormLabel className="text-nowrap text-sm lg:text-base">
+                        Rate as Per :
+                      </FormLabel>
+
+        <div className="flex flex-1 flex-col">
+          <FormControl>
+            <select
+              {...field}
+              className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
+            >
+              <option value="">
+                {rateAsPerData && rateAsPerData.length > 0
+                  ? "Select Actual Weight Unit"
+                  : "Loading..."}
+              </option>
+              {Array.isArray(rateAsPerData) &&
+                rateAsPerData.map((rate) => (
+                  <option key={rate.value} value={rate.value}>
+                    {rate.name}
+                  </option>
+                ))}
+            </select>
+          </FormControl>
+          <FormMessage />
+        </div>
+      </FormItem>
+    );
+  }}
+/> */}
+
+
+
+
+
 
 {currentItem.rateAsPer === "fixed" && (
   <div>

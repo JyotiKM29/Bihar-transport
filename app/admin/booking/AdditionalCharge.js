@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import FieldForm from "../component/FieldForm";
 import { Button } from "../../components/ui/button";
 import {
@@ -10,13 +10,21 @@ import {
     FormLabel,
     FormMessage,
   } from "../../components/ui/form";
+import { UserContext } from "../../context/UserContextProvider";
+
+
 
 const AdditionalChargers = ({ form, nameValue ,items }) => {
   const [charges, setCharges] = useState([]);
+  const [chargesList, setChargesList] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [cartItems, setCartItems] = useState(items);
   const [noOfItems , setNoOfItems] = useState(0);
   const [totalCost , setTotalCost] = useState(0.0) ;
+  const { user } = useContext(UserContext);
+
+  const userId = user?._id;
+
 
   useEffect(() => {
     setCartItems(items); 
@@ -107,6 +115,32 @@ setTotalCost(calculatedTotalCost);
     setShowForm(false);
   }
 
+
+
+   const fetchAdditionalCharges = async () => {
+     // Fetch units data from API
+     try {
+       const response = await fetch(`/api/setting/additionalCharges/get/${userId}`, {
+         method: "GET",
+       });
+
+       if (!response.ok) {
+         throw new Error(`HTTP error! Status: ${response.status}`);
+       }
+
+       const data = await response.json();
+       console.log("rate as per data:", data.data);
+       setChargesList(data.data);
+     } catch (error) {
+       console.error("Error:", error);
+     }
+   };
+
+
+   useEffect(()=>{
+    fetchAdditionalCharges();
+   },[]);
+
   return (
     <div>
       
@@ -188,7 +222,7 @@ setTotalCost(calculatedTotalCost);
                       </FormLabel>
                       <div className="flex flex-1 flex-col">
                         <FormControl>
-                          <select {...field}>
+                          {/* <select {...field}>
                           <option value="Select Charges">Select Charges</option>
                         <option value="Detention Charge">
                           Detention Charge
@@ -200,7 +234,22 @@ setTotalCost(calculatedTotalCost);
                           unloading Charge
                         </option>
                         <option value="Other Charge">Other Charge</option>
-                          </select>
+                          </select> */}
+
+
+                         <select {...field}>
+    <option value="">
+                {chargesList && chargesList.length > 0
+                  ? "Select Additional Charge"
+                  : "Loading..."}
+              </option>
+              {Array.isArray(chargesList) &&
+                chargesList.map((charge) => (
+                  <option key={charge.value} value={charge.value}>
+                    {charge.name}
+                  </option>
+                ))}
+            </select>
                         </FormControl>
                         <FormMessage />
                       </div>
