@@ -21,7 +21,7 @@ const FieldForm = ({ form, name, label, type, options }) => {
         return (
           <FormItem className="flex items-center justify-center gap-4">
             <FormLabel className="text-nowrap text-sm lg:text-base">
-              {label}:
+              {label}
             </FormLabel>
             <div className="flex flex-1 flex-col">
               <FormControl>
