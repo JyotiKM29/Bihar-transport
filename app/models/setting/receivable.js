@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 
-const receivable = new mongoose.Schema(
+const receivableSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
+    value:{type:String,required:true},
     addedBy: {
       name: { type: String },
       id: { type: String, required: true },
@@ -13,4 +14,4 @@ const receivable = new mongoose.Schema(
 );
 
 mongoose.models = {};
-export default mongoose.model("receivable", receivable);
+export default mongoose.model("receivable", receivableSchema);

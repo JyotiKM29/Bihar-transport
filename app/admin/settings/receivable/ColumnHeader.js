@@ -44,7 +44,7 @@ export default function ColumnHeader() {
       try {
         console.log(requestData);
 
-        const response = await fetch("/api/setting/paymentLiablity/delete", {
+        const response = await fetch("/api/setting/receivable/delete", {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -105,7 +105,7 @@ export default function ColumnHeader() {
           <div className="text-center">
             <p>&nbsp;</p>
             <p>&nbsp;</p>
-            <p>Payment Term</p>
+            <p>Receivable name</p>
           </div>
         ),
         cell: ({ row }) => (
@@ -125,7 +125,7 @@ export default function ColumnHeader() {
           <div className="text-center">
             <p>&nbsp;</p>
             <p>&nbsp;</p>
-            <p>Payment Term value</p>
+            <p>Receivable value</p>
           </div>
         ),
         cell: ({ row }) => (

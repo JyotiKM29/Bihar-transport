@@ -1,5 +1,6 @@
 import usermodel from "@/app/models/usermodel";
-import receivable from "@app/models/receivable"
+// import receivable from "@app/models/setting/receivable";
+import receivable from "@/app/models/setting/receivable";
 import connectDB from "@/app/middleware/connectDB";
 
 export async function GET(req, context) {

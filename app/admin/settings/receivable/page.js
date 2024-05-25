@@ -36,7 +36,7 @@ const AddUnit = () => {
       try {
         setDataLoading(true);
 
-        const response = await fetch(`/api/setting/paymentLiablity/get/${userId}`);
+        const response = await fetch(`/api/setting/receivable/get/${userId}`);
         const result = await response.json();
 
         console.log("result: ", result);
@@ -77,7 +77,7 @@ const AddUnit = () => {
       setLoading(true);
       console.log(generatedValue);
 
-      const response = await fetch("/api/setting/paymentLiablity/create", {
+      const response = await fetch("/api/setting/receivable/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -111,7 +111,7 @@ const AddUnit = () => {
   return (
     <div className="min-h-full w-full rounded-3xl bg-white px-6 py-4 shadow-sm">
       <h2 className="font-semiBold mt-12 text-3xl lg:mt-0">
-        Add a New Payment Libility:
+        Add a New Receivable:
       </h2>
 
       <form
@@ -121,7 +121,7 @@ const AddUnit = () => {
         <label className="w-full items-center gap-4 md:flex">
           <Input
             label="Unit Name"
-            placeholder="Enter Payment Libility"
+            placeholder="Enter Receivable"
             id="unitName"
             type="text"
             required
@@ -142,7 +142,7 @@ const AddUnit = () => {
           />
         </label>
         <Button type="submit">
-          {loading ? "Adding..." : "Add Payment Libility"}
+          {loading ? "Adding..." : "Add Receivable"}
         </Button>
       </form>
 
@@ -150,7 +150,7 @@ const AddUnit = () => {
       <div className="mt-8 min-h-[90vh] w-full space-y-6">
         <div className="min-h w-full space-y-2 rounded-2xl bg-white px-4 py-4 shadow-sm md:px-6 xl:h-[95%]">
           <h1 className="hidden text-4xl font-semibold text-blue-600 lg:block">
-            Payment Libility Data:{" "}
+            Receivable Data:{" "}
           </h1>
 
           <Button onClick={handleRefresh}>Refresh Data</Button>
