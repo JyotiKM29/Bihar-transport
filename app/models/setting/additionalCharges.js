@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const additionalChargesSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
+    value:{type:String, required:true},
     addedBy: {
       name: { type: String },
       id: { type: String, required: true },

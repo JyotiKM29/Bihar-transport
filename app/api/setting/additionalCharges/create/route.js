@@ -9,7 +9,7 @@ export async function POST(req, res) {
 
     try {
         
-        const { adminId, name } = await req.json();
+        const { adminId, name, value } = await req.json();
         await connectDB();
 
         const admin = await usermodel.findOne({ $and: [{ _id: adminId }, { $or: [{ isAdmin: true }, { isOwner: true }] }] });
@@ -21,6 +21,7 @@ export async function POST(req, res) {
 
         const newAdditionalCharges = new additionalCharges({
             name,
+            value,
             addedBy: {
                 name: admin.name,
                 id: admin._id,
