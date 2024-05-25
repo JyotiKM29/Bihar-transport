@@ -1,17 +1,26 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
+import ColumnHeader from './ColumnHeader';
+import { DataTable } from "../../account/data-table";
+
 
 const AddUnit = () => {
   const [unitName, setUnitName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [dataLoading, setDataLoading] = useState(false);
+  const [newDataAdded, setnewDataAdded] = useState(false);
+  const [units, setUnits] = useState([]);
   const { toast } = useToast();
   const { user } = useContext(UserContext);
+    const columns = ColumnHeader();
 
-  const userId = user?._id;
+
+    const userId = user?._id;
+    console.log("user: ", user);
 
   const displayToast = (title, action, description = "") => {
     toast({
@@ -19,6 +28,39 @@ const AddUnit = () => {
       action,
       description,
     });
+  };
+
+  // Fetch data from API
+  useEffect(() => {
+    const fetchUnits = async () => {
+      try {
+
+        setDataLoading(true);
+       
+        const response = await fetch(`/api/getunits/${userId}`);
+        const result = await response.json();
+
+        console.log(result);
+        setUnits(result.data);
+        setDataLoading(false);
+      } catch (error) {
+        setDataLoading(false);
+        console.error("Error fetching units:", error);
+      }
+    };
+
+
+    fetchUnits();
+  }, [user, newDataAdded]);
+
+  // Handle delete
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`/api/deleteUnit/${id}`);
+      setUnits(units.filter(unit => unit.id !== id));
+    } catch (error) {
+      console.error("Error deleting unit:", error);
+    }
   };
 
   async function handleSubmit(e) {
@@ -43,6 +85,8 @@ const AddUnit = () => {
       if (response.ok) {
         displayToast("Unit Added Successfully", "✅");
         setUnitName("");
+        setUnits([...units, result.unit]); // Update the units list with the new unit
+        setnewDataAdded(~newDataAdded);
       } else {
         console.error("Error:", result.message);
         displayToast("Failed to add unit", "❌", result.message);
@@ -56,7 +100,7 @@ const AddUnit = () => {
   }
 
   return (
-    <div className="h-full w-full rounded-3xl bg-white px-6 py-4 shadow-sm">
+    <div className="min-h-full w-full rounded-3xl bg-white px-6 py-4 shadow-sm">
       <h2 className="font-semiBold mt-12 text-3xl lg:mt-0">
         Add a New Unit:
       </h2>
@@ -79,6 +123,26 @@ const AddUnit = () => {
         </label>
         <Button type="submit">{loading ? "Adding..." : "Add Unit"}</Button>
       </form>
+
+      {/* showing data  */}
+
+      <div className="min-h-[90vh] w-full space-y-6 mt-8">
+     
+      <div
+        className="min-h w-full 
+      space-y-2 rounded-2xl  bg-white px-4 py-4 
+     shadow-sm md:px-6 xl:h-[95%]"
+      >
+        
+        <h1 className="hidden text-4xl  lg:block text-blue-600 font-semibold">Units Data: </h1>
+
+       {dataLoading ? (<div className="max-w max-h  bg-white"><h2
+       className="text-xl"
+       >DataLoading...</h2></div>) :  ( <DataTable columns={columns} data={units} />)}
+      </div>
+    </div>
+
+      
     </div>
   );
 };

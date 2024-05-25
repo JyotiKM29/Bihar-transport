@@ -26,7 +26,7 @@ export async function GET(req,context){
         }
 
 
-        const data = await unitmodel.find();
+        const data = await unitmodel.find().sort({_id:-1});
 
         return Response.json({ data }, { staus: 200 });
 
