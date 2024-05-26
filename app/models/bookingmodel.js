@@ -303,7 +303,11 @@ const bookingSchema = new mongoose.Schema(
     },
 
     location: [locationSchema],
-    delivery: deliverySchema,
+    // delivery: deliverySchema,
+    delivery: {
+      type: deliverySchema,
+      default: {},
+    },
     updatedBy: [
       {
         name: { type: String },
