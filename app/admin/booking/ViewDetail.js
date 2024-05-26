@@ -19,13 +19,13 @@ const ViewDetail = ({ bookingDetails, heading }) => {
 
   return (
     <div className="min-h-[90vh] w-full rounded-2xl bg-white px-6 py-4 shadow-sm ">
-      <div className="flex items-center justify-between">
-        <h1 className="mb-6 text-4xl font-semibold text-pink-600">
+      <div className="flex flex-col-reverse md:flex-row items-center justify-between">
+        <h1 className="mb-6 mt-2 md:mt-0 text-2xl lg:text-4xl font-semibold text-pink-600">
           {heading} Details:{" "}
         </h1>
         <div className="flex items-center justify-between space-x-2">
           <Button
-            className="space-x-2 bg-pink-500 px-4  hover:bg-pink-600"
+            className="space-x-2 bg-pink-600 px-4  hover:bg-pink-700"
             onClick={handleGoBack}
           >
             <IoIosArrowBack className=" fill-white" />
@@ -33,14 +33,14 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           </Button>
           <Button
             onClick={() => setEditBooking(!editBooking)}
-            className="space-x-2 bg-pink-500 px-4  hover:bg-pink-600"
+            className="space-x-2 bg-pink-600 px-4  hover:bg-pink-700"
           >
             <pre className="text-base">Edit</pre>
             <MdEdit className="h-8 fill-white" />
           </Button>
         </div>
       </div>
-      <div className="grid min-h-10 grid-cols-3 rounded-2xl bg-orange-100 p-4 shadow-md">
+      <div className="grid min-h-10  grid-cols-2 md:grid-cols-3 rounded-2xl bg-orange-100 p-4 shadow-md">
         <div className="flex  gap-4 ">
           <h2 className="font-semibold ">Order Id :</h2>
           <h2 className=""> {bookingDetails?.booking?.orderNumber}</h2>
@@ -60,7 +60,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
         </div>
       </div>
 
-      <div className="mt-4 grid min-h-10 grid-cols-2 gap-x-16 rounded-2xl bg-pink-50 p-4 shadow-lg">
+      <div className="mt-4 grid min-h-10  grid-cols-1 md:grid-cols-2 gap-x-16 rounded-2xl bg-pink-50 p-4 shadow-lg">
         <FieldComponent
           label={"Vehicle Req. Date"}
           value={new Date(
@@ -132,6 +132,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
             Material Info{" "}
           </h2>
+          <div className="overflow-x-auto">
           <table className="mx-2 my-4 w-full border border-pink-600">
             <thead>
               <tr className="w-full border border-pink-600 bg-pink-200">
@@ -180,7 +181,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
               ))}
             </tbody>
           </table>
-
+</div>
           <div className="flex justify-between gap-8 rounded-lg bg-pink-50">
             <h2 className="p-4 font-semibold text-pink-900  ">
               Total Amount:
@@ -203,6 +204,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
             Additional Chargers{" "}
           </h2>
+          <div className="overflow-x-auto">
           <table className="mx-2 my-4 w-full border border-pink-600">
             <thead>
               <tr className="w-full border border-pink-600 bg-pink-200">
@@ -253,7 +255,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
               )}
             </tbody>
           </table>
-
+</div>
           <div className="flex justify-between gap-8 rounded-lg bg-pink-50">
             <h2 className="p-4 font-semibold text-pink-900  ">
               Total Amount:
@@ -269,7 +271,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
       <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
         Payment Details{" "}
       </h2>
-      <div className="mb-4 mt-6 grid min-h-20 grid-cols-2 gap-x-16 rounded-lg border border-pink-500 p-4 shadow-md">
+      <div className="mb-4 mt-6 grid grid-cols-1 min-h-20 md:grid-cols-2 gap-x-16 rounded-lg border border-pink-500 p-4 shadow-md">
         <FieldComponent
           label={"Payment Term "}
           show={editBooking}
@@ -322,7 +324,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-x-16 rounded-lg bg-pink-50 p-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 rounded-lg bg-pink-50 p-4">
         <FieldComponent
           label={"Way"}
           show={editBooking}
@@ -359,7 +361,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
             Allocated Vehicle{" "}
           </h2>
-          <div className="mt-4 grid min-h-10 grid-cols-2 gap-x-16 rounded-2xl bg-pink-200 p-4 shadow-lg">
+          <div className="mt-4 grid min-h-10  grid-cols-1 md:grid-cols-2 gap-x-16 rounded-2xl bg-pink-200 p-4 shadow-lg">
             <FieldComponent
               label={"Owner Name"}
               value={bookingDetails?.booking?.allotedVehicle[0]?.vehicleOwner}
@@ -418,7 +420,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
             Invoice Details :
           </h2>
-
+          <div className="overflow-x-auto">
           <table className="mx-2 my-4 w-full border border-pink-600">
             <thead>
               <tr className="w-full border border-pink-600 bg-pink-200">
@@ -465,6 +467,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
              
             </tbody>
           </table>
+          </div>
         </div>
       )}
 
@@ -476,7 +479,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
            Dispatch Details :
           </h2>
 
-          <div className="mb-4 mt-6 min-h-20  gap-x-16 rounded-lg border border-pink-500 p-4 shadow-md grid grid-cols-2">
+          <div className="mb-4 mt-6 min-h-20  gap-x-16 rounded-lg border border-pink-500 p-4 shadow-md grid grid-cols-1 md:grid-cols-2">
 
           <FieldComponent
           label={"Bill Type"}
@@ -520,7 +523,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           identifier="paymentTerm"
           value={bookingDetails?.booking?.dispatch?.dispatchDetails?.remarks}
         />
-<div className="col-span-full flex bg-pink-50 p-4 rounded justify-between">
+<div className="col-span-full sm:flex  bg-pink-50 p-4 rounded justify-between">
 
 
 <div >
@@ -581,7 +584,8 @@ const ViewDetail = ({ bookingDetails, heading }) => {
 {/* table of Chargers */}
 {bookingDetails?.booking?.dispatch?.dispatchDetails?.dispatch?.chargesDetails.length > 0 && <div className="col-span-full">
 <p className="mb-4 mt-6 text-center text-xl  font-light text-pink-700 underline">Charges Details</p>
-<table className="mx-2 my-4 w-full border border-pink-600">
+<div className="overflow-x-auto">
+<table className="mx-2 my-4 w-full border border-pink-600 ">
             <thead>
               <tr className="w-full border border-pink-600 bg-pink-200">
                 <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
@@ -625,6 +629,8 @@ const ViewDetail = ({ bookingDetails, heading }) => {
               ))}
             </tbody>
           </table>
+</div>
+
 </div>}
 
 <div className="col-span-full">
@@ -639,7 +645,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
         />
         </div>
 {/* Additional Details */}
-<div className="col-span-full  bg-pink-50 p-4 rounded grid grid-cols-2 gap-x-16">
+<div className="col-span-full  bg-pink-50 p-4 rounded grid grid-cols-1 md:grid-cols-2 gap-x-16">
 
 <FieldComponent
           label={"Delivery Type"}
@@ -717,6 +723,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
 <p className="col-span-full text-center underline text-xl text-light my-4 text-pink-700">
          Additional Rate Table 
         </p>
+        <div className="overflow-x-auto">
 <table className="mx-2 my-4 w-full border border-pink-600">
             <thead>
               <tr className="w-full border border-pink-600 bg-pink-200">
@@ -761,7 +768,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
               ))}
             </tbody>
           </table>
-
+</div>
 </div>
 
 
@@ -774,7 +781,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
            Payment History :
           </h2>
-
+          <div className="overflow-x-auto">
           <table className="mx-2 my-4 w-full border border-pink-600">
             <thead>
               <tr className="w-full border border-pink-600 bg-pink-200">
@@ -798,7 +805,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
               {bookingDetails?.booking?.paymentHistory?.map((items, i) => (
                 <tr key={i} className="w-full text-center">
                   <td className="border border-pink-900 p-2 text-pink-700">
-                    {items.paymentDate}
+                    {new Date(items.paymentDate).toLocaleDateString()}
                   </td>
                   <td className="border border-pink-900 p-2 text-pink-700">
                     {items.paidAmount}
@@ -815,6 +822,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
               ))}
             </tbody>
           </table>
+          </div>
           </div> }
           
 
@@ -824,10 +832,10 @@ const ViewDetail = ({ bookingDetails, heading }) => {
            Delivery 
           </h2>
 
-          <div className="mb-4 mt-6 min-h-20  gap-x-16 rounded border border-pink-500 shadow-lg grid grid-cols-2">
+          <div className="mb-4 mt-6 min-h-20  gap-x-16 rounded border border-pink-500 shadow-lg grid grid-cols-1 md:grid-cols-2">
 
 
-<div className="col-span-full bg-pink-100 p-4 rounded grid grid-cols-2 gap-x-16 ">
+<div className="col-span-full bg-pink-100 p-4 rounded grid grid-cols-1 md:grid-cols-2 gap-x-16 ">
 
 
           <p className="col-span-full mb-4 text-center text-xl  font-light text-pink-700 underline">Delivery Details</p>
@@ -875,7 +883,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           value={(bookingDetails?.booking?.delivery?.delivery_details?.sign)?"Yes ":"No"}
         />
         </div>
-        <div className="col-span-full my-3 p-4 rounded-lg grid grid-cols-2 gap-x-16 ">
+        <div className="col-span-full my-3 p-4 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-x-16 ">
 
        
 <p className="col-span-full mb-4 text-center text-xl  font-light text-pink-700 underline">Payment Details</p>
@@ -923,7 +931,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           value={bookingDetails?.booking?.delivery?.payment_details?.remarks}
         />
  </div>
- <div className="col-span-full bg-pink-100 p-4 rounded grid grid-cols-2 gap-x-16 ">
+ <div className="col-span-full bg-pink-100 p-4 rounded grid grid-cols-1 md:grid-cols-2 gap-x-16 ">
 
  
 <p className="col-span-full mb-4 text-center text-xl  font-light text-pink-700 underline">Consignment Info</p>
