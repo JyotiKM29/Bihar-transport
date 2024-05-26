@@ -257,6 +257,34 @@ export default function ColumnHeader() {
           </div>
         ),
       },
+{
+  accessorKey: "pendingPOD",
+  header: (
+    <div className="text-center">
+      <p>&nbsp;</p>
+      <p>POD Completed ? </p>
+    </div>
+  ),
+  cell: ({ row }) => {
+    const hasPendingPOD =
+      row.original.status === "Delivered" &&
+      row.original.delivery?.consignment_info &&
+      Array.isArray(row.original.delivery.consignment_info) &&
+      row.original.delivery.consignment_info.length > 0 &&
+      row.original.delivery.consignment_info[0].pod &&
+      row.original.delivery.consignment_info[0].pod.length > 0;
+
+    return (
+      <div>
+        <p>{hasPendingPOD ? "Yes" : "No"}</p>
+      </div>
+    );
+  },
+},
+
+
+
+
       {
         id: "actions",
         enableHiding: false,

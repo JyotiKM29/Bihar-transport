@@ -61,7 +61,7 @@ const TodayData = () => {
     data?.orderDelivered,
     data?.totalOrder,
   );
-  const pendingPOD = calculatePercentage(data?.pendingPOD, data?.totalOrder);
+  const pendingPOD = calculatePercentage(data?.pendingPOD, data?.orderDelivered);
   const invoice = calculatePercentage(data?.invoice, data?.invoice); // Check if invoice is 0?
   const pendingInvoice = calculatePercentage(
     data?.pendingInvoice,
@@ -183,7 +183,7 @@ const TodayData = () => {
               </div>
             </Link>
             <Link
-              href="/admin/booking?=delivered"
+              href="/admin/booking?tab=delivered"
               className="flex  h-full w-full  
           rounded-3xl bg-white p-4 shadow-md "
             >
