@@ -52,7 +52,7 @@ export async function GET(req, context) {
             $sum: { $cond: [{ $eq: ["$status", "Cancelled"] }, 1, 0] },
           },
           totalAmount: { $sum: "$totalBillingAmount" },
-          totalPaidAmount: { $sum: "$totalPaidAmount" },
+          totalRecievedAmount: { $sum: "$totalPaidAmount" },
         },
       },
       {
