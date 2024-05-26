@@ -81,6 +81,7 @@ const ledgerSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  paymentHistory:[],
   advanceAmount: {
     type: Number,
     default: 0,
