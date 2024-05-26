@@ -684,7 +684,7 @@ const DeliveryForm = ({ params }) => {
                   <h2 className="border-r-2 pr-8 font-medium md:w-48">
                     Action
                   </h2>
-                  <p>{formatDate(data?.date)}</p>
+                  <p>unload</p>
                 </div>
               </div>
               <table className="mx-2 my-4 hidden w-full rounded border shadow-lg 2xl:block ">
