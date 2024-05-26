@@ -305,12 +305,36 @@ const DispatchVehicle = ({ params }) => {
                 <h2 className="mt-6 text-center text-2xl font-semibold">
                   Consignor Invoice Details
                 </h2>
-                <FieldForm
+                {/* <FieldForm
                   form={form}
                   name="dispatch.dispatchDetails.consignorInvoiceDetails.isPODCompulsory"
                   label="POD Compulsory (Yes/No)"
                   type="text"
-                />
+                /> */}
+                <FormField
+              control={form.control}
+              name="dispatch.dispatchDetails.consignorInvoiceDetails.isPODCompulsory"
+              render={({ field }) => {
+                return (
+                  <FormItem className="flex items-center justify-center gap-4">
+                    <FormLabel className="text-nowrap text-sm lg:text-base">
+                    POD Compulsory :
+                    </FormLabel>
+                    <div className="flex flex-1 flex-col">
+                      <FormControl>
+                        <select {...field}>
+                          <option value="">Select POD Compulsory</option>
+                          <option value="yes">Yes </option>
+                          <option value="no">No</option>
+                        
+                        </select>
+                      </FormControl>
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                );
+              }}
+            />
                 <FieldForm
                   form={form}
                   name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorInvoiceDate"

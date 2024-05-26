@@ -220,12 +220,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                 <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Amount
                 </th>
-                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
-                  GST
-                </th>
-                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
-                  Actual Wt.
-                </th>
+               
               </tr>
             </thead>
             <tbody>
@@ -233,23 +228,17 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                 (items, i) => (
                   <tr key={i} className="w-full text-center">
                     <td className="border border-cyan-900 p-2 text-cyan-700">
-                      {items.material}
+                      {items.name}
                     </td>
                     <td className="border border-cyan-900 p-2 text-cyan-700">
-                      {items.quantity}&nbsp;{items.quantityUnit}
+                      {items.qty} </td>
+                    <td className="border border-cyan-900 p-2 text-cyan-700">
+                      {items.rate}
                     </td>
                     <td className="border border-cyan-900 p-2 text-cyan-700">
-                      {items.rate}&nbsp; {items.rateUnit}
+                      {items.amount}
                     </td>
-                    <td className="border border-cyan-900 p-2 text-cyan-700">
-                      {items.basicAmount}
-                    </td>
-                    <td className="border border-cyan-900 p-2 text-cyan-700">
-                      {items.GSTType}
-                    </td>
-                    <td className="border border-cyan-900 p-2 text-cyan-700">
-                      {items.actualWeight}&nbsp; {items.actualWeightUnit}
-                    </td>
+                   
                   </tr>
                 ),
               )}

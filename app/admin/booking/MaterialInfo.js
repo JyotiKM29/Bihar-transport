@@ -289,7 +289,7 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
                             {...field}
                             className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
                           >
-                            {/* <option value=""> Select Quantity Unit</option> */}
+                          
                             <option key={qtyUnit}>
                               {qtyUnit ? qtyUnit : "Select Quantity Unit"}{" "}
                             </option>
