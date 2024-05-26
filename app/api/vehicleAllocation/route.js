@@ -109,6 +109,7 @@ export async function POST(req, res) {
 
     // Update the remaining logic to save the changes and respond
 
+
      existingVehicle.bookedBy.push({
        bookingId: existingBooking._id,
        vehicleType: existingVehicle.vehicleType,
@@ -121,11 +122,12 @@ export async function POST(req, res) {
        DriverDetails,
        arrangedBy: arrangedBy,
        netBhara: materialDetails.netBhara,
-       commision: materialDetails.commision,
+       commission: materialDetails.commission,
        driverBhara: materialDetails.driverBhara,
        quantity: materialDetails.quantity,
        quantityUnit: materialDetails.qtyUnit,
        rateAsPer: materialDetails.rateAsPer,
+       rate:materrialDetails.rate,
        billTo: billTo,
        ledgerBalanceParty: ledgerBalanceParty,
        remarks: materialDetails.remarks,

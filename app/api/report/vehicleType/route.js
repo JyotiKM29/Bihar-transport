@@ -27,7 +27,13 @@ export async function POST(req, res) {
         let totalRevenue = 0;
         let totalDriverBhara = 0;
 
+        //  
+
+
+
         vehicle.forEach((element) => {
+
+            console.log(element.bookedBy);
             
             totalBooking += element.bookedBy.length;
             element.bookedBy.forEach((booking) => {

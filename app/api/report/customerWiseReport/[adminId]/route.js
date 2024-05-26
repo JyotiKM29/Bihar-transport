@@ -42,15 +42,16 @@ export async function GET(req,context){
             const totalAmount = customer[i].totalAmount;
 
             const bookingData = {
+                _id: customer[i]._id,
+                name: customer[i].basicInfo.accountName,
                 totalBooking: totalBooking || 0,
                 totalPaid: totalPaid || 0,
                 totalRemaining: totalRemaning || 0,
                 totalAmount: totalAmount || 0
             };
 
-            const name = customer[i].basicInfo.accountName;
 
-            data.push({ [name]: bookingData });
+            data.push(bookingData );
 
         }
 
