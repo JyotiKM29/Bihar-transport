@@ -283,11 +283,7 @@ export default function ColumnHeader() {
                     Send Invoice
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link href={`/admin/booking/delivered/deliveredDetail/${row.original._id}`}>
-                    Deliver Material
-                  </Link>
-                </DropdownMenuItem>
+               
               </DropdownMenuContent>
             </DropdownMenu>
           );

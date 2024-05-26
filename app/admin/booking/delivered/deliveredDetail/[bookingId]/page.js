@@ -26,8 +26,8 @@ const deliveryDetailsSchema = z.object({
   unloading_date: z.coerce.date(),
   material_received_by: z.string(),
   phone_number: z.string().optional(),
-  stamp: z.enum(["yes", "no"]),
-  sign: z.enum(["yes", "no"]),
+  stamp: z.coerce.boolean(),
+  sign:z.coerce.boolean(),
 });
 
 const paymentDetailsSchema = z.object({
@@ -51,29 +51,29 @@ const consignmentInfoSchema = z.object({
   shortage: z.coerce.number(),
   remarks: z.string(),
   pod: z.array(z.string().url()),
-  // action: z.string(),
+  action: z.string().optional(),
 });
 
 const formSchema = z.object({
   adminId: z.string(),
   bookingId: z.string(),
-  delivery_details: deliveryDetailsSchema,
-  payment_details: paymentDetailsSchema,
-  consignment_info: z.array(consignmentInfoSchema),
+  deliveryDetails: deliveryDetailsSchema,
+  paymentDetails: paymentDetailsSchema,
+  consignmentInfo: z.array(consignmentInfoSchema),
 });
 
 const DeliveryForm = ({ params }) => {
   const initialFormState = {
     adminId:"",
     bookingId:"",
-    delivery_details: {
+    deliveryDetails: {
       reporting_date: new Date().toISOString().split("T")[0],
       unloading_date: new Date().toISOString().split("T")[0],
       material_received_by: undefined,
       phone_number: undefined,
       stamp: undefined,
     },
-    payment_details: {
+    paymentDetails: {
       lr_dues_amount: undefined,
       payment_modes: undefined,
       amount_received: undefined,
@@ -81,7 +81,7 @@ const DeliveryForm = ({ params }) => {
       final_due: undefined,
       remarks: undefined,
     },
-    consignment_info: [],
+    consignmentInfo: [],
   };
 
   const { toast } = useToast();
@@ -188,15 +188,15 @@ const DeliveryForm = ({ params }) => {
 
     function setFormValues(){
       if(data){
-        form.setValue("consignment_info[0].delivery_date" , formatDateToYYYYMMDD(data?.date))
+        form.setValue("consignmentInfo[0].delivery_date" , formatDateToYYYYMMDD(data?.date))
         
-  form.setValue("consignment_info[0].delivery_number" , data?.orderNumber)
-  form.setValue("consignment_info[0].from_location" , data?.loadingPoints.join(","))
-  form.setValue("consignment_info[0].to_location" , data?.unloadingPoints.join(","))
-  form.setValue("consignment_info[0].quantity" ,90 )
-  form.setValue("consignment_info[0].weight" , 9)
+  form.setValue("consignmentInfo[0].delivery_number" , data?.orderNumber)
+  form.setValue("consignmentInfo[0].from_location" , data?.loadingPoints.join(","))
+  form.setValue("consignmentInfo[0].to_location" , data?.unloadingPoints.join(","))
+  form.setValue("consignmentInfo[0].quantity" ,90 )
+  form.setValue("consignmentInfo[0].weight" , 9)
 
-      console.log("value:",form.getValues("consignment_info[0]" ))
+      console.log("value:",form.getValues("consignmentInfo[0]" ))
       }
     }
     
@@ -236,7 +236,7 @@ const DeliveryForm = ({ params }) => {
        
         setIsLoading(false);
         displayToast(
-          "Successfully Booked, Click view Booking button to view the booking",
+          "Successfully Deliver Material",
           "✅",
         );
 
@@ -277,8 +277,40 @@ const DeliveryForm = ({ params }) => {
   };
 
   const submitData = {
-    adminId:"ihackdac",
-    bookingId:"nhac",
+    adminId: "6630a60370282f06184d9cd6", 
+    bookingId: "6650281234b19d4ee7f2e048",
+    deliveryDetails: {
+      reporting_date: "2024-05-25T10:00:00.000Z",
+      unloading_date: "2024-05-26T14:00:00.000Z",
+      material_received_by: "John Doe",
+      phone_number: "1234567890",
+      stamp: true,
+      sign: false,
+    },
+    paymentDetails: {
+      lr_dues_amount: 1000,
+      payment_modes: "Credit Card",
+      amount_received: 900,
+      fine: 50,
+      final_due: 150,
+      remarks: "Payment due in next cycle"
+    },
+    consignmentInfo: [
+      {
+        delivery_date: "2024-05-26T14:00:00.000Z",
+        delivery_number: "DEL123456",
+        from_location: "Warehouse A",
+        to_location: "Warehouse B",
+        quantity: 100,
+        weight: 2000,
+        breakage: 2,
+        excess: 0,
+        shortage: 0,
+        remarks: "Handle with care",
+        pod: ["https://meet.google.com/obo-fyri-bfu"],
+        action: "Delivered"
+      },
+    ]
   }
 
   // console.log(formSchema.safeParse(submitData));
@@ -457,7 +489,7 @@ const DeliveryForm = ({ params }) => {
                 </h2>
                 <FieldForm
                   form={form}
-                  name="delivery_details.reporting_date"
+                  name="deliveryDetails.reporting_date"
                   label="Reporting Date"
                   type="date"
                 />
@@ -465,7 +497,7 @@ const DeliveryForm = ({ params }) => {
 
                 <FieldForm
                   form={form}
-                  name="delivery_details.unloading_date"
+                  name="deliveryDetails.unloading_date"
                   label="Uploading Date"
                   type="date"
                 />
@@ -473,20 +505,20 @@ const DeliveryForm = ({ params }) => {
 
                 <FieldForm
                   form={form}
-                  name="delivery_details.material_received_by"
+                  name="deliveryDetails.material_received_by"
                   label="Material Received By"
                   type="text"
                 />
                 <FieldForm
                   form={form}
-                  name="delivery_details.phone_number"
+                  name="deliveryDetails.phone_number"
                   label="Phone No"
                   type="number"
                 />
 
                 <FormField
                   control={form.control}
-                  name="delivery_details.stamp"
+                  name="deliveryDetails.stamp"
                   render={({ field }) => {
                     return (
                       <FormItem className="flex items-center justify-center gap-4">
@@ -497,8 +529,8 @@ const DeliveryForm = ({ params }) => {
                           <FormControl>
                             <select {...field}>
                               <option value="">Select Stamp</option>
-                              <option value="yes">Yes</option>
-                              <option value="no">No</option>
+                              <option value="1">Yes</option>
+                              <option value="0">No</option>
                             </select>
                           </FormControl>
                           <FormMessage />
@@ -509,7 +541,7 @@ const DeliveryForm = ({ params }) => {
                 />
                 <FormField
                   control={form.control}
-                  name="delivery_details.sign"
+                  name="deliveryDetails.sign"
                   render={({ field }) => {
                     return (
                       <FormItem className="flex items-center justify-center gap-4">
@@ -520,8 +552,8 @@ const DeliveryForm = ({ params }) => {
                           <FormControl>
                             <select {...field}>
                               <option value="">Select Sign</option>
-                              <option value="yes">Yes</option>
-                              <option value="no">No</option>
+                              <option value="1">Yes</option>
+                              <option value="0">No</option>
                             </select>
                           </FormControl>
                           <FormMessage />
@@ -537,19 +569,19 @@ const DeliveryForm = ({ params }) => {
                 </h2>
                 <FieldForm
                   form={form}
-                  name="payment_details.lr_dues_amount"
+                  name="paymentDetails.lr_dues_amount"
                   label="LR Dues Amt"
                   type="number"
                 />
                 <FieldForm
                   form={form}
-                  name="payment_details.payment_modes"
+                  name="paymentDetails.payment_modes"
                   label="Payment Modes"
                   type="text"
                 />
                 <FieldForm
                   form={form}
-                  name="payment_details.amount_received"
+                  name="paymentDetails.amount_received"
                   label="Amount Received"
                   type="number"
                 />
@@ -560,19 +592,19 @@ const DeliveryForm = ({ params }) => {
                 </p>
                 <FieldForm
                   form={form}
-                  name="payment_details.fine"
+                  name="paymentDetails.fine"
                   label="Fine"
                   type="number"
                 />
                 <FieldForm
                   form={form}
-                  name="payment_details.final_due"
+                  name="paymentDetails.final_due"
                   label="Final Due"
                   type="number"
                 />
                 <FieldForm
                   form={form}
-                  name="payment_details.remarks"
+                  name="paymentDetails.remarks"
                   label="Remarks"
                   type="text"
                 />
@@ -623,30 +655,30 @@ const DeliveryForm = ({ params }) => {
                   <h2 className="border-r-2 pr-8 font-medium md:w-48">
                     Breakage
                   </h2>
-                  <FieldForm form={form} name="consignment_info[0].breakage" label="" type="number" />
+                  <FieldForm form={form} name="consignmentInfo[0].breakage" label="" type="number" />
                 </div>
                 <div className="flex gap-4 border p-2 pl-4  ">
                   <h2 className="border-r-2 pr-8 font-medium md:w-48">
                     Excess
                   </h2>
-                  <FieldForm form={form} name="consignment_info[0].excess" label="" type="number" />
+                  <FieldForm form={form} name="consignmentInfo[0].excess" label="" type="number" />
                 </div>
                 <div className="flex gap-4 border bg-gray-100 p-2 pl-4  ">
                   <h2 className="border-r-2 pr-8 font-medium md:w-48">
                     Shortage
                   </h2>
-                  <FieldForm form={form} name="consignment_info[0].shortage" label="" type="number" />
+                  <FieldForm form={form} name="consignmentInfo[0].shortage" label="" type="number" />
                 </div>
                 <div className="flex gap-4 border p-2 pl-4   ">
                   <h2 className="border-r-2 pr-8 font-medium md:w-48">
                     remarks
                   </h2>
-                  <FieldForm form={form} name="consignment_info[0].remarks" label="" type="text" />
+                  <FieldForm form={form} name="consignmentInfo[0].remarks" label="" type="text" />
                 </div>
                 <div className="flex gap-4 border bg-gray-100 p-2 pl-4  ">
                   <h2 className="border-r-2 pr-8 font-medium md:w-48">POD</h2>
                  
-                  <FieldFormFile form={form} nameValue="consignment_info[0].pod" label="" type="file" fileNumber={1}/>
+                  <FieldFormFile form={form} nameValue="consignmentInfo[0].pod" label="" type="file" fileNumber={1}/>
                 </div>
                 <div className="flex gap-4 border p-2 pl-4   ">
                   <h2 className="border-r-2 pr-8 font-medium md:w-48">
@@ -707,27 +739,27 @@ const DeliveryForm = ({ params }) => {
 
                     <td className="border p-2" >
                      
-                        <FieldForm form={form} name="consignment_info[0].breakage" label="" type="number" />
+                        <FieldForm form={form} name="consignmentInfo[0].breakage" label="" type="number" />
                       
                     </td>
                     <td className="border p-2" onDoubleClick={handleTable}>
                      
-                        <FieldForm form={form} name="consignment_info[0].excess" label="" type="number" />
+                        <FieldForm form={form} name="consignmentInfo[0].excess" label="" type="number" />
                       
                     </td>
                     <td className="border p-2" onDoubleClick={handleTable}>
                      
-                        <FieldForm form={form} name="consignment_info[0].shortage" label="" type="number" />
+                        <FieldForm form={form} name="consignmentInfo[0].shortage" label="" type="number" />
                       
                     </td>
                     <td className="border p-2" onDoubleClick={handleTable}>
                      
-                        <FieldForm form={form} name="consignment_info[0].remarks" label="" type="text" />
+                        <FieldForm form={form} name="consignmentInfo[0].remarks" label="" type="text" />
                       
                     </td>
                     <td className="border p-2" >
                      
-                    <FieldFormFile form={form} nameValue="consignment_info[0].pod" label="" type="file" fileNumber={1}/>
+                    <FieldFormFile form={form} nameValue="consignmentInfo[0].pod" label="" type="file" fileNumber={1}/>
                    </td>
 
                     <td>Unload</td>
@@ -737,12 +769,12 @@ const DeliveryForm = ({ params }) => {
             </div>
 
             <div className="hidden">
-            <FieldForm form={form} name="consignment_info[0].delivery_date" label="" type="date" />
-            <FieldForm form={form} name="consignment_info[0].delivery_number" label="" type="text" />
-            <FieldForm form={form} name="consignment_info[0].from_location" label="" type="text" />
-            <FieldForm form={form} name="consignment_info[0].to_location" label="" type="text" />
-            <FieldForm form={form} name="consignment_info[0].quantity" label="" type="number" />
-            <FieldForm form={form} name="consignment_info[0].weight" label="" type="number" />
+            <FieldForm form={form} name="consignmentInfo[0].delivery_date" label="" type="date" />
+            <FieldForm form={form} name="consignmentInfo[0].delivery_number" label="" type="text" />
+            <FieldForm form={form} name="consignmentInfo[0].from_location" label="" type="text" />
+            <FieldForm form={form} name="consignmentInfo[0].to_location" label="" type="text" />
+            <FieldForm form={form} name="consignmentInfo[0].quantity" label="" type="number" />
+            <FieldForm form={form} name="consignmentInfo[0].weight" label="" type="number" />
             </div>
 
             <Button

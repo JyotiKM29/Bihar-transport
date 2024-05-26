@@ -372,6 +372,11 @@ href={`/admin/booking/cancel/${row.original._id}`}
     Cancel Booking
    </Link>
                 </DropdownMenuItem> */}
+                <DropdownMenuItem>
+                  <Link href={`/admin/booking/delivered/deliveredDetail/${row.original._id}`}>
+                    Deliver Material
+                  </Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           );
