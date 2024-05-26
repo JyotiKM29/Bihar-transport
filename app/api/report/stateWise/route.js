@@ -103,6 +103,8 @@ export async function POST(req, res) {
       const data = state.states;
       const stateData = data.find((item) => item.state === stateName);
 
+      console.log("stateData ",stateData);
+
       if (!stateData) {
         return Response.json(
           { message: "No bookings found for the provided state" },
@@ -172,6 +174,11 @@ export async function POST(req, res) {
       districtOrderCountsArray.forEach(([district, counts]) => {
         sortedDistrictOrderCounts[district] = counts;
       });
+
+
+
+
+
 
       // Returning the district counts
       return Response.json({ sortedDistrictOrderCounts }, { status: 200 });

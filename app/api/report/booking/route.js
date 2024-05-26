@@ -35,17 +35,24 @@ export async function POST(req, res) {
          cancelledBooking: {
            $sum: { $cond: [{ $eq: ["$status", "Cancelled"] }, 1, 0] },
          },
+         totalAmount: { $sum: "$totalBillingAmount" },
+         totalPaidAmount: { $sum: "$totalPaidAmount" },
        },
      },
    ];
 
+
+
    const [result] = await Booking.aggregate(aggregationPipeline);
 
    const data = {
-     totalBooking: result.totalBooking || 0,
-     confirmedBooking: result.confirmedBooking || 0,
-     deliveredBooking: result.Delivered || 0,
-     cancelledBooking: result.cancelledBooking || 0,
+     totalBooking: result?.totalBooking || 0,
+     confirmedBooking: result?.confirmedBooking || 0,
+     deliveredBooking: result?.Delivered || 0,
+     cancelledBooking: result?.cancelledBooking || 0,
+     totalRecievableAmount: result?.totalAmount || 0,
+     totalRecievedAmount: result?.totalPaidAmount || 0,
+     totalPendingAmount: result?.totalAmount - result?.totalPaidAmount || 0,
    };
 
    return Response.json({ data }, { status: 200 });

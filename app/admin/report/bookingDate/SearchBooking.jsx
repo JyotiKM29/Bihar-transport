@@ -22,8 +22,8 @@ const SearchBooking = () => {
   const { user } = useContext(UserContext);
   const [data, setData] = useState([]);
 
-  const dataBar =[data?.totalBooking , data?.confirmedBooking , data?.deliveredBooking , data?.cancelledBooking];
-  const categoryBar = ["Total Booking" , "Confirm Booking" ,"Delivered Booking" ,"Cancelled Booking"]
+  const dataBar =[data?.totalBooking , data?.confirmedBooking , data?.deliveredBooking , data?.cancelledBooking, data?.totalRecievableAmount, data?.totalRecievedAmount, data?.totalPendingAmount];
+  const categoryBar = ["Total Booking" , "Confirm Booking" ,"Delivered Booking" ,"Cancelled Booking", "Recievable Amount", "Recieved Amount", "Total Pending Amount"];
 
  
 
@@ -114,7 +114,7 @@ const SearchBooking = () => {
         </form>
       </Form>
 
-<div className="flex gap-8 ">
+<div className="flex  gap-8 w-full">
 
 
       {/* Table */}
@@ -125,6 +125,9 @@ const SearchBooking = () => {
           <th className="border py-1 px-2 bg-blue-200">Confirm Booking</th>
           <th className="border py-1 px-2 bg-blue-200">Delivered Booking</th>
           <th className="border py-1 px-2 bg-blue-200">Cancelled Booking</th>
+          <th className="border py-1 px-2 bg-blue-200">Total Recievable Amount</th>
+          <th className="border py-1 px-2 bg-blue-200">Total Recieved Amount</th>
+          <th className="border py-1 px-2 bg-blue-200">Total Pending Amount</th>
           </tr>
         </thead>
         <tbody>
@@ -134,6 +137,9 @@ const SearchBooking = () => {
         <td className="border px-2 py-1 text-center">{data?.confirmedBooking}</td>
         <td className="border px-2 py-1 text-center">{data?.deliveredBooking}</td>
         <td className="border px-2 py-1 text-center">{data?.cancelledBooking}</td>
+        <td className="border px-2 py-1 text-center">{data?.totalRecievableAmount}₹</td>
+        <td className="border px-2 py-1 text-center">{data?.totalRecievedAmount}₹</td>
+        <td className="border px-2 py-1 text-center">{data?.totalPendingAmount}₹</td>
       </tr>
    
 </tbody>

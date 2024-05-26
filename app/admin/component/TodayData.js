@@ -294,7 +294,7 @@ const TodayData = () => {
                   </div>
                 </div>
 
-                <Progress value={pendingInvoice} />
+                <Progress value={generatedInvoice} />
               </div>
             </div>
             <div className="grid  w-full grid-rows-2 gap-6 md:w-3/5">
