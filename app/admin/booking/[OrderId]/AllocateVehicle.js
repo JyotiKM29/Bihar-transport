@@ -67,6 +67,9 @@ const formSchema = z.object({
 const AllocateVehicle = ({ params, ledgerBalance  }) => {
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
+  const [receivableData, setReceivable] = useState([]);
+  const [paymentLibilityData, setPaymentLibility] = useState([]);
+  const [rateAsPerData, setRateAsPerData] = useState([]);
   const { user } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
   const [allocate , setAllocate] = useState(false);
@@ -211,6 +214,68 @@ const AllocateVehicle = ({ params, ledgerBalance  }) => {
       description,
     });
   };
+
+  // fetch all the neccesarry selections
+
+   useEffect(()=>{
+    if(user?._id){
+      fetchReceivable();
+      fetchPaymentLibility();
+      fetchRateAsPer();
+    }
+    },[userId]);
+
+
+   const fetchPaymentLibility = async () => {
+      try {
+        // setDataLoading(true);
+
+        const response = await fetch(`/api/setting/paymentLiablity/get/${userId}`);
+        const result = await response.json();
+
+        console.log("result payment Liablity: ", result);
+        setPaymentLibility(result.data);
+        // setDataLoading(false);
+      } catch (error) {
+        // setDataLoading(false);
+        console.error("Error fetching units:", error);
+      }
+    };
+
+
+    const fetchReceivable = async () => {
+      try {
+        // setDataLoading(true);
+
+        const response = await fetch(`/api/setting/receivable/get/${userId}`);
+        const result = await response.json();
+
+        console.log("result: ", result);
+        setReceivable(result.data);
+        // setDataLoading(false);
+      } catch (error) {
+        // setDataLoading(false);
+        console.error("Error fetching units:", error);
+      }
+    };
+
+      const fetchRateAsPer = async () => {
+      try {
+        // setDataLoading(true);
+
+        const response = await fetch(`/api/setting/rateAsPer/get/${userId}`);
+        const result = await response.json();
+
+        console.log("result: ", result);
+        setRateAsPerData(result.data);
+        // setDataLoading(false);
+      } catch (error) {
+        // setDataLoading(false);
+        console.error("Error fetching units:", error);
+      }
+    };
+
+
 
    const fetchUnits = async () => {
       try {
@@ -519,9 +584,17 @@ const AllocateVehicle = ({ params, ledgerBalance  }) => {
         <div className="flex flex-1 flex-col">
           <FormControl>
             <select {...field}>
-              <option value="" disabled>Select Rate As Per</option>
-              <option value="actualWeight">Actual Weight</option>
-              <option value="quantity">Quantity</option>
+              <option value="">
+                {rateAsPerData && rateAsPerData.length > 0
+                  ? "Select Rate As Per"
+                  : "Loading..."}
+              </option>
+              {Array.isArray(rateAsPerData) &&
+                rateAsPerData.map((rate) => (
+                  <option key={rate.value} value={rate.value}>
+                    {rate.name}
+                  </option>
+                ))}
             </select>
           </FormControl>
 
@@ -702,13 +775,18 @@ const AllocateVehicle = ({ params, ledgerBalance  }) => {
                           {...field}
                           className="border border-red-300 bg-red-200 focus-visible:ring-1"
                         >
-                          <option value="">
-                            Select Value Payable Liability{" "}
-                          </option>
-                          <option value="Vehicle Owner">Vehicle Owner</option>
-                          <option value="Consignor">Consignor</option>
-                          <option value="Arranged By">Arranged By</option>
-                        </select>
+                         <option value="">
+                {paymentLibilityData && paymentLibilityData.length > 0
+                  ? "Select payable liability"
+                  : "Loading..."}
+              </option>
+              {Array.isArray(paymentLibilityData) &&
+                paymentLibilityData.map((rate) => (
+                  <option key={rate.value} value={rate.value}>
+                    {rate.name}
+                  </option>
+                ))}
+            </select>
                       </FormControl>
 
                       <FormMessage />
@@ -732,14 +810,18 @@ const AllocateVehicle = ({ params, ledgerBalance  }) => {
                           {...field}
                           className="border border-red-300 bg-red-200 focus-visible:ring-1"
                         >
-                          <option value="">
-                            Select Value of Recievable Liability{" "}
-                          </option>
-                          <option value="Vehicle Owner">Vehicle Owner</option>
-                          <option value="Consignor">Consignor</option>
-                          <option value="Consignee">Consignee</option>
-                          <option value="Third Party">Third Party</option>
-                        </select>
+                         <option value="">
+                {receivableData && receivableData.length > 0
+                  ? "Select Recievable Liabilitly"
+                  : "Loading..."}
+              </option>
+              {Array.isArray(receivableData) &&
+                receivableData.map((rate) => (
+                  <option key={rate.value} value={rate.value}>
+                    {rate.name}
+                  </option>
+                ))}
+            </select>
                       </FormControl>
 
                       <FormMessage />

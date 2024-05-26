@@ -53,11 +53,19 @@ export async function GET(req, context) {
       (item) => item.status === "In Transit",
     ).length;
     data.orderDelivered = booking.filter(
-      (item) => item.status === "delevered",
+      (item) => item.status === "Delivered",
     ).length;
-    data.pendingPOD = booking.filter(
-      (item) => item.balanceAmount !== 0,
+    const POD  = booking.filter(
+      (item) =>
+        item.status === "Delivered" &&
+        item.delivery?.consignment_info &&
+        Array.isArray(item.delivery.consignment_info) &&
+        item.delivery.consignment_info.length > 0 &&
+        item.delivery.consignment_info[0].pod &&
+        item.delivery.consignment_info[0].pod.length > 0,
     ).length;
+    data.pendingPOD = data.orderDelivered - POD;
+
 
     data.invoice = booking.length;
 // data.generatedInvoice = await Booking.find({
