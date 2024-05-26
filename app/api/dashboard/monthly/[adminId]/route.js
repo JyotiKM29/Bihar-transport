@@ -52,6 +52,7 @@ export async function GET(req, context) {
         pendingInvoice: 0,
         advanceAmount: 0,
         totalAmount: 0,
+        paidAmount:0,
         advanceBooking: 0,
         monthStartDate: startDate,
         monthEndDate: endDate,
@@ -70,23 +71,31 @@ export async function GET(req, context) {
         (item) => item.status === "In Transit",
       ).length;
       data.orderDelivered = booking.filter(
-        (item) => item.status === "delevered",
+        (item) => item.status === "Delivered",
       ).length;
-      data.pendingPOD = booking.filter(
-        (item) => item.status === "Pending",
-      ).length;
-      data.invoice = booking.filter((item) => item.status === "Pending").length;
+      const POD  = booking.filter(
+      (item) =>
+        item.status === "Delivered" &&
+        item.delivery?.consignment_info &&
+        Array.isArray(item.delivery.consignment_info) &&
+        item.delivery.consignment_info.length > 0 &&
+        item.delivery.consignment_info[0].pod &&
+        item.delivery.consignment_info[0].pod.length > 0,
+    ).length;
+    data.pendingPOD = data.orderDelivered - POD;
+      data.invoice = booking.filter((item) => item.invoiceStatus === true).length;
       data.pendingInvoice = booking.filter(
-        (item) => item.status === "Pending",
+        (item) => item.invoiceStatus === false,
       ).length;
 
       booking.forEach((item) => {
+        data.paidAmount += item.totalPaidAmount;
         data.advanceAmount += item.advanceAmount;
         data.totalAmount += item.balanceAmount + item.advanceAmount;
       });
 
       data.advanceBooking = booking.filter(
-        (item) => item.paymentTerm === "Advance",
+        (item) => item.paymentTerm === "advance",
       ).length;
 
       // Add the data for the current month to the monthlyData array
