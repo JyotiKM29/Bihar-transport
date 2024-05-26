@@ -30,6 +30,12 @@ export async function POST(req, res) {
         }
         const date = paymentDate? paymentDate : new Date();
 
+        if(!booking.paidAmount){
+            booking.totalPaidAmount = paidAmount;
+        }
+        else 
+          booking.totalPaidAmount += paidAmount;
+
         booking.balanceAmount -= paidAmount;
         const newPayment= {
             bookingId: _id,
