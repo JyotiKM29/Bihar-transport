@@ -57,21 +57,21 @@ const FieldComponent = ({ label, value, show, identifier, tableId , type = 'text
   }
 
   return (
-    <div className="flex w-full border-b" >
-      {/* {console.log(identifier, newValue, tableId)} */}
+    <div className="flex w-full " >
+      
       <label className="my-2 flex w-full items-center justify-between   ">
-        <h2 className="mr-3 text-nowrap text-lg font-semibold ">{label} :</h2>
+        <h2 className="mr-3 text-pink-800 text-nowrap text-lg font-semibold ">{label} </h2>
         <div className="flex items-center gap-3">
           <div>
             {isEdit ? (
               <Input
-                
+                className='text-pink-800 w-2/3 border'
                 type={type}
                 value={newValue}
                 onChange={handleChangeInput}
               />
             ) : (
-              <h2>{newValue}</h2>
+              <h2 className='text-pink-800'>{newValue}</h2>
             )}
           </div>
           <div>
