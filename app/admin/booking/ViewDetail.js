@@ -20,12 +20,12 @@ const ViewDetail = ({ bookingDetails, heading }) => {
   return (
     <div className="min-h-[90vh] w-full rounded-2xl bg-white px-6 py-4 shadow-sm ">
       <div className="flex flex-col-reverse md:flex-row items-center justify-between">
-        <h1 className="mb-6 mt-2 md:mt-0 text-2xl lg:text-4xl font-semibold text-pink-600">
+        <h1 className="mb-6 mt-2 md:mt-0 text-2xl lg:text-4xl font-semibold text-cyan-600">
           {heading} Details:{" "}
         </h1>
         <div className="flex items-center justify-between space-x-2">
           <Button
-            className="space-x-2 bg-pink-600 px-4  hover:bg-pink-700"
+            className="space-x-2 bg-cyan-600 px-4  hover:bg-cyan-700"
             onClick={handleGoBack}
           >
             <IoIosArrowBack className=" fill-white" />
@@ -33,7 +33,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           </Button>
           <Button
             onClick={() => setEditBooking(!editBooking)}
-            className="space-x-2 bg-pink-600 px-4  hover:bg-pink-700"
+            className="space-x-2 bg-cyan-600 px-4  hover:bg-cyan-700"
           >
             <pre className="text-base">Edit</pre>
             <MdEdit className="h-8 fill-white" />
@@ -60,7 +60,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
         </div>
       </div>
 
-      <div className="mt-4 grid min-h-10  grid-cols-1 md:grid-cols-2 gap-x-16 rounded-2xl bg-pink-50 p-4 shadow-lg">
+      <div className="mt-4 grid min-h-10  grid-cols-1 md:grid-cols-2 gap-x-16 rounded-2xl bg-cyan-50 p-4 shadow-lg">
         <FieldComponent
           label={"Vehicle Req. Date"}
           value={new Date(
@@ -129,29 +129,29 @@ const ViewDetail = ({ bookingDetails, heading }) => {
       {/* Material Table */}
       {bookingDetails?.booking?.itemsList.item.length > 0 && (
         <div>
-          <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
+          <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-cyan-700 underline">
             Material Info{" "}
           </h2>
           <div className="overflow-x-auto md:overflow-x-visible">
-          <table className="mx-2 my-4 w-full border border-pink-600 ">
+          <table className="mx-2 my-4 w-full border border-cyan-600 ">
             <thead>
-              <tr className="w-full border border-pink-600 bg-pink-200">
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+              <tr className="w-full border border-cyan-600 bg-cyan-200">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Charges Name
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Qty
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Rate
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Amount
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   GST
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Actual Wt.
                 </th>
               </tr>
@@ -159,22 +159,22 @@ const ViewDetail = ({ bookingDetails, heading }) => {
             <tbody>
               {bookingDetails?.booking?.itemsList.item.map((items, i) => (
                 <tr key={i} className="w-full text-center">
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.material}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.quantity}&nbsp;{items.quantityUnit}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.rate}&nbsp; {items.rateUnit}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.basicAmount}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.GSTType}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.actualWeight}&nbsp; {items.actualWeightUnit}
                   </td>
                 </tr>
@@ -182,16 +182,16 @@ const ViewDetail = ({ bookingDetails, heading }) => {
             </tbody>
           </table>
 </div>
-          <div className="flex justify-between gap-8 rounded-lg bg-pink-50">
-            <h2 className="p-4 font-semibold text-pink-900  ">
+          <div className="flex justify-between gap-8 rounded-lg bg-cyan-50">
+            <h2 className="p-4 font-semibold text-cyan-900  ">
               Total Amount:
-              <span className="ml-4 rounded border border-pink-400 bg-pink-100 p-1 px-3 font-light ">
+              <span className="ml-4 rounded border border-cyan-400 bg-cyan-100 p-1 px-3 font-light ">
                 {bookingDetails?.booking?.itemsList.totalAmount}
               </span>
             </h2>
-            <h2 className="p-4 font-semibold text-pink-900 ">
+            <h2 className="p-4 font-semibold text-cyan-900 ">
               Total Weight:
-              <span className="ml-4 rounded border border-pink-400 bg-pink-100 p-1  px-3 font-light ">
+              <span className="ml-4 rounded border border-cyan-400 bg-cyan-100 p-1  px-3 font-light ">
                 {bookingDetails?.booking?.itemsList.totalActualWeight}
               </span>
             </h2>
@@ -201,29 +201,29 @@ const ViewDetail = ({ bookingDetails, heading }) => {
       {/* Additional Charges */}
       {bookingDetails?.booking?.additionalCharges.chargers.length > 0 && (
         <div>
-          <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
+          <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-cyan-700 underline">
             Additional Chargers{" "}
           </h2>
           <div className="overflow-x-auto md:overflow-x-visible">
-          <table className="mx-2 my-4 w-full border border-pink-600 ">
+          <table className="mx-2 my-4 w-full border border-cyan-600 ">
             <thead>
-              <tr className="w-full border border-pink-600 bg-pink-200">
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+              <tr className="w-full border border-cyan-600 bg-cyan-200">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Charges Name
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Qty
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Rate
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Amount
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   GST
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Actual Wt.
                 </th>
               </tr>
@@ -232,22 +232,22 @@ const ViewDetail = ({ bookingDetails, heading }) => {
               {bookingDetails?.booking?.additionalCharges.chargers.map(
                 (items, i) => (
                   <tr key={i} className="w-full text-center">
-                    <td className="border border-pink-900 p-2 text-pink-700">
+                    <td className="border border-cyan-900 p-2 text-cyan-700">
                       {items.material}
                     </td>
-                    <td className="border border-pink-900 p-2 text-pink-700">
+                    <td className="border border-cyan-900 p-2 text-cyan-700">
                       {items.quantity}&nbsp;{items.quantityUnit}
                     </td>
-                    <td className="border border-pink-900 p-2 text-pink-700">
+                    <td className="border border-cyan-900 p-2 text-cyan-700">
                       {items.rate}&nbsp; {items.rateUnit}
                     </td>
-                    <td className="border border-pink-900 p-2 text-pink-700">
+                    <td className="border border-cyan-900 p-2 text-cyan-700">
                       {items.basicAmount}
                     </td>
-                    <td className="border border-pink-900 p-2 text-pink-700">
+                    <td className="border border-cyan-900 p-2 text-cyan-700">
                       {items.GSTType}
                     </td>
-                    <td className="border border-pink-900 p-2 text-pink-700">
+                    <td className="border border-cyan-900 p-2 text-cyan-700">
                       {items.actualWeight}&nbsp; {items.actualWeightUnit}
                     </td>
                   </tr>
@@ -256,10 +256,10 @@ const ViewDetail = ({ bookingDetails, heading }) => {
             </tbody>
           </table>
 </div>
-          <div className="flex justify-between gap-8 rounded-lg bg-pink-50">
-            <h2 className="p-4 font-semibold text-pink-900  ">
+          <div className="flex justify-between gap-8 rounded-lg bg-cyan-50">
+            <h2 className="p-4 font-semibold text-cyan-900  ">
               Total Amount:
-              <span className="ml-4 rounded border border-pink-400 bg-pink-100 p-1 px-3 font-light ">
+              <span className="ml-4 rounded border border-cyan-400 bg-cyan-100 p-1 px-3 font-light ">
                 {bookingDetails?.booking?.additionalCharges.totalCharge}
               </span>
             </h2>
@@ -268,10 +268,10 @@ const ViewDetail = ({ bookingDetails, heading }) => {
       )}
 
       {/* Payment Details  */}
-      <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
+      <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-cyan-700 underline">
         Payment Details{" "}
       </h2>
-      <div className="mb-4 mt-6 grid grid-cols-1 min-h-20 md:grid-cols-2 gap-x-16 rounded-lg border border-pink-500 p-4 shadow-md">
+      <div className="mb-4 mt-6 grid grid-cols-1 min-h-20 md:grid-cols-2 gap-x-16 rounded-lg border border-cyan-500 p-4 shadow-md">
         <FieldComponent
           label={"Payment Term "}
           show={editBooking}
@@ -324,7 +324,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 rounded-lg bg-pink-50 p-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 rounded-lg bg-cyan-50 p-4">
         <FieldComponent
           label={"Way"}
           show={editBooking}
@@ -358,10 +358,10 @@ const ViewDetail = ({ bookingDetails, heading }) => {
       {/* Allocated Vehicle */}
       {bookingDetails?.booking?.allotedVehicle.length > 0 && (
         <div>
-          <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
+          <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-cyan-700 underline">
             Allocated Vehicle{" "}
           </h2>
-          <div className="mt-4 grid min-h-10  grid-cols-1 md:grid-cols-2 gap-x-16 rounded-2xl bg-pink-200 p-4 shadow-lg">
+          <div className="mt-4 grid min-h-10  grid-cols-1 md:grid-cols-2 gap-x-16 rounded-2xl bg-cyan-200 p-4 shadow-lg">
             <FieldComponent
               label={"Owner Name"}
               value={bookingDetails?.booking?.allotedVehicle[0]?.vehicleOwner}
@@ -417,26 +417,26 @@ const ViewDetail = ({ bookingDetails, heading }) => {
       {/* Generated Invoice Details */}
       { (
         <div>
-          <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
+          <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-cyan-700 underline">
             Invoice Details :
           </h2>
           <div className="overflow-x-auto md:overflow-x-visible">
-          <table className="mx-2 my-4 w-full border border-pink-600 ">
+          <table className="mx-2 my-4 w-full border border-cyan-600 ">
             <thead>
-              <tr className="w-full border border-pink-600 bg-pink-200">
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+              <tr className="w-full border border-cyan-600 bg-cyan-200">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                  Invoice No
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Date
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Amount
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                  Total
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Remark
                 </th>
                 
@@ -446,20 +446,20 @@ const ViewDetail = ({ bookingDetails, heading }) => {
             <tbody>
             
                 <tr  className="w-full text-center">
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {bookingDetails?.booking?.generatedInvoice?.invoiceNumber}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {new Date(bookingDetails?.booking?.generatedInvoice?.invoiceDate).toLocaleDateString()}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {bookingDetails?.booking?.generatedInvoice?.invoiceAmount}
                   </td>
                   
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {bookingDetails?.booking?.generatedInvoice?.invoiceTotal}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {bookingDetails?.booking?.generatedInvoice?.invoiceRemarks}
                   </td>
                  
@@ -475,11 +475,11 @@ const ViewDetail = ({ bookingDetails, heading }) => {
       {/* Dispacted */}
       {bookingDetails?.booking?.dispatch?.isDispatched === true &&
       <div>
-      <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
+      <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-cyan-700 underline">
            Dispatch Details :
           </h2>
 
-          <div className="mb-4 mt-6 min-h-20  gap-x-16 rounded-lg border border-pink-500 p-4 shadow-md grid grid-cols-1 md:grid-cols-2">
+          <div className="mb-4 mt-6 min-h-20  gap-x-16 rounded-lg border border-cyan-500 p-4 shadow-md grid grid-cols-1 md:grid-cols-2">
 
           <FieldComponent
           label={"Bill Type"}
@@ -523,13 +523,13 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           identifier="paymentTerm"
           value={bookingDetails?.booking?.dispatch?.dispatchDetails?.remarks}
         />
-<div className="col-span-full sm:flex  bg-pink-50 p-4 rounded justify-between">
+<div className="col-span-full sm:flex  bg-cyan-50 p-4 rounded justify-between">
 
 
 <div >
 
 
-        <p className="mb-4  text-center text-xl  font-light text-pink-700 underline">Consignor  Invoice Details</p>
+        <p className="mb-4  text-center text-xl  font-light text-cyan-700 underline">Consignor  Invoice Details</p>
        
         <FieldComponent
           label={"Delivery No"}
@@ -556,7 +556,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
 </div>
 
 <div >
-<p className="mb-4  text-center text-lg font-light underline  text-pink-700 ">eWay Bill Details</p>
+<p className="mb-4  text-center text-lg font-light underline  text-cyan-700 ">eWay Bill Details</p>
 <FieldComponent
           label={"Bill Date"}
           show={editBooking}
@@ -583,24 +583,24 @@ const ViewDetail = ({ bookingDetails, heading }) => {
 
 {/* table of Chargers */}
 {bookingDetails?.booking?.dispatch?.dispatchDetails?.dispatch?.chargesDetails.length > 0 && <div className="col-span-full">
-<p className="mb-4 mt-6 text-center text-xl  font-light text-pink-700 underline">Charges Details</p>
+<p className="mb-4 mt-6 text-center text-xl  font-light text-cyan-700 underline">Charges Details</p>
 <div className="overflow-x-auto md:overflow-x-visible">
-<table className="mx-2 my-4 w-full border border-pink-600 ">
+<table className="mx-2 my-4 w-full border border-cyan-600 ">
             <thead>
-              <tr className="w-full border border-pink-600 bg-pink-200">
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+              <tr className="w-full border border-cyan-600 bg-cyan-200">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Charges Name
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   days
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Rate
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Amount
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Remarks
                 </th>
               
@@ -609,19 +609,19 @@ const ViewDetail = ({ bookingDetails, heading }) => {
             <tbody>
               {bookingDetails?.booking?.dispatch?.dispatchDetails?.dispatch?.chargesDetails.map((items, i) => (
                 <tr key={i} className="w-full text-center">
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.chargesName}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.days}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.rate}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.amount}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.remarks}
                   </td>
                 
@@ -645,7 +645,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
         />
         </div>
 {/* Additional Details */}
-<div className="col-span-full  bg-pink-50 p-4 rounded grid grid-cols-1 md:grid-cols-2 gap-x-16">
+<div className="col-span-full  bg-cyan-50 p-4 rounded grid grid-cols-1 md:grid-cols-2 gap-x-16">
 
 <FieldComponent
           label={"Delivery Type"}
@@ -677,7 +677,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
         />
 {bookingDetails?.booking?.dispatch?.dispatchAdditionalDetails?.insurance?.isInsured === true && 
 <>
-        <p className="col-span-full text-center underline text-xl text-light my-4 text-pink-700">
+        <p className="col-span-full text-center underline text-xl text-light my-4 text-cyan-700">
           Insurance 
         </p>
         <FieldComponent
@@ -720,26 +720,26 @@ const ViewDetail = ({ bookingDetails, heading }) => {
 
 <div className="col-span-full">
 
-<p className="col-span-full text-center underline text-xl text-light my-4 text-pink-700">
+<p className="col-span-full text-center underline text-xl text-light my-4 text-cyan-700">
          Additional Rate Table 
         </p>
         <div className="overflow-x-auto md:overflow-x-visible">
-<table className="mx-2 my-4 w-full border border-pink-600">
+<table className="mx-2 my-4 w-full border border-cyan-600">
             <thead>
-              <tr className="w-full border border-pink-600 bg-pink-200">
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+              <tr className="w-full border border-cyan-600 bg-cyan-200">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Charges Name
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Days
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Rate
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Amount
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                   Remarks
                 </th>
                
@@ -748,19 +748,19 @@ const ViewDetail = ({ bookingDetails, heading }) => {
             <tbody>
               {bookingDetails?.booking?.dispatch?.dispatchAdditionalRate.map((items, i) => (
                 <tr key={i} className="w-full text-center">
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.chargesName}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.days}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.rate}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.amount}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.remarks}
                   </td>
                  
@@ -778,24 +778,24 @@ const ViewDetail = ({ bookingDetails, heading }) => {
 
           {/* Payment History */}
           {bookingDetails?.booking?.paymentHistory.length > 0 && <div>
-          <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
+          <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-cyan-700 underline">
            Payment History :
           </h2>
           <div className="overflow-x-auto md:overflow-x-visible">
-          <table className="mx-2 my-4 w-full border border-pink-600 ">
+          <table className="mx-2 my-4 w-full border border-cyan-600 ">
             <thead>
-              <tr className="w-full border border-pink-600 bg-pink-200">
-              <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+              <tr className="w-full border border-cyan-600 bg-cyan-200">
+              <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                 Payment Date
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                 Paid Amount
                 </th>
                
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                 Payment Mode
                 </th>
-                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                <th className=" text-nowrap border border-cyan-600 p-2 pr-3 text-sm font-medium text-cyan-900  md:text-base  ">
                 TDS
                 </th>
               
@@ -804,16 +804,16 @@ const ViewDetail = ({ bookingDetails, heading }) => {
             <tbody>
               {bookingDetails?.booking?.paymentHistory?.map((items, i) => (
                 <tr key={i} className="w-full text-center">
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {new Date(items.paymentDate).toLocaleDateString()}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.paidAmount}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.paymentMode}
                   </td>
-                  <td className="border border-pink-900 p-2 text-pink-700">
+                  <td className="border border-cyan-900 p-2 text-cyan-700">
                     {items.TDS}
                   </td>
                   
@@ -828,17 +828,17 @@ const ViewDetail = ({ bookingDetails, heading }) => {
 
           {/* Delivery details */}
 <div>
-<h2 className="mb-4 mt-6 text-center  text-2xl  font-semibold text-pink-700 underline">
+<h2 className="mb-4 mt-6 text-center  text-2xl  font-semibold text-cyan-700 underline">
            Delivery 
           </h2>
 
-          <div className="mb-4 mt-6 min-h-20  gap-x-16 rounded border border-pink-500 shadow-lg grid grid-cols-1 md:grid-cols-2">
+          <div className="mb-4 mt-6 min-h-20  gap-x-16 rounded border border-cyan-500 shadow-lg grid grid-cols-1 md:grid-cols-2">
 
 
-<div className="col-span-full bg-pink-100 p-4 rounded grid grid-cols-1 md:grid-cols-2 gap-x-16 ">
+<div className="col-span-full bg-cyan-100 p-4 rounded grid grid-cols-1 md:grid-cols-2 gap-x-16 ">
 
 
-          <p className="col-span-full mb-4 text-center text-xl  font-light text-pink-700 underline">Delivery Details</p>
+          <p className="col-span-full mb-4 text-center text-xl  font-light text-cyan-700 underline">Delivery Details</p>
      
           <FieldComponent
           label={"Reporting date"}
@@ -886,7 +886,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
         <div className="col-span-full my-3 p-4 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-x-16 ">
 
        
-<p className="col-span-full mb-4 text-center text-xl  font-light text-pink-700 underline">Payment Details</p>
+<p className="col-span-full mb-4 text-center text-xl  font-light text-cyan-700 underline">Payment Details</p>
 
 <FieldComponent
           label={"LR Dues Amount"}
@@ -931,10 +931,10 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           value={bookingDetails?.booking?.delivery?.payment_details?.remarks}
         />
  </div>
- <div className="col-span-full bg-pink-100 p-4 rounded grid grid-cols-1 md:grid-cols-2 gap-x-16 ">
+ <div className="col-span-full bg-cyan-100 p-4 rounded grid grid-cols-1 md:grid-cols-2 gap-x-16 ">
 
  
-<p className="col-span-full mb-4 text-center text-xl  font-light text-pink-700 underline">Consignment Info</p>
+<p className="col-span-full mb-4 text-center text-xl  font-light text-cyan-700 underline">Consignment Info</p>
 
 <FieldComponent
           label={"Delivery date"}

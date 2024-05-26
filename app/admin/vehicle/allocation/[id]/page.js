@@ -131,10 +131,11 @@ const VechicleDetail = ({ params }) => {
 
       `  {/* {loadingTable ? 'Loading table.....' : <DataTable columns={columns} data={data?.data} />}` */}
           {/* Vehicle Details */}
-          <div className="grid grid-cols-1 gap-x-6 gap-y-1 lg:grid-cols-2 2xl:gap-x-8 ">
-            <h2 className="col-span-full mb-6 mt-3 text-center text-2xl font-bold">
-              Vehicle Details{" "}
+          <div >
+          <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-sky-700 underline">
+              Vehicle Details 
             </h2>
+            <div className="mb-4 mt-6 grid grid-cols-1 min-h-20 md:grid-cols-2 gap-x-16 rounded-lg border border-sky-600 p-4 shadow-md">
             <FieldComponent
               label={"Vehicle No"}
               value={vehicleDetails?.newVehicle?.vehicleNo}
@@ -218,7 +219,7 @@ const VechicleDetail = ({ params }) => {
             />
             <FieldComponent
               label={"Fitness Valid Up To"}
-              value={DateString(vehicleDetails?.newVehicle?.fitnessValidUpTo)}
+              value={new Date(vehicleDetails?.newVehicle?.fitnessValidUpTo).toLocaleDateString()}
               show={editvehicle}
               tableId={vehicleDetails?.newVehicle?._id}
               identifier="fitnessValidUpTo"
@@ -226,7 +227,7 @@ const VechicleDetail = ({ params }) => {
             />
             <FieldComponent
               label={"Tax Paid Up To"}
-              value={DateString(vehicleDetails?.newVehicle?.taxPaidUpTo)}
+              value={new Date(vehicleDetails?.newVehicle?.taxPaidUpTo).toLocaleDateString()}
               show={editvehicle}
               tableId={vehicleDetails?.newVehicle?._id}
               identifier="taxPaidUpTo"
@@ -234,7 +235,7 @@ const VechicleDetail = ({ params }) => {
             />
             <FieldComponent
               label={"Insurance Valid Up To"}
-              value={DateString(vehicleDetails?.newVehicle?.insurenceValidUpTo)}
+              value={new Date(vehicleDetails?.newVehicle?.insurenceValidUpTo).toLocaleDateString()}
               show={editvehicle}
               tableId={vehicleDetails?.newVehicle?._id}
               identifier="insurenceValidUpTo"
@@ -242,7 +243,7 @@ const VechicleDetail = ({ params }) => {
             />
             <FieldComponent
               label={"Permit Valid Up To"}
-              value={DateString(vehicleDetails?.newVehicle?.permitValidUpTo)}
+              value={new Date(vehicleDetails?.newVehicle?.permitValidUpTo).toLocaleDateString()}
               show={editvehicle}
               tableId={vehicleDetails?.newVehicle?._id}
               identifier="permitValidUpTo"
@@ -258,9 +259,9 @@ const VechicleDetail = ({ params }) => {
             />
             <FieldComponent
               label={"National Permit Valid Up To"}
-              value={DateString(
+              value={new Date(
                 vehicleDetails?.newVehicle?.nationalPermitValidUpTo,
-              )}
+              ).toLocaleDateString()}
               show={editvehicle}
               tableId={vehicleDetails?.newVehicle?._id}
               identifier="nationalPermitValidUpTo"
@@ -274,6 +275,7 @@ const VechicleDetail = ({ params }) => {
               tableId={vehicleDetails?.newVehicle?._id}
               identifier="Remark"
             />
+            
             {/* <FieldComponent
               label={"RC Photo"}
               value={vehicleDetails?.newVehicle?.rcPhoto}
@@ -291,14 +293,15 @@ const VechicleDetail = ({ params }) => {
               identifier="rcPhoto"
               type="file"
             /> */}
+            </div>
           </div>
 
           {/* Owner Details */}
           <div className="mt-8">
-            <h2 className="col-span-full mb-6 mt-3 text-center text-2xl font-bold">
+             <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-sky-700 underline">
               Owner Details
             </h2>
-            <div className="grid grid-cols-1 gap-x-6 gap-y-1 lg:grid-cols-2 2xl:gap-x-8 ">
+            <div className="grid bg-sky-100 rounded p-4 shadow-md grid-cols-1 gap-x-6 gap-y-1 lg:grid-cols-2 2xl:gap-x-8 ">
               <FieldComponent
                 label={"Proof Type"}
                 value={vehicleDetails?.newVehicle?.owner?.proofType}
@@ -322,9 +325,9 @@ const VechicleDetail = ({ params }) => {
               />
               <FieldComponent
                 label={"Date of Birth"}
-                value={DateString(vehicleDetails?.newVehicle?.owner?.DOB)}
+                value={new Date(vehicleDetails?.newVehicle?.owner?.DOB).toLocaleDateString()}
                 show={editvehicle}
-                tableId={DateString(vehicleDetails?.vehicle?._id)}
+                tableId={new Date(vehicleDetails?.vehicle?._id).toLocaleDateString()}
                 identifier="ownerDOB"
                 type="date" // Assuming this should be a date input
               />
@@ -414,10 +417,10 @@ const VechicleDetail = ({ params }) => {
 
           {/* Driver Details */}
           <div className="mt-8">
-            <h2 className="col-span-full mb-6 mt-3 text-center text-2xl font-bold">
+             <h2 className="mb-4  mt-6 text-center text-2xl  font-semibold text-sky-700 underline">
               Driver Details
             </h2>
-            <div className="grid grid-cols-1 gap-x-6 gap-y-1 lg:grid-cols-2 2xl:gap-x-8 ">
+            <div className="grid  grid-cols-1 bg-sky-200   rounded-lg p-4 shadow-md gap-x-6 gap-y-1 lg:grid-cols-2 2xl:gap-x-8 ">
               <FieldComponent
                 label={"License No"}
                 value={vehicleDetails?.newVehicle?.driver?.licenseNo}
@@ -434,9 +437,9 @@ const VechicleDetail = ({ params }) => {
               />
               <FieldComponent
                 label={"Issue Date"}
-                value={DateString(
+                value={new Date(
                   vehicleDetails?.newVehicle?.driver?.issueDate,
-                )}
+                ).toLocaleDateString()}
                 show={editvehicle}
                 tableId={vehicleDetails?.newVehicle?._id}
                 identifier="driverIssueDate"
@@ -444,9 +447,9 @@ const VechicleDetail = ({ params }) => {
               />
               <FieldComponent
                 label={"Licence Validity"}
-                value={DateString(
+                value={new Date(
                   vehicleDetails?.newVehicle?.driver?.licenceValidity,
-                )}
+                ).toLocaleDateString()}
                 show={editvehicle}
                 tableId={vehicleDetails?.newVehicle?._id}
                 identifier="driverLicenceValidity"
@@ -454,7 +457,7 @@ const VechicleDetail = ({ params }) => {
               />
               <FieldComponent
                 label={"Date of Birth"}
-                value={DateString(vehicleDetails?.newVehicle?.driver?.DOB)}
+                value={new Date(vehicleDetails?.newVehicle?.driver?.DOB).toLocaleDateString()}
                 show={editvehicle}
                 tableId={vehicleDetails?.newVehicle?._id}
                 identifier="driverDOB"
@@ -541,15 +544,15 @@ const VechicleDetail = ({ params }) => {
 
           {/* Transpoter Details */}
           <div className="mt-8">
-            <h2 className="col-span-full mb-6 mt-3 text-center text-2xl font-bold">
+             <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-sky-700 underline">
               Transporter Details
             </h2>
-            <div className="grid grid-cols-1 gap-x-6 gap-y-1 lg:grid-cols-2 2xl:gap-x-8 ">
+            <div className="grid grid-cols-1 gap-x-6 shadow-md gap-y-1 lg:grid-cols-2 2xl:gap-x-8 border border-sky-700 rounded-xl ">
              
               {vehicleDetails?.newVehicle?.transporterDetails[0]
                 ?.vehicleGuarantor === "Others" && (
-                <>
-                  <h2 className="mt col-span-full mb-6 text-center text-lg font-bold">
+                <div className="p-4 col-span-full bg-sky-50 grid grid-cols-1 md:grid-cols-2 gap-x-16 rounded-xl">
+                  <h2 className="mt col-span-full mb-6 text-sky-700 text-center text-lg font-semibold underline">
                     Vehicle Guarantor - Others Details
                   </h2>
                   <FieldComponent
@@ -642,10 +645,12 @@ const VechicleDetail = ({ params }) => {
                     tableId={vehicleDetails?.newVehicle?._id}
                     identifier="ownerProofType"
                   />
-                </>
+                </div>
               )}
+<div className="col-span-full grid grid-cols-1 md:grid-cols-2 gap-x-16 p-4 ">
 
-              <h2 className="mt col-span-full mt-6 mb-3 text-center text-lg font-bold">
+
+              <h2 className="mt col-span-full mb-6 text-sky-700 text-center text-lg font-semibold underline">
                 Bank details :
               </h2>
               <FieldComponent
@@ -725,8 +730,9 @@ const VechicleDetail = ({ params }) => {
                 identifier="driverProof"
                 type="file"
               /> */}
-
-<h2 className="mt col-span-full mt-6 mb-3 text-center text-lg font-bold">
+              </div>
+              <div className="col-span-2 grid grid-cols-1 gap-x-6 shadow-md gap-y-1 lg:grid-cols-2 2xl:gap-x-8 bg-sky-100 p-4  rounded-xl ">
+              <h2 className="mt col-span-full mb-6 text-sky-700 text-center text-lg font-semibold underline">
                 Multiple Contact Detail :
               </h2>
 
@@ -757,7 +763,7 @@ const VechicleDetail = ({ params }) => {
                 tableId={vehicleDetails?.newVehicle?._id}
                 identifier="ownerProofType"
               />
-
+</div>
             </div>
           </div>
         </>

@@ -66,9 +66,9 @@ const FieldComponent = ({ label, value, show, identifier, tableId , type = 'text
   }
 
   return (
-    <div className="flex w-full border-b">
+    <div className="flex w-full ">
       <label className="my-2 flex w-full items-center justify-between">
-        <h2 className="mr-3 text-nowrap text-lg font-semibold">{label}:</h2>
+        <h2 className="mr-3 text-nowrap text-sky-700 font-semibold text-lg font-semibold">{label}:</h2>
         <div className={`flex items-center gap-3 ${type === 'file' ? 'flex-col' : ''}`}>
           {type === 'file' && value ? (
             <div className="flex gap-4">
@@ -76,7 +76,7 @@ const FieldComponent = ({ label, value, show, identifier, tableId , type = 'text
                 <div key={index}>
                   {isEdit ? (
                     <div>
-                      <Input type="file" onChange={(e) => handleFileChange(e, index)} />
+                      <Input className='text-sky-700 ' type="file" onChange={(e) => handleFileChange(e, index)} />
                     </div>
                   ) : (
                     <>
@@ -94,12 +94,13 @@ const FieldComponent = ({ label, value, show, identifier, tableId , type = 'text
               <div>
                 {isEdit ? (
                   <Input
+                  className='text-sky-700 '
                     type={type}
                     value={newValue}
                     onChange={handleChangeInput}
                   />
                 ) : (
-                  <h2>{newValue}</h2>
+                  <h2  className='text-sky-700 '>{newValue}</h2>
                 )}
               </div>
               {show && (
@@ -107,13 +108,13 @@ const FieldComponent = ({ label, value, show, identifier, tableId , type = 'text
                   {isEdit && type !== 'file' ? ( // Conditionally render file input only when isEdit is true
                     <button
                       onClick={handleUpdate}
-                      className="rounded-md bg-blue-500 p-2 text-white"
+                      className="rounded-md bg-sky-500 p-2 text-white"
                     >
                       Update
                     </button>
                   ) : (
                     <button onClick={() => setIsEdit(!isEdit)}>
-                      <MdEdit className="h-8 fill-blue-500" />
+                      <MdEdit className="h-8 fill-sky-500" />
                     </button>
                   )}
                 </div>

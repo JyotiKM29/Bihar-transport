@@ -60,18 +60,18 @@ const FieldComponent = ({ label, value, show, identifier, tableId , type = 'text
     <div className="flex w-full " >
       
       <label className="my-2 flex w-full items-center justify-between   ">
-        <h2 className="mr-3 text-pink-800 text-nowrap text-lg font-semibold ">{label} </h2>
+        <h2 className="mr-3 text-cyan-800 text-nowrap text-lg font-semibold ">{label} </h2>
         <div className="flex items-center gap-3">
           <div>
             {isEdit ? (
               <Input
-                className='text-pink-800 w-4/5 border'
+                className='text-cyan-800 w-4/5 border'
                 type={type}
                 value={newValue}
                 onChange={handleChangeInput}
               />
             ) : (
-              <h2 className='text-pink-800'>{newValue}</h2>
+              <h2 className='text-cyan-800'>{newValue}</h2>
             )}
           </div>
           <div>
@@ -79,13 +79,13 @@ const FieldComponent = ({ label, value, show, identifier, tableId , type = 'text
               isEdit ? (
                 <button
                    onClick={handleUpdate}
-                  className="rounded-md bg-pink-600  hover:bg-pink-700 p-2 text-white"
+                  className="rounded-md bg-cyan-600  hover:bg-cyan-700 p-2 text-white"
                 >
                   Update
                 </button>
               ) : (
                 <button onClick={() => setIsEdit(!isEdit)}>
-                  <MdEdit className="h-8 fill-pink-600" />
+                  <MdEdit className="h-8 fill-cyan-600" />
                 </button>
               )
             ) : (
