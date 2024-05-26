@@ -109,15 +109,15 @@ const VechicleDetail = ({ params }) => {
   return (
     <div className="min-h-[90vh] w-full rounded-2xl bg-white px-6 py-4 shadow-sm ">
       <div className="flex items-center justify-between">
-        <h1 className="mb-6 text-4xl">Vehicle Complete Details: </h1>
+      <h1 className="mb-6 mt-2 md:mt-0 text-2xl lg:text-4xl font-semibold text-sky-600">Vehicle Complete Details: </h1>
         <div className="flex items-center justify-between space-x-2">
-          <Button className="space-x-2 px-4" onClick={handleGoBack}>
+          <Button className="space-x-2 px-4 bg-sky-600 hover:bg-sky-700" onClick={handleGoBack}>
             <IoIosArrowBack className=" fill-white" />
             <pre className="text-base">Back</pre>
           </Button>
           <Button
             onClick={() => setEditVehicle(!editvehicle)}
-            className="space-x-2 px-4"
+            className="space-x-2 px-4 bg-sky-600 hover:bg-sky-700"
           >
             <pre className="text-base">Edit</pre>
             <MdEdit className="h-8 fill-white" />
@@ -274,14 +274,14 @@ const VechicleDetail = ({ params }) => {
               tableId={vehicleDetails?.newVehicle?._id}
               identifier="Remark"
             />
-            <FieldComponent
+            {/* <FieldComponent
               label={"RC Photo"}
               value={vehicleDetails?.newVehicle?.rcPhoto}
               show={editvehicle}
               tableId={vehicleDetails?.newVehicle?._id}
               identifier="rcPhoto"
               type="file"
-            />
+            /> */}
 
             {/* <FieldComponent
               label={"RC Photo"}
@@ -527,7 +527,7 @@ const VechicleDetail = ({ params }) => {
                 identifier="driverProof"
                 type="file"
               /> */}
-
+{/* 
               <FieldComponent
                 label={"Proof"}
                 value={vehicleDetails?.newVehicle?.driver?.proof}
@@ -535,7 +535,7 @@ const VechicleDetail = ({ params }) => {
                 tableId={vehicleDetails?.newVehicle?._id}
                 identifier="driverProof"
                 type="file"
-              />
+              /> */}
             </div>
           </div>
 
@@ -708,7 +708,7 @@ const VechicleDetail = ({ params }) => {
                 tableId={vehicleDetails?.newVehicle?._id}
                 identifier="ownerProofType"
               />
-              <FieldComponent
+              {/* <FieldComponent
                 label={"Transporter Image"}
                 value={vehicleDetails?.newVehicle?.transporterDetails[0]?.image}
                 show={editvehicle}
@@ -724,7 +724,7 @@ const VechicleDetail = ({ params }) => {
                 tableId={vehicleDetails?.newVehicle?._id}
                 identifier="driverProof"
                 type="file"
-              />
+              /> */}
 
 <h2 className="mt col-span-full mt-6 mb-3 text-center text-lg font-bold">
                 Multiple Contact Detail :

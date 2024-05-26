@@ -132,8 +132,8 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
             Material Info{" "}
           </h2>
-          <div className="overflow-x-auto">
-          <table className="mx-2 my-4 w-full border border-pink-600">
+          <div className="overflow-x-auto md:overflow-x-visible">
+          <table className="mx-2 my-4 w-full border border-pink-600 ">
             <thead>
               <tr className="w-full border border-pink-600 bg-pink-200">
                 <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
@@ -204,8 +204,8 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
             Additional Chargers{" "}
           </h2>
-          <div className="overflow-x-auto">
-          <table className="mx-2 my-4 w-full border border-pink-600">
+          <div className="overflow-x-auto md:overflow-x-visible">
+          <table className="mx-2 my-4 w-full border border-pink-600 ">
             <thead>
               <tr className="w-full border border-pink-600 bg-pink-200">
                 <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
@@ -283,14 +283,14 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           label={"Balance Amount"}
           show={editBooking}
           tableId={bookingDetails?.booking?._id}
-          identifier="remarks"
+          identifier="balanceAmount"
           value={bookingDetails?.booking?.balanceAmount}
         />
         <FieldComponent
           label={"party Bhara"}
           show={editBooking}
           tableId={bookingDetails?.booking?._id}
-          identifier="remarks"
+          identifier="partyBhara"
           value={bookingDetails?.booking?.partyBhara}
         />
 
@@ -298,28 +298,28 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           label={"Total Additional Charger"}
           show={editBooking}
           tableId={bookingDetails?.booking?._id}
-          identifier="remarks"
+          identifier="totalAdditionalCharges"
           value={bookingDetails?.booking?.totalAdditionalCharges}
         />
         <FieldComponent
           label={"Total Additional Charger Tax"}
           show={editBooking}
           tableId={bookingDetails?.booking?._id}
-          identifier="remarks"
+          identifier="totalAdditionalChargeTax"
           value={bookingDetails?.booking?.totalAdditionalChargeTax}
         />
         <FieldComponent
           label={"Total Billing Amount"}
           show={editBooking}
           tableId={bookingDetails?.booking?._id}
-          identifier="remarks"
+          identifier="totalBillingAmount"
           value={bookingDetails?.booking?.totalBillingAmount}
         />
         <FieldComponent
           label={"Total Amount paid"}
           show={editBooking}
           tableId={bookingDetails?.booking?._id}
-          identifier="remarks"
+          identifier="totalPaidAmount"
           value={bookingDetails?.booking?.totalPaidAmount}
         />
       </div>
@@ -329,21 +329,21 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           label={"Way"}
           show={editBooking}
           tableId={bookingDetails?.booking?._id}
-          identifier="remarks"
+          identifier="way"
           value={bookingDetails?.booking?.way}
         />
         <FieldComponent
           label={"Vehicle Type"}
           show={editBooking}
           tableId={bookingDetails?.booking?._id}
-          identifier="remarks"
+          identifier="vehicleType"
           value={bookingDetails?.booking?.vehicleType}
         />
         <FieldComponent
           label={"No of Vehicle"}
           show={editBooking}
           tableId={bookingDetails?.booking?._id}
-          identifier="remarks"
+          identifier="noOfVehicle"
           value={bookingDetails?.booking?.noOfVehicle}
         />
         <FieldComponent
@@ -367,7 +367,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
               value={bookingDetails?.booking?.allotedVehicle[0]?.vehicleOwner}
               show={editBooking}
               tableId={bookingDetails?.booking?._id}
-              identifier="allotedVehicle.vehicleOwner"
+              identifier="allotedVehicle[0].vehicleOwner"
             />
             <FieldComponent
               label={"Owner Mobile No"}
@@ -376,14 +376,14 @@ const ViewDetail = ({ bookingDetails, heading }) => {
               }
               show={editBooking}
               tableId={bookingDetails?.booking?._id}
-              identifier="allotedVehicle.vehicleOwnerPhone"
+              identifier="allotedVehicle[0].vehicleOwnerPhone"
             />
             <FieldComponent
               label={"Driver Name"}
               value={bookingDetails?.booking?.allotedVehicle[0]?.vehicleDriver}
               show={editBooking}
               tableId={bookingDetails?.booking?._id}
-              identifier="allotedVehicle.vehicleDriver"
+              identifier="allotedVehicle[0].vehicleDriver"
             />
             <FieldComponent
               label={"Driver Mobile No"}
@@ -392,14 +392,14 @@ const ViewDetail = ({ bookingDetails, heading }) => {
               }
               show={editBooking}
               tableId={bookingDetails?.booking?._id}
-              identifier="allotedVehicle.vehicleDriverPhone"
+              identifier="allotedVehicle[0].vehicleDriverPhone"
             />
             <FieldComponent
               label={"Vehicle No"}
               value={bookingDetails?.booking?.allotedVehicle[0]?.vehicleNo}
               show={editBooking}
               tableId={bookingDetails?.booking?._id}
-              identifier="allotedVehicle.vehicleNo"
+              identifier="allotedVehicle[0].vehicleNo"
             />
             <FieldComponent
               label={"Vehicle Allocated Date"}
@@ -408,7 +408,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
               ).toLocaleDateString()}
               show={editBooking}
               tableId={bookingDetails?.booking?._id}
-              identifier="allotedVehicle.date"
+              identifier="allotedVehicle[0].date"
             />
           </div>
         </div>
@@ -420,8 +420,8 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
             Invoice Details :
           </h2>
-          <div className="overflow-x-auto">
-          <table className="mx-2 my-4 w-full border border-pink-600">
+          <div className="overflow-x-auto md:overflow-x-visible">
+          <table className="mx-2 my-4 w-full border border-pink-600 ">
             <thead>
               <tr className="w-full border border-pink-600 bg-pink-200">
                 <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
@@ -485,7 +485,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           label={"Bill Type"}
           show={editBooking}
           tableId={bookingDetails?.booking?._id}
-          identifier="paymentTerm"
+          identifier="dispatch.dispatchDetails.billtyType"
           value={bookingDetails?.booking?.dispatch?.dispatchDetails?.billtyType}
         />
           <FieldComponent
@@ -584,7 +584,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
 {/* table of Chargers */}
 {bookingDetails?.booking?.dispatch?.dispatchDetails?.dispatch?.chargesDetails.length > 0 && <div className="col-span-full">
 <p className="mb-4 mt-6 text-center text-xl  font-light text-pink-700 underline">Charges Details</p>
-<div className="overflow-x-auto">
+<div className="overflow-x-auto md:overflow-x-visible">
 <table className="mx-2 my-4 w-full border border-pink-600 ">
             <thead>
               <tr className="w-full border border-pink-600 bg-pink-200">
@@ -723,7 +723,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
 <p className="col-span-full text-center underline text-xl text-light my-4 text-pink-700">
          Additional Rate Table 
         </p>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto md:overflow-x-visible">
 <table className="mx-2 my-4 w-full border border-pink-600">
             <thead>
               <tr className="w-full border border-pink-600 bg-pink-200">
@@ -781,8 +781,8 @@ const ViewDetail = ({ bookingDetails, heading }) => {
           <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
            Payment History :
           </h2>
-          <div className="overflow-x-auto">
-          <table className="mx-2 my-4 w-full border border-pink-600">
+          <div className="overflow-x-auto md:overflow-x-visible">
+          <table className="mx-2 my-4 w-full border border-pink-600 ">
             <thead>
               <tr className="w-full border border-pink-600 bg-pink-200">
               <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">

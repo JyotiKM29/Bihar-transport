@@ -65,7 +65,7 @@ const FieldComponent = ({ label, value, show, identifier, tableId , type = 'text
           <div>
             {isEdit ? (
               <Input
-                className='text-pink-800 w-2/3 border'
+                className='text-pink-800 w-4/5 border'
                 type={type}
                 value={newValue}
                 onChange={handleChangeInput}
@@ -79,13 +79,13 @@ const FieldComponent = ({ label, value, show, identifier, tableId , type = 'text
               isEdit ? (
                 <button
                    onClick={handleUpdate}
-                  className="rounded-md bg-blue-500 p-2 text-white"
+                  className="rounded-md bg-pink-600  hover:bg-pink-700 p-2 text-white"
                 >
                   Update
                 </button>
               ) : (
                 <button onClick={() => setIsEdit(!isEdit)}>
-                  <MdEdit className="h-8 fill-blue-500" />
+                  <MdEdit className="h-8 fill-pink-600" />
                 </button>
               )
             ) : (
