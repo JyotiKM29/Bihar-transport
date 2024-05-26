@@ -71,7 +71,7 @@ export async function POST(req) {
     //       booking.delivery.delivery_details = deliveryDetails;
     // booking.delivery.payment_details = paymentDetails;
     //         booking.delivery.consignment_info = consignmentInfo;
-    //         booking.status = "Delivered";
+            booking.status = "Delivered";
         
       if (booking.pyamentHistory)
         booking.pyamentHistory.push({
