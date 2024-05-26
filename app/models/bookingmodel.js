@@ -190,7 +190,7 @@ const consignmentInfoSchema = new mongoose.Schema({
   excess: { type: Number },
   shortage: { type: Number },
   remarks: { type: String },
-  pod: { type: String },
+  pod: [],
   action: { type: String },
 });
 

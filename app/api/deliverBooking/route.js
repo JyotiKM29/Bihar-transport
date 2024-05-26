@@ -56,17 +56,32 @@ export async function POST(req) {
         }
 
 
+     
+      booking.delivery = {};
+          
+        booking.delivery = {
+          delivery_details: deliveryDetails,
+          payment_details: paymentDetails,
+          consignment_info:consignmentInfo,
+        };
+  
 
 
-          booking.delivery.delivery_details = deliveryDetails;
-    booking.delivery.payment_details = paymentDetails;
-            booking.delivery.consignment_info = consignmentInfo;
-            booking.status = "Delivered";
+
+    //       booking.delivery.delivery_details = deliveryDetails;
+    // booking.delivery.payment_details = paymentDetails;
+    //         booking.delivery.consignment_info = consignmentInfo;
+    //         booking.status = "Delivered";
         
-            booking.pyamentHistory.push({
-                paymentDetails,
-                date: new Date(),
-            });
+      if (booking.pyamentHistory)
+        booking.pyamentHistory.push({
+          paymentDetails
+        });
+      
+      else booking.paymentHistory = [];
+      booking.paymentHistory.push({
+        paymentDetails
+      });
         
         // updated that much paid amount
         booking.totalPaidAmount += paymentDetails.amount_received;
