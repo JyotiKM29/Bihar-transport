@@ -445,20 +445,20 @@ const ViewDetail = ({ bookingDetails, heading }) => {
             
                 <tr  className="w-full text-center">
                   <td className="border border-pink-900 p-2 text-pink-700">
-                    {bookingDetails?.booking?.generatedInvoice.invoiceNumber}
+                    {bookingDetails?.booking?.generatedInvoice?.invoiceNumber}
                   </td>
                   <td className="border border-pink-900 p-2 text-pink-700">
-                    {new Date(bookingDetails?.booking?.generatedInvoice.invoiceDate).toLocaleDateString()}
+                    {new Date(bookingDetails?.booking?.generatedInvoice?.invoiceDate).toLocaleDateString()}
                   </td>
                   <td className="border border-pink-900 p-2 text-pink-700">
-                    {bookingDetails?.booking?.generatedInvoice.invoiceAmount}
+                    {bookingDetails?.booking?.generatedInvoice?.invoiceAmount}
                   </td>
                   
                   <td className="border border-pink-900 p-2 text-pink-700">
-                    {bookingDetails?.booking?.generatedInvoice.invoiceTotal}
+                    {bookingDetails?.booking?.generatedInvoice?.invoiceTotal}
                   </td>
                   <td className="border border-pink-900 p-2 text-pink-700">
-                    {bookingDetails?.booking?.generatedInvoice.invoiceRemarks}
+                    {bookingDetails?.booking?.generatedInvoice?.invoiceRemarks}
                   </td>
                  
                 </tr>
@@ -764,7 +764,259 @@ const ViewDetail = ({ bookingDetails, heading }) => {
 
 </div>
 
+
+
+
           </div>
+
+          {/* Payment History */}
+          {bookingDetails?.booking?.paymentHistory.length > 0 && <div>
+          <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-pink-700 underline">
+           Payment History :
+          </h2>
+
+          <table className="mx-2 my-4 w-full border border-pink-600">
+            <thead>
+              <tr className="w-full border border-pink-600 bg-pink-200">
+              <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                Payment Date
+                </th>
+                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                Paid Amount
+                </th>
+               
+                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                Payment Mode
+                </th>
+                <th className=" text-nowrap border border-pink-600 p-2 pr-3 text-sm font-medium text-pink-900  md:text-base  ">
+                TDS
+                </th>
+              
+              </tr>
+            </thead>
+            <tbody>
+              {bookingDetails?.booking?.paymentHistory?.map((items, i) => (
+                <tr key={i} className="w-full text-center">
+                  <td className="border border-pink-900 p-2 text-pink-700">
+                    {items.paymentDate}
+                  </td>
+                  <td className="border border-pink-900 p-2 text-pink-700">
+                    {items.paidAmount}
+                  </td>
+                  <td className="border border-pink-900 p-2 text-pink-700">
+                    {items.paymentMode}
+                  </td>
+                  <td className="border border-pink-900 p-2 text-pink-700">
+                    {items.TDS}
+                  </td>
+                  
+                
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          </div> }
+          
+
+          {/* Delivery details */}
+<div>
+<h2 className="mb-4 mt-6 text-center  text-2xl  font-semibold text-pink-700 underline">
+           Delivery 
+          </h2>
+
+          <div className="mb-4 mt-6 min-h-20  gap-x-16 rounded border border-pink-500 shadow-lg grid grid-cols-2">
+
+
+<div className="col-span-full bg-pink-100 p-4 rounded grid grid-cols-2 gap-x-16 ">
+
+
+          <p className="col-span-full mb-4 text-center text-xl  font-light text-pink-700 underline">Delivery Details</p>
+     
+          <FieldComponent
+          label={"Reporting date"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={new Date(bookingDetails?.booking?.delivery?.delivery_details?.reporting_date).toLocaleDateString()}
+        />
+          <FieldComponent
+          label={"Unloading date"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={new Date(bookingDetails?.booking?.delivery?.delivery_details?.unloading_date).toLocaleDateString()}
+        />
+          <FieldComponent
+          label={"Material Received by"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.delivery_details?.material_received_by}
+        />
+          <FieldComponent
+          label={"Phone No"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.delivery_details?.phone_number}
+        />
+          <FieldComponent
+          label={"Stamp"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={(bookingDetails?.booking?.delivery?.delivery_details?.stamp)?"Yes ":"No"}
+        />
+          <FieldComponent
+          label={"Sign"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={(bookingDetails?.booking?.delivery?.delivery_details?.sign)?"Yes ":"No"}
+        />
+        </div>
+        <div className="col-span-full my-3 p-4 rounded-lg grid grid-cols-2 gap-x-16 ">
+
+       
+<p className="col-span-full mb-4 text-center text-xl  font-light text-pink-700 underline">Payment Details</p>
+
+<FieldComponent
+          label={"LR Dues Amount"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.payment_details?.lr_dues_amount}
+        />
+<FieldComponent
+          label={"Payment Modes"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.payment_details?.payment_modes}
+        />
+<FieldComponent
+          label={"Amount Received "}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.payment_details?.amount_received}
+        />
+<FieldComponent
+          label={"fine "}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.payment_details?.fine}
+        />
+<FieldComponent
+          label={"final Due"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.payment_details?.final_due}
+        />
+<FieldComponent
+          label={"Remarks"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.payment_details?.remarks}
+        />
+ </div>
+ <div className="col-span-full bg-pink-100 p-4 rounded grid grid-cols-2 gap-x-16 ">
+
+ 
+<p className="col-span-full mb-4 text-center text-xl  font-light text-pink-700 underline">Consignment Info</p>
+
+<FieldComponent
+          label={"Delivery date"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={new Date(bookingDetails?.booking?.delivery?.consignment_info[0]?.delivery_date).toLocaleDateString()}
+        />
+        <FieldComponent
+          label={"Delivery No"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.consignment_info[0]?.delivery_number}
+        />
+        <FieldComponent
+          label={"From Location"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.consignment_info[0]?.from_location}
+        />
+        <FieldComponent
+          label={"To location"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.consignment_info[0]?.to_location}
+        />
+        <FieldComponent
+          label={"Quantity"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.consignment_info[0]?.quantity}
+        />
+        <FieldComponent
+          label={"Weight"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.consignment_info[0]?.weight}
+        />
+        <FieldComponent
+          label={"Breakage"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.consignment_info[0]?.breakage}
+        />
+        <FieldComponent
+          label={"Excess"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.consignment_info[0]?.excess}
+        />
+        <FieldComponent
+          label={"Shortage"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.consignment_info[0]?.shortage}
+        />
+        <FieldComponent
+          label={"Remarks"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.consignment_info[0]?.remarks}
+        />
+        <FieldComponent
+          label={"POD"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.consignment_info[0]?.pod}
+        />
+        <FieldComponent
+          label={"Action"}
+          show={editBooking}
+          tableId={bookingDetails?.booking?._id}
+          identifier="paymentTerm"
+          value={bookingDetails?.booking?.delivery?.consignment_info[0]?.action}
+        />
+        </div>
+
+          </div>
+
+</div>
       </div>}
     </div>
   );
