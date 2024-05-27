@@ -20,6 +20,8 @@ import {
   FormMessage,
 } from "../../components/ui/form";
 import * as z from "zod";
+import UnitAdd from "./UnitAdd";
+
 
 
 
@@ -63,6 +65,10 @@ const VehicleTypePop = () => {
     useEffect(() => {
         fetchUnits(); 
     }, []);
+
+  const handleUnitAdded = () => {
+    fetchUnits(); // Fetch units data after a new unit is added
+  };
 
     const fetchUnits = async () => {
         // Fetch units data from API
@@ -241,7 +247,9 @@ const VehicleTypePop = () => {
                     </FormItem>
                   );
                 }}
+
               />
+                  <UnitAdd onUnitAdded={handleUnitAdded} />
               </div>
  <div className="flex w-full items-center gap-0">
 
@@ -292,6 +300,8 @@ const VehicleTypePop = () => {
                   );
                 }}
               />
+
+               <UnitAdd onUnitAdded={handleUnitAdded} />
               </div>
                <div className="flex w-full items-center gap-0">
 
@@ -344,6 +354,8 @@ const VehicleTypePop = () => {
                   );
                 }}
               />
+
+               <UnitAdd onUnitAdded={handleUnitAdded} />
                 </div>
  <div className="flex w-full items-center gap-0">
 <FormField
@@ -395,6 +407,8 @@ const VehicleTypePop = () => {
                   );
                 }}
               />
+
+               <UnitAdd onUnitAdded={handleUnitAdded} />
          
          </div> 
          <Button type="submit" className='text-lg w-full mt-10 px-20 py-6 bg-orange-700 hover:bg-orange-800'>
