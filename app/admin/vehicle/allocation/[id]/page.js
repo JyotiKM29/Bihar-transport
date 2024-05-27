@@ -55,7 +55,7 @@ const VechicleDetail = ({ params }) => {
     };
   
     fetchData();
-  }, [userId ]);
+  }, [ ]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -130,6 +130,211 @@ const VechicleDetail = ({ params }) => {
         <>
 
       `  {/* {loadingTable ? 'Loading table.....' : <DataTable columns={columns} data={data?.data} />}` */}
+
+       {/* Booked By  */}
+       <div>
+          <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-sky-700 underline">
+             Bookings
+            </h2>
+         
+          <div className="overflow-x-auto xl:overflow-visible">
+          <table className="mx-2 my-4 w-full border border-sky-600 ">
+            <thead>
+              <tr className="w-full border border-sky-600 bg-sky-200">
+                <th className=" text-nowrap border border-sky-600 p-2 pr-3 text-sm font-medium text-sky-900  md:text-base  ">
+                Vehicle Type
+                </th>
+                <th className=" text-nowrap border border-sky-600 p-2 pr-3 text-sm font-medium text-sky-900  md:text-base  ">
+                Arranged By
+                </th>
+                <th className=" text-nowrap border border-sky-600 p-2 pr-3 text-sm font-medium text-sky-900  md:text-base  ">
+                booking Id
+                </th>
+                <th className=" text-nowrap border border-sky-600 p-2 pr-3 text-sm font-medium text-sky-900  md:text-base  ">
+                Commission
+                </th>
+                <th className=" text-nowrap border border-sky-600 p-2 pr-3 text-sm font-medium text-sky-900  md:text-base  ">
+                Driver Bhara
+                </th>
+                <th className=" text-nowrap border border-sky-600 p-2 pr-3 text-sm font-medium text-sky-900  md:text-base  ">
+                Net Bhara
+                </th>
+                <th className=" text-nowrap border border-sky-600 p-2 pr-3 text-sm font-medium text-sky-900  md:text-base  ">
+                Rate as per
+                </th>
+                <th className=" text-nowrap border border-sky-600 p-2 pr-3 text-sm font-medium text-sky-900  md:text-base  ">
+                remarks
+                </th>
+               
+              </tr>
+            </thead>
+            <tbody>
+              {vehicleDetails?.newVehicle?.bookedBy?.map(
+                (items, i) => (
+                  <tr key={i} className="w-full text-center">
+                   <td className="border border-sky-900 p-2 text-sky-700">
+                      {items.vehicleType}
+                    </td>
+                    <td className="border border-sky-900 p-2 text-sky-700">
+                      {items.arrangedBy}
+                    </td>
+                    <td className="border border-sky-900 p-2 text-sky-700">
+                      {items.bookingId} </td>
+                    <td className="border border-sky-900 p-2 text-sky-700">
+                      {items.commission}
+                    </td>
+                    <td className="border border-sky-900 p-2 text-sky-700">
+                      {items.driverBhara}
+                    </td>
+                    <td className="border border-sky-900 p-2 text-sky-700">
+                      {items.netBhara}
+                    </td>
+                    <td className="border border-sky-900 p-2 text-sky-700">
+                      {items.rateAsPer}
+                    </td>
+                    <td className="border border-sky-900 p-2 text-sky-700">
+                      {items.remarks}
+                    </td>
+                   
+                   
+                  </tr>
+                ),
+              )}
+            </tbody>
+          </table>
+          </div>
+          </div>
+
+           {/* Driver Details */}
+           <div className="mt-8">
+             <h2 className="mb-4  mt-6 text-center text-2xl  font-semibold text-sky-700 underline">
+              Driver Details
+            </h2>
+            <div className="grid  grid-cols-1 bg-sky-200   rounded-lg p-4 shadow-md gap-x-6 gap-y-1 lg:grid-cols-2 2xl:gap-x-8 ">
+              <FieldComponent
+                label={"License No"}
+                value={vehicleDetails?.newVehicle?.driver?.licenseNo}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverLicenseNo"
+              />
+              <FieldComponent
+                label={"Name"}
+                value={vehicleDetails?.newVehicle?.driver?.name}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverName"
+              />
+              <FieldComponent
+                label={"Issue Date"}
+                value={new Date(
+                  vehicleDetails?.newVehicle?.driver?.issueDate,
+                ).toLocaleDateString()}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverIssueDate"
+                type="date"
+              />
+              <FieldComponent
+                label={"Licence Validity"}
+                value={new Date(
+                  vehicleDetails?.newVehicle?.driver?.licenceValidity,
+                ).toLocaleDateString()}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverLicenceValidity"
+                type="date"
+              />
+              <FieldComponent
+                label={"Date of Birth"}
+                value={new Date(vehicleDetails?.newVehicle?.driver?.DOB).toLocaleDateString()}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverDOB"
+                type="date"
+              />
+              <FieldComponent
+                label={"Vehicle Class"}
+                value={vehicleDetails?.newVehicle?.driver?.vehicleClass}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverVehicleClass"
+              />
+              <FieldComponent
+                label={"Licence Authority"}
+                value={vehicleDetails?.newVehicle?.driver?.licenceAuthority}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverLicenceAuthority"
+              />
+              <FieldComponent
+                label={"Address"}
+                value={vehicleDetails?.newVehicle?.driver?.address}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverAddress"
+              />
+              <FieldComponent
+                label={"Phone"}
+                value={vehicleDetails?.newVehicle?.driver?.phone}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverPhone"
+              />
+              <FieldComponent
+                label={"Alternate Phone"}
+                value={vehicleDetails?.newVehicle?.driver?.altPhone}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverAltPhone"
+              />
+              <FieldComponent
+                label={"Rating"}
+                value={vehicleDetails?.newVehicle?.driver?.rating}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverRating"
+                type="number" // Assuming this should be a number input
+              />
+              <FieldComponent
+                label={"Smartphone Status"}
+                value={vehicleDetails?.newVehicle?.driver?.smartPhone}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverSmartPhone"
+                type="checkbox" // Assuming this should be a checkbox input
+              />
+              <FieldComponent
+                label={"Owner Status"}
+                value={vehicleDetails?.newVehicle?.driver?.owner}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverOwner"
+                type="checkbox" // Assuming this should be a checkbox input
+              />
+              {/* <FieldComponent
+                label={"Proof"}
+                value={vehicleDetails?.newVehicle?.driver?.proof}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverProof"
+                type="file"
+              /> */}
+{/* 
+              <FieldComponent
+                label={"Proof"}
+                value={vehicleDetails?.newVehicle?.driver?.proof}
+                show={editvehicle}
+                tableId={vehicleDetails?.newVehicle?._id}
+                identifier="driverProof"
+                type="file"
+              /> */}
+            </div>
+          </div>
+
+
+       
+
           {/* Vehicle Details */}
           <div >
           <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-sky-700 underline">
@@ -296,6 +501,77 @@ const VechicleDetail = ({ params }) => {
             </div>
           </div>
 
+   {/* Payment History */}
+   <div>
+          <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-sky-700 underline">
+             Payment History
+            </h2>
+            <div className="overflow-x-auto xl:overflow-visible">
+          <table className="mx-2 my-4 w-full border border-sky-600 ">
+            <thead>
+              <tr className="w-full border border-sky-600 bg-sky-200">
+                <th className=" text-nowrap border border-sky-600 p-2 pr-3 text-sm font-medium text-sky-900  md:text-base  ">
+                Payment Date
+                </th>
+                <th className=" text-nowrap border border-sky-600 p-2 pr-3 text-sm font-medium text-sky-900  md:text-base  ">
+                Paid Amount
+
+                </th>
+                <th className=" text-nowrap border border-sky-600 p-2 pr-3 text-sm font-medium text-sky-900  md:text-base  ">
+                TDS
+                </th>
+                <th className=" text-nowrap border border-sky-600 p-2 pr-3 text-sm font-medium text-sky-900  md:text-base  ">
+                Paid by
+                </th>
+                <th className=" text-nowrap border border-sky-600 p-2 pr-3 text-sm font-medium text-sky-900  md:text-base  ">
+                Paid To (Driver ,  Owner , vehicle No)
+                </th>
+                <th className=" text-nowrap border border-sky-600 p-2 pr-3 text-sm font-medium text-sky-900  md:text-base  ">
+                Created By
+                </th>
+                <th className=" text-nowrap border border-sky-600 p-2 pr-3 text-sm font-medium text-sky-900  md:text-base  ">
+                Narration
+                </th>
+              
+               
+              </tr>
+            </thead>
+            <tbody>
+              {vehicleDetails?.newVehicle?.payment?.map(
+                (items, i) => (
+                  <tr key={i} className="w-full text-center">
+                   <td className="border border-sky-900 p-2 text-sky-700">
+                      {new Date(items.paymentDate).toLocaleDateString()}
+                    </td>
+                    <td className="border border-sky-900 p-2 text-sky-700">
+                      {items.paidAmount}
+                    </td>
+                    <td className="border border-sky-900 p-2 text-sky-700">
+                      {items.TDS} </td>
+                    <td className="border border-sky-900 p-2 text-sky-700">
+                      {items.paidBy}
+                    </td>
+                    <td className="border border-sky-900 p-2 text-sky-700">
+                      {items.paidTo.driverName} ,
+                      {items.paidTo.ownerName}  ,
+                      {items.paidTo.vehicleNo}  
+                    </td>
+                    <td className="border border-sky-900 p-2 text-sky-700">
+                      {items.createdBy.name}
+                    </td>
+                    <td className="border border-sky-900 p-2 text-sky-700">
+                      {items.narration}
+                    </td>
+                  
+                   
+                   
+                  </tr>
+                ),
+              )}
+            </tbody>
+          </table>
+          </div>
+          </div>
           {/* Owner Details */}
           <div className="mt-8">
              <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-sky-700 underline">
@@ -415,132 +691,7 @@ const VechicleDetail = ({ params }) => {
             </div>
           </div>
 
-          {/* Driver Details */}
-          <div className="mt-8">
-             <h2 className="mb-4  mt-6 text-center text-2xl  font-semibold text-sky-700 underline">
-              Driver Details
-            </h2>
-            <div className="grid  grid-cols-1 bg-sky-200   rounded-lg p-4 shadow-md gap-x-6 gap-y-1 lg:grid-cols-2 2xl:gap-x-8 ">
-              <FieldComponent
-                label={"License No"}
-                value={vehicleDetails?.newVehicle?.driver?.licenseNo}
-                show={editvehicle}
-                tableId={vehicleDetails?.newVehicle?._id}
-                identifier="driverLicenseNo"
-              />
-              <FieldComponent
-                label={"Name"}
-                value={vehicleDetails?.newVehicle?.driver?.name}
-                show={editvehicle}
-                tableId={vehicleDetails?.newVehicle?._id}
-                identifier="driverName"
-              />
-              <FieldComponent
-                label={"Issue Date"}
-                value={new Date(
-                  vehicleDetails?.newVehicle?.driver?.issueDate,
-                ).toLocaleDateString()}
-                show={editvehicle}
-                tableId={vehicleDetails?.newVehicle?._id}
-                identifier="driverIssueDate"
-                type="date"
-              />
-              <FieldComponent
-                label={"Licence Validity"}
-                value={new Date(
-                  vehicleDetails?.newVehicle?.driver?.licenceValidity,
-                ).toLocaleDateString()}
-                show={editvehicle}
-                tableId={vehicleDetails?.newVehicle?._id}
-                identifier="driverLicenceValidity"
-                type="date"
-              />
-              <FieldComponent
-                label={"Date of Birth"}
-                value={new Date(vehicleDetails?.newVehicle?.driver?.DOB).toLocaleDateString()}
-                show={editvehicle}
-                tableId={vehicleDetails?.newVehicle?._id}
-                identifier="driverDOB"
-                type="date"
-              />
-              <FieldComponent
-                label={"Vehicle Class"}
-                value={vehicleDetails?.newVehicle?.driver?.vehicleClass}
-                show={editvehicle}
-                tableId={vehicleDetails?.newVehicle?._id}
-                identifier="driverVehicleClass"
-              />
-              <FieldComponent
-                label={"Licence Authority"}
-                value={vehicleDetails?.newVehicle?.driver?.licenceAuthority}
-                show={editvehicle}
-                tableId={vehicleDetails?.newVehicle?._id}
-                identifier="driverLicenceAuthority"
-              />
-              <FieldComponent
-                label={"Address"}
-                value={vehicleDetails?.newVehicle?.driver?.address}
-                show={editvehicle}
-                tableId={vehicleDetails?.newVehicle?._id}
-                identifier="driverAddress"
-              />
-              <FieldComponent
-                label={"Phone"}
-                value={vehicleDetails?.newVehicle?.driver?.phone}
-                show={editvehicle}
-                tableId={vehicleDetails?.newVehicle?._id}
-                identifier="driverPhone"
-              />
-              <FieldComponent
-                label={"Alternate Phone"}
-                value={vehicleDetails?.newVehicle?.driver?.altPhone}
-                show={editvehicle}
-                tableId={vehicleDetails?.newVehicle?._id}
-                identifier="driverAltPhone"
-              />
-              <FieldComponent
-                label={"Rating"}
-                value={vehicleDetails?.newVehicle?.driver?.rating}
-                show={editvehicle}
-                tableId={vehicleDetails?.newVehicle?._id}
-                identifier="driverRating"
-                type="number" // Assuming this should be a number input
-              />
-              <FieldComponent
-                label={"Smartphone Status"}
-                value={vehicleDetails?.newVehicle?.driver?.smartPhone}
-                show={editvehicle}
-                tableId={vehicleDetails?.newVehicle?._id}
-                identifier="driverSmartPhone"
-                type="checkbox" // Assuming this should be a checkbox input
-              />
-              <FieldComponent
-                label={"Owner Status"}
-                value={vehicleDetails?.newVehicle?.driver?.owner}
-                show={editvehicle}
-                tableId={vehicleDetails?.newVehicle?._id}
-                identifier="driverOwner"
-                type="checkbox" // Assuming this should be a checkbox input
-              />
-              {/* <FieldComponent
-                label={"Proof"}
-                value={vehicleDetails?.newVehicle?.driver?.proof}
-                show={editvehicle}
-                tableId={vehicleDetails?.newVehicle?._id}
-                identifier="driverProof"
-                type="file"
-              /> */}
-{/* 
-              <FieldComponent
-                label={"Proof"}
-                value={vehicleDetails?.newVehicle?.driver?.proof}
-                show={editvehicle}
-                tableId={vehicleDetails?.newVehicle?._id}
-                identifier="driverProof"
-                type="file"
-              /> */}
-            </div>
-          </div>
+         
 
           {/* Transpoter Details */}
           <div className="mt-8">
@@ -766,6 +917,10 @@ const VechicleDetail = ({ params }) => {
 </div>
             </div>
           </div>
+
+
+         
+
         </>
       )}
     </div>
