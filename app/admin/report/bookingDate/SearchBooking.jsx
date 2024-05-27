@@ -130,9 +130,9 @@ const SearchBooking = () => {
           <th className="border border-violet-500  bg-violet-200 font-medium p-2">Confirm Booking</th>
           <th className="border border-violet-500  bg-violet-200 font-medium p-2">Delivered Booking</th>
           <th className="border border-violet-500  bg-violet-200 font-medium p-2">Cancelled Booking</th>
-          {/* <th className="border border-violet-500  bg-violet-200 font-medium p-2">Total Recievable Amt</th>
+          <th className="border border-violet-500  bg-violet-200 font-medium p-2">Total Recievable Amt</th>
           <th className="border border-violet-500  bg-violet-200 font-medium p-2">Total Recieved Amt</th>
-          <th className="border border-violet-500  bg-violet-200 font-medium p-2">Total Pending Amt</th> */}
+          <th className="border border-violet-500  bg-violet-200 font-medium p-2">Total Pending Amt</th>
           </tr>
         </thead>
         <tbody>
@@ -142,9 +142,9 @@ const SearchBooking = () => {
         <td className="border border-violet-500 px-2 py-1 text-center">{data?.confirmedBooking}</td>
         <td className="border border-violet-500 px-2 py-1 text-center">{data?.deliveredBooking}</td>
         <td className="border border-violet-500 px-2 py-1 text-center">{data?.cancelledBooking}</td>
-        {/* <td className="border border-violet-500 px-2 py-1 text-center">₹&nbsp;{data?.totalRecievableAmount}</td>
+        <td className="border border-violet-500 px-2 py-1 text-center">₹&nbsp;{data?.totalRecievableAmount}</td>
         <td className="border border-violet-500 px-2 py-1 text-center">₹&nbsp;{data?.totalRecievedAmount}</td>
-        <td className="border border-violet-500 px-2 py-1 text-center">₹&nbsp;{data?.totalPendingAmount}</td> */}
+        <td className="border border-violet-500 px-2 py-1 text-center">₹&nbsp;{data?.totalPendingAmount}</td>
       </tr>
    
 </tbody>
