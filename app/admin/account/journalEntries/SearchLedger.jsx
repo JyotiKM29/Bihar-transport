@@ -10,28 +10,12 @@ import { Input } from "../../../components/ui/input";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
 
-const SearchLedger = ({ form, field, label ,setBooking, booking }) => {
+const SearchLedger = ({ form, field, label , valueSet }) => {
   const { user } = useContext(UserContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const { toast } = useToast();
-  let bookingData =[];
-  const [newBooking , setNewBooking] = useState([]);
-
-  for (let i = 0; i < booking.length; i++) {
-    console.log("booking new", booking);
-    const id = booking[i].savedBooking?._id;
-
-    if (id) {
-      bookingData.push(id);
-
-    }
-    console.log("Final bookingData array:", bookingData);
-}
-
-
-
 
   async function fetchData(value) {
     try {
@@ -40,7 +24,7 @@ const SearchLedger = ({ form, field, label ,setBooking, booking }) => {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
       const result = await res.json();
-      // console.log("result my love", result);
+      console.log("result my love", result);
 
       if (result && Array.isArray(result.data)) {
         const results = result.data.filter((item) => {
@@ -51,7 +35,7 @@ const SearchLedger = ({ form, field, label ,setBooking, booking }) => {
                 item.basicInfo.accountName.toLowerCase().includes(value.toLowerCase())
             );
         });
-        // console.log("Filter data:", results);
+        console.log("Filter data:", results);
 
         setSearchResult(results.slice(0, 5));
       } 
@@ -116,11 +100,8 @@ const SearchLedger = ({ form, field, label ,setBooking, booking }) => {
 
                     if(result?.basicInfo?.accountName){
                         setInputValue(result?.basicInfo?.accountName)
-                  form.setValue('receivedFrom', result?.basicInfo?.accountName);
-                  form.setValue('ledgerId', result?._id);
-                  const data = result?.booking
-                  setBooking([...data]);
-             
+                  form.setValue(valueSet, result?.basicInfo?.accountName);
+                  // form.setValue('ledgerId', result?._id);
                   
                   setSearchResult([]);
                   setSearchTerm("");

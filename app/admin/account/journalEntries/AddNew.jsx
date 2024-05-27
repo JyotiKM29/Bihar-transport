@@ -18,6 +18,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
 import { Input } from "../../../components/ui/input";
+import SearchLedger from "./SearchLedger";
 
 const formSchema = z.object({
  adminId:z.string(),
@@ -125,11 +126,25 @@ useEffect(() => {
 
 <div className=" flex flex-col md:flex-row w-full gap-4">
 <div className="flex-1">
-<FieldForm 
+{/* <FieldForm 
         form={form} 
         name="from" 
         label="From Account"
-         type="text" />
+         type="text" /> */}
+
+<FormField
+                control={form.control}
+                name="from" 
+                
+                render={({ field }) => (
+                  <SearchLedger
+                    valueSet={"from"}
+                    form={form}
+                    field={field}
+                    label="From Account"
+                  />
+                )}
+              /> 
 </div>
 
 <div className="flex-1">
@@ -147,11 +162,25 @@ useEffect(() => {
 
 <div className=" flex flex-col md:flex-row w-full gap-4">
 <div className="flex-1">
-<FieldForm 
+{/* <FieldForm 
         form={form} 
         name="to" 
         label="To Account"
-         type="text" />
+         type="text" /> */}
+
+<FormField
+                control={form.control}
+                name="to" 
+                
+                render={({ field }) => (
+                  <SearchLedger
+                    valueSet={"to"}
+                    form={form}
+                    field={field}
+                    label="To Account"
+                  />
+                )}
+              /> 
 </div>
 
 <div className="flex-1">

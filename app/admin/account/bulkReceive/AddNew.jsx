@@ -40,9 +40,19 @@ const formSchema = z.object({
 });
 
 const AddNew = () => {
+  const [booking , setBooking] = useState([]);
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
+
+
+  function extractMaterials(data) {
+    return data?.items?.map(item => item.material).join(', ');
+}
+
+
+
+  // console.log("booking", booking)
 
   const initialFormState = {
     adminId:'',
@@ -116,6 +126,9 @@ const AddNew = () => {
   };
 
   return (
+    <div>
+
+   
     <Form {...form}>
       <form onSubmit={form.handleSubmit(myhandleSubmit)}>
         <h2 className="text-center  text-xl font-semibold">
@@ -128,7 +141,8 @@ const AddNew = () => {
                 
                 render={({ field }) => (
                   <SearchLedger
-                 
+                  booking = {booking}
+                  setBooking={setBooking}
                     form={form}
                     field={field}
                     label='Received From'
@@ -202,6 +216,78 @@ const AddNew = () => {
         </div>
       </form>
     </Form>
+
+
+    {/* Booking Table */}
+    <div className="overflow-x-auto md:overflow-x-visible">
+          <table className="mx-2 my-4 w-full border border-blue-600 ">
+            <thead>
+              <tr className="w-full border border-blue-600 bg-blue-200">
+                <th className=" text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900  md:text-base  ">
+                 Order No
+                </th>
+                <th className=" text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900  md:text-base  ">
+                  Material
+                </th>
+                {/* <th className=" text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900  md:text-base  ">
+                Balance Amount
+                </th> */}
+                <th className=" text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900  md:text-base  ">
+                 Party Bhara
+                </th>
+                <th className=" text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900  md:text-base  ">
+                Additional Charge
+                </th>
+                <th className=" text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900  md:text-base  ">
+                Total Billing Amount
+                </th>
+                <th className=" text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900  md:text-base  ">
+                Received Amount
+                </th>
+                <th className=" text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900  md:text-base  ">
+                After Payment
+                </th>
+               
+              </tr>
+            </thead>
+            <tbody>
+
+              {booking.length > 0 && booking?.map(
+                (items, i) => (
+                  <tr key={i} className="w-full text-center">
+                    <td className="border border-blue-900 p-2 text-blue-700">
+                      {items?.savedBooking?.orderNumber}
+                    </td>
+                    <td className="border border-blue-900 p-2 text-blue-700">
+                   { extractMaterials(items?.savedBooking?.itemsList)}
+                      </td>
+                    {/* <td className="border border-blue-900 p-2 text-blue-700">
+                    {items?.savedBooking?.balanceAmount}
+                    </td> */}
+                    <td className="border border-blue-900 p-2 text-blue-700">
+                    {items?.savedBooking?.partyBhara}
+                    </td>
+                    <td className="border border-blue-900 p-2 text-blue-700">
+                    {items?.savedBooking?.totalAdditionalCharges}
+                    </td>
+                    <td className="border border-blue-900 p-2 text-blue-700">
+                    {items?.savedBooking?.totalBillingAmount}
+                    </td>
+                    <td className="border border-blue-900 p-2 text-blue-700">
+                 
+                    </td>
+                    <td className="border border-blue-900 p-2 text-blue-700">
+                   
+                    </td>
+                   
+                   
+                  </tr>
+                ),
+              )}
+            </tbody>
+          </table>
+</div>
+    </div>
   );
 };
 
