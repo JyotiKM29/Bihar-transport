@@ -22,7 +22,7 @@ const InflationChart = ({ data, category, fromDate, toDate, totalValue }) => {
     dataLabels: {
       enabled: true,
       formatter: (val) => {
-        return ((val / totalValue).toFixed(0) * 100).toFixed(2) + '%';
+        return (parseInt(val / totalValue) * 100).toFixed(2) + '%';
       },
       offsetY: -20,
       style: {
