@@ -23,13 +23,13 @@ export async function POST(req, res) {
 
     
 
-        const from = new Date(fromDate);
-        const to = new Date(toDate);
+        // const from = new Date(fromDate);
+        // const to = new Date(toDate);
 
         const recieptData = await reciept.find({
           createdAt: {
-            $gte: from,
-            $lt: to,
+            $gte: fromDate,
+            $lt: toDate,
           },
         });
 

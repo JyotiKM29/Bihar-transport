@@ -1,80 +1,130 @@
 "use client";
 
 import { Button } from "../../../components/ui/button";
-
 import React, { useContext, useEffect, useState } from "react";
-import ColumnHeader from './ColumnHeader';
-import { DataTable } from '../data-table';
-
+import ColumnHeader from "./ColumnHeader";
+import { DataTable } from "../data-table";
 import { UserContext } from "../../../context/UserContextProvider";
 import AddNew from "./AddNew";
+import SearchBooking from "./SearchStatement";
+import { ChevronLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const MoneyReceipt = () => {
   const [showAddForm, setShowAddForm] = useState(false);
-  const [loading , setLoading] = useState(true);
+  const [statement, setStatement] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [refresh, setRefresh] = useState(false);
   const columns = ColumnHeader();
 
   const { user } = useContext(UserContext);
-
   const [data, setData] = useState(null);
-
   const userId = user?._id;
+  const router = useRouter();
+
+  function handleBack() {
+    router.back();
+  }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (userId) {
+          setLoading(true); // Set loading state to true when starting fetch
           const response = await fetch(`/api/accounting/getReceipt/${userId}`, {
             method: "GET",
           });
-          console.log(response)
-  
+
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
-  
+
           const result = await response.json();
-          console.log(result)
-  
-          setLoading(false);
-  
-        
           setData(result.data);
+          setLoading(false); // Set loading state to false when fetch is complete
         }
       } catch (error) {
         setLoading(false);
         console.error("Error:", error);
       }
     };
-  
+
     fetchData();
-  }, [userId]);
+  }, [userId, refresh]);
 
   return (
-    <div className="max-w max-h mt-14 rounded-2xl  bg-white px-4 py-4 shadow-lg md:px-10 lg:my-4 lg:p-8 lg:px-20">
+    <div className="max-w max-h mt-14 rounded-2xl bg-white px-4 py-4 shadow-lg md:px-10 lg:my-4 lg:p-8 lg:px-20">
       <div className="flex items-center justify-between">
-        <h2 className="mb-8  text-3xl font-semibold text-orange-500">Money Receipt :</h2>
-        <div className="flex gap-3">
-          <Button onClick={() => setShowAddForm(!showAddForm)}>
-            {!showAddForm ? "Add New Money Receipt " : "Back"}
-          </Button>
-          {/* <Button variant="secondary"> Statements</Button> */}
-        </div>
+        <h2 className="mb-8 text-3xl font-semibold text-orange-500">
+          Money Receipt :
+        </h2>
+
+        {!loading && !showAddForm && !statement && (
+          <div className="flex gap-3">
+            <Button onClick={() => setRefresh(!refresh)}>Refresh</Button>
+            <Button onClick={() => setShowAddForm(!showAddForm)}>
+              {!showAddForm ? "Add New Money Receipt" : "Back"}
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => setStatement(!statement)}
+            >
+              {statement ? "Back" : "Statements"}
+            </Button>
+          </div>
+        )}
       </div>
 
-      {showAddForm ? <AddNew />:
-<>
-     { loading ?
-       (<div className="max-w max-h  bg-white"><h2
-       className="text-xl"
-       >Loading...</h2></div>) :  
-       (<DataTable columns={columns} data={data} /> )
-       }
-       </>
-       }
+      {statement ? (
+        <div className="max-h relative flex w-full flex-col gap-3 space-y-2 rounded-2xl bg-white px-4 py-4 shadow-md md:p-6 xl:h-[95%]">
+          <Button
+            variant="secondary"
+            className="absolute right-4 top-4 bg-violet-200 shadow-md hover:bg-violet-300"
+            onClick={() => setStatement(false)}
+          >
+            <ChevronLeft />
+            Back
+          </Button>
+          <div className="flex pt-8 lg:pt-3">
+            <h1 className="flex-1 text-center text-2xl text-violet-800 lg:block xl:text-3xl">
+              Money Receipt Statement
+            </h1>
+          </div>
+          <SearchBooking />
+        </div>
+      ) : (
+        <>
+          {showAddForm ? (
+            <div className="relative">
+              <Button
+                variant="secondary"
+                className="absolute right-4 top-4 bg-violet-200 shadow-md hover:bg-violet-300"
+                onClick={() => setShowAddForm(false)}
+              >
+                <ChevronLeft />
+                Back
+              </Button>
+              <div className="pt-12">
+                {" "}
+                {/* Add padding to create space */}
+                <AddNew />
+              </div>
+            </div>
+          ) : (
+            <>
+              {loading ? (
+                <div className="max-w max-h bg-white">
+                  <h2 className="text-xl">Loading...</h2>
+                </div>
+              ) : (
+                <DataTable columns={columns} data={data} />
+              )}
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 };
 
 export default MoneyReceipt;
-
