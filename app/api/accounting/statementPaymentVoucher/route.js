@@ -1,11 +1,12 @@
 import usermodel from "@/app/models/usermodel";
 import connectDB from "@/app/middleware/connectDB";
 import voucher from "@/app/models/accounting/voucher";
+import { NextResponse } from 'next/server';
 
-
-export async function POST(req, res) {
+export async function POST(req) {
   try {
     const { adminId, fromDate, toDate } = await req.json();
+    console.log(adminId, fromDate, toDate);
 
     await connectDB();
 
@@ -14,22 +15,25 @@ export async function POST(req, res) {
     });
 
     if (!admin) {
-      return Response.json({ message: "Admin not found" }, { status: 404 });
+      return NextResponse.json({ message: "Admin not found" }, { status: 404 });
     }
 
     const from = new Date(fromDate);
     const to = new Date(toDate);
+    // to.setUTCHours(23, 59, 59, 999); // Set to the end of the day
 
-    const recieptData = await voucher.find({
+    const voucherData = await voucher.find({
       createdAt: {
         $gte: from,
-        $lt: to,
+        $lte: to,
       },
     });
 
-    return Response.json({ recieptData }, { status: 200 });
+    console.log(voucherData);
+
+    return NextResponse.json({ voucherData }, { status: 200 });
   } catch (error) {
     console.log(error);
-    return Response.json({ message: error.message }, { status: 400 });
+    return NextResponse.json({ message: error.message }, { status: 400 });
   }
 }
