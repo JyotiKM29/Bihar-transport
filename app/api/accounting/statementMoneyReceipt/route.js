@@ -8,6 +8,7 @@ export async function POST(req, res) {
     try {
 
         const { adminId, fromDate, toDate } = await req.json();
+        console.log(adminId, fromDate, toDate);
         
         await connectDB();
 
@@ -32,6 +33,8 @@ export async function POST(req, res) {
             $lt: toDate,
           },
         });
+
+        console.log(recieptData);
 
 
         return Response.json({ recieptData }, { status: 200 });
