@@ -22,8 +22,13 @@ const SearchBooking = () => {
   const { user } = useContext(UserContext);
   const [data, setData] = useState([]);
 
-  const dataBar =[data?.totalBooking , data?.confirmedBooking , data?.deliveredBooking , data?.cancelledBooking, data?.totalRecievableAmount, data?.totalRecievedAmount, data?.totalPendingAmount];
-  const categoryBar = ["Total Booking" , "Confirm Booking" ,"Delivered Booking" ,"Cancelled Booking", "Recievable Amount", "Recieved Amount", "Total Pending Amount"];
+  const dataBar =[data?.totalBooking , data?.confirmedBooking , data?.deliveredBooking , data?.cancelledBooking, 
+    // data?.totalRecievableAmount, data?.totalRecievedAmount, data?.totalPendingAmount
+
+  ];
+  const categoryBar = ["Total Booking" , "Confirm Booking" ,"Delivered Booking" ,"Cancelled Booking",
+  //  "Recievable Amount", "Recieved Amount", "Total Pending Amount"
+];
 
  
 
@@ -114,32 +119,32 @@ const SearchBooking = () => {
         </form>
       </Form>
 
-<div className="flex  gap-8 w-full">
+<div className="flex flex-col  gap-8 w-full">
 
 
       {/* Table */}
-      {data && Object.keys(data).length > 0 && <table className="w-1/2 mt-10 ">
+      {data && Object.keys(data).length > 0 && <table className="w-full mt-10 ">
         <thead>
           <tr>
-          <th className="border py-1 px-2 bg-blue-200">Total Booking</th>
-          <th className="border py-1 px-2 bg-blue-200">Confirm Booking</th>
-          <th className="border py-1 px-2 bg-blue-200">Delivered Booking</th>
-          <th className="border py-1 px-2 bg-blue-200">Cancelled Booking</th>
-          <th className="border py-1 px-2 bg-blue-200">Total Recievable Amt</th>
-          <th className="border py-1 px-2 bg-blue-200">Total Recieved Amt</th>
-          <th className="border py-1 px-2 bg-blue-200">Total Pending Amt</th>
+          <th className="border border-violet-500  bg-violet-200 font-medium p-2">Total Booking</th>
+          <th className="border border-violet-500  bg-violet-200 font-medium p-2">Confirm Booking</th>
+          <th className="border border-violet-500  bg-violet-200 font-medium p-2">Delivered Booking</th>
+          <th className="border border-violet-500  bg-violet-200 font-medium p-2">Cancelled Booking</th>
+          {/* <th className="border border-violet-500  bg-violet-200 font-medium p-2">Total Recievable Amt</th>
+          <th className="border border-violet-500  bg-violet-200 font-medium p-2">Total Recieved Amt</th>
+          <th className="border border-violet-500  bg-violet-200 font-medium p-2">Total Pending Amt</th> */}
           </tr>
         </thead>
         <tbody>
  
       <tr >
-        <td className="border px-2 py-1 text-center">{data?.totalBooking}</td>
-        <td className="border px-2 py-1 text-center">{data?.confirmedBooking}</td>
-        <td className="border px-2 py-1 text-center">{data?.deliveredBooking}</td>
-        <td className="border px-2 py-1 text-center">{data?.cancelledBooking}</td>
-        <td className="border px-2 py-1 text-center">{data?.totalRecievableAmount}₹</td>
-        <td className="border px-2 py-1 text-center">{data?.totalRecievedAmount}₹</td>
-        <td className="border px-2 py-1 text-center">{data?.totalPendingAmount}₹</td>
+        <td className="border border-violet-500 px-2 py-1 text-center">{data?.totalBooking}</td>
+        <td className="border border-violet-500 px-2 py-1 text-center">{data?.confirmedBooking}</td>
+        <td className="border border-violet-500 px-2 py-1 text-center">{data?.deliveredBooking}</td>
+        <td className="border border-violet-500 px-2 py-1 text-center">{data?.cancelledBooking}</td>
+        {/* <td className="border border-violet-500 px-2 py-1 text-center">₹&nbsp;{data?.totalRecievableAmount}</td>
+        <td className="border border-violet-500 px-2 py-1 text-center">₹&nbsp;{data?.totalRecievedAmount}</td>
+        <td className="border border-violet-500 px-2 py-1 text-center">₹&nbsp;{data?.totalPendingAmount}</td> */}
       </tr>
    
 </tbody>
@@ -149,7 +154,7 @@ const SearchBooking = () => {
 
       {/* graph */}
 
-<div className="w-1/2">
+<div className="w-[600px] h-[600px]">
 {(data && Object.keys(data).length > 0)? <InflationChart  data={dataBar} category={categoryBar}
   totalValue={data.totalBooking}
 /> : <p className="font-light text-red-700 ">No Booking  Data Available for this period. Select Dates</p>}

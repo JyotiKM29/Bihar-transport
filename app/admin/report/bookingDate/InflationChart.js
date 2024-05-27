@@ -15,7 +15,7 @@ const InflationChart = ({ data, category, fromDate, toDate, totalValue }) => {
         borderRadius: 6,
         columnWidth: '60px',
         dataLabels: {
-          position: 'top', // top, center, bottom
+          position: 'bottom', // top, center, bottom
         },
       },
     },
