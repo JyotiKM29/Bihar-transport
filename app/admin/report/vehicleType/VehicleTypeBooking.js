@@ -216,7 +216,7 @@ const VehicleTypeBooking = () => {
   totalValue={data.totalRevenue}
 />
 
- : <p className="font-light text-red-700 mt-3">No Booking  Data Available for this Vehicle Type. Select vehicle Type</p>}
+ : <p className="font-light text-red-700 mt-3">No Data Available for this Vehicle Type. Select vehicle Type</p>}
 </div>
 
 
