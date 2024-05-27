@@ -20,6 +20,8 @@ export async function POST(req, res) {
       return Response.json({ message: "Vehicle not found" }, { status: 400 });
     }
 
+    console.log(vehicle);
+
     let TotalBooking = vehicle.bookedBy.length;
     const statusData = {
       Pending: 0,
@@ -34,12 +36,17 @@ export async function POST(req, res) {
 
     async function updateStatusData() {
       for (const booking of vehicle.bookedBy) {
+
         const actualStatus = await bookingmodel.findOne(
-          { _id: booking.bookingId },
-          { status: 1, _id: 0 },
+          { _id: booking.bookingId },{status:1}
         );
 
-        console.log(actualStatus);
+        if(!actualStatus){
+          continue;
+        }
+        // console.log(booking.bookingId,": ", actualStatus);
+
+        // console.log(actualStatus);
 
         if (actualStatus.status === "Pending") {
           statusData.Pending++;
@@ -88,6 +95,8 @@ export async function POST(req, res) {
       totalCommision,
       totalDriverBhara,
     };
+
+    // console.log(data);
 
     return Response.json({ data }, { status: 200 });
   } catch (error) {

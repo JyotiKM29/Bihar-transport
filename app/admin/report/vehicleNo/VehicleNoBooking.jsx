@@ -130,19 +130,19 @@ const VehicleNoBooking = () => {
         </label>
         <label className="flex gap-2">
           <h2 className="mr-3 text-nowrap text-lg font-semibold ">Cancelled Booking:</h2>
-          <p className="mr-3 text-nowrap text-lg "> {data.cancelledBooking}</p>
+          <p className="mr-3 text-nowrap text-lg "> {data.statusData.Cancelled}</p>
         </label>
         <label className="flex gap-2">
           <h2 className="mr-3 text-nowrap text-lg font-semibold ">pending Booking:</h2>
-          <p className="mr-3 text-nowrap text-lg "> {data.pendingBooking}</p>
+          <p className="mr-3 text-nowrap text-lg "> {data.statusData.Pending}</p>
         </label>
         <label className="flex gap-2">
           <h2 className="mr-3 text-nowrap text-lg font-semibold ">Confirm Booking:</h2>
-          <p className="mr-3 text-nowrap text-lg "> {data.confirmedBooking}</p>
+          <p className="mr-3 text-nowrap text-lg "> {data.statusData.Confirmed}</p>
         </label>
         <label className="flex gap-2">
           <h2 className="mr-3 text-nowrap text-lg font-semibold ">Delivered Booking:</h2>
-          <p className="mr-3 text-nowrap text-lg "> {data.deleiveredBooking}</p>
+          <p className="mr-3 text-nowrap text-lg "> {data.statusData.Delivered}</p>
         </label>
         <label className="flex gap-2">
           <h2 className="mr-3 text-nowrap text-lg font-semibold ">Total Revenue:</h2>
