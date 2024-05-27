@@ -502,7 +502,9 @@ const VechicleDetail = ({ params }) => {
           </div>
 
    {/* Payment History */}
-   <div>
+   {
+    vehicleDetails?.newVehicle?.payment.length > 0 &&
+    <div>
           <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-sky-700 underline">
              Payment History
             </h2>
@@ -572,6 +574,10 @@ const VechicleDetail = ({ params }) => {
           </table>
           </div>
           </div>
+   }
+  
+
+
           {/* Owner Details */}
           <div className="mt-8">
              <h2 className="mb-4 mt-6 text-center text-2xl  font-semibold text-sky-700 underline">
