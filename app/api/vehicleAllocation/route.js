@@ -127,7 +127,7 @@ export async function POST(req, res) {
        quantity: materialDetails.quantity,
        quantityUnit: materialDetails.qtyUnit,
        rateAsPer: materialDetails.rateAsPer,
-       rate:materrialDetails.rate,
+       rate:materialDetails.rate,
        billTo: billTo,
        ledgerBalanceParty: ledgerBalanceParty,
        remarks: materialDetails.remarks,

@@ -6,7 +6,6 @@ import * as z from "zod";
 import FieldForm from "../../component/FieldForm";
 import UnitAdd from "../UnitAdd";
 
-
 import { Button } from "../../../components/ui/button";
 
 import {
@@ -26,45 +25,39 @@ import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   adminId: z.string(),
-  date: z.coerce.date(),
-  vehicleNo: z.string(),
-  vehicleType: z.string(),
+  date: z.coerce.date({ message: "Date is required" }),
+  vehicleNo: z.string({message:"vehicle no is required"}),
+  vehicleType: z.string({ message: "Vehicle Type is required" }).optional(),
   DriverDetails: z.object({
-    driverName: z.string(),
-    driverMobNo: z.coerce.number(),
+    driverName: z.string({ message: "Driver Name is required" }).optional(),
+    driverMobNo: z.coerce.number({ message: "Driver Mobile No is required" }).optional(),
   }),
-  orderNo: z.string(),
-  arrangedBy: z.string(),
-
+  orderNo: z.string({ message: "Order No is required" }),
+  arrangedBy: z.string({ message: "Arranged By is required" }),
   arrangedByName: z.string().optional(),
   arrangedByPhoneNo: z.coerce.number().optional(),
-
   materialDetails: z.object({
-    qty: z.coerce.number(),
-    qtyUnit: z.string(),
-    actualWgt: z.coerce.number(),
-    actualWgtUnit: z.string(),
-
-    rateAsPer: z.string(),
-    rate: z.string(),
-    chargedWgt: z.coerce.number(),
-    chargedWgtUnit: z.string(),
-
-    availableWgt:z.coerce.number(),
+    qty: z.coerce.number({ message: "Quantity is required" }),
+    qtyUnit: z.string({ message: "Quantity Unit is required" }),
+    actualWgt: z.coerce.number({ message: "Actual Weight is required" }),
+    actualWgtUnit: z.string({ message: "Actual Weight Unit is required" }),
+    rateAsPer: z.string({ message: "Rate As Per is required" }),
+    rate: z.string({ message: "Rate is required" }),
+    chargedWgt: z.coerce.number({ message: "Charged Weight is required" }),
+    chargedWgtUnit: z.string({ message: "Charged Weight Unit is required" }),
+    availableWgt: z.coerce.number(),
     driverBhara: z.coerce.number(),
     commission: z.coerce.number(),
     netBhara: z.coerce.number(),
-
     newLedgerBalance: z.coerce.number(),
-    remarks: z.string(),
+    remarks: z.string().optional(),
   }),
-
-  payableLiability: z.string(),
-  recievableLiability: z.string(),
-  billTo: z.string(),
+  payableLiability: z.string().nonempty({ message: "Payable Liability is required" }),
+  recievableLiability: z.string().nonempty({ message: "Receivable Liability is required" }),
+  billTo: z.string().nonempty({ message: "Bill To is required" }),
 });
 
-const AllocateVehicle = ({ params, ledgerBalance  }) => {
+const AllocateVehicle = ({ params, ledgerBalance }) => {
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const [receivableData, setReceivable] = useState([]);
@@ -72,21 +65,19 @@ const AllocateVehicle = ({ params, ledgerBalance  }) => {
   const [rateAsPerData, setRateAsPerData] = useState([]);
   const { user } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
-  const [allocate , setAllocate] = useState(false);
+  const [loading2, setLoading2] = useState(false);
+  const [allocate, setAllocate] = useState(false);
+  const [routeDispatch, setRouteDispatch] = useState(false);
   const route = useRouter();
   const [data, setData] = useState(null);
   const userId = user?._id;
   const orderId = params.OrderId;
 
   console.log(ledgerBalance);
-  
-
- 
 
   const initialFormState = {
     adminId: "",
-    
-    orderNo:params.OrderId,
+    orderNo: params.OrderId,
     date: new Date().toISOString()?.split("T")[0],
     vehicleNo: undefined,
     vehicleType: undefined,
@@ -94,25 +85,15 @@ const AllocateVehicle = ({ params, ledgerBalance  }) => {
       driverName: undefined,
       driverMobNo: undefined,
     },
-
     arrangedBy: undefined,
-
     arrangedByName: undefined,
     arrangedByPhoneNo: undefined,
-
-    // transporterDetails: z.object({
-    //   personName: z.string(),
-    //   transporterMobNo: z.coerce.number(),
-    // }),
-
     materialDetails: {
       qty: undefined,
       qtyUnit: undefined,
       actualWgt: undefined,
       actualWgtUnit: undefined,
-
-      availableWgt:undefined,
-
+      availableWgt: undefined,
       rateAsPer: undefined,
       rate: undefined,
       chargedWgt: undefined,
@@ -120,11 +101,9 @@ const AllocateVehicle = ({ params, ledgerBalance  }) => {
       driverBhara: 0,
       commission: 0,
       netBhara: 0,
-
       newLedgerBalance: ledgerBalance,
       remarks: undefined,
     },
-
     payableLiability: undefined,
     recievableLiability: undefined,
     billTo: undefined,
@@ -134,28 +113,25 @@ const AllocateVehicle = ({ params, ledgerBalance  }) => {
     resolver: zodResolver(formSchema),
     defaultValues: initialFormState,
   });
-  
+
   const bookingID = form.getValues("bookingID");
-  const DriverBhara = form.watch("materialDetails.driverBhara" , 0);
+  const DriverBhara = form.watch("materialDetails.driverBhara", 0);
   const vehicleNo = form.watch("vehicleNo");
   let availableWgt = form.getValues("materialDetails.availableWgt");
 
-  useEffect(()=>{
+  useEffect(() => {
     availableWgt = form.getValues("materialDetails.availableWgt");
-  }, [vehicleNo])
+  }, [vehicleNo]);
 
   function calNetBhara(driverBhara) {
     const commission = driverBhara * 0.05;
     form.setValue("materialDetails.commission", commission.toFixed(2));
-    
-    const netBhara =  driverBhara - commission;
+    const netBhara = driverBhara - commission;
     form.setValue("materialDetails.netBhara", netBhara.toFixed(2));
   }
 
   useEffect(() => {
     calNetBhara(DriverBhara);
-
-    
   }, [DriverBhara]);
 
   async function myhandleSubmit(value) {
@@ -166,11 +142,18 @@ const AllocateVehicle = ({ params, ledgerBalance  }) => {
       console.log("hi", error);
     }
 
+    
+
     value.adminId = user?._id;
 
     console.log("hey bro: ", value);
 
-    setIsLoading(true);
+    if(routeDispatch){
+      setLoading2(true);
+    } 
+    else 
+      setIsLoading(true);
+
     try {
       const response = await fetch("/api/vehicleAllocation", {
         method: "POST",
@@ -179,33 +162,46 @@ const AllocateVehicle = ({ params, ledgerBalance  }) => {
         },
         body: JSON.stringify(value),
       });
-      
 
       const newResult = await response.json();
 
       if (response.ok) {
-        setIsLoading(false);
-        displayToast("Successfully allocated vehicle", "✅");
-    
 
-        if(allocate){
-          console.log(allocate ,orderId  )
+
+       
+        displayToast("Successfully allocated vehicle", "✅");
+          if(routeDispatch){
+       setLoading2(false);
+      route.push(`/admin/booking/dispatedVehicle/${newResult?.message?._id}`);
+    } 
+    else 
+      setIsLoading(false);
+        
+
+        if (allocate) {
+          console.log(allocate, orderId);
           route.push(`/admin/booking/${orderId}/print/${orderId}`);
         }
         form.reset(initialFormState);
       } else {
         console.error("Error:", newResult.message);
         displayToast("Error", "❌", newResult.message);
-        setIsLoading(false);
+        if(routeDispatch){
+       setLoading2(false);
+    } 
+    else 
+      setIsLoading(false);
       }
     } catch (error) {
       console.error("Error:", error);
       displayToast("Error while sending data", "❌", newResult.message);
+     if(routeDispatch){
+       setLoading2(false);
+    } 
+    else 
       setIsLoading(false);
     }
   }
-
-    
 
   const displayToast = (title, action, description = undefined) => {
     toast({
@@ -215,100 +211,81 @@ const AllocateVehicle = ({ params, ledgerBalance  }) => {
     });
   };
 
-  // fetch all the neccesarry selections
-
-   useEffect(()=>{
-    if(user?._id){
+  useEffect(() => {
+    if (user?._id) {
       fetchReceivable();
       fetchPaymentLibility();
       fetchRateAsPer();
     }
-    },[userId]);
+  }, [userId]);
 
+  const fetchPaymentLibility = async () => {
+    try {
+      const response = await fetch(`/api/setting/paymentLiablity/get/${userId}`);
+      const result = await response.json();
 
-   const fetchPaymentLibility = async () => {
-      try {
-        // setDataLoading(true);
+      console.log("result payment Liablity: ", result);
+      setPaymentLibility(result.data);
+    } catch (error) {
+      console.error("Error fetching units:", error);
+    }
+  };
 
-        const response = await fetch(`/api/setting/paymentLiablity/get/${userId}`);
-        const result = await response.json();
+  const fetchReceivable = async () => {
+    try {
+      const response = await fetch(`/api/setting/receivable/get/${userId}`);
+      const result = await response.json();
 
-        console.log("result payment Liablity: ", result);
-        setPaymentLibility(result.data);
-        // setDataLoading(false);
-      } catch (error) {
-        // setDataLoading(false);
-        console.error("Error fetching units:", error);
-      }
-    };
+      console.log("result: ", result);
+      setReceivable(result.data);
+    } catch (error) {
+      console.error("Error fetching units:", error);
+    }
+  };
 
+  const fetchRateAsPer = async () => {
+    try {
+      const response = await fetch(`/api/setting/rateAsPer/get/${userId}`);
+      const result = await response.json();
 
-    const fetchReceivable = async () => {
-      try {
-        // setDataLoading(true);
+      console.log("result: ", result);
+      setRateAsPerData(result.data);
+    } catch (error) {
+      console.error("Error fetching units:", error);
+    }
+  };
 
-        const response = await fetch(`/api/setting/receivable/get/${userId}`);
-        const result = await response.json();
+  const fetchUnits = async () => {
+    try {
+      if (userId) {
+        const response = await fetch(`/api/getunits/${userId}`, {
+          method: "GET",
+        });
 
-        console.log("result: ", result);
-        setReceivable(result.data);
-        // setDataLoading(false);
-      } catch (error) {
-        // setDataLoading(false);
-        console.error("Error fetching units:", error);
-      }
-    };
-
-      const fetchRateAsPer = async () => {
-      try {
-        // setDataLoading(true);
-
-        const response = await fetch(`/api/setting/rateAsPer/get/${userId}`);
-        const result = await response.json();
-
-        console.log("result: ", result);
-        setRateAsPerData(result.data);
-        // setDataLoading(false);
-      } catch (error) {
-        // setDataLoading(false);
-        console.error("Error fetching units:", error);
-      }
-    };
-
-
-
-   const fetchUnits = async () => {
-      try {
-        if (userId) {
-          const response = await fetch(`/api/getunits/${userId}`, {
-            method: "GET",
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-
-          const data = await response.json();
-
-          setLoading(false);
-
-          setData(data.data);
-          console.log(data);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
-      } catch (error) {
+
+        const data = await response.json();
+
         setLoading(false);
-        console.error("Error:", error);
+
+        setData(data.data);
+        console.log(data);
       }
-    };
+    } catch (error) {
+      setLoading(false);
+      console.error("Error:", error);
+    }
+  };
 
   useEffect(() => {
     fetchUnits();
   }, [userId]);
 
   const handleUnitAdded = () => {
-    fetchUnits(); // Fetch units data after a new unit is added
+    fetchUnits();
   };
-
 
 
   return (
@@ -868,8 +845,10 @@ const AllocateVehicle = ({ params, ledgerBalance  }) => {
               }}>
               {isloading ? "Loading..." : "Assign Vehicle Only"}
             </Button>
-            <Button type="submit">
-              {isloading ? "Loading..." : " Continue & Dispatch"}
+            <Button type="submit" onClick={(e)=>{
+              setRouteDispatch(true);
+            }}>
+              {loading2 ? "Loading..." : " Continue & Dispatch"}
             </Button>
           </div>
         </form>
