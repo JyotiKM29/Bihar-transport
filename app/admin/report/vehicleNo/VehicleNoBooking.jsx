@@ -165,7 +165,7 @@ const VehicleNoBooking = () => {
 <div className="w-2/3 h-5/6" >
 {(data && Object.keys(data).length > 0)? <InflationChart  data={dataBar} category={categoryBar}
   totalValue={data.TotalBooking}
-/> : <p className="font-light text-red-700 ">No Booking  Data Available for this period. Select Dates</p>}
+/> : <p className="font-light text-red-700 ">No Data Available for this vehicle. Enter another vehicle no</p>}
 </div>
 
 
