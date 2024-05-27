@@ -125,9 +125,9 @@ const SearchBooking = () => {
           <th className="border py-1 px-2 bg-blue-200">Confirm Booking</th>
           <th className="border py-1 px-2 bg-blue-200">Delivered Booking</th>
           <th className="border py-1 px-2 bg-blue-200">Cancelled Booking</th>
-          <th className="border py-1 px-2 bg-blue-200">Total Recievable Amount</th>
-          <th className="border py-1 px-2 bg-blue-200">Total Recieved Amount</th>
-          <th className="border py-1 px-2 bg-blue-200">Total Pending Amount</th>
+          <th className="border py-1 px-2 bg-blue-200">Total Recievable Amt</th>
+          <th className="border py-1 px-2 bg-blue-200">Total Recieved Amt</th>
+          <th className="border py-1 px-2 bg-blue-200">Total Pending Amt</th>
           </tr>
         </thead>
         <tbody>
