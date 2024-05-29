@@ -243,7 +243,7 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
                   )}
                 />
               </div>
-              <ProductList />
+              <ProductList  />
             </div>
 
             {/* <FieldForm

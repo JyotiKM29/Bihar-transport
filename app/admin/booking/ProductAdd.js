@@ -8,10 +8,7 @@ import {
   DialogTrigger,
 } from "../../components/ui/dialog"
 import { Input } from "../../components/ui/input"
-
-
-import React, { useContext, useState } from "react";
-
+import React, { useContext, useEffect, useState } from "react";
 import { Button } from "../../components/ui/button";
 import { UserContext } from "../../context/UserContextProvider";
 import { useToast } from "../../components/ui/use-toast";
@@ -30,7 +27,8 @@ import * as z from "zod";
 const formSchema = z.object({
   productName: z.string(),
   hsnNo: z.string(),
-  packageGroup: z.enum(["Personal", "General", "Other"]),
+  qtyUnit:z.string(),
+  // packageGroup: z.enum(["Personal", "General", "Other"]),
   packageType: z.enum([
     "Box",
     "Bag",
@@ -63,11 +61,13 @@ const formSchema = z.object({
     "LITRES",
   ]),
   tax: z.coerce.number(),
-  conversionFactor: z.string(),
+  conversionFactor: z.string().optional(),
 });
 
 
 const ProductAdd = () => {
+  const [unitsData, setUnitsData] = useState([]);
+
     const initialFormState = {
         productName: "",
         hsnNo: "",
@@ -92,6 +92,30 @@ const ProductAdd = () => {
           description,
         });
       };
+
+      const fetchUnits = async () => {
+        // Fetch units data from API
+        try {
+          const response = await fetch(`/api/getunits/${userId}`, {
+            method: "GET",
+          });
+    
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+    
+          const data = await response.json();
+          setUnitsData(data.data);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
+
+      useEffect(() => {
+        fetchUnits(); 
+       
+      }, []);
+    
     
       async function MyHandleSubmit(value) {
         console.log("hey");
@@ -114,6 +138,8 @@ const ProductAdd = () => {
     
           if (response.ok) {
             displayToast("Product Added Successfully", "✅");
+            reset(initialFormState);
+            
           } else {
             console.error("Error:", result.message);
             displayToast("Failed to add product", "❌", result.message);
@@ -124,6 +150,8 @@ const ProductAdd = () => {
         } finally {
           setLoading(false);
         }
+
+       
       }
 
       
@@ -184,23 +212,28 @@ const ProductAdd = () => {
               );
             }}
           />
+      
 
           <FormField
             control={form.control}
-            name="packageGroup"
+            name="qtyUnit"
             render={({ field }) => {
               return (
                 <FormItem className="flex items-center justify-center gap-4">
                   <FormLabel className="text-nowrap text-sm lg:text-base">
-                    Package Group :
+                    Quantity Unit :
                   </FormLabel>
                   <div className="flex flex-1 flex-col">
                     <FormControl>
                       <select {...field}>
-                        <option value="">Select Package Group</option>
-                        <option value="Personal">Personal</option>
-                        <option value="General">General </option>
-                        <option value="Other ">Other </option>
+                        <option value="">Select quantity Unit</option>
+                        {Array.isArray(unitsData) &&
+                              unitsData.map((unit) => (
+                                <option key={unit.name} value={unit.name}>
+                                  {unit.name}
+                                </option>
+                              ))}
+                       
                       </select>
                     </FormControl>
                     <FormMessage />
@@ -314,7 +347,7 @@ const ProductAdd = () => {
             }}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="conversionFactor"
             render={({ field }) => {
@@ -332,7 +365,7 @@ const ProductAdd = () => {
                 </FormItem>
               );
             }}
-          />
+          /> */}
            </div>
            <div className="flex justify-start ml-4 w-full">
 

@@ -4,7 +4,7 @@ const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     hsnNo: { type: String, required: true, unique:true }, 
-    packageGroup : { type: String},
+    qtyUnit : { type: String},
       packageType: { type: String },
     
       weightType: { type: String },
