@@ -33,17 +33,26 @@ export async function POST(req, res) {
         let i = 0;
 
         while (payment & i<n) {
+
+              console.log("payment : ", payment);
+                console.log("total billing amount after payment  : ", ledgerData[i].savedBooking.totalBillingAmount);
+
+
          
-            if (ledgerData[i].savedBooking.totalAmount >= payment) {
-                let data = ledgerData[i].savedBooking.totalAmount;
-                ledgerData[i].savedBooking.totalAmount =
-                    ledgerData[i].savedBooking.totalAmount - payment;
+            if (ledgerData[i].savedBooking.totalBillingAmount >= payment) {
+
+                //  console.log("payment : ", payment);
+                // console.log("payment : ", ledgerData[i].savedBooking.totalBillingAmount);
+
+                let data = ledgerData[i].savedBooking.totalBillingAmount;
+                ledgerData[i].savedBooking.totalBillingAmount =
+                    ledgerData[i].savedBooking.totalBillingAmount - payment;
                 payment -= data;
                 
                 const id = ledgerData[i].savedBooking._id;
                 const newbooking = await Booking.findOne({ _id: id });
                  console.log("Booking Data before : ", newbooking);
-                newbooking.totalAmount = ledgerData[i].savedBooking.totalAmount;
+                newbooking.totalBillingAmount = ledgerData[i].savedBooking.totalBillingAmount;
                 newbooking.paymentHistory.push({
                     date: new Date(),
                     amount: data,
@@ -55,7 +64,7 @@ export async function POST(req, res) {
                         date: new Date()
                     }
                 });
-                if (newbooking.totalAmount === 0) {
+                if (newbooking.totalBillingAmount === 0) {
                   newbooking.paymentStatus = "Paid";
                 }
 
@@ -65,14 +74,14 @@ export async function POST(req, res) {
 
             else {
                 
-                ledgerData[i].savedBooking.totalAmount -= payment;
+                ledgerData[i].savedBooking.totalBillingAmount -= payment;
                 payment = 0;
-                // payment -= ledgerData[i].savedBooking.totalAmount;
+                // payment -= ledgerData[i].savedBooking.totalBillingAmount;
                 const id = ledgerData[i].savedBooking._id;
                 const booking = await Booking.findOne({ _id: id });
                  console.log("Booking Data before : ", booking);
-                booking.totalAmount = ledgerData[i].savedBooking.totalAmount;
-                if (booking.totalAmount === 0) {
+                booking.totalBillingAmount = ledgerData[i].savedBooking.totalBillingAmount;
+                if (booking.totalBillingAmount === 0) {
                     booking.paymentStatus = "Paid";
                 }
                 booking.paymentHistory.push({
