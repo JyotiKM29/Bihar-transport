@@ -8,6 +8,8 @@ import bulkRecieve from "../../../models/accounting/bulkRecieve";
 export async function POST(req, res) {
 
     try {
+
+// remarks
         
         const { adminId, ledgerId, date, recieveAmount, paymentMode, remarks } = await req.json();
         await connectDB();
@@ -32,18 +34,30 @@ export async function POST(req, res) {
         let n = ledgerData.booking.length;
         let i = 0;
 
-        while (payment & i<n) {
-         
-            if (ledgerData[i].savedBooking.totalAmount >= payment) {
-                let data = ledgerData[i].savedBooking.totalAmount;
-                ledgerData[i].savedBooking.totalAmount =
-                    ledgerData[i].savedBooking.totalAmount - payment;
+        console.log(payment, recieveAmount, n);
+
+        while (payment && i<n) {
+
+              console.log("payment : ", payment);
+                console.log("total billing amount after payment  : ", ledgerData.booking[i].savedBooking.totalBillingAmount);
+
+
+                
+                if (ledgerData.booking[i].savedBooking.totalBillingAmount >= payment) {
+                    
+                    let data = ledgerData.booking[i].savedBooking.totalBillingAmount;
+                //  console.log("payment : ", payment);
+                // console.log("payment : ", ledgerData[i].savedBooking.totalBillingAmount);
+
+                ledgerData.booking[i].savedBooking.totalBillingAmount =
+                    ledgerData.booking[i].savedBooking.totalBillingAmount - payment;
                 payment -= data;
                 
-                const id = ledgerData[i].savedBooking._id;
+                const id = ledgerData.booking[i].savedBooking._id;
                 const newbooking = await Booking.findOne({ _id: id });
                  console.log("Booking Data before : ", newbooking);
-                newbooking.totalAmount = ledgerData[i].savedBooking.totalAmount;
+                 if(newbooking) {
+                newbooking.totalBillingAmount = ledgerData.booking[i].savedBooking.totalBillingAmount;
                 newbooking.paymentHistory.push({
                     date: new Date(),
                     amount: data,
@@ -55,24 +69,29 @@ export async function POST(req, res) {
                         date: new Date()
                     }
                 });
-                if (newbooking.totalAmount === 0) {
+                if (newbooking.totalBillingAmount === 0) {
                   newbooking.paymentStatus = "Paid";
                 }
+
+                newbooking.totalPaidAmount+=data;
 
                 const booking_data = await newbooking.save();
                 console.log("Booking Data after : ",booking_data);
             }
+            }
 
             else {
                 
-                ledgerData[i].savedBooking.totalAmount -= payment;
+                ledgerData.booking[i].savedBooking.totalBillingAmount -= payment;
                 payment = 0;
-                // payment -= ledgerData[i].savedBooking.totalAmount;
-                const id = ledgerData[i].savedBooking._id;
+                // payment -= ledgerData[i].savedBooking.totalBillingAmount;
+                const id = ledgerData.booking[i].savedBooking._id;
                 const booking = await Booking.findOne({ _id: id });
                  console.log("Booking Data before : ", booking);
-                booking.totalAmount = ledgerData[i].savedBooking.totalAmount;
-                if (booking.totalAmount === 0) {
+                                  if(booking) {
+
+                booking.totalBillingAmount = ledgerData.booking[i].savedBooking.totalBillingAmount;
+                if (booking.totalBillingAmount === 0) {
                     booking.paymentStatus = "Paid";
                 }
                 booking.paymentHistory.push({
@@ -90,6 +109,7 @@ export async function POST(req, res) {
                 const bookingdata = await booking.save();
                 console.log("Booking Data After : ", bookingdata);
             }
+        }
 
             i++;
         }
@@ -98,8 +118,8 @@ export async function POST(req, res) {
         const newRecieve = new bulkRecieve({
             ledgerId,
             date,
-            recieveFrom : ledgerData.basicInfo.accountName,
             recieveAmount,
+            recieveFrom : ledgerData.basicInfo.accountName,
             paymentMode,
             remarks,
             createdBy: {
