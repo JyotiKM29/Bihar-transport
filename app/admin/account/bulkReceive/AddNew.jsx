@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import FieldForm from "../../component/FieldForm";
 import { Button } from "../../../components/ui/button";
-import SearchLedger from './SearchLedger';
+import SearchLedger from "./SearchLedger";
 import {
   Select,
   SelectContent,
@@ -37,25 +37,40 @@ const formSchema = z.object({
 const AddNew = () => {
   const [booking, setBooking] = useState([]);
   const { toast } = useToast();
-  const [isloading, setIsLoading] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const { user } = useContext(UserContext);
+  const [bookingData, setBookingData] = useState([]);
 
   function extractMaterials(data) {
-    return data?.item?.map(item => item.material).join(', ');
+    return data?.item?.map((item) => item.material).join(", ");
   }
 
+  // const calculateTotalAmount = () => {
+  //   return bookingData.reduce(
+  //     (total, item) => total + item?.totalBillingAmount,
+  //     0,
+  //   );
+  // };
+
   const calculateTotalAmount = () => {
-    return booking.reduce((total, item) => total + item?.savedBooking?.totalBillingAmount, 0);
+    const total = bookingData.reduce(
+      (total, item) => total + item?.totalBillingAmount,
+      0,
+    );
+    return parseFloat(total.toFixed(2));
   };
 
   const totalAmount = calculateTotalAmount();
 
   useEffect(() => {
-    form.setValue('recieveAmount', Math.min(form.getValues('recieveAmount'), totalAmount));
+    form.setValue(
+      "recieveAmount",
+      Math.min(form.getValues("recieveAmount"), totalAmount),
+    );
   }, [totalAmount]);
 
   const initialFormState = {
-    adminId: '',
+    adminId: "",
     date: new Date().toISOString().split("T")[0],
     ledgerId: undefined,
     recieveAmount: undefined,
@@ -118,8 +133,8 @@ const AddNew = () => {
 
   const distributeReceivedAmount = (receivedAmount) => {
     let remainingAmount = receivedAmount;
-    const updatedBooking = booking.map(item => {
-      const totalBillingAmount = item.savedBooking.totalBillingAmount;
+    const updatedBookingData = bookingData.map((item) => {
+      const totalBillingAmount = item.totalBillingAmount;
       const receiveAmount = Math.min(remainingAmount, totalBillingAmount);
       remainingAmount -= receiveAmount;
       return {
@@ -128,18 +143,41 @@ const AddNew = () => {
         afterPayment: totalBillingAmount - receiveAmount,
       };
     });
-    setBooking(updatedBooking);
+    setBookingData(updatedBookingData);
   };
 
   const handleReceiveAmountChange = (e) => {
     const receiveAmount = parseFloat(e.target.value);
     if (receiveAmount > totalAmount) {
-      form.setValue('recieveAmount', totalAmount);
+      form.setValue("recieveAmount", totalAmount);
     } else {
-      form.setValue('recieveAmount', receiveAmount);
+      form.setValue("recieveAmount", receiveAmount);
     }
     distributeReceivedAmount(receiveAmount);
   };
+
+  // handle the original booking details
+  useEffect(() => {
+    const fetchBookingDetails = async () => {
+      try {
+        const data = await Promise.all(
+          booking.map(async (booking) => {
+            const response = await fetch(
+              `/api/bookingdetails/${booking.savedBooking._id}`,
+            );
+            const result = await response.json();
+            return result.booking ? result.booking : null;
+          }),
+        );
+        const validData = data.filter((item) => item !== null);
+        setBookingData(validData);
+      } catch (error) {
+        console.error("Error fetching booking details:", error);
+      }
+    };
+
+    fetchBookingDetails();
+  }, [booking]);
 
   return (
     <div>
@@ -158,7 +196,7 @@ const AddNew = () => {
                 setBooking={setBooking}
                 form={form}
                 field={field}
-                label='Received From'
+                label="Received From"
               />
             )}
           />
@@ -169,15 +207,14 @@ const AddNew = () => {
             type="date"
           />
 
-<div onChange={handleReceiveAmountChange}>
-          <FieldForm
-            form={form}
-            name="recieveAmount"
-            label={`Received Amount  (Rs) - Max: ${totalAmount}`}
-            type="number"
-            
-          />
-</div>
+          <div onChange={handleReceiveAmountChange}>
+            <FieldForm
+              form={form}
+              name="recieveAmount"
+              label={`Received Amount  (Rs) - Max: ${totalAmount}`}
+              type="number"
+            />
+          </div>
           <FormField
             control={form.control}
             name="paymentMode"
@@ -199,7 +236,9 @@ const AddNew = () => {
                     <SelectContent>
                       <SelectItem value="CASH">CASH</SelectItem>
                       <SelectItem value="BANK">BANK</SelectItem>
-                      <SelectItem value="SBI">STATE BANK OF INDIA (SBI)</SelectItem>
+                      <SelectItem value="SBI">
+                        STATE BANK OF INDIA (SBI)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -208,16 +247,11 @@ const AddNew = () => {
             }}
           />
 
-          <FieldForm
-            form={form}
-            name="remarks"
-            label="Remarks"
-            type="text"
-          />
+          <FieldForm form={form} name="remarks" label="Remarks" type="text" />
 
-          <div className="flex items-center justify-center my-8">
+          <div className="my-8 flex items-center justify-center">
             <Button type="submit" className="w-full lg:w-1/3">
-              {isloading ? "Loading..." : "Submit"}
+              {isLoading ? "Loading..." : "Submit"}
             </Button>
           </div>
         </form>
@@ -227,6 +261,9 @@ const AddNew = () => {
         <table className="mx-2 my-4 w-full border border-blue-600">
           <thead>
             <tr className="w-full border border-blue-600 bg-blue-200">
+              <th className="text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900 md:text-base">
+                S.No
+              </th>
               <th className="text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900 md:text-base">
                 Order No
               </th>
@@ -251,46 +288,49 @@ const AddNew = () => {
             </tr>
           </thead>
           <tbody>
-            {booking.length > 0 && booking?.map(
-              (items, i) => (
+            {bookingData.length > 0 &&
+              bookingData.map((items, i) => (
                 <tr key={i} className="w-full text-center">
                   <td className="border border-blue-900 p-2 text-blue-700">
-                    {items?.savedBooking?.orderNumber}
+                    {i + 1}
                   </td>
                   <td className="border border-blue-900 p-2 text-blue-700">
-                    {extractMaterials(items?.savedBooking?.itemsList)}
+                    {items?.orderNumber}
                   </td>
                   <td className="border border-blue-900 p-2 text-blue-700">
-                    {items?.savedBooking?.partyBhara}
+                    {extractMaterials(items?.itemsList)}
                   </td>
                   <td className="border border-blue-900 p-2 text-blue-700">
-                    {items?.savedBooking?.totalAdditionalCharges}
+                    {items?.partyBhara}
                   </td>
                   <td className="border border-blue-900 p-2 text-blue-700">
-                    {items?.savedBooking?.totalBillingAmount}
+                    {items?.totalAdditionalCharges}
+                  </td>
+                  <td className="border border-blue-900 p-2 text-blue-700">
+                    {items?.totalBillingAmount}
                   </td>
                   <td className="border border-blue-900 p-2 text-blue-700">
                     {items.receivedAmount || 0}
                   </td>
                   <td className="border border-blue-900 p-2 text-blue-700">
-                    {items.afterPayment !== undefined ? items.afterPayment : items.totalBillingAmount}
+                    {items.afterPayment !== undefined
+                      ? items.afterPayment
+                      : items.totalBillingAmount}
                   </td>
                 </tr>
-              ),
-            )}
+              ))}
             <tr className="w-full border-t border-blue-600">
-              <td className="border border-blue-900 p-2 text-blue-700" colSpan="4">
+              <td
+                className="border border-blue-900 p-2 text-blue-700"
+                colSpan="4"
+              >
                 Total Amount
               </td>
               <td className="border border-blue-900 p-2 text-blue-700">
                 {totalAmount}
               </td>
-              <td className="border border-blue-900 p-2 text-blue-700">
-                -
-              </td>
-              <td className="border border-blue-900 p-2 text-blue-700">
-                -
-              </td>
+              <td className="border border-blue-900 p-2 text-blue-700">-</td>
+              <td className="border border-blue-900 p-2 text-blue-700">-</td>
             </tr>
           </tbody>
         </table>
