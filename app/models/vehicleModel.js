@@ -131,6 +131,7 @@ const allotmentSchema = new mongoose.Schema(
     driverBhara: { type: Number },
     commission: { type: Number },
     netBhara: { type: Number }, // Calculated as (Driver Bhara - Commission)
+    balanceAmount:{type:Number},
 
     paymentLiability: {
       type: String,

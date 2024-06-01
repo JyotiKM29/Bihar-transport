@@ -8,6 +8,7 @@ export async function POST(req, res) {
     
     try {
 
+
         const { adminId, date, vehicleNo, recieveFrom, recieveAmount, paymentMode, remarks } = await req.json();
         await connectDB();
 
@@ -18,7 +19,7 @@ export async function POST(req, res) {
           ],
         });
       
-       console.log(admin);
+      //  console.log(admin);
         if (!admin) {
             return Response.json({ message: "Admin not found." }, { status: 404 });
         }
@@ -31,37 +32,41 @@ export async function POST(req, res) {
 
        
         let payment = recieveAmount;
-        let numOfBookings = vehicle.booking ? vehicle.booking.length : 0;
+        let numOfBookings = vehicle.bookedBy ? vehicle.bookedBy.length : 0;
+        console.log("no of booking", numOfBookings);
         let i = 0;
+
+        console.log("booking which are allocated to this vehicle: ", vehicle.bookedBy);
      
         while (payment > 0 && i < numOfBookings) {
-             if (!vehicle.remainingAmount) {
-               vehicle.remainingAmount = vehicle.booking[i].netBhara;
-             }
-          if (payment >= vehicle.booking[i].remainingAmount) {
-            payment -= vehicle.booking[i].remainingAmount;
-            vehicle.booking[i].netBhara = 0;
-            vehicle.booking[i].isPaid = true;
 
-            await Booking.findOneAndUpdate(
-              { _id: vehicle.booking[i].bookingId },
-              { $set: { netBhara: 0, paymentTerm: "Paid" } },
-              { new: true },
-            );
+          
+          if (!vehicle.remainingAmount) {
+            vehicle.remainingAmount = vehicle.bookedBy[i].netBhara;
+          }
+          
+          if(!vehicle.bookedBy[i].balanceAmount){
+            vehicle.bookedBy[i].balanceAmount = vehicle.bookedBy[i].netBhara;
+          }
+          // balanceAmount
+          console.log("blance amount before : ", vehicle.bookedBy[i].balanceAmount);
+
+
+          if (payment >= vehicle.bookedBy[i].balanceAmount) {
+            payment -= vehicle.bookedBy[i].balanceAmount;
+            vehicle.bookedBy[i].balanceAmount = 0;
+            vehicle.bookedBy[i].isPaid = true;
+
+           
           } else {
-            vehicle.booking[i].netBhara -= payment;
-            await Booking.findOneAndUpdate(
-              { _id: vehicle.booking[i].bookingId },
-              {
-                $set: {
-                  netBhara: vehicle.booking[i].netBhara,
-                  paymentTerm: "Partially Paid",
-                },
-              },
-              { new: true },
-            );
+            vehicle.bookedBy[i].balanceAmount -= payment;
             payment = 0;
           }
+
+                    console.log("blance amount after : ", vehicle.bookedBy[i].balanceAmount);
+
+
+
           i++;
         }
 
@@ -95,7 +100,10 @@ export async function POST(req, res) {
           },
         });
 
-     console.log(slip);
+     console.log("slip", slip);
+
+    console.log("booking which are allocated to this vehicle: ", vehicle.bookedBy);
+
 
      const data = await slip.save();
       console.log("worked", data);

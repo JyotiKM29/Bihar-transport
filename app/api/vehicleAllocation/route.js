@@ -123,6 +123,7 @@ export async function POST(req, res) {
        arrangedBy: arrangedBy,
        netBhara: materialDetails.netBhara,
        commission: materialDetails.commission,
+       balanceAmount:materialDetails.netBhara,
        driverBhara: materialDetails.driverBhara,
        quantity: materialDetails.quantity,
        quantityUnit: materialDetails.qtyUnit,

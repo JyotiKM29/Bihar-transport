@@ -104,7 +104,7 @@ This algorithm need,
                 // make the payment to booking
                 bookingData.paymentHistory.push({
                     date: new Date(),
-                    paymentAmount: bookingData.totalBillingAmount,
+                    paymentAmount: bookingData.balanceAmount,
                     paymentMode,
                     remarks,
                     createdBy: {

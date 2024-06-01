@@ -12,7 +12,7 @@ export async function POST(req, res) {
             return Response.json({ message: "User not authorized" }, { status: 400 });
         }
 
-        const newVehicle = await vehicle.findOne({ _id: _id });
+      const newVehicle = await vehicle.findOne({ _id: _id });
 
         if (!newVehicle) {
           return Response.json(
