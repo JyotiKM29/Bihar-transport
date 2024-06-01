@@ -40,7 +40,8 @@ const eWayBillDetailsSchema = z.object({
 });
 
 const consignorInvoiceDetailsSchema = z.object({
-  isPODCompulsory: z.string(),
+  isPODCompulsory: z.enum(["Yes", "No"]).transform((val) => val === "Yes"),
+  podType: z.enum(["softCopy", "hardCopy"]),
   consignorInvoiceDate: z.coerce.date(),
   consignorDeliveryNo: z.string(),
   consignorInvoiceNo: z.string(),
@@ -143,6 +144,7 @@ const DispatchVehicle = ({ params }) => {
         totalFreight: undefined,
         consignorInvoiceDetails: {
           isPODCompulsory: undefined,
+          podType:undefined,
           consignorInvoiceDate: new Date().toISOString().split("T")[0],
           consignorDeliveryNo: undefined,
           consignorInvoiceNo: undefined,
@@ -296,17 +298,54 @@ const DispatchVehicle = ({ params }) => {
                   >
                     Consignor Invoice Details
                   </h2>
+<div className="flex items-center space-x-4">
+  <FormField
+    control={form.control}
+    name="dispatch.dispatchDetails.consignorInvoiceDetails.isPODCompulsory"
+    render={({ field }) => (
+      <FormItem className="flex items-center space-x-4">
+        <FormLabel className="whitespace-nowrap">POD Compulsory (Yes/No)</FormLabel>
+        <Select onValueChange={field.onChange} defaultValue={field.value ? "Yes" : "No"}>
+          <FormControl>
+            <SelectTrigger>
+              <SelectValue placeholder="Select" />
+            </SelectTrigger>
+          </FormControl>
+          <SelectContent>
+            <SelectItem value="Yes">Yes</SelectItem>
+            <SelectItem value="No">No</SelectItem>
+          </SelectContent>
+        </Select>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
 
-                  <FieldForm
-  form={form}
-  name="dispatch.dispatchDetails.consignorInvoiceDetails.isPODCompulsory"
-  label="POD Compulsory (Yes/No)"
-  type="select"
-  options={[
-    { value: 'yes', label: 'Yes' },
-    { value: 'no', label: 'No' }
-  ]}
-/>
+  <FormField
+    control={form.control}
+    name="dispatch.dispatchDetails.consignorInvoiceDetails.podType"
+    render={({ field }) => (
+      <FormItem className="flex items-center space-x-4">
+        {/* <FormLabel className="whitespace-nowrap">POD Type</FormLabel> */}
+        <Select onValueChange={field.onChange} defaultValue={field.value ? "hardCopy" : "softCopy"}>
+          <FormControl>
+            <SelectTrigger>
+              <SelectValue placeholder="Select" />
+            </SelectTrigger>
+          </FormControl>
+          <SelectContent>
+            <SelectItem value="hardCopy">Hard Copy</SelectItem>
+            <SelectItem value="softCopy">Soft Copy</SelectItem>
+          </SelectContent>
+        </Select>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+</div>
+
+
+
 
 
                   <FieldForm
