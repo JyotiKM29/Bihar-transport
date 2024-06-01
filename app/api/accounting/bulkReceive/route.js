@@ -20,6 +20,8 @@ export async function POST(req, res) {
                 }]
         });
 
+        // console.log("admin mil gya...");
+
         if (!admin) {
             return Response.json({ message: "Admin does not exist" }, { status: 404 });
         }
@@ -29,90 +31,160 @@ export async function POST(req, res) {
             return Response.json({ message: "Ledger does not exist" }, { status: 404 });
         }
 
-        console.log("Ledger : ",ledgerData.booking);
+        // console.log("ledger mil gya");
+        // console.log("ledger booking size: ", ledgerData.booking?.length);
+
+
+        // console.log("Ledger : ",ledgerData.booking);
         let payment = recieveAmount;
         let n = ledgerData.booking.length;
         let i = 0;
 
-        console.log(payment, recieveAmount, n);
+        // console.log(payment, recieveAmount, n);
 
-        while (payment && i<n) {
+        // console.log("payment mil gyi ji ...");
 
-              console.log("payment : ", payment);
-                console.log("total billing amount after payment  : ", ledgerData.booking[i].savedBooking.totalBillingAmount);
+        
+        
 
+        /*
+This algorithm need,
+ 1. Payment should be distributed in greedy method
+ 2. Payment should be distributed if the booking still exists if not then not do that,
+ 3. if booking is canceled or deleted then delete it from the ledger too and also reduce the ledger balance with totalBillingAmount of that booking
+ 4. If payment is greater than the totalBillingAmount then give them maximum and remaining should be distributed in the next booking
+ 5. after the payment is done then update the ledger with the remaining balance & with the updated value of booking
+        */
+        
+        if (payment <= 0) {
+            return Response, json({ message: "Payment should be greater than 0" }, { status: 400 });
+        }
+        
+        while (payment > 0 && i < n) {
+
+            // console.log("loop ke andar ", i, " li bar");
+
+            // console.log("id:", ledgerData.booking[i]?.savedBooking?._id);
+            const _id = ledgerData.booking[i]?.savedBooking?._id;
+
+
+            // find the booking which is saved inside ledger with booking database
+            const bookingData = await Booking.findOne({
+              _id,
+            });
+
+            
+            if ( !bookingData ) {
+                // console.log("booking data nahi mila ", ledgerData.booking[i]?.savedBooking?._id , " isliye remove kar diya" );
+                ledgerData.booking.splice(i, 1);
+                i++;
+                continue;
+                
+            }
+            // console.log("booking data mil gya ", bookingData);
+
+            if(bookingData.balanceAmount <= 0 ) {
+
+                // console.log("skip karte hai inka amount 0 hai", bookingData._id, "paidAmount : ", bookingData.totalPaidAmount, "balance amount : ", bookingData.balanceAmount, "total: ", bookingData.totalBillingAmount);
+                i++;
+                continue;
+            }
+            
+            // if the payment is greater than the totalBillingAmount then give them maximum and remaining should be distributed in the next booking
+
+
+            if (payment >= bookingData.balanceAmount) {
+                // console.log(i, "th time but payment bada hai ", bookingData._id, " booking ki kimat ", bookingData.totalBillingAmount);
+                // console.log("before");
+                // console.log("balance amount: ", bookingData.balanceAmount);
+                // console.log("total paid amount: ", bookingData.totalPaidAmount);
 
                 
-                if (ledgerData.booking[i].savedBooking.totalBillingAmount >= payment) {
-                    
-                    let data = ledgerData.booking[i].savedBooking.totalBillingAmount;
-                //  console.log("payment : ", payment);
-                // console.log("payment : ", ledgerData[i].savedBooking.totalBillingAmount);
-
-                ledgerData.booking[i].savedBooking.totalBillingAmount =
-                    ledgerData.booking[i].savedBooking.totalBillingAmount - payment;
-                payment -= data;
                 
-                const id = ledgerData.booking[i].savedBooking._id;
-                const newbooking = await Booking.findOne({ _id: id });
-                 console.log("Booking Data before : ", newbooking);
-                 if(newbooking) {
-                newbooking.totalBillingAmount = ledgerData.booking[i].savedBooking.totalBillingAmount;
-                newbooking.paymentHistory.push({
+                // make the payment to booking
+                bookingData.paymentHistory.push({
                     date: new Date(),
-                    amount: data,
-                    paymentMode: paymentMode,
-                    remarks: remarks,
+                    paymentAmount: bookingData.totalBillingAmount,
+                    paymentMode,
+                    remarks,
                     createdBy: {
                         adminId: adminId,
                         name: admin.name,
                         date: new Date()
                     }
                 });
-                if (newbooking.totalBillingAmount === 0) {
-                  newbooking.paymentStatus = "Paid";
-                }
 
-                newbooking.totalPaidAmount+=data;
+                bookingData.totalPaidAmount += bookingData.totalBillingAmount;
+                bookingData.balanceAmount = 0;
+            
+                
+                // update the payment
+                payment = payment - bookingData.totalBillingAmount;
+                const newBooking = await bookingData.save();
+                ledgerData.booking[i].savedBooking = newBooking;
+                i++;
 
-                const booking_data = await newbooking.save();
-                console.log("Booking Data after : ",booking_data);
+
+                //  console.log("after");
+                //  console.log("balance amount: ", newBooking.balanceAmount);
+                //  console.log(
+                //    "total paid amount: ",
+                //    bookingData.totalPaidAmount,
+                //  );
             }
-            }
+            // if payment is lesser than the totalBilling amount of the booking
 
             else {
-                
-                ledgerData.booking[i].savedBooking.totalBillingAmount -= payment;
-                payment = 0;
-                // payment -= ledgerData[i].savedBooking.totalBillingAmount;
-                const id = ledgerData.booking[i].savedBooking._id;
-                const booking = await Booking.findOne({ _id: id });
-                 console.log("Booking Data before : ", booking);
-                                  if(booking) {
 
-                booking.totalBillingAmount = ledgerData.booking[i].savedBooking.totalBillingAmount;
-                if (booking.totalBillingAmount === 0) {
-                    booking.paymentStatus = "Paid";
-                }
-                booking.paymentHistory.push({
+
+                //    console.log(
+                //      i,
+                //      "th time but payment chhota hai ",
+                //      bookingData._id,
+                //      " booking ki kimat ",
+                //      bookingData.totalBillingAmount,
+                //    );
+                //    console.log("before");
+                //    console.log("balance amount: ", bookingData.balanceAmount);
+                //    console.log(
+                //      "total paid amount: ",
+                //      bookingData.totalPaidAmount,
+                //    );
+
+                // make the payment to booking
+                bookingData.paymentHistory.push({
                     date: new Date(),
-                    amount: data,
-                    paymentMode: paymentMode,
-                    remarks: remarks,
+                    paymentAmount: payment,
+                    paymentMode,
+                    remarks,
                     createdBy: {
                         adminId: adminId,
                         name: admin.name,
                         date: new Date()
                     }
                 });
-                
-                const bookingdata = await booking.save();
-                console.log("Booking Data After : ", bookingdata);
+
+                bookingData.totalPaidAmount += payment;
+                bookingData.balanceAmount = bookingData.totalBillingAmount - bookingData.totalPaidAmount;
+                payment = 0;
+                const newBooking = await bookingData.save();
+                ledgerData.booking[i].savedBooking = newBooking;
+                i++;
+
+                //   console.log("after");
+                //   console.log("balance amount: ", newBooking.balanceAmount);
+                //   console.log(
+                //     "total paid amount: ",
+                //     bookingData.totalPaidAmount,
+                //   );
+
             }
         }
 
-            i++;
-        }
+        await ledgerData.save();
+
+        
+        
 
 
         const newRecieve = new bulkRecieve({

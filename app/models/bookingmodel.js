@@ -244,7 +244,7 @@ const bookingSchema = new mongoose.Schema(
       // enum: ["Advance", "Paid", "To Pay", "To be Billed"],
     },
     advanceAmount: { type: Number, default: 0 },
-    balanceAmount: { type: Number },
+    balanceAmount: { type: Number, },
     GSTPercentage: { type: Number },
     GSTType: { type: String, enum: ["RCM", "FCM"] },
     payMode: { type: String },

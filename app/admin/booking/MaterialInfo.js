@@ -26,6 +26,28 @@ const MaterialInfo = ({ form, nameValue, onAddItem, setMaterialItems }) => {
   useEffect(() => {
     fetchUnits(); // Initial fetch when component mounts
     fetchRateAsPer();
+
+   
+    const disableScrollOnNumberInput = (e) => {
+      if (e.target.type === "number") {
+        e.preventDefault();
+      }
+    };
+
+    const handleWheelEvent = (e) => {
+      if (document.activeElement.type === "number") {
+        document.activeElement.blur();
+      }
+    };
+
+    window.addEventListener("wheel", disableScrollOnNumberInput, { passive: false });
+    window.addEventListener("wheel", handleWheelEvent);
+
+    return () => {
+      window.removeEventListener("wheel", disableScrollOnNumberInput);
+      window.removeEventListener("wheel", handleWheelEvent);
+    };
+
   }, []);
 
   const fetchUnits = async () => {
