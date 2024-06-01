@@ -15,9 +15,9 @@ import {
 } from "../../components/ui/form";
 import { Input } from "../../components/ui/input";
 import { UserContext } from "../../context/UserContextProvider";
+import { parse } from "path";
 
-
-const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
+const MaterialInfo = ({ form, nameValue, onAddItem, setMaterialItems }) => {
   const [items, setItems] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [unitsData, setUnitsData] = useState([]);
@@ -46,31 +46,24 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
     }
   };
 
+  const fetchRateAsPer = async () => {
+    // Fetch units data from API
+    try {
+      const response = await fetch(`/api/setting/rateAsPer/get/${userId}`, {
+        method: "GET",
+      });
 
-   const fetchRateAsPer = async () => {
-     // Fetch units data from API
-     try {
-       const response = await fetch(`/api/setting/rateAsPer/get/${userId}`, {
-         method: "GET",
-       });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
-       if (!response.ok) {
-         throw new Error(`HTTP error! Status: ${response.status}`);
-       }
-
-       const data = await response.json();
-       console.log("rate as per data:", data.data);
-       setRateAsPerData(data.data);
-     } catch (error) {
-       console.error("Error:", error);
-     }
-   };
-
-
-
-
-
-
+      const data = await response.json();
+      console.log("rate as per data:", data.data);
+      setRateAsPerData(data.data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   const handleUnitAdded = () => {
     fetchUnits(); // Fetch units data after a new unit is added
@@ -78,16 +71,24 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
 
   const { user } = useContext(UserContext);
 
- 
   const userId = user?._id;
+
+  
 
   function calPartyBhara() {
     const totalAmount = items.reduce(
-      (acc, item) =>parseFloat(acc) + parseFloat(item.amount),
+      (acc, item) => parseFloat(acc) + parseFloat(item.amount),
       0,
     );
 
-  
+    const percentageAmount = parseFloat(GSTPercentage) * parseFloat(basicAmount);
+
+    const totalMaterialAmount = parseFloat(basicAmount) + percentageAmount;
+    // console.log("totalMaterialAmount", totalMaterialAmount);
+
+    form.setValue(`${nameValue}[${items.length}].amount`,totalMaterialAmount );
+   
+
     // form.setValue("partyBhara", totalAmount);
     // console.log("paty bhara from material info :" ,form.getValues("partyBhara"));
 
@@ -112,7 +113,7 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
     } else {
       amount = parseFloat(rate) * parseFloat(quantity);
     }
-    amount = isNaN(amount)? 0 : amount;
+    amount = isNaN(amount) ? 0 : amount;
     form.setValue(`${nameValue}[${items.length}].basicAmount`, amount);
     const total = parseFloat(amount) * Number(GSTPercentage);
     return parseFloat(amount + total);
@@ -122,15 +123,22 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
   const quantity = form.watch(`${nameValue}[${items.length}].quantity`);
   const rate = form.watch(`${nameValue}[${items.length}].rate`);
   const qtyUnit = form.watch(`${nameValue}[${items.length}].quantityUnit`, "");
+  const basicAmount = form.watch(`${nameValue}[${items.length}].basicAmount`, "");
+ 
+
 
   const GSTPercentage = form.watch(
     `${nameValue}[${items.length}].GSTPercentage`,
-  '');
+    "",
+  );
   const GSTType = form.watch(`${nameValue}[${items.length}].GSTType`);
 
   useEffect(() => {
     if (GSTType === "RCM") {
-      form.setValue(`${nameValue}[${items.length}].GSTPercentage`, GSTPercentage);
+      form.setValue(
+        `${nameValue}[${items.length}].GSTPercentage`,
+        GSTPercentage,
+      );
       // form.setValue(`${nameValue}[${items.length}].GSTType`, "RCM")
     }
   }, [GSTType]);
@@ -142,11 +150,18 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
       form.setValue(`${nameValue}[${items.length}].amount`, result);
     }
     calPartyBhara();
-  }, [rate, quantity, items.length,nameValue,  GSTPercentage,  rateMultiple,  GSTType ]);
+  }, [
+    rate,
+    quantity,
+    items.length,
+    nameValue,
+    GSTPercentage,
+    rateMultiple,
+    GSTType,
+    basicAmount,
+  ]);
 
   function handleAdditionalItem() {
-    
-
     const newItem = {
       material: form.getValues(`${nameValue}[${items.length}].material`),
       hsnNo: form.getValues(`${nameValue}[${items.length}].hsnNo`),
@@ -182,15 +197,14 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
 
     // onAddItem(newItem);
     const data = form.getValues(nameValue);
-    console.log("item list after update:" , data)
-    
+    console.log("item list after update:", data);
 
     const updatedItem = form.getValues("itemsList") && [];
 
     setItems([...updatedItem, newItem]);
     form.setValue(nameValue, [...items, newItem]);
     setMaterialItems([...updatedItem, newItem]);
-   
+
     setShowForm(false);
   }
 
@@ -289,7 +303,6 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
                             {...field}
                             className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
                           >
-                          
                             <option key={qtyUnit}>
                               {qtyUnit ? qtyUnit : "Select Quantity Unit"}{" "}
                             </option>
@@ -450,43 +463,41 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
                 }}
               /> */}
 
-             <FormField
-  control={form.control}
-  name={`${nameValue}[${items.length}].rateAsPer`}
-  render={({ field }) => {
-    return (
-      <FormItem className="flex flex-1 items-center justify-center gap-4">
-
-<FormLabel className="text-nowrap text-sm lg:text-base">
+              <FormField
+                control={form.control}
+                name={`${nameValue}[${items.length}].rateAsPer`}
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex flex-1 items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
                         Rate as Per :
                       </FormLabel>
 
-        <div className="flex flex-1 flex-col">
-          <FormControl>
-            <select
-              {...field}
-              className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
-            >
-              <option value="">
-                {rateAsPerData && rateAsPerData.length > 0
-                  ? "Select Rate As Per"
-                  : "Loading..."}
-              </option>
-              {Array.isArray(rateAsPerData) &&
-                rateAsPerData.map((rate) => (
-                  <option key={rate.value} value={rate.value}>
-                    {rate.name}
-                  </option>
-                ))}
-            </select>
-          </FormControl>
-          <FormMessage />
-        </div>
-      </FormItem>
-    );
-  }}
-/>
-
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <select
+                            {...field}
+                            className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
+                          >
+                            <option value="">
+                              {rateAsPerData && rateAsPerData.length > 0
+                                ? "Select Rate As Per"
+                                : "Loading..."}
+                            </option>
+                            {Array.isArray(rateAsPerData) &&
+                              rateAsPerData.map((rate) => (
+                                <option key={rate.value} value={rate.value}>
+                                  {rate.name}
+                                </option>
+                              ))}
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
             </div>
 
             {form.watch(`${nameValue}[${items.length}].rateAsPer`, "fixed") !==
@@ -713,10 +724,22 @@ const MaterialInfo = ({ form, nameValue , onAddItem , setMaterialItems }) => {
               />
             )}
 
+            {form.watch(`${nameValue}[${items.length}].rateAsPer`, "fixed") ===
+              "fixed" && 
             <FieldForm
               form={form}
+              name={`${nameValue}[${items.length}].basicAmount`}
+              label=" Amount"
+              type="number"
+            />
+            }
+
+           
+
+<FieldForm
+              form={form}
               name={`${nameValue}[${items.length}].amount`}
-              label="Amount"
+              label="Total Amount"
               type="number"
             />
 
