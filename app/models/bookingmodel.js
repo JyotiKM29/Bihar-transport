@@ -73,7 +73,8 @@ const dispatchDetailsSchema = new mongoose.Schema({
   dispatchTime: { type: String },
   totalFreight: { type: Number },
   consignorInvoiceDetails: {
-    isPODCompulsory: { type: String },
+    isPODCompulsory: { type: Boolean },
+    podType:{type: String},
     consignorInvoiceDate: { type: Date },
     consignorDeliveryNo: { type: String },
     consignorInvoiceNo: { type: String },

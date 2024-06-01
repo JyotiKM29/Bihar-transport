@@ -19,7 +19,7 @@ const SearchLedger = ({ form, field, label ,setBooking, booking }) => {
   let bookingData =[];
   const [newBooking , setNewBooking] = useState([]);
 
-  for (let i = 0; i < booking.length; i++) {
+  for (let i = 0; i < booking?.length; i++) {
     console.log("booking new", booking);
     const id = booking[i].savedBooking?._id;
 
