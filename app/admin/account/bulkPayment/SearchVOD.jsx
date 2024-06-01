@@ -10,7 +10,7 @@ import { Input } from "../../../components/ui/input";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
 
-const SearchVOD = ({ form, field, label  }) => {
+const SearchVOD = ({ form, field, label, fetchBookingDetails }) => {
   const { user } = useContext(UserContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
@@ -30,13 +30,17 @@ const SearchVOD = ({ form, field, label  }) => {
         const results = result.data.filter((item) => {
           const searchTermLowerCase = value.toLowerCase();
           return (
-              // Check if the vehicleNo, owner name, or driver name includes the search term
-              (item.vehicleNo && item.vehicleNo.toLowerCase().includes(searchTermLowerCase)) ||
-              (item.owner && item.owner.name && item.owner.name.toLowerCase().includes(searchTermLowerCase)) ||
-              (item.driver && item.driver.name && item.driver.name.toLowerCase().includes(searchTermLowerCase))
+            (item.vehicleNo &&
+              item.vehicleNo.toLowerCase().includes(searchTermLowerCase)) ||
+            (item.owner &&
+              item.owner.name &&
+              item.owner.name.toLowerCase().includes(searchTermLowerCase)) ||
+            (item.driver &&
+              item.driver.name &&
+              item.driver.name.toLowerCase().includes(searchTermLowerCase))
           );
-      });
-      console.log("Filter data:", results);
+        });
+        console.log("Filter data:", results);
 
         setSearchResult(results.slice(0, 5));
       } else {
@@ -66,6 +70,11 @@ const SearchVOD = ({ form, field, label  }) => {
     });
   };
 
+  const handleVehicleSelection = (vehicleNo) => {
+    field.onChange(vehicleNo);
+    fetchBookingDetails(vehicleNo);
+  };
+
   return (
     <FormItem className="flex flex-1 items-center justify-center gap-4">
       <FormLabel className="text-nowrap text-sm lg:text-base">
@@ -75,7 +84,6 @@ const SearchVOD = ({ form, field, label  }) => {
         <FormControl>
           <Input
             placeholder="Type to search..."
-            // value={field.value || searchTerm}
             value={inputValue}
             onChange={(e) => handleChange(e.target.value)}
           />
@@ -89,12 +97,11 @@ const SearchVOD = ({ form, field, label  }) => {
               className="w-full cursor-pointer px-3 py-2 hover:bg-slate-200"
               onClick={() => {
                 field.onChange(searchTerm);
-
+                handleVehicleSelection(searchTerm);
                 setSearchTerm("");
-                // setEdit(true);
               }}
             >
-              {searchTerm}  ( not found)
+              {searchTerm} (not found)
             </div>
           )}
           {searchResult &&
@@ -105,24 +112,20 @@ const SearchVOD = ({ form, field, label  }) => {
                 key={id}
                 className="w-full cursor-pointer px-3 py-2 hover:bg-slate-200"
                 onClick={() => {
-
-                    if(result?.vehicleNo){
-                        setInputValue(result?.owner?.name)
-                  form.setValue('recieveFrom', result?.owner?.name);
-                  form.setValue('vehicleNo', result?.vehicleNo);
-                  
-                  setSearchResult([]);
-                  setSearchTerm("");
-                    }else{
-
-                        displayToast("Can't set ledger ", "❌" ,'ledger not found')
-                    }
-                   
+                  if (result?.vehicleNo) {
+                    setInputValue(result?.owner?.name);
+                    form.setValue("recieveFrom", result?.owner?.name);
+                    form.setValue("vehicleNo", result?.vehicleNo);
+                    handleVehicleSelection(result?.vehicleNo);
+                    setSearchResult([]);
+                    setSearchTerm("");
+                  } else {
+                    displayToast("Can't set ledger", "❌", "ledger not found");
+                  }
                 }}
               >
-            
-                {result?.owner?.name}(owner),&nbsp;&nbsp;&nbsp;  
-                {result?.driver?.name}(driver),&nbsp;&nbsp;&nbsp; 
+                {result?.owner?.name}(owner),&nbsp;&nbsp;&nbsp;
+                {result?.driver?.name}(driver),&nbsp;&nbsp;&nbsp;
                 {result?.vehicleNo}(vehicle No)
               </div>
             ))}
