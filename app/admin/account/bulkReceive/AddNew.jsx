@@ -45,29 +45,49 @@ const AddNew = () => {
     return data?.item?.map((item) => item.material).join(", ");
   }
 
-  // const calculateTotalAmount = () => {
-  //   return bookingData.reduce(
-  //     (total, item) => total + item?.totalBillingAmount,
-  //     0,
-  //   );
-  // };
-
   const calculateTotalAmount = () => {
     const total = bookingData.reduce(
       (total, item) => total + item?.totalBillingAmount,
-      0,
+      0
+    );
+    return parseFloat(total.toFixed(2));
+  };
+  
+  const total = calculateTotalAmount();
+
+  const calculatePendingAmount = () => {
+    const total = bookingData.reduce(
+      (total, item) => total + item?.balanceAmount,
+      0
     );
     return parseFloat(total.toFixed(2));
   };
 
-  const totalAmount = calculateTotalAmount();
+  const totalPendingAmount = calculatePendingAmount();
+
+  const calculateTotalPaymentAfterPayment = () => {
+    const total = bookingData.reduce(
+      (total, item) => total + item?.afterPayment,
+      0
+    );
+    return parseFloat(total.toFixed(2));
+
+    
+  };
+
+  let totalAfterPayment = calculateTotalPaymentAfterPayment();
+
+
+  
+
+
 
   useEffect(() => {
     form.setValue(
       "recieveAmount",
-      Math.min(form.getValues("recieveAmount"), totalAmount),
+      Math.min(form.getValues("recieveAmount"), totalPendingAmount)
     );
-  }, [totalAmount]);
+  }, [totalPendingAmount]);
 
   const initialFormState = {
     adminId: "",
@@ -134,7 +154,7 @@ const AddNew = () => {
   const distributeReceivedAmount = (receivedAmount) => {
     let remainingAmount = receivedAmount;
     const updatedBookingData = bookingData.map((item) => {
-      const totalBillingAmount = item.totalBillingAmount;
+      const totalBillingAmount = item.balanceAmount;
       const receiveAmount = Math.min(remainingAmount, totalBillingAmount);
       remainingAmount -= receiveAmount;
       return {
@@ -148,26 +168,28 @@ const AddNew = () => {
 
   const handleReceiveAmountChange = (e) => {
     const receiveAmount = parseFloat(e.target.value);
-    if (receiveAmount > totalAmount) {
-      form.setValue("recieveAmount", totalAmount);
+    if (receiveAmount > totalPendingAmount) {
+      form.setValue("recieveAmount", totalPendingAmount);
+      totalAfterPayment = calculateTotalPaymentAfterPayment();
+      
     } else {
       form.setValue("recieveAmount", receiveAmount);
+      totalAfterPayment = calculateTotalPaymentAfterPayment();
     }
     distributeReceivedAmount(receiveAmount);
   };
 
-  // handle the original booking details
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
         const data = await Promise.all(
           booking.map(async (booking) => {
             const response = await fetch(
-              `/api/bookingdetails/${booking.savedBooking._id}`,
+              `/api/bookingdetails/${booking.savedBooking._id}`
             );
             const result = await response.json();
             return result.booking ? result.booking : null;
-          }),
+          })
         );
         const validData = data.filter((item) => item !== null);
         setBookingData(validData);
@@ -211,7 +233,7 @@ const AddNew = () => {
             <FieldForm
               form={form}
               name="recieveAmount"
-              label={`Received Amount  (Rs) - Max: ${totalAmount}`}
+              label={`Received Amount  (Rs) - Max: ${totalPendingAmount}`}
               type="number"
             />
           </div>
@@ -280,6 +302,9 @@ const AddNew = () => {
                 Total Billing Amount
               </th>
               <th className="text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900 md:text-base">
+                Total Pending Amount
+              </th>
+              <th className="text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900 md:text-base">
                 Received Amount
               </th>
               <th className="text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900 md:text-base">
@@ -310,27 +335,33 @@ const AddNew = () => {
                     {items?.totalBillingAmount}
                   </td>
                   <td className="border border-blue-900 p-2 text-blue-700">
+                    {items?.balanceAmount }
+                  </td>
+                  <td className="border border-blue-900 p-2 text-blue-700">
                     {items.receivedAmount || 0}
                   </td>
                   <td className="border border-blue-900 p-2 text-blue-700">
                     {items.afterPayment !== undefined
                       ? items.afterPayment
-                      : items.totalBillingAmount}
+                      : items.balanceAmount}
                   </td>
                 </tr>
               ))}
             <tr className="w-full border-t border-blue-600">
               <td
                 className="border border-blue-900 p-2 text-blue-700"
-                colSpan="4"
+                colSpan="5"
               >
                 Total Amount
               </td>
               <td className="border border-blue-900 p-2 text-blue-700">
-                {totalAmount}
+                {total}
               </td>
-              <td className="border border-blue-900 p-2 text-blue-700">-</td>
-              <td className="border border-blue-900 p-2 text-blue-700">-</td>
+              <td className="border border-blue-900 p-2 text-blue-700">
+                {totalPendingAmount}
+              </td>
+              <td className="border border-blue-900 p-2 text-blue-700">{form.getValues("recieveAmount")}</td>
+              <td className="border border-blue-900 p-2 text-blue-700">{totalAfterPayment}</td>
             </tr>
           </tbody>
         </table>
