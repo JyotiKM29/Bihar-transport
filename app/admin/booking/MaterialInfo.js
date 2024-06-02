@@ -117,27 +117,115 @@ const MaterialInfo = ({ form, nameValue, onAddItem, setMaterialItems }) => {
     return totalAmount;
   }
 
-  function calAmount(rate, quantity, GSTPercentage = 0, rateMultiple) {
+  function calAmount(rate, quantity, GSTPercentage = 0, rateMultiple, rateUnit, chargedWeightUnit, actualWeightUnit, qtyUnit) {
     let amount;
 
-    console.log("rateAsPer: ", rateMultiple);
-     console.log("GST Percentage: ", GSTPercentage);
+console.log("rate: ", rate, "quantity: ", quantity, "GSTPercentage: ", GSTPercentage, "rateMultiplier: ", rateMultiple, "rateUnit: ", rateUnit, "charged Weight unit: ", chargedWeightUnit, "actual weight unit: ", actualWeightUnit, "qty unit: ", qtyUnit);
+     let quantityDub;
+
+
     if (rateMultiple === "actualWeight") {
-      const quantity = form.getValues(
+       quantityDub = form.getValues(
         `${nameValue}[${items.length}].actualWeight`,
       );
-      amount = parseFloat(rate) * parseFloat(quantity);
     } else if (rateMultiple === "chargedWeight") {
-      const quantity = form.getValues(
+       quantityDub = form.getValues(
         `${nameValue}[${items.length}].chargedWeight`,
       );
-      amount = parseFloat(rate) * parseFloat(quantity);
     } else if (rateMultiple === "quantity") {
-      const quantity = form.getValues(`${nameValue}[${items.length}].quantity`);
-      amount = parseFloat(rate) * parseFloat(quantity);
-    } else {
-      amount = parseFloat(rate) * parseFloat(quantity);
+       quantityDub = form.getValues(`${nameValue}[${items.length}].quantity`);
     }
+    
+
+    console.log("quantity here : ", quantityDub);
+    
+    
+    
+
+      if(rateUnit === "Ton"){
+              if(rateMultiple==="chargedWeight" && chargedWeightUnit){
+
+      if(chargedWeightUnit === "TON")
+               quantityDub *=1;
+       if(chargedWeightUnit === "KG")
+                           quantityDub /=1000;
+
+      if(chargedWeightUnit === "g")
+              quantityDub /= 1000000;
+
+     }else if (rateMultiple === "actualWeight" && actualWeightUnit){
+      console.log("true");
+             if(actualWeightUnit === "TON")
+                           quantityDub *=1;
+              if(actualWeightUnit === "KG")
+                           quantityDub /=1000;
+
+             if(actualWeightUnit === "g")
+              quantityDub /= 1000000;
+
+
+     }else if (qtyUnit === "TON"){
+          quantityDub *=1;
+     }
+
+
+         console.log("quantity if the rateUnit is Ton : ", quantityDub);
+
+
+
+    }else {
+
+
+       if(rateMultiple==="chargedWeight" && chargedWeightUnit){
+
+      if(chargedWeightUnit === "TON")
+               quantityDub *=1000;
+
+      if(chargedWeightUnit === "g")
+              quantityDub /= 1000;
+
+     }else if (rateMultiple === "actualWeight" && actualWeightUnit){
+             if(actualWeightUnit === "TON")
+                           quantityDub *=1000;
+        
+             if(actualWeightUnit === "g")
+                           quantityDub /=1000;
+    }
+    else if (qtyUnit === "TON"){
+          quantityDub *=1000;
+     }
+
+
+              console.log("quantity if the rateUnit is not Ton : ", quantityDub);
+
+
+
+
+  }
+
+console.log(
+  "quantityDub: ", quantityDub,
+  "rate: ", rate,
+  "quantity: ", quantity,
+  "GSTPercentage: ", GSTPercentage,
+  "rateMultiplier: ", rateMultiple,
+  "rateUnit: ", rateUnit,
+  "charged Weight unit: ", chargedWeightUnit,
+  "actual weight unit: ", actualWeightUnit,
+  "qty unit: ", qtyUnit
+);
+
+
+      console.log("rateUnit: ", rateUnit);
+      console.log("rate: ", rate);
+      console.log("quanitty after calculation: ", quantityDub);
+
+    amount = parseFloat(rate) * parseFloat(quantityDub);
+    
+    
+    // else {
+    //   amount = parseFloat(rate) * parseFloat(quantity);
+    // }
     amount = isNaN(amount) ? 0 : amount;
     form.setValue(`${nameValue}[${items.length}].basicAmount`, amount);
     const total = parseFloat(amount) * Number(GSTPercentage);
@@ -163,6 +251,9 @@ const MaterialInfo = ({ form, nameValue, onAddItem, setMaterialItems }) => {
 
 
   const GSTType = form.watch(`${nameValue}[${items.length}].GSTType`);
+  const rateUnit = form.watch(`${nameValue}[${items.length}].rateUnit`);
+  const actualWeightUnit = form.watch(`${nameValue}[${items.length}].actualWeightUnit`);
+  const chargedWeightUnit = form.watch(`${nameValue}[${items.length}].chargedWeightUnit`);
 
   useEffect(() => {
     if (GSTType === "FCM") {
@@ -184,13 +275,14 @@ const MaterialInfo = ({ form, nameValue, onAddItem, setMaterialItems }) => {
 
   useEffect(() => {
     if (!isNaN(parseFloat(rate)) && !isNaN(parseFloat(quantity))) {
-      let result = calAmount(rate, quantity, GSTPercentage, rateMultiple);
+      let result = calAmount(rate, quantity, GSTPercentage, rateMultiple, rateUnit, chargedWeightUnit, actualWeightUnit, qtyUnit);
 
       form.setValue(`${nameValue}[${items.length}].amount`, result);
     }
     calPartyBhara();
   }, [
     rate,
+    rateUnit,
     quantity,
     items.length,
     nameValue,
