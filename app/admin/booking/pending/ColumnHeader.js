@@ -23,6 +23,7 @@ export default function ColumnHeader() {
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
+  const [confirm, setConfirm] = useState(false);
 
   const [columns, setColumns] = useState([]);
  
@@ -45,6 +46,7 @@ export default function ColumnHeader() {
         "status": status,
         "bookingId": bookingId
       };
+      setConfirm(true);
 
       try {
 
@@ -64,17 +66,22 @@ export default function ColumnHeader() {
         if (response.ok) {
           setIsLoading(false);
           displayToast(`Successfully ${status}`, "✅");
+           setConfirm(false);
          
         } else {
           console.log(newResult," ",response);
           console.error("Error:", newResult.message);
           displayToast("Error", "❌", newResult.message);
           setIsLoading(false);
+           setConfirm(false);
         }
+
+       
       } catch (error) {
         console.error("Error:", error);
         displayToast("Error while sending data", "❌", newResult.message);
         setIsLoading(false);
+         setConfirm(false);
       }
 
     }
@@ -308,6 +315,27 @@ export default function ColumnHeader() {
           </div>
         ),
       },
+
+  {
+  id: "actions",
+  enableHiding: false,
+  header: (
+    <div className="text-center">
+      <p>&nbsp;</p>
+      <p>Confirm</p>
+      <p>Booking</p>
+    </div>
+  ),
+  cell: ({ row }) => (
+    <div
+      className="inline-block bg-blue-500 hover:bg-blue-700 active:bg-red-900 text-white font-bold py-2 px-4 rounded cursor-pointer"
+      onClick={(e) => handleConfirm("Confirmed", `${row.original._id}`, e)}
+    >
+      <p>Confirm Booking</p>
+    </div>
+  ),
+},
+
       {
         id: "actions",
         enableHiding: false,
@@ -319,9 +347,8 @@ export default function ColumnHeader() {
           </div>
         ),
         cell: ({ row }) => {
-          return ( <CancellationPop bookingId={row.original._id}/> )
-        }
-
+          return <CancellationPop bookingId={row.original._id} />;
+        },
       },
       {
         id: "actions",
@@ -351,6 +378,11 @@ export default function ColumnHeader() {
                   </Link>
                 </DropdownMenuItem>
 
+                {/* 
+                
+
+                removed because client wanted
+                
                 <DropdownMenuItem>
                   <button
                     onClick={(e) =>
@@ -359,8 +391,7 @@ export default function ColumnHeader() {
                   >
                     Confirm Booking
                   </button>
-                </DropdownMenuItem>
-            
+                </DropdownMenuItem> */}
               </DropdownMenuContent>
             </DropdownMenu>
           );

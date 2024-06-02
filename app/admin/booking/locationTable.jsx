@@ -138,12 +138,12 @@ const LocationTable = ({ locations }) => {
                 >
                   Location
                 </th>
-                <th
+                {/* <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                 >
                   Actions
-                </th>
+                </th> */}
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
@@ -151,7 +151,7 @@ const LocationTable = ({ locations }) => {
                 locations.map((location) => (
                   <tr key={location?._id}>
                     <td className="whitespace-nowrap px-6 py-4">
-                      {location?.date}
+                      <div>{location?.date.split("T")[0]}</div>
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">
                       {location?.time}
@@ -159,11 +159,11 @@ const LocationTable = ({ locations }) => {
                     <td className="whitespace-nowrap px-6 py-4">
                       {location?.location}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                    {/* <td className="whitespace-nowrap px-6 py-4">
                       <Button onClick={() => handleEditClick(location)}>
                         Edit
                       </Button>
-                    </td>
+                    </td> */}
                   </tr>
                 ))
               ) : (
