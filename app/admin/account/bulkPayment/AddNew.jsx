@@ -52,6 +52,31 @@ const AddNew = () => {
     remarks: undefined,
   };
 
+
+  useEffect(() => {
+    const disableScrollOnNumberInput = (e) => {
+      if (e.target.type === "number") {
+        e.preventDefault();
+      }
+    };
+
+    const handleWheelEvent = (e) => {
+      if (document.activeElement.type === "number") {
+        document.activeElement.blur();
+      }
+    };
+
+    window.addEventListener("wheel", disableScrollOnNumberInput, {
+      passive: false,
+    });
+    window.addEventListener("wheel", handleWheelEvent);
+
+    return () => {
+      window.removeEventListener("wheel", disableScrollOnNumberInput);
+      window.removeEventListener("wheel", handleWheelEvent);
+    };
+  }, []);
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: initialFormState,

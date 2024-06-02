@@ -356,6 +356,11 @@ export default function ColumnHeader() {
                     Send Invoice
                   </Link>
                 </DropdownMenuItem>
+                {/* 
+                
+                because client wanted to remove
+                
+                
                 <DropdownMenuItem>
                   <button
                     onClick={() =>
@@ -364,7 +369,7 @@ export default function ColumnHeader() {
                   >
                     Delivered Booking
                   </button>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
                 {/* <DropdownMenuItem>
                 <Link 
 href={`/admin/booking/cancel/${row.original._id}`}
