@@ -119,12 +119,15 @@ const MaterialInfo = ({ form, nameValue, onAddItem, setMaterialItems }) => {
 
   function calAmount(rate, quantity, GSTPercentage = 0, rateMultiple) {
     let amount;
-    if (rateMultiple === "Actual weight") {
+
+    console.log("rateAsPer: ", rateMultiple);
+     console.log("GST Percentage: ", GSTPercentage);
+    if (rateMultiple === "actualWeight") {
       const quantity = form.getValues(
         `${nameValue}[${items.length}].actualWeight`,
       );
       amount = parseFloat(rate) * parseFloat(quantity);
-    } else if (rateMultiple === "charged weight") {
+    } else if (rateMultiple === "chargedWeight") {
       const quantity = form.getValues(
         `${nameValue}[${items.length}].chargedWeight`,
       );
@@ -153,15 +156,29 @@ const MaterialInfo = ({ form, nameValue, onAddItem, setMaterialItems }) => {
     `${nameValue}[${items.length}].GSTPercentage`,
     "",
   );
+
+  // const actualWeight = form.watch(`${nameValue}$[{items.length}].actualWeight`,0);
+  // const chargedWeight = form.watch(`${nameValue}$[{items.length}].chargedWeight`,0);
+
+
+
   const GSTType = form.watch(`${nameValue}[${items.length}].GSTType`);
 
   useEffect(() => {
-    if (GSTType === "RCM") {
+    if (GSTType === "FCM") {
       form.setValue(
         `${nameValue}[${items.length}].GSTPercentage`,
         GSTPercentage,
       );
       // form.setValue(`${nameValue}[${items.length}].GSTType`, "RCM")
+    }
+
+    else {
+       form.setValue(
+        `${nameValue}[${items.length}].GSTPercentage`,
+        0,
+      );
+
     }
   }, [GSTType]);
 
@@ -705,10 +722,10 @@ const MaterialInfo = ({ form, nameValue, onAddItem, setMaterialItems }) => {
               }}
             />
 
-            {form.watch(`${nameValue}[${items.length}].GSTType`) === "FCM" ? (
+            {form.watch(`${nameValue}[${items.length}].GSTType`) === "RCM" ? (
               <>
                 <p className="bg-orange-100 p-1 text-center font-light">
-                  if you select FCM , GST percentage is 0%
+                   GST percentage is 0%
                 </p>
               </>
             ) : (
