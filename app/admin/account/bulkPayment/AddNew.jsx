@@ -125,7 +125,7 @@ const AddNew = () => {
   }, [form.getValues("vehicleNo")]);
 
   const fetchOrderNo = async function () {
-    bookingData.forEach(async (booking) => {
+    bookingData?.forEach(async (booking) => {
       console.log("it's started...");
       try {
         const data = await fetch(`/api/bookingdetails/${booking.bookingId}`);
@@ -143,30 +143,30 @@ const AddNew = () => {
   };
 
   useEffect(() => {
-    if (bookingData.length > 0) {
+    if (bookingData?.length > 0) {
       console.log("okay...");
       fetchOrderNo();
     }
   }, [bookingData, loadIt]);
 
   const calculateTotalAmount = () => {
-    return bookingData.reduce((total, item) => total + item.driverBhara, 0);
+    return bookingData?.reduce((total, item) => total + item.driverBhara, 0);
   };
 
   const calculatePendingAmount = () => {
-    return bookingData.reduce((total, item) => total + item.commission, 0);
+    return bookingData?.reduce((total, item) => total + item.commission, 0);
   };
 
   const calculateNetBhara = () => {
-    return bookingData.reduce((total, item) => total + item.netBhara, 0);
+    return bookingData?.reduce((total, item) => total + item.netBhara, 0);
   };
 
   const calculateTotalAfterPayment = ()=>{
-    return bookingData.reduce((total, item) => total + item.afterPayment, 0);
+    return bookingData?.reduce((total, item) => total + item.afterPayment, 0);
   }
 
    const calculateTotalBalanceAmount = ()=>{
-    return bookingData.reduce((total, item) => total + item.balanceAmount, 0);
+    return bookingData?.reduce((total, item) => total + item.balanceAmount, 0);
   }
 
 
@@ -203,8 +203,8 @@ const AddNew = () => {
 
   const distributeReceivedAmount = (receivedAmount) => {
     let remainingAmount = receivedAmount;
-    const updatedBookingData = bookingData.map((item) => {
-      const totalBillingAmount = item.netBhara;
+    const updatedBookingData = bookingData?.map((item) => {
+      const totalBillingAmount = item.balanceAmount;
       const receiveAmount = Math.min(remainingAmount, totalBillingAmount);
       remainingAmount -= receiveAmount;
       return {
@@ -256,7 +256,7 @@ const AddNew = () => {
           <FieldForm
             form={form}
             name="recieveAmount"
-            label={`Received Amount (Rs), less than ${totalNetBhara}`}
+            label={`Received Amount (Rs), less than ${totalBalanceAmount}`}
             type="number"
           />
         </div>
@@ -332,8 +332,8 @@ const AddNew = () => {
             </tr>
           </thead>
           <tbody>
-            {bookingData.length > 0 &&
-              bookingData.map((item, index) => (
+            {bookingData?.length > 0 &&
+              bookingData?.map((item, index) => (
                 <tr key={index} className="w-full text-center">
                   <td className="border border-blue-900 p-2 text-blue-700">
                     {index + 1}
@@ -369,7 +369,7 @@ const AddNew = () => {
                   </td>
                 </tr>
               ))}
-            {bookingData.length > 0 && (
+            {bookingData?.length > 0 && (
               <tr className="w-full border border-blue-900 bg-blue-100 text-center font-semibold text-blue-950">
                 <td
                   colSpan="4"
