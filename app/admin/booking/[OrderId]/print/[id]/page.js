@@ -5,10 +5,12 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Image from "next/image";
 import { UserContext } from "../../../../../context/UserContextProvider";
+import { useRouter } from "next/navigation";
 
 function Invoice({params}) {
   const [loader, setLoader] = useState(false);
   const { user } = useContext(UserContext);
+  const router = useRouter();
 
   const [loading, setLoading] = useState(false);
   const [data ,setData] = useState();
@@ -56,6 +58,10 @@ const id = params.id;
       setLoader(false);
       doc.save("receipt.pdf");
     });
+  };
+
+  const handleContinue = () => {
+    router.push("/admin/booking?tab=intilize");
   };
 
   return (
@@ -110,21 +116,21 @@ const id = params.id;
             fare
           </p>
           <p className="absolute left-[405px] top-[439px]  text-[.7rem] ">
-           ₹ {data?.advanceAmount}
+            ₹ {data?.advanceAmount}
           </p>
 
           <p className="absolute left-[75px] top-[469px]  text-[.7rem] ">
             detention
           </p>
           <p className="absolute left-[405px] top-[469px]  text-[.7rem] ">
-           ₹ {data?.balanceAmount}
+            ₹ {data?.balanceAmount}
           </p>
 
           <p className="absolute left-[105px] top-[498px]  text-[.7rem] ">
             otherChage
           </p>
           <p className="absolute left-[430px] top-[498px]  text-[.7rem] ">
-            ₹ {data?.totalBillingAmount} 
+            ₹ {data?.totalBillingAmount}
           </p>
 
           <p className="absolute left-[92px] top-[564px]  text-[.7rem] ">
@@ -154,6 +160,12 @@ const id = params.id;
             disabled={!(loader === false)}
           >
             {loader ? <span>Downloading</span> : <span>Download</span>}
+          </Button>
+          <Button
+            className="receipt-modal-download-button ml-2 transition-colors duration-300 ease-in-out hover:bg-blue-700 active:bg-blue-100" // Added margin-right here
+            onClick={handleContinue}
+          >
+            Continue
           </Button>
         </div>
       </div>

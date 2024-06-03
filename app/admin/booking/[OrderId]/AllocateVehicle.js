@@ -170,13 +170,13 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
 
        
         displayToast("Successfully allocated vehicle", "✅");
-          if(routeDispatch){
-       setLoading2(false);
-      route.push(`/admin/booking/dispatedVehicle/${newResult?.message?._id}`);
-    } 
-    else 
-      setIsLoading(false);
-        
+        if (routeDispatch) {
+          setLoading2(false);
+          route.push(`/admin/booking/dispatedVehicle/${newResult?.message?._id}`);
+        }
+        else {
+          setIsLoading(false);
+        }
 
         if (allocate) {
           console.log(allocate, orderId);
