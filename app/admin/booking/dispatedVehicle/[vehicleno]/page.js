@@ -24,6 +24,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../../context/UserContextProvider";
 import { useToast } from "../../../../components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const chargesDetailsSchema = z.object({
   chargesName: z.string().optional(),
@@ -53,7 +54,7 @@ const consignorInvoiceDetailsSchema = z.object({
 const dispatchDetailsSchema = z.object({
   billtyType: z.string(),
   dispatchDate: z.coerce.date(),
-  dispatchTime: z.string(),
+  dispatchTime: z.string().optional(),
   totalFreight: z.coerce.number(),
   consignorInvoiceDetails: consignorInvoiceDetailsSchema,
   dispatch: z.object({
@@ -121,11 +122,22 @@ const DispatchVehicle = ({ params }) => {
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
+  const route = useRouter();
   const [showEWayBillDetail, setShowEWayBillDetail] = useState(false);
   const [showConsignorInvoiceDetail, setShowConsignorInvoiceDetail] =
     useState(false);
 
-    const [showAdditionalDetails, setShowAdditionalDetails] = useState(false);
+  const [showAdditionalDetails, setShowAdditionalDetails] = useState(false);
+  const [selectedTime, setSelectedTime] = useState(getCurrentTime());
+  
+
+   function getCurrentTime() {
+     const today = new Date();
+     const hours = String(today.getHours()).padStart(2, "0");
+     const minutes = String(today.getMinutes()).padStart(2, "0");
+     return `${hours}:${minutes}`;
+   }
+
   
 
 
@@ -218,6 +230,9 @@ const DispatchVehicle = ({ params }) => {
 
     // form.setValue('adminId', user?._id,)
     value.adminId = user?._id;
+    value.dispatchTime = selectedTime;
+
+    console.log("dispatched time : ", value.dispatchTime);
 
     setIsLoading(true);
     try {
@@ -237,6 +252,10 @@ const DispatchVehicle = ({ params }) => {
         displayToast("Successfully dispatched", "✅");
         // const userDetail = newResult.user;
         form.reset(initialFormState);
+
+        route.push("/admin/booking?tab=dispatch");
+
+
       } else {
         console.error("Error:", newResult.message);
         displayToast("Error", "❌", newResult.message);
@@ -257,6 +276,36 @@ const DispatchVehicle = ({ params }) => {
     });
   };
 
+  // diaable scrolling 
+
+  useEffect(() => {
+    const disableScrollOnNumberInput = (e) => {
+      if (e.target.type === "number") {
+        e.preventDefault();
+      }
+    };
+
+    const handleWheelEvent = (e) => {
+      if (document.activeElement.type === "number") {
+        document.activeElement.blur();
+      }
+    };
+
+    window.addEventListener("wheel", disableScrollOnNumberInput, {
+      passive: false,
+    });
+    window.addEventListener("wheel", handleWheelEvent);
+
+    return () => {
+      window.removeEventListener("wheel", disableScrollOnNumberInput);
+      window.removeEventListener("wheel", handleWheelEvent);
+    };
+  }, []);
+
+
+
+
+
   return (
     <div className="max-w   mt-14 w-full rounded-2xl  bg-white px-4 py-4 shadow-md md:px-10 lg:my-4 lg:p-8 lg:px-20">
       <h2 className="mb-6 text-3xl font-semibold"> Dispatch Booking Form</h2>
@@ -276,12 +325,25 @@ const DispatchVehicle = ({ params }) => {
                 label="Dispatch Date"
                 type="date"
               />
-              <FieldForm
-                form={form}
-                name="dispatch.dispatchDetails.dispatchTime"
-                label="Dispatch Time"
-                type="text"
-              />
+              <label className="w-full items-center gap-8 md:flex">
+    <span className="block mb-2 text-sm font-medium text-gray-700">Dispatch Time:</span>
+    <input
+      type="time"
+      value={selectedTime}
+      onChange={(e) => setSelectedTime(e.target.value)}
+      className="block w-full rounded-md border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+    />
+  </label>
+             {/* <FieldForm form={form} name="dispatch.dispatchDetails.dispatchTime" label="Dispatch Time">
+  <input
+    type="time"
+    value={selectedTime}
+    onChange={(e) => setSelectedTime(e.target.value)}
+    className="block w-full rounded-md border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+  />
+</FieldForm> */}
+
+             
               <FieldForm
                 form={form}
                 name="dispatch.dispatchDetails.totalFreight"
@@ -298,55 +360,63 @@ const DispatchVehicle = ({ params }) => {
                   >
                     Consignor Invoice Details
                   </h2>
-<div className="flex items-center space-x-4">
-  <FormField
-    control={form.control}
-    name="dispatch.dispatchDetails.consignorInvoiceDetails.isPODCompulsory"
-    render={({ field }) => (
-      <FormItem className="flex items-center space-x-4">
-        <FormLabel className="whitespace-nowrap">POD Compulsory (Yes/No)</FormLabel>
-        <Select onValueChange={field.onChange} defaultValue={field.value ? "Yes" : "No"}>
-          <FormControl>
-            <SelectTrigger>
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-          </FormControl>
-          <SelectContent>
-            <SelectItem value="Yes">Yes</SelectItem>
-            <SelectItem value="No">No</SelectItem>
-          </SelectContent>
-        </Select>
-        <FormMessage />
-      </FormItem>
-    )}
-  />
+                  <div className="flex items-center space-x-4">
+                    <FormField
+                      control={form.control}
+                      name="dispatch.dispatchDetails.consignorInvoiceDetails.isPODCompulsory"
+                      render={({ field }) => (
+                        <FormItem className="flex items-center space-x-4">
+                          <FormLabel className="whitespace-nowrap">
+                            POD Compulsory (Yes/No)
+                          </FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value ? "Yes" : "No"}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="Yes">Yes</SelectItem>
+                              <SelectItem value="No">No</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-  <FormField
-    control={form.control}
-    name="dispatch.dispatchDetails.consignorInvoiceDetails.podType"
-    render={({ field }) => (
-      <FormItem className="flex items-center space-x-4">
-        {/* <FormLabel className="whitespace-nowrap">POD Type</FormLabel> */}
-        <Select onValueChange={field.onChange} defaultValue={field.value ? "hardCopy" : "softCopy"}>
-          <FormControl>
-            <SelectTrigger>
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-          </FormControl>
-          <SelectContent>
-            <SelectItem value="hardCopy">Hard Copy</SelectItem>
-            <SelectItem value="softCopy">Soft Copy</SelectItem>
-          </SelectContent>
-        </Select>
-        <FormMessage />
-      </FormItem>
-    )}
-  />
-</div>
-
-
-
-
+                    <FormField
+                      control={form.control}
+                      name="dispatch.dispatchDetails.consignorInvoiceDetails.podType"
+                      render={({ field }) => (
+                        <FormItem className="flex items-center space-x-4">
+                          {/* <FormLabel className="whitespace-nowrap">POD Type</FormLabel> */}
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value ? "hardCopy" : "softCopy"}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="hardCopy">
+                                Hard Copy
+                              </SelectItem>
+                              <SelectItem value="softCopy">
+                                Soft Copy
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
                   <FieldForm
                     form={form}
