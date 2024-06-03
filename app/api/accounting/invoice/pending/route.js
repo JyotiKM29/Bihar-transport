@@ -17,7 +17,7 @@ export async function POST(req, res) {
             return Response.json({ message: "Admin not found or missing required fields" }, { status: 400 });
         }
 
-        const booking = await Booking.find({ invoiceStatus: false });
+        const booking = await Booking.find({ $and: [{ invoiceStatus: false }, { status: "Delivered" }] });
         console.log(booking.length);
         return Response.json({ message: "Invoice Generated", booking }, { status: 200 });
     } catch (error) {

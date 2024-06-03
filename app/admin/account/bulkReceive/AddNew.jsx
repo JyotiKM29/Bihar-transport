@@ -310,6 +310,9 @@ const AddNew = () => {
               <th className="text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900 md:text-base">
                 Order No
               </th>
+               <th className="text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900 md:text-base">
+                Status
+              </th>
               <th className="text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900 md:text-base">
                 Material
               </th>
@@ -342,6 +345,9 @@ const AddNew = () => {
                   </td>
                   <td className="border border-blue-900 p-2 text-blue-700">
                     {items?.orderNumber}
+                  </td>
+                  <td className="border border-blue-900 p-2 text-blue-700">
+                    {items?.status}
                   </td>
                   <td className="border border-blue-900 p-2 text-blue-700">
                     {extractMaterials(items?.itemsList)}
