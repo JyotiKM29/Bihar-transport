@@ -267,6 +267,7 @@ const bookingSchema = new mongoose.Schema(
         "Restart",
       ],
     },
+    // ok
     isUrgent: { type: Boolean, default: false },
     allotedVehicle: [
       {
