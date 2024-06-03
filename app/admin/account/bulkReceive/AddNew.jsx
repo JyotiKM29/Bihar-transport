@@ -374,10 +374,10 @@ const AddNew = () => {
                   </td>
                 </tr>
               ))}
-            <tr className="w-full border-t border-blue-600">
+            <tr className="w-full border-t text-center  border-blue-600">
               <td
                 className="border border-blue-900 p-2 text-blue-700"
-                colSpan="5"
+                colSpan="6"
               >
                 Total Amount
               </td>

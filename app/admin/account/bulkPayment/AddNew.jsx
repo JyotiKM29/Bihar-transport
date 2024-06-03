@@ -409,7 +409,7 @@ const AddNew = () => {
             {bookingData?.length > 0 && (
               <tr className="w-full border border-blue-900 bg-blue-100 text-center font-semibold text-blue-950">
                 <td
-                  colSpan="4"
+                  colSpan="5"
                   className="border border-blue-900 p-2 text-blue-950"
                 >
                   TOTAL
