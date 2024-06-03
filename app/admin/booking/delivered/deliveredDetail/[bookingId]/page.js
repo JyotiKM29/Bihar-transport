@@ -50,7 +50,7 @@ const consignmentInfoSchema = z.object({
   excess: z.coerce.number(),
   shortage: z.coerce.number(),
   remarks: z.string(),
-  pod: z.array(z.string().url()),
+  pod: z.array(z.string().url()).optional(),
   action: z.string().optional(),
 });
 
