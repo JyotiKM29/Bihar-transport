@@ -61,7 +61,7 @@ const TodayData = () => {
     data?.orderDelivered,
     data?.totalOrder,
   );
-  const pendingPOD = calculatePercentage(data?.pendingPOD, data?.orderDelivered);
+  const pendingPOD = calculatePercentage(data?.pendingPOD, data?.totalPOD);
   const invoice = calculatePercentage(data?.invoice, data?.invoice); // Check if invoice is 0?
   const pendingInvoice = calculatePercentage(
     data?.pendingInvoice,

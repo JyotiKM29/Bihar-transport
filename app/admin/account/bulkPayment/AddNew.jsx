@@ -41,6 +41,7 @@ const AddNew = () => {
   const [bookingData, setBookingData] = useState([]);
   const [orderNO, setOrderNo] = useState([]);
   const [loadIt, setLoadIt] = useState(false);
+  const [status, setStatus] = useState([]);
 
   const initialFormState = {
     adminId: '',
@@ -132,6 +133,7 @@ const AddNew = () => {
   const fetchBookingDetails = async (vehicleNo) => {
     try {
       setOrderNo([]);
+      setStatus([]);
       console.log("vehicle no : ", vehicleNo);
       const response = await fetch(`/api/vehicledetails/${vehicleNo}`);
       const result = await response.json();
@@ -155,10 +157,14 @@ const AddNew = () => {
       try {
         const data = await fetch(`/api/bookingdetails/${booking.bookingId}`);
         const newData = await data.json();
+        
         if (newData.booking.orderNumber) {
+          setStatus((prevState)=> [...prevState, newData.booking.status]);
           setOrderNo((prevState) => [...prevState, newData.booking.orderNumber]);
         } else {
           setOrderNo((prevState) => [...prevState, "Not Found"]);
+          setStatus((prevState)=> [...prevState, "Not Found"]);
+
         }
       } catch (error) {
         console.error("Error fetching booking details:", error);
@@ -331,6 +337,9 @@ const AddNew = () => {
                 Order No
               </th>
               <th className="text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900 md:text-base">
+               Status
+              </th>
+              <th className="text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900 md:text-base">
                 Arranged By
               </th>
               <th className="text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-blue-900 md:text-base">
@@ -366,6 +375,9 @@ const AddNew = () => {
                   <td className="border border-blue-900 p-2 text-blue-700">
                     {orderNO[index]}
                   </td>
+                   <td className="border border-blue-900 p-2 text-blue-700">
+                    {status[index]}
+                  </td>
                   <td className="border border-blue-900 p-2 text-blue-700">
                     {item?.arrangedBy}
                   </td>
@@ -397,7 +409,7 @@ const AddNew = () => {
             {bookingData?.length > 0 && (
               <tr className="w-full border border-blue-900 bg-blue-100 text-center font-semibold text-blue-950">
                 <td
-                  colSpan="4"
+                  colSpan="5"
                   className="border border-blue-900 p-2 text-blue-950"
                 >
                   TOTAL
