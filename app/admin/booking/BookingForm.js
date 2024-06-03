@@ -83,7 +83,7 @@ const formSchema = z.object({
  
   bookingType: z.enum(["personal", "general", "company"], {
     errorMap: () => ({ message: "Select Booking Type" }),
-  }),
+  }).optional(),
   consignorName: z.string({
     required_error: "Consignor name is required",
   }),
@@ -107,13 +107,13 @@ const formSchema = z.object({
   // way: z.string((), {
   //   errorMap: () => ({ message: "Select way" }),
   // }),
-  way:z.string(),
+  way:z.string().optional(),
   vehicleType: z.string({
     required_error: "Vehicle type is required",
-  }),
+  }).optional(),
   noOfVehicle: z.enum(["1", "2", "3", "others"], {
     errorMap: () => ({ message: "Select no of Vehicle" }),
-  }),
+  }).optional(),
 
   vehicleLength: z.coerce.number().optional(),
   vehicleLengthUnit: z.string().optional(),
