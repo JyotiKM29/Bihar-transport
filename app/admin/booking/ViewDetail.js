@@ -6,21 +6,21 @@ import { MdEdit } from "react-icons/md";
 import { useEffect, useState } from "react";
 import FieldComponent from "./FieldComponent";
 import { Button } from "../../components/ui/button";
-import Lightbox from "react-image-lightbox";
-import "react-image-lightbox/style.css";
+// import Lightbox from "react-image-lightbox";
+// import "react-image-lightbox/style.css";
 
 const ViewDetail = ({ bookingDetails, heading }) => {
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [lightboxIndex, setLightboxIndex] = useState(0);
+  // const [lightboxOpen, setLightboxOpen] = useState(false);
+  // const [lightboxIndex, setLightboxIndex] = useState(0);
 
-  const openLightbox = (index) => {
-    setLightboxIndex(index);
-    setLightboxOpen(true);
-  };
+  // const openLightbox = (index) => {
+  //   setLightboxIndex(index);
+  //   setLightboxOpen(true);
+  // };
 
-  const closeLightbox = () => {
-    setLightboxOpen(false);
-  };
+  // const closeLightbox = () => {
+  //   setLightboxOpen(false);
+  // };
   const { toast } = useToast();
   const router = useRouter();
   const [editBooking, setEditBooking] = useState(false);
@@ -1128,7 +1128,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                     className="mr-4"
                   />
                   <div className="h-auto max-w-[200px]">
-                    <img
+                    {/* <img
                       src={
                         bookingDetails?.booking?.delivery?.consignment_info[0]
                           ?.pod
@@ -1136,9 +1136,9 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                       alt="POD Image"
                       className="h-auto w-full transform cursor-pointer rounded-md shadow-md transition-transform hover:scale-105"
                       onClick={() => openLightbox(0)} // Change the index if you have multiple images
-                    />
+                    /> */}
                   </div>
-                  {lightboxOpen && (
+                  {/* {lightboxOpen && (
                     <Lightbox
                       mainSrc={
                         bookingDetails?.booking?.delivery?.consignment_info[
@@ -1148,7 +1148,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                       onCloseRequest={closeLightbox}
                       enableZoom={true}
                     />
-                  )}
+                  )} */}
                 </div>
 
                 {/* <FieldComponent
