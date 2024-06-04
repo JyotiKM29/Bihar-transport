@@ -35,7 +35,7 @@ function Invoice({ params }) {
           if (result.booking) {
             setInvoiceData(result.booking);
             const bookingIndex = result.booking.findIndex(
-              (booking) => booking._id === id
+              (booking) => booking._id === id,
             );
             if (bookingIndex !== -1) {
               setData(result.booking[bookingIndex]);
@@ -60,19 +60,53 @@ function Invoice({ params }) {
     setLoader(true);
     const workbook = XLSX.utils.book_new();
     const worksheetData = [
-      ["Bill To", data?.consignorName, "", "", "", "Invoice Date", data?.generatedInvoice?.invoiceDate.split("T")[0]],
-      ["From", data?.loadingPoints[0], "", "", "", "Invoice No", data?.generatedInvoice?.invoiceNumber],
-      ["Consignor", data?.consignorName, "", "", "", "Vehicle No", data?.allotedVehicle[0]?.vehicleNo || "Not Alloted"],
+      [
+        "Bill To",
+        data?.consignorName,
+        "",
+        "",
+        "",
+        "Invoice Date",
+        data?.generatedInvoice?.invoiceDate.split("T")[0],
+      ],
+      [
+        "From",
+        data?.loadingPoints[0],
+        "",
+        "",
+        "",
+        "Invoice No",
+        data?.generatedInvoice?.invoiceNumber,
+      ],
+      [
+        "Consignor",
+        data?.consignorName,
+        "",
+        "",
+        "",
+        "Vehicle No",
+        data?.allotedVehicle[0]?.vehicleNo || "Not Alloted",
+      ],
       ["Mobile No", data?.consignorMobileNumber, "", "", "", "", ""],
       ["Address", "Not Found", "", "", "", "", ""],
       ["To", data?.unloadingPoints[0], "", "", "", "", ""],
       ["Consignee", data?.consigneeName, "", "", "", "", ""],
       ["Mob No", data?.consigneeMobileNumber, "", "", "", "", ""],
       ["Address", "", "", "", "", "", ""],
-      ["Material Name", "HSN CODE", "Qty.", "PKG. Type", "Actual Weight", "Charged Weight", "Rate As Per", "RATE", "Freight"]
+      [
+        "Material Name",
+        "HSN CODE",
+        "Qty.",
+        "PKG. Type",
+        "Actual Weight",
+        "Charged Weight",
+        "Rate As Per",
+        "RATE",
+        "Freight",
+      ],
     ];
 
-    data?.itemsList.item.forEach(item => {
+    data?.itemsList.item.forEach((item) => {
       worksheetData.push([
         item.material,
         item.hsnNo || "",
@@ -82,15 +116,23 @@ function Invoice({ params }) {
         item.chargedWeight || "" + item.chargedWeightUnit,
         item.rateAsPer || "",
         item.rate || "",
-        "₹ " + data?.itemsList?.totalAmount || ""
+        "₹ " + data?.itemsList?.totalAmount || "",
       ]);
     });
 
     worksheetData.push([
-      "Charge Name", "Amount", "Rate", "Quantity", "Total Freight", "Total Charges", "Total Value", "Enabled", "Remarks"
+      "Charge Name",
+      "Amount",
+      "Rate",
+      "Quantity",
+      "Total Freight",
+      "Total Charges",
+      "Total Value",
+      "Enabled",
+      "Remarks",
     ]);
 
-    data?.additionalCharges?.chargers.forEach(item => {
+    data?.additionalCharges?.chargers.forEach((item) => {
       worksheetData.push([
         item.name,
         item.amount || "",
@@ -100,12 +142,21 @@ function Invoice({ params }) {
         item.amount || "",
         "",
         item.isEnabled ? "Yes" : "No" || "",
-        ""
+        "",
       ]);
     });
 
     worksheetData.push(
-      ["", "", "", "", "", "", "Total Billed Amount:", `₹ ${data?.totalBillingAmount?.toFixed(2) || 0}`],
+      [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "Total Billed Amount:",
+        `₹ ${data?.totalBillingAmount?.toFixed(2) || 0}`,
+      ],
       ["Amount in words:", toWords(data?.totalBillingAmount || 0)],
       ["Bank Details:"],
       ["Name:", "BIHAR TRANSPORT", "", "", "", "", ""],
@@ -115,7 +166,10 @@ function Invoice({ params }) {
       ["Authorised Signatory:"],
       ["UPI Payment:"],
       ["UPI No:", "8757320018", "", "", "", "", ""],
-      ["Note:", "Please pay by A/C payee cheque/D.D. in favour of Bihar Transport not to."]
+      [
+        "Note:",
+        "Please pay by A/C payee cheque/D.D. in favour of Bihar Transport not to.",
+      ],
     );
 
     const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
@@ -131,13 +185,21 @@ function Invoice({ params }) {
     doc.setFontSize(12);
 
     doc.text(`Bill To: ${data?.consignorName}`, 10, 10);
-    doc.text(`Invoice Date: ${data?.generatedInvoice?.invoiceDate.split("T")[0]}`, 140, 10);
+    doc.text(
+      `Invoice Date: ${data?.generatedInvoice?.invoiceDate.split("T")[0]}`,
+      140,
+      10,
+    );
 
     doc.text(`From: ${data?.loadingPoints[0]}`, 10, 20);
     doc.text(`Invoice No: ${data?.generatedInvoice?.invoiceNumber}`, 140, 20);
 
     doc.text(`Consignor: ${data?.consignorName}`, 10, 30);
-    doc.text(`Vehicle No: ${data?.allotedVehicle[0]?.vehicleNo || "Not Alloted"}`, 140, 30);
+    doc.text(
+      `Vehicle No: ${data?.allotedVehicle[0]?.vehicleNo || "Not Alloted"}`,
+      140,
+      30,
+    );
 
     doc.text(`Mobile No: ${data?.consignorMobileNumber}`, 10, 40);
 
@@ -153,8 +215,20 @@ function Invoice({ params }) {
 
     doc.autoTable({
       startY: 100,
-      head: [['Material Name', 'HSN CODE', 'Qty.', 'PKG. Type', 'Actual Weight', 'Charged Weight', 'Rate As Per', 'RATE', 'Freight']],
-      body: data?.itemsList.item.map(item => [
+      head: [
+        [
+          "Material Name",
+          "HSN CODE",
+          "Qty.",
+          "PKG. Type",
+          "Actual Weight",
+          "Charged Weight",
+          "Rate As Per",
+          "RATE",
+          "Freight",
+        ],
+      ],
+      body: data?.itemsList.item.map((item) => [
         item.material,
         item.hsnNo || "",
         item.quantity || "",
@@ -163,14 +237,26 @@ function Invoice({ params }) {
         item.chargedWeight || "" + item.chargedWeightUnit,
         item.rateAsPer || "",
         item.rate || "",
-        "₹ " + data?.itemsList?.totalAmount || ""
-      ])
+        "₹ " + data?.itemsList?.totalAmount || "",
+      ]),
     });
 
     doc.autoTable({
       startY: doc.previousAutoTable.finalY + 10,
-      head: [['Charge Name', 'Amount', 'Rate', 'Quantity', 'Total Freight', 'Total Charges', 'Total Value', 'Enabled', 'Remarks']],
-      body: data?.additionalCharges?.chargers.map(item => [
+      head: [
+        [
+          "Charge Name",
+          "Amount",
+          "Rate",
+          "Quantity",
+          "Total Freight",
+          "Total Charges",
+          "Total Value",
+          "Enabled",
+          "Remarks",
+        ],
+      ],
+      body: data?.additionalCharges?.chargers.map((item) => [
         item.name,
         item.amount || "",
         item.rate || "",
@@ -179,12 +265,20 @@ function Invoice({ params }) {
         item.amount || "",
         "",
         item.enabled ? "Yes" : "No" || "",
-        ""
-      ])
+        "",
+      ]),
     });
 
-    doc.text(`Total Billed Amount: ₹ ${data?.totalBillingAmount?.toFixed(2) || 0}`, 10, doc.previousAutoTable.finalY + 10);
-    doc.text(`Amount in words: ${toWords(data?.totalBillingAmount || 0)}`, 10, doc.previousAutoTable.finalY + 20);
+    doc.text(
+      `Total Billed Amount: ₹ ${data?.totalBillingAmount?.toFixed(2) || 0}`,
+      10,
+      doc.previousAutoTable.finalY + 10,
+    );
+    doc.text(
+      `Amount in words: ${toWords(data?.totalBillingAmount || 0)}`,
+      10,
+      doc.previousAutoTable.finalY + 20,
+    );
 
     doc.text(`Bank Details:`, 10, doc.previousAutoTable.finalY + 30);
     doc.text(`Name: BIHAR TRANSPORT`, 10, doc.previousAutoTable.finalY + 40);
@@ -197,170 +291,343 @@ function Invoice({ params }) {
     doc.text(`UPI Payment:`, 10, doc.previousAutoTable.finalY + 90);
     doc.text(`UPI No: 8757320018`, 10, doc.previousAutoTable.finalY + 100);
 
-    doc.text(`Note: Please pay by A/C payee cheque/D.D. in favour of Bihar Transport not to.`, 10, doc.previousAutoTable.finalY + 110);
+    doc.text(
+      `Note: Please pay by A/C payee cheque/D.D. in favour of Bihar Transport not to.`,
+      10,
+      doc.previousAutoTable.finalY + 110,
+    );
 
-    doc.save('invoice.pdf');
+    doc.save("invoice.pdf");
     setLoader(false);
   };
 
   return (
-    <div className="w-full p-4">
+    <div className="w-full p-4 py-8">
       <div className="overflow-x-auto">
-        <div className="min-w-full bg-white">
-          <div className="py-2 px-4">
-            <table className="table-auto w-full border-collapse border border-gray-300">
+        <div className="min-w-full rounded-xl bg-white p-4 px-8 shadow-md  ">
+          <h1 className="text-center text-4xl font-medium uppercase text-sky-600 underline mb-6 ">
+            Invoice
+          </h1>
+          <div className="grid min-h-24 grid-cols-7  ">
+            <div className="col-span-4 border border-gray-400  p-2">
+              <p>
+                <span className="font-medium">Bill To:</span>
+                {` ${data?.consignorName}`}
+              </p>
+            </div>
+
+            <div className="col-span-1 grid-rows-subgrid">
+              <p colSpan="4" className="border border-gray-400  p-2 font-medium">
+                Invoice Date:
+              </p>
+              <p colSpan="4" className="border border-gray-400  p-2 font-medium">
+                Invoice No:
+              </p>
+              <p colSpan="4" className="border border-gray-400  p-2 font-medium">
+                Vehicle No:
+              </p>
+            </div>
+            <div className="col-span-2">
+              <p
+                colSpan="4"
+                className="border border-gray-400  p-2"
+              >{` ${data?.generatedInvoice?.invoiceDate.split("T")[0]}`}</p>
+              <p
+                colSpan="4"
+                className="border border-gray-400  p-2"
+              >{` ${data?.generatedInvoice?.invoiceNumber}`}</p>
+              <p colSpan="4" className="border border-gray-400  p-2">
+                {" "}
+                {data?.allotedVehicle[0]?.vehicleNo || "Not Alloted"}
+              </p>
+            </div>
+          </div>
+
+
+          {/* 2nd Row  */}
+          <div className="border border-t-0 border-gray-400  min-h-12">
+          <p className="p-2 border border-t-0 border-gray-400    font-medium">From :</p>
+          <div className="flex flex-col">
+          <p  className=" px-4 py-1">
+                    <span className="font-medium mr-1">Consignor:-</span> {`${data?.consignorName}`}
+                  </p>
+          <p className=" px-4 py-1">
+                    <span className="font-medium mr-1">GST No:-</span> {`${data?.consignorName}`}
+                  </p>
+
+                  <p colSpan="5" className=" px-4 py-1">
+                    <span className="font-medium mr-1">Mobile No:-</span> {data?.consignorMobileNumber}
+                  </p>
+                  <p colSpan="5" className=" px-4 py-1">
+                    <span className="font-medium mr-1">Address:-</span> Not Found
+                  </p>
+                  <p>
+                  &nbsp;
+                  </p>
+                  <p>
+                  &nbsp;
+                  </p>
+                 
+          </div>
+
+          </div>
+
+          {/* 3rd Row */}
+          <div className="border border-t-0 border-gray-400  min-h-12">
+          <p className="p-2 border border-t-0 border-gray-400  font-medium">To :</p>
+          <div className="flex flex-col">
+          <p  className=" px-4 py-1">
+                    <span className="font-medium mr-1">Consignee:-</span> {`${data?.consigneeName}`}
+                  </p>
+          <p className=" px-4 py-1">
+                    <span className="font-medium mr-1">GST No:-</span> {`${data?.consigneeName}`}
+                  </p>
+
+                  <p colSpan="5" className=" px-4 py-1">
+                    <span className="font-medium mr-1">Mobile No:-</span> {data?.consigneeMobileNumber}
+                  </p>
+                  <p colSpan="5" className=" px-4 py-1">
+                    <span className="font-medium mr-1">Address:-</span> Not Found
+                  </p>
+                  <p>
+                  &nbsp;
+                  </p>
+                  <p>
+                  &nbsp;
+                  </p>
+                 
+          </div>
+
+{/* MAterial Chargers */}
+          </div>
+          <h4 className="font-bold text-center  mt-6 mb-2 underline text-xl">Material Detail:</h4>
+          <div className="overflow-x-auto md:overflow-x-visible">
+            <table className=" mt-4 w-full border border-gray-400   ">
               <thead>
-                <tr className="bg-gray-200">
-                  <th colSpan="5" className="border border-gray-300 p-2">{`Bill To: ${data?.consignorName}`}</th>
-                  <th colSpan="4" className="border border-gray-300 p-2">{`Invoice Date: ${data?.generatedInvoice?.invoiceDate.split("T")[0]}`}</th>
+          <tr className="bg-gray-200 w-full">
+                  <th className="border border-gray-400  font-semibold p-2">Material Name</th>
+                  <th className="border border-gray-400  font-semibold p-2">HSN CODE</th>
+                  <th className="border border-gray-400  font-semibold p-2">Qty.</th>
+                  <th className="border border-gray-400  font-semibold p-2">PKG. Type</th>
+                  <th className="border border-gray-400  font-semibold p-2">Actual Weight</th>
+                  <th className="border border-gray-400  font-semibold p-2">Charged Weight</th>
+                  <th className="border border-gray-400  font-semibold p-2">Rate As Per</th>
+                  <th className="border border-gray-400  font-semibold p-2">RATE</th>
+                  <th className="border border-gray-400  font-semibold p-2">Freight</th>
                 </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td colSpan="5" className="border border-gray-300 p-2">{`From: ${data?.loadingPoints[0]}`}</td>
-                  <td colSpan="4" className="border border-gray-300 p-2">{`Invoice No: ${data?.generatedInvoice?.invoiceNumber}`}</td>
-                </tr>
-                <tr>
-                  <td colSpan="5" className="border border-gray-300 p-2"><b>Consignor:</b> {`${data?.consignorName}`}</td>
-                  <td colSpan="4" className="border border-gray-300 p-2"><b>Vehicle No:</b> {data?.allotedVehicle[0]?.vehicleNo || "Not Alloted"}</td>
-                </tr>
-                <tr>
-                  <td colSpan="5" className="border border-gray-300 p-2"><b>Mobile No:</b> {data?.consignorMobileNumber}</td>
-                  <td colSpan="4" className="border border-gray-300 p-2"></td>
-                </tr>
-                <tr>
-                  <td colSpan="5" className="border border-gray-300 p-2"><b>Address:</b> Not Found</td>
-                  <td colSpan="4" className="border border-gray-300 p-2"></td>
-                </tr>
-                <tr>
-                  <td colSpan="5" className="border border-gray-300 p-2"><b>To:</b> {data?.unloadingPoints[0]}</td>
-                  <td colSpan="4" className="border border-gray-300 p-2"></td>
-                </tr>
-                <tr>
-                  <td colSpan="5" className="border border-gray-300 p-2">Consignee:- {data?.consigneeName}</td>
-                  <td colSpan="4" className="border border-gray-300 p-2"></td>
-                </tr>
-                <tr>
-                  <td colSpan="5" className="border border-gray-300 p-2">Mob No.: {data?.consigneeMobileNumber}</td>
-                  <td colSpan="4" className="border border-gray-300 p-2"></td>
-                </tr>
-                <tr>
-                  <td colSpan="9" className="border border-gray-300 p-2">Address:-</td>
-                </tr>
-                <tr className="bg-gray-200">
-                  <th className="border border-gray-300 p-2">Material Name</th>
-                  <th className="border border-gray-300 p-2">HSN CODE</th>
-                  <th className="border border-gray-300 p-2">Qty.</th>
-                  <th className="border border-gray-300 p-2">PKG. Type</th>
-                  <th className="border border-gray-300 p-2">Actual Weight</th>
-                  <th className="border border-gray-300 p-2">Charged Weight</th>
-                  <th className="border border-gray-300 p-2">Rate As Per</th>
-                  <th className="border border-gray-300 p-2">RATE</th>
-                  <th className="border border-gray-300 p-2">Freight</th>
-                </tr>
+                </thead>
+                <tbody>
+
+                
                 {data?.itemsList.item.map((item, index) => (
                   <tr key={index}>
-                    <td className="border border-gray-300 p-2">{item.material}</td>
-                    <td className="border border-gray-300 p-2">{item.hsnNo || ""}</td>
-                    <td className="border border-gray-300 p-2">{item.quantity || ""}</td>
-                    <td className="border border-gray-300 p-2">{item.quantityUnit || ""}</td>
-                    <td className="border border-gray-300 p-2">{item.actualWeight || ""}{item.actualWeightUnit}</td>
-                    <td className="border border-gray-300 p-2">{item.chargedWeight || ""}{item.chargedWeightUnit}</td>
-                    <td className="border border-gray-300 p-2">{item.rateAsPer || ""}</td>
-                    <td className="border border-gray-300 p-2">{item.rate || ""}</td>
-                    <td className="border border-gray-300 p-2">₹ {data?.itemsList?.totalAmount || ""}</td>
-                  </tr>
-                ))}
+                    <td className="border border-gray-400  p-2">
+                      {item.material}
+                    </td>
+                    <td className="border border-gray-400  p-2">
+                      {item.hsnNo || ""}
+                    </td>
+                    <td className="border border-gray-400  p-2">
+                      {item.quantity || ""}
+                    </td>
+                    <td className="border border-gray-400  p-2">
+                      {item.quantityUnit || ""}
+                    </td>
+                    <td className="border border-gray-400  p-2">
+                      {item.actualWeight || ""}
+                      {item.actualWeightUnit}
+                    </td>
+                    <td className="border border-gray-400  p-2">
+                      {item.chargedWeight || ""}
+                      {item.chargedWeightUnit}
+                    </td>
+                    <td className="border border-gray-400  p-2">
+                      {item.rateAsPer || ""}
+                    </td>
+                    <td className="border border-gray-400  p-2">
+                      {item.rate || ""}
+                    </td>
+                    <td className="border border-gray-400  p-2">
+                      ₹ {data?.itemsList?.totalAmount || ""}
+                    </td>
 
-                <tr className="bg-gray-200">
-                  <th className="border border-gray-300 p-2">Charge Name</th>
-                  <th className="border border-gray-300 p-2">Amount</th>
-                  <th className="border border-gray-300 p-2">Rate</th>
-                  <th className="border border-gray-300 p-2">Quantity</th>
-                  <th className="border border-gray-300 p-2">Total Freight</th>
-                  <th className="border border-gray-300 p-2">Total Charges</th>
-                  <th className="border border-gray-300 p-2">Total Value</th>
-                  <th className="border border-gray-300 p-2">Enabled</th>
-                  <th className="border border-gray-300 p-2">Remarks</th>
+                  </tr>
+                  
+                 
+                ))} 
+              
+                <tr>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
                 </tr>
-                {data?.additionalCharges?.chargers.map((item, index) => (
+                <tr>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+                </tr>
+                <tr>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+                </tr>
+               
+                </tbody>
+                
+                </table>
+                <p className="flex  justify-between items-center border border-t-0 border-gray-400 px-2">
+                  <span className="p-2 font-medium">Total Freight:   </span>
+                  <span className="p-2">{data?.itemsList.totalAmount}</span>
+                </p>
+                
+          </div>
+        
+{/* Additional Chargers */}
+        <div>
+        <h4 className="font-bold text-center  mt-6 mb-2 underline text-xl">Additonal Chargers:</h4>
+        <div className="overflow-x-auto md:overflow-x-visible">
+            <table className=" mt-4 w-full border border-gray-400   ">
+              <thead>
+          <tr className="bg-gray-200 w-full">
+                  <th className="border border-gray-400  font-semibold p-2">Ditension Charges</th>
+                  <th className="border border-gray-400  font-semibold p-2">Packing  Charges</th>
+                  <th className="border border-gray-400  font-semibold p-2">Picking Charges</th>
+                  <th className="border border-gray-400  font-semibold p-2">Loading Charges</th>
+                  <th className="border border-gray-400  font-semibold p-2">unLoading Charges</th>
+                  <th className="border border-gray-400  font-semibold p-2">Other Charges</th>
+                
+                </tr>
+                </thead>
+                <tbody>
+
+                
+                {data?.additionalCharges.chargers.map((item, index) => (
                   <tr key={index}>
-                    <td className="border border-gray-300 p-2">{item.name}</td>
-                    <td className="border border-gray-300 p-2">{item.amount || ""}</td>
-                    <td className="border border-gray-300 p-2">{item.rate || ""}</td>
-                    <td className="border border-gray-300 p-2">{item.qty || ""}</td>
-                    <td className="border border-gray-300 p-2">{item.amount || ""}</td>
-                    <td className="border border-gray-300 p-2">{item.amount || ""}</td>
-                    <td className="border border-gray-300 p-2"></td>
-                    <td className="border border-gray-300 p-2">{item.enabled ? "Yes" : "No" || ""}</td>
-                    <td className="border border-gray-300 p-2"></td>
+                    <td className="border border-gray-400  p-2">
+                      {item.name ==='Detention Charge'? item.amount : " "}
+                    </td>
+                    <td className="border border-gray-400  p-2">
+                     {item.name ==='Packing Charge'? item.amount : " "}
+                    </td>
+                    <td className="border border-gray-400  p-2">
+                     {item.name ==='Pickup Charge'? item.amount : " "}
+                    </td>
+                    <td className="border border-gray-400  p-2">
+                     {item.name ==='loading Charge'? item.amount : " "}
+                    </td>
+                    <td className="border border-gray-400  p-2">
+                     {item.name ==='unloading Charge'? item.amount : " "}
+                    </td>
+                    <td className="border border-gray-400  p-2">
+                      {item.name ==='Other Charge'? item.amount : " "}
+                    </td>
+                    
+
                   </tr>
-                ))}
-
+                  
+                 
+                ))} 
+              
                 <tr>
-                   <td colSpan="6" className="border border-gray-300 p-2"><b></b></td>
-                  <td colSpan="3" className="border border-gray-300 p-2"><b>Total Billed Amount:   </b> ₹ {data?.totalBillingAmount?.toFixed(2) || 0}</td>
-
-                </tr>
-                <tr>
-                  <td colSpan="9" className="border border-gray-300 p-2"><b>Amount in words:</b> {toWords(data?.totalBillingAmount || 0)}</td>
-                </tr>
-                <tr>
-                  <td colSpan="9" className="border border-gray-300 p-2"><b>Bank Details:</b></td>
-                </tr>
-                <tr className="bg-gray-200">
-                  <td colSpan="3" className="border border-gray-300 p-2"><b>Name:</b> BIHAR TRANSPORT</td>
-                  <td colSpan="6" className="border border-gray-300 p-2"></td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              
                 </tr>
                 <tr>
-                  <td colSpan="3" className="border border-gray-300 p-2"><b>A/C No:</b> 59208757320018</td>
-                  <td colSpan="6" className="border border-gray-300 p-2"></td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              <td className="border border-gray-400  p-2"> &nbsp; </td>
+              
                 </tr>
-                <tr className="bg-gray-200">
-                  <td colSpan="3" className="border border-gray-300 p-2"><b>Ifsc Code:</b> HDFC0000755</td>
-                  <td colSpan="6" className="border border-gray-300 p-2"></td>
-                </tr>
-                <tr>
-                  <td colSpan="3" className="border border-gray-300 p-2"><b>Branch:</b> Begusarai, Bihar</td>
-                  <td colSpan="6" className="border border-gray-300 p-2"></td>
-                </tr>
-                <tr className="bg-gray-200">
-                  <td colSpan="4" className="border border-gray-300 p-2"></td>
-                  <td colSpan="5" className="border border-gray-300 p-2"><b>Authorised Signatory:</b></td>
-                </tr>
-                <tr>
-                  <td colSpan="9" className="border border-gray-300 p-2"><b>UPI Payment:</b></td>
-                </tr>
-                <tr className="bg-gray-200">
-                  <td colSpan="3" className="border border-gray-300 p-2"><b>UPI No:</b> 8757320018</td>
-                  <td colSpan="6" className="border border-gray-300 p-2"></td>
-                </tr>
-                <tr>
-                  <td colSpan="9" className="border border-gray-300 p-2"><b>Note:</b> Please pay by A/C payee cheque/D.D. in favour of Bihar Transport not to.</td>
-                </tr>
-              </tbody>
-            </table>
+               
+               
+                </tbody>
+                
+                </table>
+                <p className="flex  justify-between items-center border border-t-0 border-gray-400 px-2">
+                  <span className="p-2 font-medium">Total Additional Charges:   </span>
+                  <span className="p-2">{data?.additionalCharges.totalCharge}</span>
+                </p>
+                <p className="flex  justify-between items-center border border-t-0 border-gray-400 px-2">
+                  <span className="p-2 font-semibold">Total Billing Amount:   </span>
+                  <span className="p-2"> {data?.totalBillingAmount?.toFixed(2) || 0}</span>
+                </p>
+                <div className="border border-t-0 border-gray-400 px-2">
+                <p className="flex  justify-between items-center ">
+                  <span className="p-2 font-semibold">Amount in words:   </span>
+                  <span className="p-2"> {toWords(data?.totalBillingAmount || 0)}</span>
+                 
+                </p>
+                <p>
+                  &nbsp; 
+                  </p>
+                <p>
+                  &nbsp; 
+                  </p>
+                </div>
+                
+               
+                
           </div>
         </div>
-      </div>
-      <div className="flex justify-end mt-4">
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={exportToExcel}
-          disabled={loader}
-        >
-          {loader ? "Exporting..." : "Export to Excel"}
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={exportToPDF}
-          disabled={loader}
-        >
-          {loader ? "Exporting..." : "Export to PDF"}
-        </Button>
-      </div>
+
+        {/* BAnking */}
+        <div className="grid grid-cols-4 min-h-12 border border-t-0 border-gray-400">
+<div className="col-span-1 ">
+<h4 className="font-bold underline text-center my-1">Bank Details :</h4>
+<p className="py-[2px]"><span className="font-medium mx-4">Name:</span> BIHAR TRANSPORT</p>
+<p className="py-[2px]"> <span className="font-medium mx-4">A/C No:</span> 59208757320018</p>
+<p className="py-[2px]">  <span className="font-medium mx-4">Ifsc Code:</span> HDFC0000755</p>
+<p className="py-[2px]">
+<span className="font-medium mx-4">Branch:</span> Begusarai, Bihar
+</p>
+
+<h4 className="font-bold underline text-center my-1 border border-x-0 border-gray-400"> UPI Payment</h4>
+<p className=" ">
+<span className="font-medium mx-4 ">UPI No:</span> 8757320018
+</p>
+
+</div>
+<div className="col-span-1 border border-y-0 border-gray-400">
+
+</div>
+<div className="col-span-2 flex flex-col justify-between">
+<h4 className="font-bold text-lg text-center my-1">For Bihar Transport</h4>
+<p className="text-center">Authorised Signatory</p>
+</div>
+        </div>
+        <p className=" border border-t-0 border-gray-400 p-2 px-4 mb-6">
+      <span className="font-bold">Note :</span>  Please pay by A/C payee cheque/D.D. in favour of Bihar Transport not to.
+                </p>
+
+       
+    </div>
+    </div>
     </div>
   );
 }
