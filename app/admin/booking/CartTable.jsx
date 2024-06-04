@@ -32,18 +32,18 @@ const CartTable = ({ form, items, onDelete, onEdit }) => {
     setTotalCost(calculatedTotalCost);
 
     form.setValue("partyBhara", calculatedTotalCost);
-    console.log("partyBhara Jyoti KM", form.getValues("partyBhara"));
+    // console.log("partyBhara Jyoti KM", form.getValues("partyBhara"));
   }, [items]);
 
   useEffect(()=>{
-    console.log("it's started...");
+    // console.log("it's started...");
    fetchRateAsPer();
 },[]);
 
 
   const fetchRateAsPer = async () => {
      // Fetch units data from API
-     console.log("it's workiing now...")
+    //  console.log("it's workiing now...")
      try {
        const response = await fetch(`/api/setting/rateAsPer/get/${userId}`, {
          method: "GET",
@@ -54,7 +54,7 @@ const CartTable = ({ form, items, onDelete, onEdit }) => {
        }
 
        const data = await response.json();
-       console.log("rate as per data:", data.data);
+      //  console.log("rate as per data:", data.data);
        setRateAsPerData(data.data);
      } catch (error) {
        console.error("Error:", error);
@@ -105,13 +105,13 @@ const CartTable = ({ form, items, onDelete, onEdit }) => {
         
 
 
-        console.log("test AMount : ", testAmount)
-        console.log("actual weight ", actualWeight);
-        console.log("chargedWeight : ", chargedWeight);
-        console.log("rate: ", rate);
-        console.log("rate as per : ", rateAsPer);
-        console.log("updated item : ", updatedItem);
-        console.log("ok, checking multiplier: ", updatedItem.rateAsPer);
+        // console.log("test AMount : ", testAmount)
+        // console.log("actual weight ", actualWeight);
+        // console.log("chargedWeight : ", chargedWeight);
+        // console.log("rate: ", rate);
+        // console.log("rate as per : ", rateAsPer);
+        // console.log("updated item : ", updatedItem);
+        // console.log("ok, checking multiplier: ", updatedItem.rateAsPer);
 
         let basicAmount;
 
@@ -142,8 +142,8 @@ const CartTable = ({ form, items, onDelete, onEdit }) => {
         // amount = total;
         const total = amount;
 
-        console.log("Total ", total);
-        console.log("basic amount : ", basicAmount);
+        // console.log("Total ", total);
+        // console.log("basic amount : ", basicAmount);
 
         return {
           ...updatedItem,

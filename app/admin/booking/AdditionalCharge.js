@@ -55,7 +55,7 @@ setTotalCost(calculatedTotalCost);
 
     if(charges.length > 0){
     
-    console.log('additional charge' , charges[charges.length - 1]?.amount)
+    // console.log('additional charge' , charges[charges.length - 1]?.amount)
     form.setValue("additionalCharges.totalCharge", charges[charges.length - 1]?.amount);
     }
     // const PartyBhara = form.getValues("partyBhara");
@@ -130,7 +130,7 @@ setTotalCost(calculatedTotalCost);
        }
 
        const data = await response.json();
-       console.log("rate as per data:", data.data);
+      //  console.log("rate as per data:", data.data);
        setChargesList(data.data);
      } catch (error) {
        console.error("Error:", error);

@@ -44,7 +44,7 @@ const SignIn = () => {
           ip = data.ip || null;
           location = data.city || null;
         } else {
-          console.log("IP Fetching failed");
+          // console.log("IP Fetching failed");
         }
       } catch (error) {
         console.error("Error fetching IP:", error.message);

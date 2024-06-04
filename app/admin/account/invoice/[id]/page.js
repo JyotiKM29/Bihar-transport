@@ -46,7 +46,7 @@ function Invoice({ params }) {
 
           const result = await response.json();
 
-          console.log("Invoice Generated", result);
+          // console.log("Invoice Generated", result);
 
           if (result.booking) {
             setInvoiceData(result.booking);
@@ -55,7 +55,7 @@ function Invoice({ params }) {
             );
             if (bookingIndex !== -1) {
               setData(result.booking[bookingIndex]);
-              console.log("Data", result.booking[bookingIndex]);
+              // console.log("Data", result.booking[bookingIndex]);
             } else {
               console.log("Booking with the specified ID was not found.");
             }

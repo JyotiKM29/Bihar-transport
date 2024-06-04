@@ -40,7 +40,7 @@ const SearchInput = ({ form, field, personName }) => {
 
         setSearchResult(results.slice(0, 5));
       } else {
-        console.log("Person not found");
+        // console.log("Person not found");
         if (personName === "consignorName") {
           setSearchResult([{ consignorName: value }]);
         } else {
@@ -48,13 +48,13 @@ const SearchInput = ({ form, field, personName }) => {
         }
       }
     } catch (error) {
-      console.log("Fetch failed", error);
+      // console.log("Fetch failed", error);
     }
   }
 
   useEffect(() => {
     // Log the updated searchResult state
-    console.log("Result:", searchResult);
+    // console.log("Result:", searchResult);
   }, [searchResult]);
 
   function handleChange(value) {

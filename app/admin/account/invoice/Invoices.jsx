@@ -49,7 +49,7 @@ const Invoices = () => {
 
           
 
-          console.log("Pending Invoice Result ", result);
+          // console.log("Pending Invoice Result ", result);
 
           setInvoicePending(result.booking);
           setLoading(false);
@@ -79,7 +79,7 @@ const Invoices = () => {
 
           
 
-          console.log("Invoice Generated", result);
+          // console.log("Invoice Generated", result);
 
           setInvoiceData(result.booking);
           setLoading(false);

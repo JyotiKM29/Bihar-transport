@@ -72,14 +72,9 @@ const AddNew = () => {
   });
 
   async function myhandleSubmit(value) {
-    console.log(formSchema.safeParse(value));
+    // console.log(formSchema.safeParse(value));
 
-    try {
-      const res = formSchema.parse(value);
-      console.log("solved", res);
-    } catch (error) {
-      console.log("hi", error);
-    }
+   
     value.adminId = user?._id;
     try {
       const response = await fetch("/api/accounting/createExpanse", {
@@ -89,7 +84,7 @@ const AddNew = () => {
         },
         body: JSON.stringify(value),
       });
-      console.log(response);
+      // console.log(response);
     
       const newResult = await response.json();
     

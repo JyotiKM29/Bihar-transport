@@ -30,7 +30,7 @@ export function DataTable({ columns, data }) {
       const header = columns.map((c) => ({ header: c.header, accessorKey: c.accessorKey }));
       const filteredHeader = header.filter((item) => typeof item.header !== 'function');
 
-      console.log('header', filteredHeader);
+      // console.log('header', filteredHeader);
 
       const compatibleData = data.map((row) => {
         const obj = {};
@@ -42,7 +42,7 @@ export function DataTable({ columns, data }) {
       });
 
       // Log processed data for debugging:
-      console.log("Compatible data after processing:", compatibleData);
+      // console.log("Compatible data after processing:", compatibleData);
 
       let wb = XLSX.utils.book_new();
       let ws1 = XLSX.utils.json_to_sheet(compatibleData, {

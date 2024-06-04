@@ -43,7 +43,7 @@ const FieldComponent = ({ label, value, show, identifier, tableId , type = 'text
 
       if (response.ok) {
         displayToast("Successfully Updated", "✅");
-        console.log("Booking updated successfully!");
+        // console.log("Booking updated successfully!");
         setIsEdit(false);
       } else {
        const Error = await response.json();

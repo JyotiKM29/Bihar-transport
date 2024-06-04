@@ -118,8 +118,8 @@ const ProductAdd = () => {
     
     
       async function MyHandleSubmit(value) {
-        console.log("hey");
-        console.log(value);
+        // console.log("hey");
+        // console.log(value);
     
         setLoading(true);
     

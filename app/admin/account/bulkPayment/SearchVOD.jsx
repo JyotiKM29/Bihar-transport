@@ -24,7 +24,7 @@ const SearchVOD = ({ form, field, label, fetchBookingDetails }) => {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
       const result = await res.json();
-      console.log("result fetched:", result);
+      // console.log("result fetched:", result);
 
       if (result && Array.isArray(result.data)) {
         const results = result.data.filter((item) => {
@@ -40,11 +40,11 @@ const SearchVOD = ({ form, field, label, fetchBookingDetails }) => {
               item.driver.name.toLowerCase().includes(searchTermLowerCase))
           );
         });
-        console.log("Filter data:", results);
+        // console.log("Filter data:", results);
 
         setSearchResult(results.slice(0, 5));
       } else {
-        console.log("Person not found");
+        // console.log("Person not found");
         if (personName === "consignorName") {
           setSearchResult([{ consignorName: value }]);
         } else {
@@ -52,7 +52,7 @@ const SearchVOD = ({ form, field, label, fetchBookingDetails }) => {
         }
       }
     } catch (error) {
-      console.log("Fetch failed", error);
+      // console.log("Fetch failed", error);
     }
   }
 

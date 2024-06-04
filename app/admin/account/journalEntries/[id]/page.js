@@ -22,7 +22,7 @@ const View = ({ params }) => {
 
     setData(result.data);
     setLoading(false);
-    console.log("res", result);
+    // console.log("res", result);
   }
 
   useEffect(() => {

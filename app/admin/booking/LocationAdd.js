@@ -23,7 +23,7 @@ const LocationAdd = ({ form, field, label, nameValue }) => {
     setLocations((prev) => {
       const newLocations = [...prev, value];
       form.setValue(nameValue, newLocations);
-      console.log(newLocations);
+      // console.log(newLocations);
       return newLocations;
     });
   }
@@ -37,9 +37,9 @@ const LocationAdd = ({ form, field, label, nameValue }) => {
   }
 
   async function fetchLocation(value) {
-    console.log(user._id);
+    // console.log(user._id);
     try {
-      console.log("value here :", value);
+      // console.log("value here :", value);
 
       const response = await fetch(`/api/map/${user._id}/${value}`);
       // console.log("response :", response);
@@ -65,20 +65,20 @@ const LocationAdd = ({ form, field, label, nameValue }) => {
         });
 
         setSearchResult(results.slice(0,5));
-        console.log("Result:" ,searchResult);
+        // console.log("Result:" ,searchResult);
       } else {
-        console.log("No suggested locations found");
+        // console.log("No suggested locations found");
         setSearchResult([{"placeAddress":value}]);
-        console.log(searchResult);
+        // console.log(searchResult);
       }
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
     }
   }
 
   // useEffect(() => {
     // Log the updated searchResult state
-  //   console.log("Result:", searchResult);
+    console.log("Result:", searchResult);
   // }, [searchResult]); 
 
   function handleChange(e) {

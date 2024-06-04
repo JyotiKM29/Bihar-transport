@@ -24,7 +24,7 @@ export default function ColumnHeaderPending() {
           method: "POST",
           body: JSON.stringify({ bookingId: id, adminId: user?._id }),
         });
-        console.log(response);
+        // console.log(response);
 
         if (!response.ok) {
        const  result = await response.json();

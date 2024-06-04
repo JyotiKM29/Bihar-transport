@@ -80,7 +80,7 @@ const MaterialInfo = ({ form, nameValue, onAddItem, setMaterialItems }) => {
       }
 
       const data = await response.json();
-      console.log("rate as per data:", data.data);
+      // console.log("rate as per data:", data.data);
       setRateAsPerData(data.data);
     } catch (error) {
       console.error("Error:", error);
@@ -120,7 +120,7 @@ const MaterialInfo = ({ form, nameValue, onAddItem, setMaterialItems }) => {
   function calAmount(rate, quantity, GSTPercentage = 0, rateMultiple, rateUnit, chargedWeightUnit, actualWeightUnit, qtyUnit) {
     let amount;
 
-console.log("rate: ", rate, "quantity: ", quantity, "GSTPercentage: ", GSTPercentage, "rateMultiplier: ", rateMultiple, "rateUnit: ", rateUnit, "charged Weight unit: ", chargedWeightUnit, "actual weight unit: ", actualWeightUnit, "qty unit: ", qtyUnit);
+// console.log("rate: ", rate, "quantity: ", quantity, "GSTPercentage: ", GSTPercentage, "rateMultiplier: ", rateMultiple, "rateUnit: ", rateUnit, "charged Weight unit: ", chargedWeightUnit, "actual weight unit: ", actualWeightUnit, "qty unit: ", qtyUnit);
      let quantityDub;
 
 
@@ -137,7 +137,7 @@ console.log("rate: ", rate, "quantity: ", quantity, "GSTPercentage: ", GSTPercen
     }
     
 
-    console.log("quantity here : ", quantityDub);
+    // console.log("quantity here : ", quantityDub);
     
     
     
@@ -154,7 +154,7 @@ console.log("rate: ", rate, "quantity: ", quantity, "GSTPercentage: ", GSTPercen
               quantityDub /= 1000000;
 
      }else if (rateMultiple === "actualWeight" && actualWeightUnit){
-      console.log("true");
+      // console.log("true");
              if(actualWeightUnit === "TON")
                            quantityDub *=1;
               if(actualWeightUnit === "KG")
@@ -169,7 +169,7 @@ console.log("rate: ", rate, "quantity: ", quantity, "GSTPercentage: ", GSTPercen
      }
 
 
-         console.log("quantity if the rateUnit is Ton : ", quantityDub);
+        //  console.log("quantity if the rateUnit is Ton : ", quantityDub);
 
 
 
@@ -196,29 +196,29 @@ console.log("rate: ", rate, "quantity: ", quantity, "GSTPercentage: ", GSTPercen
      }
 
 
-              console.log("quantity if the rateUnit is not Ton : ", quantityDub);
+              // console.log("quantity if the rateUnit is not Ton : ", quantityDub);
 
 
 
 
   }
 
-console.log(
-  "quantityDub: ", quantityDub,
-  "rate: ", rate,
-  "quantity: ", quantity,
-  "GSTPercentage: ", GSTPercentage,
-  "rateMultiplier: ", rateMultiple,
-  "rateUnit: ", rateUnit,
-  "charged Weight unit: ", chargedWeightUnit,
-  "actual weight unit: ", actualWeightUnit,
-  "qty unit: ", qtyUnit
-);
+// console.log(
+//   "quantityDub: ", quantityDub,
+//   "rate: ", rate,
+//   "quantity: ", quantity,
+//   "GSTPercentage: ", GSTPercentage,
+//   "rateMultiplier: ", rateMultiple,
+//   "rateUnit: ", rateUnit,
+//   "charged Weight unit: ", chargedWeightUnit,
+//   "actual weight unit: ", actualWeightUnit,
+//   "qty unit: ", qtyUnit
+// );
 
 
-      console.log("rateUnit: ", rateUnit);
-      console.log("rate: ", rate);
-      console.log("quanitty after calculation: ", quantityDub);
+      // console.log("rateUnit: ", rateUnit);
+      // console.log("rate: ", rate);
+      // console.log("quanitty after calculation: ", quantityDub);
 
     amount = parseFloat(rate) * parseFloat(quantityDub);
     
@@ -328,7 +328,7 @@ console.log(
 
     // onAddItem(newItem);
     const data = form.getValues(nameValue);
-    console.log("item list after update:", data);
+    // console.log("item list after update:", data);
 
     const updatedItem = form.getValues("itemsList") && [];
 
