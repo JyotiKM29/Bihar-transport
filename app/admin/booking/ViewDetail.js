@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import FieldComponent from "./FieldComponent";
 import { Button } from "../../components/ui/button";
 // import Lightbox from "react-image-lightbox";
-import "react-image-lightbox/style.css";
+// import "react-image-lightbox/style.css";
 import {
   Dialog,
   DialogContent,
