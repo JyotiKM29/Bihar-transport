@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { IoCall } from "react-icons/io5";
 import { IoMail } from "react-icons/io5";
 import { FaEarthAmericas } from "react-icons/fa6";
@@ -6,6 +6,7 @@ import { FaUserLarge } from "react-icons/fa6";
 import { useReactToPrint } from "react-to-print";
 import { Printer } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
+
 
 const PrintQuote = ({
   quoteid,
@@ -17,12 +18,15 @@ const PrintQuote = ({
   email,
   GSTIN,
 }) => {
+
   const documentRef = useRef(null);
   const handlePrint = useReactToPrint({
     content: () => documentRef.current,
     documentTitle: `Quatation-${name}`,
     bodyClass: "p-8", // some padding
   });
+
+ 
 
   return (
     <div className="py-32">

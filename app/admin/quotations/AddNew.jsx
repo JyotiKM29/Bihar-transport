@@ -11,6 +11,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContextProvider";
 import { useToast } from "../../components/ui/use-toast";
 import CartTable from "./CartTable";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   adminId: z.string(),
@@ -38,6 +39,7 @@ const formSchema = z.object({
 });
 
 const AddNew = () => {
+  const route = useRouter();
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState(false);
   const { user } = useContext(UserContext);
@@ -127,6 +129,9 @@ const AddNew = () => {
         setIsLoading(false);
         displayToast("Successfully Added new Quotation", "✅");
         form.reset(initialFormState);
+        // move to detail page 
+        route.push(`/admin/quotations/663db02c0abdb0affd69c00d`)
+
       } else {
         console.error("Error:", newResult.message);
         displayToast("Error", "❌ ", newResult.message);
