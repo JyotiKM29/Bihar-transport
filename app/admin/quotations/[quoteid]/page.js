@@ -7,6 +7,7 @@ import { useToast } from "../../../components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import ViewDetail from "../ViewDetail"; // Import the ViewDetail component
 import { UserContext } from "../../../context/UserContextProvider";
+import PrintQuote from "./PrintQuote";
 
 const Page = ({ params }) => {
   const { toast } = useToast();
@@ -38,7 +39,7 @@ const Page = ({ params }) => {
           `/api/quote/getOne/adminId=${userId}&&_id=${params.quoteid}`,
           {
             method: "GET",
-          }
+          },
         );
         const data = await response.json();
         if (response.ok) {
@@ -76,8 +77,11 @@ const Page = ({ params }) => {
       {userId && loading ? (
         "Loading..."
       ) : (
-        // "suraj"
-        <ViewDetail bookingDetails={bookingDetails} heading={"Quotation "} />
+        <>
+       
+          <ViewDetail bookingDetails={bookingDetails} heading={"Quotation "} />
+         
+        </>
       )}
     </div>
   );
