@@ -37,7 +37,7 @@ const BulkPayment = () => {
           setLoading(false);
   
          
-          console.log('Bulk payment ',result);
+          // console.log('Bulk payment ',result);
   
           setData(result.data);
         }

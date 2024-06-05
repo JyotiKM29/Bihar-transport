@@ -41,9 +41,9 @@ const AdditionalContact = ({ form, nameValue ,setshowAdditionalContact,showaddit
     }
 
     setContacts([...contacts ,newContact]);
-    console.log('contacts',contacts)
+    // console.log('contacts',contacts)
     form.setValue(nameValue, [...contacts ,newContact])
-    console.log('form',form.getValues(nameValue));
+    // console.log('form',form.getValues(nameValue));
     setShowForm(false);
   }
 

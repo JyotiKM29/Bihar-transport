@@ -32,17 +32,17 @@ const CancellationPop = ({bookingId}) => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(userId,reason,bookingId);
+    // console.log(userId,reason,bookingId);
 
     try {
         setLoading(true);
-        console.log(
-          JSON.stringify({
-            adminId: userId,
-            bookingId,
-            reason,
-          }),
-        );
+        // console.log(
+        //   JSON.stringify({
+        //     adminId: userId,
+        //     bookingId,
+        //     reason,
+        //   }),
+        // );
 
       const response = await fetch("/api/cancelBooking", {
         method: "POST",

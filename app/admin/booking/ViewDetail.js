@@ -8,6 +8,12 @@ import FieldComponent from "./FieldComponent";
 import { Button } from "../../components/ui/button";
 // import Lightbox from "react-image-lightbox";
 // import "react-image-lightbox/style.css";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "../../components/ui/dialog";
+import Image from "next/image";
 
 const ViewDetail = ({ bookingDetails, heading }) => {
   // const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -21,7 +27,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
   // const closeLightbox = () => {
   //   setLightboxOpen(false);
   // };
-  const { toast } = useToast();
+  // const { toast } = useToast();
   const router = useRouter();
   const [editBooking, setEditBooking] = useState(false);
   // console.log('Hey jyoti ' ,bookingDetails)
@@ -1128,6 +1134,35 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                     className="mr-4"
                   />
                   <div className="h-auto max-w-[200px]">
+                  <Dialog >
+            <DialogTrigger asChild>
+            <img
+                      src=
+                       { bookingDetails?.booking?.delivery?.consignment_info[0]
+                          ?.pod}
+                      
+                      alt="POD Image"
+                  
+                      className="h-auto w-full transform cursor-pointer rounded-md shadow-md transition-transform hover:scale-105"
+                      
+                    />
+            </DialogTrigger>
+            <DialogContent  className=" flex justify-center items-center">
+                <div className="rounded-3xl bg-white px-6 py-4 ">
+                <img
+                      src={
+                        bookingDetails?.booking?.delivery?.consignment_info[0]
+                          ?.pod
+                      }
+                      alt="POD Image"
+                      className="h-auto w-full transform cursor-pointer rounded-md shadow-md transition-transform hover:scale-105"
+                     
+                    />
+
+                   
+                </div>
+            </DialogContent>
+        </Dialog>
                     {/* <img
                       src={
                         bookingDetails?.booking?.delivery?.consignment_info[0]

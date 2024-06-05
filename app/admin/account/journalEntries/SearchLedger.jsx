@@ -24,7 +24,7 @@ const SearchLedger = ({ form, field, label , valueSet }) => {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
       const result = await res.json();
-      console.log("result my love", result);
+      // console.log("result my love", result);
 
       if (result && Array.isArray(result.data)) {
         const results = result.data.filter((item) => {
@@ -35,12 +35,12 @@ const SearchLedger = ({ form, field, label , valueSet }) => {
                 item.basicInfo.accountName.toLowerCase().includes(value.toLowerCase())
             );
         });
-        console.log("Filter data:", results);
+        // console.log("Filter data:", results);
 
         setSearchResult(results.slice(0, 5));
       } 
     } catch (error) {
-      console.log("Fetch failed", error);
+      // console.log("Fetch failed", error);
     }
   }
 

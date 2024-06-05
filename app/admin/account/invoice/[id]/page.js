@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button } from "../../../../components/ui/button";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
@@ -7,6 +7,10 @@ import "jspdf-autotable";
 import { toWords } from "number-to-words";
 import { useContext, useEffect } from "react";
 import { UserContext } from "../../../../context/UserContextProvider";
+import { useReactToPrint } from 'react-to-print';
+import { Printer } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
+import { useRouter } from "next/navigation";
 
 function Invoice({ params }) {
   const [loader, setLoader] = useState(false);
@@ -15,6 +19,18 @@ function Invoice({ params }) {
   const [data, setData] = useState();
   const id = params.id;
   const userId = user?._id;
+
+  const documentRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => documentRef.current,
+    // documentTitle: `YourPdfTitle-${values.name}`,
+    // bodyClass: 'p-16', // some padding
+  });
+
+  const router = useRouter();
+  const handleGoBack = () => {
+    router.back();
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,7 +46,7 @@ function Invoice({ params }) {
 
           const result = await response.json();
 
-          console.log("Invoice Generated", result);
+          // console.log("Invoice Generated", result);
 
           if (result.booking) {
             setInvoiceData(result.booking);
@@ -39,7 +55,7 @@ function Invoice({ params }) {
             );
             if (bookingIndex !== -1) {
               setData(result.booking[bookingIndex]);
-              console.log("Data", result.booking[bookingIndex]);
+              // console.log("Data", result.booking[bookingIndex]);
             } else {
               console.log("Booking with the specified ID was not found.");
             }
@@ -302,21 +318,26 @@ function Invoice({ params }) {
   };
 
   return (
-    <div className="w-full p-4 py-8">
+    <div className="w-full p-4 py-8 bg-white">
+    <div className="flex justify-between px-8">
+    <Button  onClick={handleGoBack} > <ChevronLeft /> &nbsp;  Back</Button>
+         <Button onClick={handlePrint}>  <Printer />  &nbsp; Print to PDF</Button>
+    </div>
+         
       <div className="overflow-x-auto">
-        <div className="min-w-full rounded-xl bg-white p-4 px-8 shadow-md  ">
-          <h1 className="text-center text-4xl font-medium uppercase text-sky-600 underline mb-6 ">
+        <div ref={documentRef} className="min-w-full rounded-xl bg-white p-4 px-8  ">
+          <h1 className="text-center text-3xl font-medium uppercase text-green-600 underline mb-6 tracking-wider ">
             Invoice
           </h1>
           <div className="grid min-h-24 grid-cols-7  ">
-            <div className="col-span-4 border border-gray-400  p-2">
+            <div className="col-span-3 border border-gray-400  p-2">
               <p>
                 <span className="font-medium">Bill To:</span>
                 {` ${data?.consignorName}`}
               </p>
             </div>
 
-            <div className="col-span-1 grid-rows-subgrid">
+            <div className="col-span-2 grid-rows-subgrid">
               <p colSpan="4" className="border border-gray-400  p-2 font-medium">
                 Invoice Date:
               </p>
@@ -346,13 +367,13 @@ function Invoice({ params }) {
 
           {/* 2nd Row  */}
           <div className="border border-t-0 border-gray-400  min-h-12">
-          <p className="p-2 border border-t-0 border-gray-400    font-medium">From :</p>
+          <p className="p-2 border border-t-0 border-gray-400  "><span className="font-medium mr-2 text-red-500">From :</span>{`${data?.loadingPoints}`} </p>
           <div className="flex flex-col">
           <p  className=" px-4 py-1">
                     <span className="font-medium mr-1">Consignor:-</span> {`${data?.consignorName}`}
                   </p>
           <p className=" px-4 py-1">
-                    <span className="font-medium mr-1">GST No:-</span> {`${data?.consignorName}`}
+                    <span className="font-medium mr-1">GST No:-</span> {`${data?.consignorMobileNumber}`}
                   </p>
 
                   <p colSpan="5" className=" px-4 py-1">
@@ -374,13 +395,14 @@ function Invoice({ params }) {
 
           {/* 3rd Row */}
           <div className="border border-t-0 border-gray-400  min-h-12">
-          <p className="p-2 border border-t-0 border-gray-400  font-medium">To :</p>
+          <p className="p-2 border border-t-0 border-gray-400  "><span className="font-medium mr-2 text-red-500">To :</span>
+          {data?.unloadingPoints}` </p>
           <div className="flex flex-col">
           <p  className=" px-4 py-1">
                     <span className="font-medium mr-1">Consignee:-</span> {`${data?.consigneeName}`}
                   </p>
           <p className=" px-4 py-1">
-                    <span className="font-medium mr-1">GST No:-</span> {`${data?.consigneeName}`}
+                    <span className="font-medium mr-1">GST No:-</span> {`${data?.consigneeMobileNumber}`}
                   </p>
 
                   <p colSpan="5" className=" px-4 py-1">
@@ -495,7 +517,7 @@ function Invoice({ params }) {
                 </table>
                 <p className="flex  justify-between items-center border border-t-0 border-gray-400 px-2">
                   <span className="p-2 font-medium">Total Freight:   </span>
-                  <span className="p-2">{data?.itemsList.totalAmount}</span>
+                  <span className="p-2">₹{data?.itemsList.totalAmount}</span>
                 </p>
                 
           </div>
@@ -571,15 +593,15 @@ function Invoice({ params }) {
                 </table>
                 <p className="flex  justify-between items-center border border-t-0 border-gray-400 px-2">
                   <span className="p-2 font-medium">Total Additional Charges:   </span>
-                  <span className="p-2">{data?.additionalCharges.totalCharge}</span>
+                  <span className="p-2">₹ {data?.additionalCharges.totalCharge}</span>
                 </p>
                 <p className="flex  justify-between items-center border border-t-0 border-gray-400 px-2">
                   <span className="p-2 font-semibold">Total Billing Amount:   </span>
-                  <span className="p-2"> {data?.totalBillingAmount?.toFixed(2) || 0}</span>
+                  <span className="p-2">₹ {data?.totalBillingAmount?.toFixed(2) || 0}</span>
                 </p>
                 <div className="border border-t-0 border-gray-400 px-2">
                 <p className="flex  justify-between items-center ">
-                  <span className="p-2 font-semibold">Amount in words:   </span>
+                  <span className="p-2 font-semibold capitalize">Amount in words:   </span>
                   <span className="p-2"> {toWords(data?.totalBillingAmount || 0)}</span>
                  
                 </p>
@@ -597,13 +619,13 @@ function Invoice({ params }) {
         </div>
 
         {/* BAnking */}
-        <div className="grid grid-cols-4 min-h-12 border border-t-0 border-gray-400">
-<div className="col-span-1 ">
+        <div className="grid grid-cols-8 min-h-12 border border-t-0 border-gray-400">
+<div className="col-span-3 ">
 <h4 className="font-bold underline text-center my-1">Bank Details :</h4>
-<p className="py-[2px]"><span className="font-medium mx-4">Name:</span> BIHAR TRANSPORT</p>
-<p className="py-[2px]"> <span className="font-medium mx-4">A/C No:</span> 59208757320018</p>
-<p className="py-[2px]">  <span className="font-medium mx-4">Ifsc Code:</span> HDFC0000755</p>
-<p className="py-[2px]">
+<p className="py-[2px] text-nowrap"><span className="font-medium mx-4">Name:</span> BIHAR TRANSPORT</p>
+<p className="py-[2px] text-nowrap"> <span className="font-medium mx-4">A/C No:</span> 59208757320018</p>
+<p className="py-[2px] text-nowrap">  <span className="font-medium mx-4">Ifsc Code:</span> HDFC0000755</p>
+<p className="py-[2px] text-nowrap">
 <span className="font-medium mx-4">Branch:</span> Begusarai, Bihar
 </p>
 
@@ -613,10 +635,10 @@ function Invoice({ params }) {
 </p>
 
 </div>
-<div className="col-span-1 border border-y-0 border-gray-400">
+<div className="col-span-2 border border-y-0 border-gray-400">
 
 </div>
-<div className="col-span-2 flex flex-col justify-between">
+<div className="col-span-3 flex flex-col justify-between">
 <h4 className="font-bold text-lg text-center my-1">For Bihar Transport</h4>
 <p className="text-center">Authorised Signatory</p>
 </div>
@@ -627,9 +649,9 @@ function Invoice({ params }) {
 
        
     </div>
+   
     </div>
     </div>
   );
 }
-
 export default Invoice;

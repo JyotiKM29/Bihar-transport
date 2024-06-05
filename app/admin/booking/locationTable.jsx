@@ -21,10 +21,10 @@ const LocationTable = ({ locations }) => {
  if (locations.date) {
   const dateString = locations.date;
   const [finalDate, timePart] = dateString.split("T");
-  console.log(finalDate); // Output: 2024-05-09
-  console.log(timePart); // Output: 00:00:00.000Z
+  // console.log(finalDate); // Output: 2024-05-09
+  // console.log(timePart); // Output: 00:00:00.000Z
 } else {
-  console.log("Date is undefined");
+  // console.log("Date is undefined");
 }
 
 
@@ -45,7 +45,7 @@ const LocationTable = ({ locations }) => {
   //       throw new Error("Failed to fetch locations");
   //     }
   //   } catch (error) {
-  //     console.error("Error:", error.message);
+      console.error("Error:", error.message);
   //     toast({
   //       title: "Error",
   //       description: "Failed to fetch locations",
@@ -63,7 +63,7 @@ const LocationTable = ({ locations }) => {
 
   const handleUpdateLocation = ()=>{
 
-    console.log("okau");
+    // console.log("okau");
 
 
   }
@@ -99,7 +99,7 @@ const LocationTable = ({ locations }) => {
   //       throw new Error("Failed to update location");
   //     }
   //   } catch (error) {
-  //     console.error("Error:", error.message);
+      console.error("Error:", error.message);
   //     toast({
   //       title: "Error",
   //       description: "Failed to update location",

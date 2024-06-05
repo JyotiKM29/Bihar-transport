@@ -36,7 +36,7 @@ const JournalEntries = () => {
   
           setLoading(false);
   
-       console.log('Journal Entry',result);
+      //  console.log('Journal Entry',result);
           
   
           setData(result);

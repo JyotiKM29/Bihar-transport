@@ -225,7 +225,7 @@ export default function ProfileForm() {
   }, [CartItems]);
 
   function onDeleteItem(hsnRemove) {
-    console.log("delete :", hsnRemove);
+    // console.log("delete :", hsnRemove);
     const updatedItems = materialItems.filter(
       (item) => item.hsnNo !== hsnRemove,
     );
@@ -252,8 +252,8 @@ export default function ProfileForm() {
     setMaterialItems((items)=>[...items, newItem]);
 
     form.setValue("itemsList", materialItems);
-    console.log("materialItems :", materialItems);
-    console.log("ItemsList :", form.getValues("itemsList"));
+    // console.log("materialItems :", materialItems);
+    // console.log("ItemsList :", form.getValues("itemsList"));
   }
 
   //=======================================================================
@@ -285,7 +285,7 @@ export default function ProfileForm() {
       Number(PartyBhara) +
       Number(totalAdditionalChargeTax);
 
-    console.log(totalAdditionalCharges, PartyBhara, totalAdditionalChargeTax);
+    // console.log(totalAdditionalCharges, PartyBhara, totalAdditionalChargeTax);
     // console.log("Total Billing :", isNaN(total) ? 0 : total);
     form.setValue("totalBillingAmount", isNaN(total) ? 0 : total);
   }
@@ -433,7 +433,7 @@ export default function ProfileForm() {
         const response = await fetch(`/api/setting/tripType/get/${userId}`);
         const result = await response.json();
 
-        console.log("result: ", result);
+        // console.log("result: ", result);
         setTripType(result.data);
         // setDataLoading(false);
       } catch (error) {
@@ -452,7 +452,7 @@ export default function ProfileForm() {
         const response = await fetch(`/api/setting/paymentTerm/get/${userId}`);
         const result = await response.json();
 
-        console.log("result: ", result);
+        // console.log("result: ", result);
         setpaymentTerm(result.data);
         // setDataLoading(false);
       } catch (error) {
@@ -471,17 +471,17 @@ export default function ProfileForm() {
   // console.log(formSchema.safeParse(submitData));
 
   async function MyHandleSubmit(value) {
-    console.log("hey");
+    // console.log("hey");
    
 
     value.adminId = user._id;
-    console.log(value);
+    // console.log(value);
     setIsLoading(true);
     setIsLoading2(true);
     try {
       if (allocateVehicle) {
         value.status = "Confirmed";
-        console.log(value);
+        // console.log(value);
       }
       const response = await fetch("/api/createbooking", {
         method: "POST",
@@ -490,13 +490,13 @@ export default function ProfileForm() {
         },
         body: JSON.stringify(value),
       });
-      console.log(response);
+      // console.log(response);
 
       const newResult = await response.json();
-      console.log(newResult);
+      // console.log(newResult);
       if (response.ok) {
         if (allocateVehicle) {
-          console.log("hey", newResult.Booking.orderNumber);
+          // console.log("hey", newResult.Booking.orderNumber);
           setIsLoading(false);
           setIsLoading2(false);
           displayToast("Successfully Booked,Ok", "✅");

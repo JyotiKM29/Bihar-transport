@@ -17,14 +17,14 @@ export default function ColumnHeader() {
 
   useEffect(() => {
     async function deleteData(id) {
-      console.log(user);
-      console.log("id:", id);
+      // console.log(user);
+      // console.log("id:", id);
       try {
         const response = await fetch(`/api/deletebooking`, {
           method: "DELETE",
           body: JSON.stringify({ _id: id, adminId: user._id }),
         });
-        console.log(response);
+        // console.log(response);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

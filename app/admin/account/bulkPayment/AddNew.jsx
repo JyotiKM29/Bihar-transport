@@ -84,13 +84,13 @@ const AddNew = () => {
   });
 
   async function myhandleSubmit(value) {
-    console.log(formSchema.safeParse(value));
+    // console.log(formSchema.safeParse(value));
 
     try {
       const res = formSchema.parse(value);
-      console.log("solved", res);
+      // console.log("solved", res);
     } catch (error) {
-      console.log("hi", error);
+      // console.log("hi", error);
     }
 
     value.adminId = user?._id;
@@ -102,7 +102,7 @@ const AddNew = () => {
         },
         body: JSON.stringify(value),
       });
-      console.log(response);
+      // console.log(response);
 
       const newResult = await response.json();
 
@@ -134,11 +134,11 @@ const AddNew = () => {
     try {
       setOrderNo([]);
       setStatus([]);
-      console.log("vehicle no : ", vehicleNo);
+      // console.log("vehicle no : ", vehicleNo);
       const response = await fetch(`/api/vehicledetails/${vehicleNo}`);
       const result = await response.json();
       await setBookingData(result.data?.bookedBy);
-      console.log("booking data:  ", bookingData);
+      // console.log("booking data:  ", bookingData);
       await fetchOrderNo();
     } catch (error) {
       console.error("Error fetching vehicle details:", error);
@@ -153,7 +153,7 @@ const AddNew = () => {
 
   const fetchOrderNo = async function () {
     bookingData?.forEach(async (booking) => {
-      console.log("it's started...");
+      // console.log("it's started...");
       try {
         const data = await fetch(`/api/bookingdetails/${booking.bookingId}`);
         const newData = await data.json();
@@ -170,12 +170,12 @@ const AddNew = () => {
         console.error("Error fetching booking details:", error);
       }
     });
-    console.log(orderNO);
+    // console.log(orderNO);
   };
 
   useEffect(() => {
     if (bookingData?.length > 0) {
-      console.log("okay...");
+      // console.log("okay...");
       fetchOrderNo();
     }
   }, [bookingData, loadIt]);

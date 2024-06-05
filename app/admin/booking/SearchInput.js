@@ -22,7 +22,7 @@ const SearchInput = ({ form, field, personName }) => {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
       const result = await res.json();
-      console.log("data: ", result);
+      // console.log("data: ", result);
       
 
       if (result && Array.isArray(result.newdata)) {
@@ -38,9 +38,9 @@ const SearchInput = ({ form, field, personName }) => {
         });
 
         setSearchResult(results.slice(0, 5));
-        console.log("here: ", result);
+        // console.log("here: ", result);
       } else {
-        console.log("Person not found");
+        // console.log("Person not found");
         if (personName === "consignorName") {
           setSearchResult([{ consignorName: value }]);
         } else {
@@ -48,7 +48,7 @@ const SearchInput = ({ form, field, personName }) => {
         }
       }
     } catch (error) {
-      console.log("Fetch failed", error);
+      // console.log("Fetch failed", error);
     }
   }
 

@@ -41,11 +41,11 @@ const DataView = ({ label, value, show, identifier, tableId ,apiCall, type = 'te
           },
         })
       });
-      console.log('response', await response.json());
+      // console.log('response', await response.json());
 
       if (response.ok) {
         displayToast("Successfully Updated", "✅");
-        console.log("Updated successfully!");
+        // console.log("Updated successfully!");
         setIsEdit(false);
       } else {
        const Error = await response.json();
@@ -53,14 +53,14 @@ const DataView = ({ label, value, show, identifier, tableId ,apiCall, type = 'te
         console.error('Error' ,Error);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       displayToast("Error", "❌", error.message);
     }
   }
 
   return (
     <div className="flex w-full border-b" >
-      {/* {console.log(identifier, newValue, tableId)} */}
+      {console.log(identifier, newValue, tableId)}
       <label className="my-2 flex w-full items-center justify-between   ">
         <h2 className="mr-3 text-nowrap text-lg font-semibold ">{label} :</h2>
         <div className="flex items-center gap-3">
