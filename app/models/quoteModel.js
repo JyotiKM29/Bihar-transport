@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
-
 const productSchema = new mongoose.Schema({
     productName: {
         type: String,
-        required: true,
+        // required: true,
     },
     itemSize: {
         type: String,
@@ -25,6 +24,18 @@ const productSchema = new mongoose.Schema({
     },
 
 },{timestamps:true});
+
+// [
+//   {
+//     productName: "ses",
+//     itemSize: "12",
+//     itemWeight: "12KG",
+//     ETA: "133",
+//     rate: 24,
+//     rateAsPer: "sdgs",
+//     Advance: 2,
+//   },
+// ];
 
 
 

@@ -68,7 +68,8 @@ const Quotation = () => {
       {showAddForm ? <AddNew />:
 <>
      { loading ?
-       (<div className="max-w max-h  bg-white"><h2
+            (<div className="max-w max-h  bg-white">
+              <h2
        className="text-xl"
        >Loading...</h2></div>) :  
        ( <DataTable columns={columns} data={data} />)}
