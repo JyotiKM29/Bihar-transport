@@ -111,7 +111,7 @@ const validateRcPhoto = function (value) {
 };
 
 
-const paymentSchema = new mongoose.Scheam(
+const paymentSchema = new mongoose.Schema(
   {
     date: { type: Date, default: Date.now },
     paymentMode: { type: String },
