@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+
 // Custom validator to ensure exactly two URLs for driverSchema
 const validateDriverProof = function (value) {
   return (
@@ -131,7 +132,7 @@ const allotmentSchema = new mongoose.Schema(
     driverBhara: { type: Number },
     commission: { type: Number },
     netBhara: { type: Number }, // Calculated as (Driver Bhara - Commission)
-    balanceAmount:{type:Number},
+    balanceAmount: { type: Number },
 
     paymentLiability: {
       type: String,
@@ -139,6 +140,8 @@ const allotmentSchema = new mongoose.Schema(
     ledgerBalanceParty: { type: String }, // Assuming it can be both debit or credit
 
     remarks: { type: String },
+    payment: [paymentSchema],
+    totalPaidAmount: { type: Number, default: 0 },
   },
   { _id: false }, // To exclude this subdocument from having its own _id
 );
@@ -199,6 +202,53 @@ const transporterDetailsSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+// additional payments
+
+const fuelSchema = new mongoose.Schema(
+  {
+    fuelType: { type: String },
+    date: { type: Date, default: Date.now },
+    slipNo: { type: String },
+    petrolPump: { type: String },
+    fuelVolume: { type: Number, default: 0 },
+    fuelRate: { type: Number, default: 0 },
+    fuelAmount: { type: Number, default: 0 },
+    cashReceived: { type: Number, default: 0 },
+    paymentTerm: { type: String },
+    paymentMode: { type: String, default: "Noting" },
+    Remark: { type: String },
+  },
+  { timestamps: true },
+);
+
+const expanseSchema = new mongoose.Schema(
+  {
+    date: { type: Date, default: Date.now },
+    expanseCategory: { type: String },
+    vehicleNo: { type: String, required: true },
+    serveceCharge: { type: Number, required: true },
+    paidAmount: { type: Number, required: true },
+    paidBy: { type: String },
+    remarks: { type: String },
+  },
+  { timestamps :true},
+);
+
+const paymentSchema = new mongoose.Scheam(
+  {
+    date: { type: Date, default: Date.now },
+    paymentMode: { type: String },
+    amountPaid: { type: Number, required: true },
+    fine: { type: Number },
+    finalDue: { type: Number },
+    paymentType: { type: String },
+    remarks: { type: String },
+  },
+  { timestamps : true},
+);
+
+
+
 const vehicleSchema = new mongoose.Schema(
   {
     vehicleNo: { type: String, required: true },
@@ -240,6 +290,10 @@ const vehicleSchema = new mongoose.Schema(
     // owner Details
     owner: ownerSchema,
     driver: driverSchema,
+    expanse: {
+      fuel: [fuelSchema],
+      service: [expanseSchema]
+    },
     addedBy: [
       {
         // Details for owner or admin
