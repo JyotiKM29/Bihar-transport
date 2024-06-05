@@ -97,9 +97,16 @@ e.preventDefault();
                         setInputValue(result?.basicInfo?.accountName)
                   form.setValue('customerDetails.customerName', result?.basicInfo?.accountName);
                
-                  form.setValue('customerDetails.customerPhone', result?.basicInfo?.contactNo);
+                  form.setValue(
+                    "customerDetails.customerMobileNo",
+                    result?.basicInfo?.contactNo,
+                  );
                   form.setValue('customerDetails.customerAddress', result?.basicInfo?.officeAddress);
-                  form.setValue('customerDetails.customerId', result?.basicInfo?.taxInfo?.GSTIN);
+                      form.setValue('customerDetails.customerId', result?._id);
+                      form.setValue(
+                        "customerDetails.customerGSTIN",
+                        result?.basicInfo?.taxInfo?.GSTIN,
+                      );
                   form.setValue('customerDetails.customerEmail', 'customer@gmail.com');
 
                   console.log('SET VLUE')

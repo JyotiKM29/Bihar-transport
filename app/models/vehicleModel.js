@@ -110,6 +110,23 @@ const validateRcPhoto = function (value) {
   return typeof value === "string" && value.trim().length > 0;
 };
 
+
+const paymentSchema = new mongoose.Scheam(
+  {
+    date: { type: Date, default: Date.now },
+    paymentMode: { type: String },
+    amountPaid: { type: Number, required: true },
+    fine: { type: Number },
+    finalDue: { type: Number },
+    paymentType: { type: String },
+    remarks: { type: String },
+  },
+  { timestamps : true},
+);
+
+
+
+
 const allotmentSchema = new mongoose.Schema(
   {
     bookingId: { type: String, required: true },
@@ -232,19 +249,6 @@ const expanseSchema = new mongoose.Schema(
     remarks: { type: String },
   },
   { timestamps :true},
-);
-
-const paymentSchema = new mongoose.Scheam(
-  {
-    date: { type: Date, default: Date.now },
-    paymentMode: { type: String },
-    amountPaid: { type: Number, required: true },
-    fine: { type: Number },
-    finalDue: { type: Number },
-    paymentType: { type: String },
-    remarks: { type: String },
-  },
-  { timestamps : true},
 );
 
 
