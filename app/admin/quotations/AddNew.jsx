@@ -1,20 +1,16 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import * as z from "zod";
 import FieldForm from "../component/FieldForm";
 import { Button } from "../../components/ui/button";
 import SearchProduct from "./SearchProduct";
 import SearchCustomer from "./SearchCustomer";
-import {
-  Form,
-  FormField,
- 
-} from "../../components/ui/form";
+import { Form, FormField } from "../../components/ui/form";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContextProvider";
 import { useToast } from "../../components/ui/use-toast";
-
+import CartTable from "./CartTable";
 
 const formSchema = z.object({
   adminId: z.string(),
@@ -23,44 +19,44 @@ const formSchema = z.object({
   customerDetails: z.object({
     customerId: z.string(),
     customerName: z.string(),
-    customerEmail: z.string().optional(),
-    customerPhone: z.number().optional(),
     customerAddress: z.string().optional(),
+    customerMobileNo: z.coerce.number().optional(),
+    customerEmail: z.string().optional(),
+    customerGSTIN: z.string().optional(),
   }),
-  product: z.object({
-    productId: z.string(),
-    productName: z.string(),
-    productDescription: z.string().optional(),
-    productPrice: z.coerce.number().optional(),
-    quantity: z.coerce.number().optional(),
-  }),
+  products: z.array(
+    z.object({
+      productName: z.string(),
+      itemSize: z.string().optional(),
+      itemWeight: z.string().optional(),
+      ETA: z.string().optional(),
+      rate: z.coerce.number().optional(),
+      rateAsPer: z.string().optional(),
+      Advance: z.coerce.number().optional(),
+    }),
+  ),
 });
 
 const AddNew = () => {
   const { toast } = useToast();
-  const [isloading, setIsLoading] = useState();
+  const [isloading, setIsLoading] = useState(false);
   const { user } = useContext(UserContext);
 
   const initialFormState = {
     adminId: "",
-    quoteDate:new Date().toISOString().split("T")[0],
-    quoteValidity:new Date().toISOString().split("T")[0],
-    customerDetails:{
-      customerId:generateUniqueId(),
-      customerName:"",
-      customerEmail:"",
-      customerPhone:"",
-      customerAddress:"",
+    quoteDate: new Date().toISOString().split("T")[0],
+    quoteValidity: new Date().toISOString().split("T")[0],
+    customerDetails: {
+      customerId: generateUniqueId(),
+      customerName: "",
+      customerEmail: "",
+      customerMobileNo: "",
+      customerAddress: "",
+      customerGSTIN: "",
     },
-    product:{
-      productId:undefined,
-      productName:undefined,
-      productDescription:undefined,
-      productPrice:undefined,
-      quantity:undefined,
-    },
-    
+    products: [],
   };
+
   function generateUniqueId() {
     return Math.floor(100000 + Math.random() * 900000);
   }
@@ -70,25 +66,50 @@ const AddNew = () => {
     defaultValues: initialFormState,
   });
 
+  const { fields, append, remove, update } = useFieldArray({
+    control: form.control,
+    name: "products",
+  });
+
+  const addProduct = (product) => {
+    append(product);
+    form.setValue("product", {
+      productName: "",
+      itemSize: "",
+      itemWeight: "",
+      ETA: "",
+      rate: 0,
+      rateAsPer: "",
+      Advance: 0,
+    });
+  };
+
+  const deleteProduct = (index) => {
+    remove(index);
+  };
+
+  const editProduct = (index, updatedProduct) => {
+    update(index, updatedProduct);
+  };
+
   async function myhandleSubmit(value) {
-    console.log(formSchema.safeParse(value));
     const { customerDetails, ...rest } = value;
     const payload = {
       ...rest,
       adminId: user?._id,
     };
-  
-    // Conditionally add customerDetails if they contain meaningful information
-    if (customerDetails && Object.values(customerDetails).some(val => val)) {
+
+    if (customerDetails && Object.values(customerDetails).some((val) => val)) {
       payload.customerDetails = customerDetails;
     }
-  
+
     try {
       const res = formSchema.parse(value);
       console.log("solved", res);
     } catch (error) {
       console.log("hi", error);
     }
+
     value.adminId = user?._id;
     try {
       const response = await fetch("/api/quote/create", {
@@ -96,7 +117,7 @@ const AddNew = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(value),
+        body: JSON.stringify(payload),
       });
       console.log(response);
 
@@ -104,8 +125,7 @@ const AddNew = () => {
 
       if (response.ok) {
         setIsLoading(false);
-        displayToast("Successfully Added new Quatation", "✅");
-        // const userDetail = newResult.user;
+        displayToast("Successfully Added new Quotation", "✅");
         form.reset(initialFormState);
       } else {
         console.error("Error:", newResult.message);
@@ -114,7 +134,7 @@ const AddNew = () => {
       }
     } catch (error) {
       console.error("Error:", error);
-      displayToast("Error", "❌ ", newResult.message);
+      displayToast("Error", "❌ ", error.message);
       setIsLoading(false);
     }
   }
@@ -127,58 +147,142 @@ const AddNew = () => {
     });
   };
 
+  useEffect(() => {
+    const disableScrollOnNumberInput = (e) => {
+      if (e.target.type === "number") {
+        e.preventDefault();
+      }
+    };
+
+    const handleWheelEvent = (e) => {
+      if (document.activeElement.type === "number") {
+        document.activeElement.blur();
+      }
+    };
+
+    window.addEventListener("wheel", disableScrollOnNumberInput, {
+      passive: false,
+    });
+    window.addEventListener("wheel", handleWheelEvent);
+
+    return () => {
+      window.removeEventListener("wheel", disableScrollOnNumberInput);
+      window.removeEventListener("wheel", handleWheelEvent);
+    };
+  }, []);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(myhandleSubmit)}>
-        <h2 className="text-center  text-xl font-semibold">
-          New Quatation :
-        </h2>
-        <FieldForm form={form} name="Quote Date" label="quoteDate" type="date" />
-        <FieldForm form={form} name="quoteValidity" label="Quote Validity" type="date" />
-
-<div className="flex gap-8 w-full">
-
-
-<div className="flex-1">
-<FormField
-          control={form.control}
-          name="customerDetails.customerName"
-          render={({ field }) => (
-            <SearchCustomer form={form} field={field} label="Customer" />
-          )}
+        <h2 className="text-center text-xl font-semibold">New Quotation :</h2>
+        <FieldForm
+          form={form}
+          name="quoteDate"
+          label="Quote Date"
+          type="date"
+        />
+        <FieldForm
+          form={form}
+          name="quoteValidity"
+          label="Quote Validity"
+          type="date"
         />
 
-<FieldForm form={form}  name="customerDetails.customerId" label="Customer Id" type="text" />
+        <div className="flex w-full gap-8">
+          <div className="flex-1">
+            <FormField
+              control={form.control}
+              name="customerDetails.customerName"
+              render={({ field }) => (
+                <SearchCustomer form={form} field={field} label="Customer" />
+              )}
+            />
+            <FieldForm
+              form={form}
+              name="customerDetails.customerId"
+              label="Customer Id"
+              type="text"
+            />
+            <FieldForm
+              form={form}
+              name="customerDetails.customerEmail"
+              label="Customer Email"
+              type="email"
+            />
+            <FieldForm
+              form={form}
+              name="customerDetails.customerMobileNo"
+              label="Customer Phone"
+              type="text"
+            />
+            <FieldForm
+              form={form}
+              name="customerDetails.customerAddress"
+              label="Customer Address"
+              type="text"
+            />
+            <FieldForm
+              form={form}
+              name="customerDetails.customerGSTIN"
+              label="Customer GSTIN"
+              type="text"
+            />
+          </div>
 
-<FieldForm form={form}  name="customerDetails.customerEmail" label="Customer Name" type="email" />
-<FieldForm form={form}  name="customerDetails.customerPhone" label="Customer Phone" type="number" />
-
-<FieldForm form={form}  name="customerDetails.customerAddress" label="Customer Address" type="text" />
-
-</div>
-       
-        
-{/* 
-        <FormField
-          control={form.control}
-          name="serviceAccount"
-          render={({ field }) => (
-            <SearchProduct form={form} field={field} label="Expense Account" />
-          )}
-        /> */}
-        <div className="flex-1">
-
-        <FieldForm form={form} name="product.productId" label="Product Id" type="text" />
-
-        <FieldForm form={form} name="product.productName" label="Product Name" type="text" />
-
-        <FieldForm form={form} name="product.productDescription" label="Product Description" type="text" />
-
-        <FieldForm form={form} name="product.productPrice" label="Product Price" type="number" />
-
-        <FieldForm form={form} name="product.quantity" label="Quantity" type="number" />
+          <div className="flex-1">
+            <FieldForm
+              form={form}
+              name="product.productName"
+              label="Product Name"
+              type="text"
+            />
+            <FieldForm
+              form={form}
+              name="product.itemSize"
+              label="Item Size"
+              type="text"
+            />
+            <FieldForm
+              form={form}
+              name="product.itemWeight"
+              label="Item Weight"
+              type="text"
+            />
+            <FieldForm form={form} name="product.ETA" label="ETA" type="text" />
+            <FieldForm
+              form={form}
+              name="product.rate"
+              label="Rate"
+              type="number"
+            />
+            <FieldForm
+              form={form}
+              name="product.rateAsPer"
+              label="Rate As Per"
+              type="text"
+            />
+            <FieldForm
+              form={form}
+              name="product.Advance"
+              label="Advance"
+              type="number"
+            />
+            <Button
+              type="button"
+              onClick={() => addProduct(form.getValues("product"))}
+            >
+              Add Product
+            </Button>
+          </div>
         </div>
-</div>
+
+        <CartTable
+          items={fields}
+          onDelete={deleteProduct}
+          onEdit={editProduct}
+          form={form}
+        />
+
         <div className="my-8 flex items-center justify-center">
           <Button
             type="submit"

@@ -12,7 +12,9 @@ export async function POST(req, res) {
     
 
     try {
-        const { adminId, quoteDate, quoteValidity, customerDetails, product } = await req.json();
+        const { adminId, quoteDate, quoteValidity, customerDetails, products } = await req.json();
+
+        console.log("product here :", products);
 
         await connectDB();
         const admin = await usermodel.findOne({ $and: [{ _id: adminId }, { $or: [{ isAdmin: true }, { isOwner: true }] }] });
@@ -31,38 +33,41 @@ export async function POST(req, res) {
 
         
 
-            const already = await quoteModel.findOne({ "customerDetails.customerId": customerDetails.customerId });
-            if (already) {
-                 const quoteNo = generateUniqueQuoteNo();
-                const data = {
-                    quoteNo,
-                    product,
-                    quoteDate,
-                    quoteValidity,
-                    createdBy: {
-                        name: admin.name,
-                        id: admin._id
-                    },
-                }
-                already.product.push(data);
-                await already.save();
-            }
+            // const already = await quoteModel.findOne({ "customerDetails.customerId": customerDetails.customerId });
+            // if (already) {
+            //      const quoteNo = generateUniqueQuoteNo();
+            //     const data = {
+            //         quoteNo,
+            //         product:products,
+            //         quoteDate,
+            //         quoteValidity,
+            //         createdBy: {
+            //             name: admin.name,
+            //             id: admin._id
+            //         },
+            //     }
+            //     already.product.push(data);
+            //     await already.save();
+            // }
 
-            else {
+            // else {
                 const quoteNo = generateUniqueQuoteNo();
                 const quote = new quoteModel({
                     quoteNo,
                     quoteDate,
                     quoteValidity,
                     customerDetails,
-                    product,
+                    product:products,
                     createdBy: {
                         name: admin.name,
                         id: admin._id
                     },
                 });
+        
+        console.log(quote);
                 await quote.save();
-            }
+            // }
+        // 
 
         return Response.json({ message: "Quote created successfully" }, { status: 200 });
         
