@@ -62,55 +62,208 @@ export default function ColumnHeader() {
         header: "S.No",
         cell: ({ row }) => row.index + 1,
       },
+      // {
+      //   accessorKey: "_id",
+      //   accessorKey:"orderNumber",
+      //   header: "Booking Details",
+      // },
       {
-        accessorKey: "consignorName",
-        header: "Consignor",
+        accessorKey: "orderNumber",
+        header: (
+          <div className="text-center">
+            <p>Booking Details</p>
+            <p></p>
+            <p></p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p className="font-medium text-blue-500 underline">
+              {row.original.orderNumber}
+            </p>
+            <p>{new Date(row.original.date).toLocaleDateString()}</p>
+            <p><b>Status:</b> {row.original.status} </p>
+<p><b>Delivery: </b>{row.original?.delivery?.delivery_details?.unloading_date ? new Date(row.original.delivery.delivery_details.unloading_date).toLocaleDateString() : ''}</p>
+<p>
+  <b>POD: </b>
+  {row.original.delivery?.consignment_info && row.original.delivery.consignment_info.length > 0
+    ? new Date(row.original.delivery.consignment_info[0].delivery_date).toLocaleDateString()
+    : ''}
+</p>
+          </div>
+        ),
       },
       {
-        accessorKey: "consigneeName",
-        header: "Consignee",
+        accessorKey: "vehicleNo",
+        header: (
+          <div className="text-center">
+            <p>Vehicle Details</p>
+            <p></p>
+            <p></p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p className="font-medium text-blue-500 underline">
+             
+              {row.original.vehicleData?.vehicleNo}
+            </p>
+            <p>
+              <b> Driver Name:</b>
+              {row.original.vehicleData?.driver?.name}</p>
+            <p><b>RC:</b> {row.original?.vehicleData?.rcPhoto?.length>0? "Yes":"No" } </p>
+<p><b>License: </b>{row.original?.vehicleData?.driver?.licenseNo ? "Yes": 'No'}</p>
+
+          </div>
+        ),
+      },
+       {
+        accessorKey: "vehicleNo",
+        header: (
+          <div className="text-center">
+            <p>LR Details</p>
+            <p></p>
+            <p></p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p className="font-medium text-blue-500 underline">
+             
+              {row.original.orderNumber}
+            </p>
+            <p>{new Date(row.original.date).toLocaleDateString()}</p>
+            <p>
+              <b>From: </b>
+              
+              {row.original.loadingPoints}</p>
+          
+
+               <p>
+              <b>To: </b>
+              
+              {row.original.unloadingPoints}</p>
+            <p>
+              <b> Driver Name:</b>
+              {row.original.vehicleData?.driver?.name}</p>
+            <p><b>RC:</b> {row.original?.vehicleData?.rcPhoto?.length>0? "Yes":"No" } </p>
+<p><b>License: </b>{row.original?.vehicleData?.driver?.licenseNo ? "Yes": 'No'}</p>
+
+          </div>
+        ),
       },
 
       {
-        accessorKey: "loadingPoints",
+        accessorKey: "vehicleNo",
+        header: (
+          <div className="text-center">
+            <p>Charged Amount</p>
+            <p></p>
+            <p></p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p className="font-medium text-center text-blue-500 underline">
+             
+              {row.original.vehicleData?.bookedBy[0]?.netBhara}
+            </p>
+          </div>
+        ),
+      },
 
-        header: "From",
-      },
       {
-        accessorKey: "unloadingPoints",
+        accessorKey: "vehicleNo",
+        header: (
+          <div className="text-center">
+            <p>Balance Amount</p>
+            <p></p>
+            <p></p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p className="font-medium text-center text-blue-500 underline">
+             
 
-        header: "To",
+              {row.original.vehicleData?.bookedBy[0]?.balanceAmount}
+                          </p>
+          </div>
+        ),
       },
 
-      {
-        accessorKey: "paymentTerm",
-        header: "Term",
+       {
+        accessorKey: "vehicleNo",
+        header: (
+          <div className="text-center">
+            <p>Advance Amount</p>
+            <p></p>
+            <p></p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p className="font-medium text-center text-blue-500 underline">
+             
+             {row.original.vehicleData?.bookedBy[0]?.advanceAmount ? row.original.vehicleData?.bookedBy[0]?.advanceAmount : 0 }
+            </p>
+          </div>
+        ),
       },
-      {
-        accessorKey: "partyBhara",
-        header: "Party Bhara",
+
+       {
+        accessorKey: "vehicleNo",
+        header: (
+          <div className="text-center">
+            <p>Paid Amount</p>
+            <p></p>
+            <p></p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div>
+            <p className="font-medium text-center text-blue-500 underline">
+             
+              {row.original.vehicleData?.bookedBy[0]?.totalPaidAmount ? row.original.vehicleData?.bookedBy[0]?.totalPaidAmount : row.original.vehicleData?.bookedBy[0]?.netBhara - row.original.vehicleData?.bookedBy[0]?.balanceAmount }
+            </p>
+          </div>
+        ),
       },
+
+     
       {
-        accessorKey: "advanceAmount",
-        header: "Received ",
-      },
-      {
-        accessorKey: "balanceAmount",
-        header: "Due ",
-      },
-      {
-        header: "Collect",
+        header: "Pay / Expanse",
         cell: ({ row }) => {
           return (
             <Link
-              className="rounded-2xl bg-green-300 px-4 py-1"
+              className="rounded-2xl bg-green-300 px-4 py-4"
               href={`/admin/account/pendingPayment/${row.original._id}`}
             >
-              Collect
+             {row.original.vehicleData.bookedBy[0].balanceAmount===0? "Paid": "+Expanse" }
             </Link>
           );
         },
       },
+
+
+     {
+  header: "Fuel",
+  cell: ({ row }) => {
+    return (
+      <Link
+        className="inline-block px-4 py-2 bg-green-600 text-white font-semibold rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 flex items-center"
+        href={`/admin/account/pendingPayment/${row.original._id}`}
+      >
+        <i className="fas fa-gas-pump mr-2"></i>
+        Give Fuel
+      </Link>
+    );
+  },
+}
+,
+
+
+     
       {
         header: "Edit",
         cell: ({ row }) => (

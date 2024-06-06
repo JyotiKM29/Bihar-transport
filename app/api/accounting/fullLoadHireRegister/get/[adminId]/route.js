@@ -49,6 +49,7 @@ export async function GET(req, context) {
         paymentHistory: 1,
         delivery: 1,
           location: 1,
+          date:1,
         
       }, // Only select _id and allotedVehicle fields
     ).sort({_id:-1});
@@ -69,6 +70,22 @@ export async function GET(req, context) {
 
           if (vehicle) {
             // console.log("Vehicle found:", vehicle);
+
+            let j;
+    for (j = 0; j < vehicle?.bookedBy?.length; j++) {
+      if (vehicle?.bookedBy[j]?.bookingId === bookings[i]._id) break;
+    }
+
+    vehicle?.bookedBy?.splice(0, j-1);  // Remove elements before the index
+    vehicle?.bookedBy?.splice(1, vehicle?.bookedBy?.length - 1);  // Remove elements after the index
+
+    //      const paymentData = vehicle.bookedBy.filter(
+    //   (booking) => booking.bookingId === bookings[i]?._id.toString()
+    // );
+    console.log(vehicle.bookedBy, bookings[i]._id);
+            // vehicle.bookedBy = [];
+            // vehicle.bookedBy.push(exactData);
+
             bookings[i].vehicleData = vehicle;
             vehicleData.push(vehicle);
           } else {

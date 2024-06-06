@@ -3,7 +3,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import ColumnHeader from "./ColumnHeader";
 import { DataTable } from "../data-table";
-
 import { UserContext } from "../../../context/UserContextProvider";
 
 const HireRegister = () => {
@@ -22,10 +21,10 @@ const HireRegister = () => {
       try {
         if (userId) {
           const response = await fetch(
-            `/api/accounting/pendingPayments/${userId}`,
+            `/api/accounting/fullLoadHireRegister/get/${userId}`,
             {
               method: "GET",
-            },
+            }
           );
 
           if (!response.ok) {
@@ -34,11 +33,12 @@ const HireRegister = () => {
 
           const result = await response.json();
 
-          setLoading(false);
-
           console.log("pending payment ", result);
 
-          setData(result.data);
+          setData(result.bookings || []);
+          setLoading(false);
+
+          console.log(data);
         }
       } catch (error) {
         setLoading(false);
@@ -50,19 +50,19 @@ const HireRegister = () => {
   }, [userId]);
 
   return (
-    <div className="max-w max-h mt-14 rounded-2xl bg-white px-4 py-4 shadow-lg  md:px-10 lg:my-4 lg:p-8 lg:px-10">
+    <div className="max-w max-h mt-14 rounded-2xl bg-white px-4 py-4 shadow-lg md:px-10 lg:my-4 lg:p-8 lg:px-10">
       <div className="flex items-center justify-between">
-        <h2 className="mb-2  text-3xl font-semibold text-orange-500">
+        <h2 className="mb-2 text-3xl font-semibold text-orange-500">
           Full Load Hire Register :
         </h2>
       </div>
 
       {loading ? (
-        <div className="max-w max-h  bg-white">
+        <div className="max-w max-h bg-white">
           <h2 className="text-xl">Loading...</h2>
         </div>
       ) : (
-        <DataTable columns={columns} data={data} />
+        data && data.length > 0 && <DataTable columns={columns} data={data} />
       )}
     </div>
   );
