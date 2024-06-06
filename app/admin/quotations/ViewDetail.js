@@ -6,6 +6,7 @@ import { MdEdit } from "react-icons/md";
 import { useEffect, useState } from "react";
 import FieldComponent from "./FieldComponent"; // Update the path to the correct location
 import { Button } from "../../components/ui/button";
+import PrintQuote from "./[quoteid]/PrintQuote";
 
 const ViewDetail = ({ bookingDetails, heading }) => {
   const { toast } = useToast();
@@ -17,7 +18,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
   };
 
   return (
-    <div className="min-h-[90vh] w-full rounded-2xl bg-white px-6 py-4 shadow-sm">
+    <div className="min-h-[10vh] w-full rounded-2xl bg-white px-6 py-4 ">
       <div className="flex items-center justify-between">
         <h1 className="mb-6 text-4xl">{heading} Details: </h1>
         <div className="flex items-center justify-between space-x-2">
@@ -84,20 +85,78 @@ const ViewDetail = ({ bookingDetails, heading }) => {
             identifier="customerEmail"
           />
           {/* Render product details */}
-          {bookingDetails?.product?.map((product) => (
-            <div key={product._id}>
-              <FieldComponent
-                label={"Product Name"}
-                value={product.productName}
-                show={editBooking}
-                tableId={product._id}
-                identifier="productName"
-              />
-              {/* You can add more fields for product if needed */}
-            </div>
-          ))}
+        
+          <div className="overflow-x-auto md:overflow-x-visible">
+          <table className=" my-4 w-full border border-blue-600 ">
+            <thead>
+              <tr className=" w-full border border-blue-600 bg-blue-700 text-white">
+                <th className=" text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-white  md:text-base  ">
+                  Product Name
+                </th>
+                <th className=" text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-white  md:text-base  ">
+                  Size
+                </th>
+                <th className=" text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-white  md:text-base  ">
+                  Weight
+                </th>
+                <th className=" text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-white  md:text-base  ">
+                  ETA
+                </th>
+                <th className=" text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-white  md:text-base  ">
+                  rate
+                </th>
+                <th className=" text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-white  md:text-base  ">
+                  Rate as per
+                </th>
+                <th className=" text-nowrap border border-blue-600 p-2 pr-3 text-sm font-medium text-white  md:text-base  ">
+                  Advance
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {bookingDetails?.product?.map((items, i) => (
+                <tr key={i} className="w-full text-center">
+                  <td className="border border-blue-900 p-2 text-blue-700">
+                    {items.productName}
+                  </td>
+                  <td className="border border-blue-900 p-2 text-blue-700">
+                    {items.itemSize}
+                  </td>
+                  <td className="border border-blue-900 p-2 text-blue-700">
+                    {items.itemWeight}
+                  </td>
+                  <td className="border border-blue-900 p-2 text-blue-700">
+                    {items.ETA}
+                  </td>
+                  <td className="border border-blue-900 p-2 text-blue-700">
+                    {items.rate}
+                  </td>
+                  <td className="border border-blue-900 p-2 text-blue-700">
+                    {items.rateAsPer}
+                  </td>
+                  <td className="border border-blue-900 p-2 text-blue-700">
+                    {items.Advance}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         </div>
       </div>
+
+      <PrintQuote 
+      quoteid={bookingDetails?.quoteNo} 
+      date={bookingDetails?.quoteDate} 
+      product={bookingDetails?.product} 
+      name={bookingDetails?.customerDetails?.customerName} 
+      address={bookingDetails?.customerDetails?.customerAddress} 
+      phoneno={bookingDetails?.customerDetails?.customerMobileNo} 
+      email={bookingDetails?.customerDetails?.customerEmail} 
+      
+      GSTIN={bookingDetails?.customerDetails?.customerGSTIN} 
+      
+      />
     </div>
   );
 };
