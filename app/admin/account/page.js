@@ -18,6 +18,7 @@ import JournalEntries from './journalEntries/JournalEntries';
 import BulkReceive from './bulkReceive/BulkReceive';
 import BulkPayment from './bulkPayment/BulkPayment';
 import PendingPayment from './pendingPayment/PendingPayment';
+import HireRegister from './fullLoadHireRegister/HireRegister';
 
 const Page = () => {
   const [selectedTab, setSelectedTab] = useState(null);
@@ -36,38 +37,74 @@ const Page = () => {
   };
 
   return (
-    <div className="w-full min-h-[95vh]">
-      <Tabs value={selectedTab} className="relative w-full min-h-full">
-        <TabsList className="flex justify-center flex-wrap rounded-2xl">
-          <TabsTrigger value="newLedger" onClick={() => handleTabChange("newLedger")}>
+    <div className="min-h-[95vh] w-full">
+      <Tabs value={selectedTab} className="relative min-h-full w-full">
+        <TabsList className="flex flex-wrap justify-center rounded-2xl">
+          <TabsTrigger
+            value="newLedger"
+            onClick={() => handleTabChange("newLedger")}
+          >
             New Ledger
           </TabsTrigger>
-          <TabsTrigger value="moneyReceipt" onClick={() => handleTabChange("moneyReceipt")}>
+          <TabsTrigger
+            value="moneyReceipt"
+            onClick={() => handleTabChange("moneyReceipt")}
+          >
             Money Receipt
           </TabsTrigger>
-          <TabsTrigger value="invoices" onClick={() => handleTabChange("invoices")}>
+          <TabsTrigger
+            value="invoices"
+            onClick={() => handleTabChange("invoices")}
+          >
             Invoices
           </TabsTrigger>
-          <TabsTrigger value="moneyTransfer" onClick={() => handleTabChange("moneyTransfer")}>
+          <TabsTrigger
+            value="moneyTransfer"
+            onClick={() => handleTabChange("moneyTransfer")}
+          >
             Money Transfer
           </TabsTrigger>
-          <TabsTrigger value="pendingPayment" onClick={() => handleTabChange("pendingPayment")}>
+          <TabsTrigger
+            value="pendingPayment"
+            onClick={() => handleTabChange("pendingPayment")}
+          >
             Pending Payment
           </TabsTrigger>
-          <TabsTrigger value="paymentVoucher" onClick={() => handleTabChange("paymentVoucher")}>
+          <TabsTrigger
+            value="paymentVoucher"
+            onClick={() => handleTabChange("paymentVoucher")}
+          >
             Payment Voucher
           </TabsTrigger>
-          <TabsTrigger value="manageExpense" onClick={() => handleTabChange("manageExpense")}>
+          <TabsTrigger
+            value="manageExpense"
+            onClick={() => handleTabChange("manageExpense")}
+          >
             Manage Expense
           </TabsTrigger>
-          <TabsTrigger value="journalEntries" onClick={() => handleTabChange("journalEntries")}>
+          <TabsTrigger
+            value="journalEntries"
+            onClick={() => handleTabChange("journalEntries")}
+          >
             Journal Entries
           </TabsTrigger>
-          <TabsTrigger value="bulkReceive" onClick={() => handleTabChange("bulkReceive")}>
+          <TabsTrigger
+            value="bulkReceive"
+            onClick={() => handleTabChange("bulkReceive")}
+          >
             Bulk Receive
           </TabsTrigger>
-          <TabsTrigger value="bulkPayment" onClick={() => handleTabChange("bulkPayment")}>
+          <TabsTrigger
+            value="bulkPayment"
+            onClick={() => handleTabChange("bulkPayment")}
+          >
             Bulk Payment
+          </TabsTrigger>
+          <TabsTrigger
+            value="hireRegister"
+            onClick={() => handleTabChange("hireRegister")}
+          >
+           Full Load Hire Register
           </TabsTrigger>
         </TabsList>
 
@@ -100,6 +137,9 @@ const Page = () => {
         </TabsContent>
         <TabsContent value="bulkPayment">
           <BulkPayment />
+        </TabsContent>
+        <TabsContent value="hireRegister">
+          <HireRegister />
         </TabsContent>
       </Tabs>
     </div>
