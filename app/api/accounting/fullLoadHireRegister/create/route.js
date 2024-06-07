@@ -66,12 +66,32 @@ export async function POST(req, res) {
             vehicle.expanse.fuel = [data];
         }
 
-        
-        await vehicle.save();
-        
+        vehicle.bookedBy.forEach((item) => {
+
+            if(item.bookingId === bookingId){
+                if (item.fuelDetails && item.fuelDetails.length > 0)
+                    item.fuelDetails.push(data);
+                else item.fuelDetails = [data];
+
+                item.totalPaidAmount += cashReceived;
+                item.balanceAmount = item.totalAmount - item.totalPaidAmount;
+                const paymentData = {
+                    date: date,
+                    paymentMode: "fuel",
+                    amountPaid: cashReceived,
+                    fine: 0,
+                    finalDue: item.balanceAmount,
+                    paymentType: fuelType,
+                    remarks: remarks,
+                }
+
+                item.payment && item.payment.length > 0 ? item.payment.push(paymentData) : item.payment = [paymentData];
+            }
+        });
 
         
-        
+        await vehicle.save();
+                
        
         return Response.json({ message: "fuel details added successfully" });
 
