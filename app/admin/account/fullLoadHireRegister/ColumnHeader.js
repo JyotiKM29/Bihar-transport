@@ -1,17 +1,20 @@
 "use client";
 
 import { Checkbox } from "../../../components/ui/checkbox";
-
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { Input } from "../../../components/ui/input";
 import { Pencil } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function ColumnHeader() {
   const { user } = useContext(UserContext);
   const [columns, setColumns] = useState([]);
+  const router = useRouter();
 
+
+ 
   useEffect(() => {
     async function deleteData(id) {
       console.log(user);
@@ -56,17 +59,10 @@ export default function ColumnHeader() {
         enableSorting: false,
         enableHiding: false,
       },
-
       {
-        // accessorKey: "",
         header: "S.No",
         cell: ({ row }) => row.index + 1,
       },
-      // {
-      //   accessorKey: "_id",
-      //   accessorKey:"orderNumber",
-      //   header: "Booking Details",
-      // },
       {
         accessorKey: "orderNumber",
         header: (
@@ -83,13 +79,13 @@ export default function ColumnHeader() {
             </p>
             <p>{new Date(row.original.date).toLocaleDateString()}</p>
             <p><b>Status:</b> {row.original.status} </p>
-<p><b>Delivery: </b>{row.original?.delivery?.delivery_details?.unloading_date ? new Date(row.original.delivery.delivery_details.unloading_date).toLocaleDateString() : ''}</p>
-<p>
-  <b>POD: </b>
-  {row.original.delivery?.consignment_info && row.original.delivery.consignment_info.length > 0
-    ? new Date(row.original.delivery.consignment_info[0].delivery_date).toLocaleDateString()
-    : ''}
-</p>
+            <p><b>Delivery: </b>{row.original?.delivery?.delivery_details?.unloading_date ? new Date(row.original.delivery.delivery_details.unloading_date).toLocaleDateString() : ''}</p>
+            <p>
+              <b>POD: </b>
+              {row.original.delivery?.consignment_info && row.original.delivery.consignment_info.length > 0
+                ? new Date(row.original.delivery.consignment_info[0].delivery_date).toLocaleDateString()
+                : ''}
+            </p>
           </div>
         ),
       },
@@ -105,19 +101,18 @@ export default function ColumnHeader() {
         cell: ({ row }) => (
           <div>
             <p className="font-medium text-blue-500 underline">
-             
               {row.original.vehicleData?.vehicleNo}
             </p>
             <p>
               <b> Driver Name:</b>
-              {row.original.vehicleData?.driver?.name}</p>
-            <p><b>RC:</b> {row.original?.vehicleData?.rcPhoto?.length>0? "Yes":"No" } </p>
-<p><b>License: </b>{row.original?.vehicleData?.driver?.licenseNo ? "Yes": 'No'}</p>
-
+              {row.original.vehicleData?.driver?.name}
+            </p>
+            <p><b>RC:</b> {row.original?.vehicleData?.rcPhoto?.length > 0 ? "Yes" : "No"} </p>
+            <p><b>License: </b>{row.original?.vehicleData?.driver?.licenseNo ? "Yes" : 'No'}</p>
           </div>
         ),
       },
-       {
+      {
         accessorKey: "vehicleNo",
         header: (
           <div className="text-center">
@@ -129,30 +124,26 @@ export default function ColumnHeader() {
         cell: ({ row }) => (
           <div>
             <p className="font-medium text-blue-500 underline">
-             
               {row.original.orderNumber}
             </p>
             <p>{new Date(row.original.date).toLocaleDateString()}</p>
             <p>
               <b>From: </b>
-              
-              {row.original.loadingPoints}</p>
-          
-
-               <p>
+              {row.original.loadingPoints}
+            </p>
+            <p>
               <b>To: </b>
-              
-              {row.original.unloadingPoints}</p>
+              {row.original.unloadingPoints}
+            </p>
             <p>
               <b> Driver Name:</b>
-              {row.original.vehicleData?.driver?.name}</p>
-            <p><b>RC:</b> {row.original?.vehicleData?.rcPhoto?.length>0? "Yes":"No" } </p>
-<p><b>License: </b>{row.original?.vehicleData?.driver?.licenseNo ? "Yes": 'No'}</p>
-
+              {row.original.vehicleData?.driver?.name}
+            </p>
+            <p><b>RC:</b> {row.original?.vehicleData?.rcPhoto?.length > 0 ? "Yes" : "No"} </p>
+            <p><b>License: </b>{row.original?.vehicleData?.driver?.licenseNo ? "Yes" : 'No'}</p>
           </div>
         ),
       },
-
       {
         accessorKey: "vehicleNo",
         header: (
@@ -165,13 +156,11 @@ export default function ColumnHeader() {
         cell: ({ row }) => (
           <div>
             <p className="font-medium text-center text-blue-500 underline">
-             
               {row.original.vehicleData?.bookedBy[0]?.netBhara}
             </p>
           </div>
         ),
       },
-
       {
         accessorKey: "vehicleNo",
         header: (
@@ -184,15 +173,12 @@ export default function ColumnHeader() {
         cell: ({ row }) => (
           <div>
             <p className="font-medium text-center text-blue-500 underline">
-             
-
               {row.original.vehicleData?.bookedBy[0]?.balanceAmount}
-                          </p>
+            </p>
           </div>
         ),
       },
-
-       {
+      {
         accessorKey: "vehicleNo",
         header: (
           <div className="text-center">
@@ -204,14 +190,12 @@ export default function ColumnHeader() {
         cell: ({ row }) => (
           <div>
             <p className="font-medium text-center text-blue-500 underline">
-             
-             {row.original.vehicleData?.bookedBy[0]?.advanceAmount ? row.original.vehicleData?.bookedBy[0]?.advanceAmount : 0 }
+              {row.original.vehicleData?.bookedBy[0]?.advanceAmount ? row.original.vehicleData?.bookedBy[0]?.advanceAmount : 0}
             </p>
           </div>
         ),
       },
-
-       {
+      {
         accessorKey: "vehicleNo",
         header: (
           <div className="text-center">
@@ -223,14 +207,11 @@ export default function ColumnHeader() {
         cell: ({ row }) => (
           <div>
             <p className="font-medium text-center text-blue-500 underline">
-             
-              {row.original.vehicleData?.bookedBy[0]?.totalPaidAmount ? row.original.vehicleData?.bookedBy[0]?.totalPaidAmount : row.original.vehicleData?.bookedBy[0]?.netBhara - row.original.vehicleData?.bookedBy[0]?.balanceAmount }
+              {row.original.vehicleData?.bookedBy[0]?.totalPaidAmount ? row.original.vehicleData?.bookedBy[0]?.totalPaidAmount : row.original.vehicleData?.bookedBy[0]?.netBhara - row.original.vehicleData?.bookedBy[0]?.balanceAmount}
             </p>
           </div>
         ),
       },
-
-     
       {
         header: "Pay / Expanse",
         cell: ({ row }) => {
@@ -239,31 +220,28 @@ export default function ColumnHeader() {
               className="rounded-2xl bg-green-300 px-4 py-4"
               href={`/admin/account/pendingPayment/${row.original._id}`}
             >
-             {row.original.vehicleData.bookedBy[0].balanceAmount===0? "Paid": "+Expanse" }
+              {row.original.vehicleData.bookedBy[0].balanceAmount === 0 ? "Paid" : "+Expanse"}
             </Link>
           );
         },
       },
-
-
-     {
-  header: "Fuel",
-  cell: ({ row }) => {
-    return (
-      <Link
-        className="inline-block px-4 py-2 bg-green-600 text-white font-semibold rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 flex items-center"
-        href={`/admin/account/pendingPayment/${row.original._id}`}
-      >
-        <i className="fas fa-gas-pump mr-2"></i>
-        Give Fuel
-      </Link>
-    );
-  },
-}
-,
-
-
-     
+      {
+        header: "Fuel",
+        cell: ({ row }) => {
+          return (
+            <button
+              className="inline-block flex items-center rounded bg-green-600 px-4 py-2 font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75"
+              onClick={() => {
+                const data = encodeURIComponent(JSON.stringify(row.original));
+    router.push(`/admin/account/fullLoadHireRegister/fuel/${row.original._id}?data=${data}`);
+              }}
+            >
+              <i className="fas fa-gas-pump mr-2"></i>
+              Give Fuel
+            </button>
+          );
+        },
+      },
       {
         header: "Edit",
         cell: ({ row }) => (
