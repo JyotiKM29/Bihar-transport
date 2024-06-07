@@ -125,6 +125,23 @@ const paymentSchema = new mongoose.Schema(
 );
 
 
+const fuelSchema = new mongoose.Schema(
+  {
+    bookingId: { type: String },
+    fuelType: { type: String },
+    date: { type: Date, default: Date.now },
+    slipNo: { type: String },
+    petrolPump: { type: String },
+    fuelVolume: { type: Number, default: 0 },
+    fuelRate: { type: Number, default: 0 },
+    fuelAmount: { type: Number, default: 0 },
+    cashReceived: { type: Number, default: 0 },
+    paymentTerm: { type: String },
+    paymentMode: { type: String, default: "Noting" },
+    Remark: { type: String },
+  },
+  { timestamps: true },
+);
 
 
 const allotmentSchema = new mongoose.Schema(
@@ -159,6 +176,7 @@ const allotmentSchema = new mongoose.Schema(
     remarks: { type: String },
     payment: [paymentSchema],
     totalPaidAmount: { type: Number, default: 0 },
+    fuelDetails:[fuelSchema],
   },
   { _id: false }, // To exclude this subdocument from having its own _id
 );
@@ -221,22 +239,6 @@ const transporterDetailsSchema = new mongoose.Schema(
 
 // additional payments
 
-const fuelSchema = new mongoose.Schema(
-  {
-    fuelType: { type: String },
-    date: { type: Date, default: Date.now },
-    slipNo: { type: String },
-    petrolPump: { type: String },
-    fuelVolume: { type: Number, default: 0 },
-    fuelRate: { type: Number, default: 0 },
-    fuelAmount: { type: Number, default: 0 },
-    cashReceived: { type: Number, default: 0 },
-    paymentTerm: { type: String },
-    paymentMode: { type: String, default: "Noting" },
-    Remark: { type: String },
-  },
-  { timestamps: true },
-);
 
 const expanseSchema = new mongoose.Schema(
   {
