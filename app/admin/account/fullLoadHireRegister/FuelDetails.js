@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { UserContext } from '@/app/context/UserContextProvider';
+import { useToast } from '@/app/components/ui/use-toast';
 
 const FuelDetails = ({ data }) => {
   const [fuelType, setFuelType] = useState('');
@@ -11,14 +13,18 @@ const FuelDetails = ({ data }) => {
   const [paymentTerm, setPaymentTerm] = useState('');
   const [remarks, setRemarks] = useState('');
   const [loading, setLoading] = useState(false);
+  const { user } = useContext(UserContext);
+  const { toast } = useToast();
+
+  const adminId = user?._id;
+
+  console.log(adminId);
   
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     const fuelDetails = {
-      bookingId:data._id,
-      vehicleId: data.vehicleData._id,
       fuelType,
       date,
       slipCouponNo,
@@ -28,24 +34,59 @@ const FuelDetails = ({ data }) => {
       cashReceived,
       paymentTerm,
       remarks,
+      bookingId:data._id,
     };
 
+    const value = {
+       fuelDetails,
+       adminId,
+       bookingId:data._id,
+       vehicleId: data.vehicleData._id,
+    }
 
-    console.log(fuelDetails);
+
+    console.log(value);
     
     // Replace with your API endpoint
-    const response = await fetch('/api/accounting/fullLoadHireRegister/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      "/api/accounting/fullLoadHireRegister/giveFuel",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(value),
       },
-      body: JSON.stringify(fuelDetails),
-    });
+    );
 
-    setLoading(false);
+     setLoading(false);
     const result = await response.json();
     console.log(result);
+
+    if(response.ok){
+
+           displayToast("Given money for petrol", "✅");
+
+
+
+    }
+
+
+    else {
+           displayToast("Try again later, there's some error", "✅",result.message);
+
+    }
+
   };
+
+
+   const displayToast = (title, action, description = "") => {
+     toast({
+       title,
+       action,
+       description,
+     });
+   };
 
   return (
     <div className="p-4">
@@ -159,7 +200,7 @@ const FuelDetails = ({ data }) => {
           type="submit"
           className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75"
         >
-          Save Fuel Payment
+{loading?"adding...": "Save Fuel Payment"}
         </button>
       </form>
     </div>

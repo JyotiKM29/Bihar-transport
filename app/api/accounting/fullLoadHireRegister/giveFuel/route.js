@@ -29,6 +29,10 @@ export async function POST(req, res) {
         */
         
         console.log(fuelDetails, adminId, bookingId, vehicleId);
+
+
+
+
         await connectDB();
         const admin = await usermodel.findOne({ $and: [{ _id: adminId }, { $or: [{ isAdmin: true }, { isOwner: true }] }] });
 
@@ -40,49 +44,35 @@ export async function POST(req, res) {
 
         if (!booking) return Response.json({ message: "booking not found" }, { status: 400 });
 
-        const vehicle = await vehicleModel.findOne({ _id: vehicleId });
+        let vehicle = await vehicleModel.findOne({ _id: vehicleId });
 
         if (!vehicle) return Response.json({ message: "vehicle not found" }, { status: 400 });
 
-        data = {
-            bookingId,
-            fuelType,
-            date,
-            slipNo: slipCouponNo,
-            petrolPump,
-            fuelVolume,
-            fuelRate,
-            cashReceived,
-            paymentTerm,
-            remarks,
-        
-        };
-
         if (vehicle.expanse.fuel && vehicle.expanse.fuel.length > 0) {
-            vehicle.expanse.fuel.push(data);
+            vehicle.expanse.fuel.push(fuelDetails);
 
         }
         else {
-            vehicle.expanse.fuel = [data];
+            vehicle.expanse.fuel = [fuelDetails];
         }
 
         vehicle.bookedBy.forEach((item) => {
 
             if(item.bookingId === bookingId){
                 if (item.fuelDetails && item.fuelDetails.length > 0)
-                    item.fuelDetails.push(data);
-                else item.fuelDetails = [data];
+                    item.fuelDetails.push(fuelDetails);
+                else item.fuelDetails = [fuelDetails];
 
-                item.totalPaidAmount += cashReceived;
-                item.balanceAmount = item.totalAmount - item.totalPaidAmount;
+                item.totalPaidAmount += fuelDetails?.cashReceived;
+                item.balanceAmount = item.netBhara - item.totalPaidAmount;
                 const paymentData = {
-                    date: date,
+                    date: fuelDetails.date,
                     paymentMode: "fuel",
-                    amountPaid: cashReceived,
+                    amountPaid: fuelDetails?.cashReceived,
                     fine: 0,
                     finalDue: item.balanceAmount,
-                    paymentType: fuelType,
-                    remarks: remarks,
+                    paymentType: fuelDetails?.fuelType,
+                    remarks: fuelDetails?.remarks,
                 }
 
                 item.payment && item.payment.length > 0 ? item.payment.push(paymentData) : item.payment = [paymentData];
@@ -99,8 +89,4 @@ export async function POST(req, res) {
         console.log(error);
         return Response.json({ message: error.message }, { status: 400 });
     }
-
-
-
-
 }
