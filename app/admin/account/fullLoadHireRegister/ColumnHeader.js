@@ -212,19 +212,28 @@ export default function ColumnHeader() {
           </div>
         ),
       },
-      {
-        header: "Pay / Expanse",
+       {
+        header: "Expanse",
         cell: ({ row }) => {
           return (
-            <Link
-              className="rounded-2xl bg-green-300 px-4 py-4"
-              href={`/admin/account/pendingPayment/${row.original._id}`}
+            <button
+              className="inline-block flex items-center rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-100"
+              onClick={() => {
+                const data = encodeURIComponent(JSON.stringify(row.original));
+    router.push(`/admin/account/fullLoadHireRegister/pay/${row.original._id}?data=${data}`);
+              }}
             >
-              {row.original.vehicleData.bookedBy[0].balanceAmount === 0 ? "Paid" : "+Expanse"}
-            </Link>
+              <i className="fas fa-gas-pump mr-2"></i>
+              {row.original.vehicleData.bookedBy[0].balanceAmount === 0 ? "Paid" : "Pay Now"}
+            </button>
           );
         },
       },
+     
+
+
+
+
       {
         header: "Fuel",
         cell: ({ row }) => {
@@ -242,19 +251,7 @@ export default function ColumnHeader() {
           );
         },
       },
-      {
-        header: "Edit",
-        cell: ({ row }) => (
-          <Link href={`/admin/account/pendingPayment/view/${row.original._id}`}>
-            <div className="flex h-8 w-8 items-center justify-center rounded bg-yellow-400 p-1">
-              <Pencil
-                strokeWidth={1.5}
-                className="h-5 w-5 fill-yellow-400 text-white"
-              />
-            </div>
-          </Link>
-        ),
-      },
+      
     ]);
   }, [user]);
 

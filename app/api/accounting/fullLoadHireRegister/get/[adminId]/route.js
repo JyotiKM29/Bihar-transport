@@ -82,7 +82,7 @@ export async function GET(req, context) {
     //      const paymentData = vehicle.bookedBy.filter(
     //   (booking) => booking.bookingId === bookings[i]?._id.toString()
     // );
-    console.log(vehicle.bookedBy, bookings[i]._id);
+    // console.log(vehicle.bookedBy, bookings[i]._id);
             // vehicle.bookedBy = [];
             // vehicle.bookedBy.push(exactData);
 
