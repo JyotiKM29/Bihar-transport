@@ -24,7 +24,6 @@ const FuelPage = ({ params }) => {
 
   return (
     <div>
-      <h1>Fuel Details for Booking {id}</h1>
       <FuelDetails data={data} />
     </div>
   );

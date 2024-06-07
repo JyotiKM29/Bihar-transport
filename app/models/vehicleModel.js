@@ -223,6 +223,7 @@ const transporterDetailsSchema = new mongoose.Schema(
 
 const fuelSchema = new mongoose.Schema(
   {
+    bookingId: { type: String },
     fuelType: { type: String },
     date: { type: Date, default: Date.now },
     slipNo: { type: String },

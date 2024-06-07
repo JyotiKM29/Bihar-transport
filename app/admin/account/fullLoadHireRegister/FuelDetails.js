@@ -1,91 +1,167 @@
+import React, { useState } from 'react';
+
 const FuelDetails = ({ data }) => {
+  const [fuelType, setFuelType] = useState('');
+  const [date, setDate] = useState('');
+  const [slipCouponNo, setSlipCouponNo] = useState('');
+  const [petrolPump, setPetrolPump] = useState('');
+  const [fuelVolume, setFuelVolume] = useState('');
+  const [fuelRate, setFuelRate] = useState('');
+  const [cashReceived, setCashReceived] = useState('');
+  const [paymentTerm, setPaymentTerm] = useState('');
+  const [remarks, setRemarks] = useState('');
+  const [loading, setLoading] = useState(false);
+  
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const fuelDetails = {
+      bookingId:data._id,
+      vehicleId: data.vehicleData._id,
+      fuelType,
+      date,
+      slipCouponNo,
+      petrolPump,
+      fuelVolume,
+      fuelRate,
+      cashReceived,
+      paymentTerm,
+      remarks,
+    };
+
+
+    console.log(fuelDetails);
+    
+    // Replace with your API endpoint
+    const response = await fetch('/api/accounting/fullLoadHireRegister/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(fuelDetails),
+    });
+
+    setLoading(false);
+    const result = await response.json();
+    console.log(result);
+  };
+
   return (
-    <div>
-      <h2>Booking Details</h2>
-      <p>
-        <strong>Order Number:</strong> {data.orderNumber}
-      </p>
-      <p>
-        <strong>Date:</strong> {new Date(data.date).toLocaleDateString()}
-      </p>
-      <p>
-        <strong>Status:</strong> {data.status}
-      </p>
-      <p>
-        <strong>Delivery:</strong>{" "}
-        {data.delivery?.delivery_details?.unloading_date
-          ? new Date(
-              data.delivery.delivery_details.unloading_date,
-            ).toLocaleDateString()
-          : ""}
-      </p>
-      <p>
-        <strong>POD:</strong>{" "}
-        {data.delivery?.consignment_info &&
-        data.delivery.consignment_info.length > 0
-          ? new Date(
-              data.delivery.consignment_info[0].delivery_date,
-            ).toLocaleDateString()
-          : ""}
-      </p>
+    <div className="p-4">
+      <h2 className="text-2xl font-bold mb-4">Booking Details</h2>
+      <div className="grid grid-cols-3 gap-4 mb-4">
+        <p><strong>Vehicle Hire NO:</strong> {data.orderNumber}</p>
+        <p><strong>vehicle No: </strong> {data.vehicleData.vehicleNo}</p>
+        <p><strong>Shipping Charge:</strong> {data.vehicleData.bookedBy[0].netBhara}</p>
+      </div>
+      
+      <div className="grid grid-cols-3 gap-4 mb-4">
+        <p><strong>Owner Name Number:</strong> {data.vehicleData?.owner?.name}</p>
+        <p><strong>Driver Name:</strong> {data.vehicleData?.driver?.name}</p>
+        <p><strong>Advance Amount:</strong> {data.vehicleData?.bookedBy[0]?.advanceAmount ? data.vehicleData?.bookedBy[0]?.advanceAmount : 0}</p>
+      </div>
+      
+      <div className="grid grid-cols-3 gap-4 mb-4">
+        <p><strong>Hire Date:</strong> {new Date(data.date).toLocaleDateString()}</p>
+                <p><strong>Hire Due:</strong> {data.vehicleData?.bookedBy[0]?.balanceAmount}</p>
 
-      <h2>Vehicle Details</h2>
-      <p>
-        <strong>Vehicle Number:</strong> {data.vehicleData?.vehicleNo}
-      </p>
-      <p>
-        <strong>Driver Name:</strong> {data.vehicleData?.driver?.name}
-      </p>
-      <p>
-        <strong>RC:</strong>{" "}
-        {data.vehicleData?.rcPhoto?.length > 0 ? "Yes" : "No"}
-      </p>
-      <p>
-        <strong>License:</strong>{" "}
-        {data.vehicleData?.driver?.licenseNo ? "Yes" : "No"}
-      </p>
-
-      <h2>LR Details</h2>
-      <p>
-        <strong>From:</strong> {data.loadingPoints}
-      </p>
-      <p>
-        <strong>To:</strong> {data.unloadingPoints}
-      </p>
-      <p>
-        <strong>Driver Name:</strong> {data.vehicleData?.driver?.name}
-      </p>
-      <p>
-        <strong>RC:</strong>{" "}
-        {data.vehicleData?.rcPhoto?.length > 0 ? "Yes" : "No"}
-      </p>
-      <p>
-        <strong>License:</strong>{" "}
-        {data.vehicleData?.driver?.licenseNo ? "Yes" : "No"}
-      </p>
-
-      <h2>Payment Details</h2>
-      <p>
-        <strong>Charged Amount:</strong>{" "}
-        {data.vehicleData?.bookedBy[0]?.netBhara}
-      </p>
-      <p>
-        <strong>Balance Amount:</strong>{" "}
-        {data.vehicleData?.bookedBy[0]?.balanceAmount}
-      </p>
-      <p>
-        <strong>Advance Amount:</strong>{" "}
-        {data.vehicleData?.bookedBy[0]?.advanceAmount
-          ? data.vehicleData?.bookedBy[0]?.advanceAmount
-          : 0}
-      </p>
-      <p>
-        <strong>Paid Amount:</strong>{" "}
-        {data.vehicleData?.bookedBy[0]?.totalPaidAmount
-          ? data.vehicleData?.bookedBy[0]?.totalPaidAmount
-          : data.vehicleData?.bookedBy[0]?.netBhara -
-            data.vehicleData?.bookedBy[0]?.balanceAmount}
-      </p>
+        <p><strong>Hire Due:</strong> {data.vehicleData?.bookedBy[0]?.balanceAmount}</p>
+       
+      </div>
+      
+      <h2 className="text-2xl font-bold mb-4">Fuel Details</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid grid-cols-3 gap-4">
+          <label className="block">
+            <span className="text-gray-700">Fuel Type</span>
+            <input
+              type="text"
+              value={fuelType}
+              onChange={(e) => setFuelType(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </label>
+          <label className="block">
+            <span className="text-gray-700">Date</span>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </label>
+          <label className="block">
+            <span className="text-gray-700">Slip/Coupon No</span>
+            <input
+              type="text"
+              value={slipCouponNo}
+              onChange={(e) => setSlipCouponNo(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </label>
+          <label className="block">
+            <span className="text-gray-700">Petrol Pump</span>
+            <input
+              type="text"
+              value={petrolPump}
+              onChange={(e) => setPetrolPump(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </label>
+          <label className="block">
+            <span className="text-gray-700">Fuel Volume</span>
+            <input
+              type="number"
+              value={fuelVolume}
+              onChange={(e) => setFuelVolume(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </label>
+          <label className="block">
+            <span className="text-gray-700">Fuel Rate</span>
+            <input
+              type="number"
+              value={fuelRate}
+              onChange={(e) => setFuelRate(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </label>
+          <label className="block">
+            <span className="text-gray-700">Cash Received</span>
+            <input
+              type="number"
+              value={cashReceived}
+              onChange={(e) => setCashReceived(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </label>
+          <label className="block">
+            <span className="text-gray-700">Payment Term</span>
+            <input
+              type="text"
+              value={paymentTerm}
+              onChange={(e) => setPaymentTerm(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </label>
+          <label className="block">
+            <span className="text-gray-700">Remarks</span>
+            <input
+              type="text"
+              value={remarks}
+              onChange={(e) => setRemarks(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </label>
+        </div>
+        <button
+          type="submit"
+          className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75"
+        >
+          Save Fuel Payment
+        </button>
+      </form>
     </div>
   );
 };
