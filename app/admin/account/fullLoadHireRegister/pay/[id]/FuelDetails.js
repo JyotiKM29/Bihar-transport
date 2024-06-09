@@ -216,7 +216,7 @@ const FuelDetails = ({ data }) => {
            <div className="bg-indigo-100 rounded-2xl shadow-xl p-6 mb-8">
 
           
-          <div className="mb-4 grid grid-cols-3 gap-4 ">
+          <div className="mb-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-4 ">
             <p>
               <strong>Vehicle Hire NO:</strong> {data.bookings.orderNumber}
             </p>
@@ -229,7 +229,7 @@ const FuelDetails = ({ data }) => {
             </p>
           </div>
 
-          <div className="mb-4 grid grid-cols-3 gap-4">
+          <div className="mb-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-4">
             <p>
               <strong>Owner Name Number:</strong>{" "}
               {data.vehicle?.owner?.name}
@@ -243,7 +243,7 @@ const FuelDetails = ({ data }) => {
             </p>
           </div>
 
-          <div className="mb-4 grid grid-cols-3 gap-4">
+          <div className="mb-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-4">
             <p>
               <strong>Hire Date:</strong>{" "}
               {new Date(data.bookings.date).toLocaleDateString()}
@@ -256,7 +256,7 @@ const FuelDetails = ({ data }) => {
           </div>
            <h2 className="mb-4 text-2xl font-bold text-indigo-900 underline  text-center">Fuel Details</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-4">
               <label className="block">
                 <span className="text-gray-700 font-semibold ">Payment Mode </span>
                 <Input
@@ -317,7 +317,7 @@ const FuelDetails = ({ data }) => {
          <div className="flex justify-center pt-8">
          <button
               type="submit"
-              className="w-1/3 rounded-md  bg-indigo-300 px-4 py-2 font-semibold text-indigo-900 shadow-md hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75"
+              className="w-1/3 rounded-md  bg-indigo-600 px-4 py-2 font-semibold text-white shadow-md hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-75"
             >
               {loading ? "Adding..." : "Save Fuel Payment"}
             </button>
