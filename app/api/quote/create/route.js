@@ -65,11 +65,14 @@ export async function POST(req, res) {
                 });
         
         console.log(quote);
-                await quote.save();
+              const data =  await quote.save();
             // }
         // 
 
-        return Response.json({ message: "Quote created successfully" }, { status: 200 });
+        return Response.json({
+            message: "Quote created successfully",
+            "id":data?._id,
+        }, { status: 200 });
         
 
     } catch (error) {
