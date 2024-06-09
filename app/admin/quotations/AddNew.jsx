@@ -128,9 +128,10 @@ const AddNew = () => {
       if (response.ok) {
         setIsLoading(false);
         displayToast("Successfully Added new Quotation", "✅");
+        console.log("quotation",newResult)
         form.reset(initialFormState);
         // move to detail page 
-        route.push(`/admin/quotations/663db02c0abdb0affd69c00d`)
+        route.push(`/admin/quotations/${newResult.id}`)
 
       } else {
         console.error("Error:", newResult.message);
