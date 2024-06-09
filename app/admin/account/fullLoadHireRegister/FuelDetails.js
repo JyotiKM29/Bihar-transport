@@ -32,14 +32,14 @@ const FuelDetails = ({ data }) => {
       cashReceived,
       paymentTerm,
       remarks,
-      bookingId: data._id,
+      bookingId: data.bookings_id,
     };
 
     const value = {
       fuelDetails,
       adminId,
-      bookingId: data._id,
-      vehicleId: data.vehicleData._id,
+      bookingId: data.bookings_id,
+      vehicleId: data.vehicle._id,
     };
 
     const response = await fetch("/api/accounting/fullLoadHireRegister/giveFuel", {
@@ -72,7 +72,7 @@ const FuelDetails = ({ data }) => {
     setShowForm(!showForm);
   };
 
-  const expenseData = data.vehicleData.expanse.fuel; // Assuming expense data is passed in `data.expenses`
+  const expenseData = data.vehicle.expanse.fuel; // Assuming expense data is passed in `data.expenses`
 
   return (
     <div className="p-4">
@@ -113,21 +113,21 @@ const FuelDetails = ({ data }) => {
         <div>
           <h2 className="text-2xl font-bold mb-4">Booking Details</h2>
           <div className="grid grid-cols-3 gap-4 mb-4">
-            <p><strong>Vehicle Hire NO:</strong> {data.orderNumber}</p>
-            <p><strong>Vehicle No: </strong> {data.vehicleData.vehicleNo}</p>
-            <p><strong>Shipping Charge:</strong> {data.vehicleData.bookedBy[0].netBhara}</p>
+            <p><strong>Vehicle Hire NO:</strong> {data.bookingsorderNumber}</p>
+            <p><strong>Vehicle No: </strong> {data.vehicle.vehicleNo}</p>
+            <p><strong>Shipping Charge:</strong> {data.vehicle.bookedBy[0].netBhara}</p>
           </div>
           
           <div className="grid grid-cols-3 gap-4 mb-4">
-            <p><strong>Owner Name Number:</strong> {data.vehicleData?.owner?.name}</p>
-            <p><strong>Driver Name:</strong> {data.vehicleData?.driver?.name}</p>
-            <p><strong>Advance Amount:</strong> {data.vehicleData?.bookedBy[0]?.advanceAmount ? data.vehicleData?.bookedBy[0]?.advanceAmount : 0}</p>
+            <p><strong>Owner Name Number:</strong> {data.vehicle?.owner?.name}</p>
+            <p><strong>Driver Name:</strong> {data.vehicle?.driver?.name}</p>
+            <p><strong>Advance Amount:</strong> {data.vehicle?.bookedBy[0]?.advanceAmount ? data.vehicle?.bookedBy[0]?.advanceAmount : 0}</p>
           </div>
           
           <div className="grid grid-cols-3 gap-4 mb-4">
-            <p><strong>Hire Date:</strong> {new Date(data.date).toLocaleDateString()}</p>
-            <p><strong>Hire Due:</strong> {data.vehicleData?.bookedBy[0]?.balanceAmount}</p>
-            <p><strong>Hire Due:</strong> {data.vehicleData?.bookedBy[0]?.balanceAmount}</p>
+            <p><strong>Hire Date:</strong> {new Date(data.bookingsdate).toLocaleDateString()}</p>
+            <p><strong>Hire Due:</strong> {data.vehicle?.bookedBy[0]?.balanceAmount}</p>
+            <p><strong>Hire Due:</strong> {data.vehicle?.bookedBy[0]?.balanceAmount}</p>
           </div>
           
           <h2 className="text-2xl font-bold mb-4">Fuel Details</h2>
