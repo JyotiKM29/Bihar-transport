@@ -28,14 +28,14 @@ const FuelDetails = ({ data }) => {
         fine,
         finalDue,
         remarks,
-        bookingId: data._id,
+        bookingId: data.bookings._id,
       };
 
       const value = {
         paymentDetails,
         adminId,
-        bookingId: data._id,
-        vehicleId: data.vehicleData._id,
+        bookingId: data.bookings._id,
+        vehicleId: data.vehicle._id,
       };
 
       console.log(value);
@@ -78,13 +78,13 @@ const FuelDetails = ({ data }) => {
     setShowForm(!showForm);
   };
 
-  const expenseData = data.vehicleData.expanse.fuel; // Assuming expense data is passed in `data.expenses`
+  const expenseData = data.vehicle.expanse.fuel; // Assuming expense data is passed in `data.expenses`
 
   const calculateFinalDues = (pendingAmount, fine, amountPaid) => {
     return Number(pendingAmount) + Number(fine) - Number(amountPaid);
   };
 
-  const pendingAmount = data.vehicleData?.bookedBy[0]?.balanceAmount || 0;
+  const pendingAmount = data.vehicle?.bookedBy[0]?.balanceAmount || 0;
 
   useEffect(() => {
     console.log("amount paid: ", amountPaid);
@@ -185,35 +185,35 @@ const FuelDetails = ({ data }) => {
           <h2 className="mb-4 text-2xl font-bold">Booking Details</h2>
           <div className="mb-4 grid grid-cols-3 gap-4">
             <p>
-              <strong>Vehicle Hire NO:</strong> {data.orderNumber}
+              <strong>Vehicle Hire NO:</strong> {data.bookings.orderNumber}
             </p>
             <p>
-              <strong>Vehicle No: </strong> {data.vehicleData.vehicleNo}
+              <strong>Vehicle No: </strong> {data.vehicle.vehicleNo}
             </p>
             <p>
               <strong>Shipping Charge:</strong>{" "}
-              {data.vehicleData.bookedBy[0].netBhara}
+              {data.vehicle.bookedBy[0].netBhara}
             </p>
           </div>
 
           <div className="mb-4 grid grid-cols-3 gap-4">
             <p>
               <strong>Owner Name Number:</strong>{" "}
-              {data.vehicleData?.owner?.name}
+              {data.vehicle?.owner?.name}
             </p>
             <p>
-              <strong>Driver Name:</strong> {data.vehicleData?.driver?.name}
+              <strong>Driver Name:</strong> {data.vehicle?.driver?.name}
             </p>
             <p>
               <strong>Paid Amount:</strong>{" "}
-              {data.vehicelData?.bookedBy[0].totalPaidAmount || 0}
+              {data.vehicle?.bookedBy[0].totalPaidAmount || 0}
             </p>
           </div>
 
           <div className="mb-4 grid grid-cols-3 gap-4">
             <p>
               <strong>Hire Date:</strong>{" "}
-              {new Date(data.date).toLocaleDateString()}
+              {new Date(data.bookings.date).toLocaleDateString()}
             </p>
             <p></p>
             <p>

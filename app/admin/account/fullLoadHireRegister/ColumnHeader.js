@@ -220,7 +220,7 @@ export default function ColumnHeader() {
               className="inline-block flex items-center rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-100"
               onClick={() => {
                 const data = encodeURIComponent(JSON.stringify(row.original));
-    router.push(`/admin/account/fullLoadHireRegister/pay/${row.original._id}?data=${data}`);
+    router.push(`/admin/account/fullLoadHireRegister/pay/${row.original._id}`);
               }}
             >
               <i className="fas fa-gas-pump mr-2"></i>
@@ -242,7 +242,7 @@ export default function ColumnHeader() {
               className="inline-block flex items-center rounded bg-green-600 px-4 py-2 font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75"
               onClick={() => {
                 const data = encodeURIComponent(JSON.stringify(row.original));
-    router.push(`/admin/account/fullLoadHireRegister/fuel/${row.original._id}?data=${data}`);
+    router.push(`/admin/account/fullLoadHireRegister/fuel/${row.original._id}`);
               }}
             >
               <i className="fas fa-gas-pump mr-2"></i>
