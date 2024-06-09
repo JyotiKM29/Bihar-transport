@@ -47,20 +47,20 @@ const PrintQuote = ({
                 Bihar Transport
               </h4>
               <p className="flex gap-2 p-1">
-                <span className="font-semibold">Head Office </span>Begusarai
-                pincode-846243
+                <span className="font-semibold text-nowrap">Head Office </span>NH-31, Barauni-Purnia Highway, Harpur Chowk, Begusarai, Bihar-851122
               </p>
+              
               <p className="flex gap-2 p-1">
                 <IoCall />
-                +91 1234567890
+                +91 8210931799
               </p>
               <p className="flex gap-2 p-1">
                 <IoMail />
-                bihartransport@gmail.com
+                Info@bihartransport.in
               </p>
               <p className="flex gap-2 p-1">
                 <FaEarthAmericas />
-                bihar-transport.vercel.app
+                www.bihartransport.in
               </p>
               <p className="flex gap-2 p-1">
                 <span className="font-semibold">GST No.</span> 123
