@@ -8,14 +8,10 @@ import { useToast } from "../../../../components/ui/use-toast";
 import { UserContext } from "../../../../context/UserContextProvider";
 import {
   Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
 } from "../../../../components/ui/form";
 import { Input } from "@/app/components/ui/input";
 import FieldForm from "../../FieldForm";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   vehicleNo: z.string(),
@@ -27,8 +23,8 @@ const formSchema = z.object({
   ownerMobileNo: z.string(),
   fromAddress: z.string(),
   specificRoutes: z.string(),
-  inTime:  z.time(),
-  outTime: z.time(),
+  inTime:  z.string(),
+  outTime: z.string(),
   remarks: z.string(),
   location: z.array(z.string()),
 });
@@ -37,6 +33,7 @@ const VehicleEntry = () => {
   const { toast } = useToast();
   const { user } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
+  const route = useRouter();
 
   const initialFormState = {
     vehicleNo: undefined,
@@ -107,8 +104,17 @@ const VehicleEntry = () => {
 
   }
 
+
+  function handleBack(){
+    route.push("/admin/vehicle")
+  }
+
   return (
+    <div className="min-h-[70vh] p-8 rounded-xl shadow-2xl bg-white">
     <div>
+      <Button onClick={handleBack}>Back</Button>
+    </div>
+    <h2 className="text-2xl font-semibold text-center underline text-blue-800">In a Vehicle </h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(MyHandleSubmit)}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-6">
@@ -127,7 +133,7 @@ const VehicleEntry = () => {
     <FieldForm form={form} nameValue="remarks" label="Remarks" type="text" />
     </div>    
     <div className="w-full flex justify-center mt-10">
-    <Button type="submit" className="h-12 text-lg w-full xl:w-1/3">
+    <Button type="submit" className="h-12 text-lg w-full lg:w-1/3">
               {isLoading ? "Loading..." : "Submit"}
             </Button>
     </div>

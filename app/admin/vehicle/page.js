@@ -14,7 +14,7 @@ import Attendence from './attendence/page';
 function Vehicle() {
   return (
     <div className="w-full min-h-[95vh] ">
-       <Tabs defaultValue="registration" className="relative w-full min-h-full ">
+       <Tabs defaultValue="attendence" className="relative w-full min-h-full ">
         <TabsList className="absolute right-0">
           <TabsTrigger value="registration">
           Registration
