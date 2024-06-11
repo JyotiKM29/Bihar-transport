@@ -38,10 +38,6 @@ const AttendanceSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  currentLocation: {
-    type: String,
-    required: true,
-  },
   inTime: {
     type: Date,
     required: true,
@@ -54,7 +50,8 @@ const AttendanceSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-});
+  location:[],
+},{ timestamps: true });
 
 mongoose.models = {};
 export default mongoose.model("Attendance", AttendanceSchema);
