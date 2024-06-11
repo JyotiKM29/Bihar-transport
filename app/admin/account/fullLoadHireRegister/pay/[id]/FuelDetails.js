@@ -1,6 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "@/app/context/UserContextProvider";
 import { useToast } from "@/app/components/ui/use-toast";
+import { useRouter } from "next/navigation";
+
+import { IoIosArrowBack } from "react-icons/io";
+import { Input } from "@/app/components/ui/input";
 
 const FuelDetails = ({ data }) => {
   const [paymentMode, setPaymentMode] = useState("");
@@ -78,7 +82,8 @@ const FuelDetails = ({ data }) => {
     setShowForm(!showForm);
   };
 
-  const expenseData = data.vehicle.expanse.fuel; // Assuming expense data is passed in `data.expenses`
+  const expenseData = data.vehicle.expanse.fuel;
+  const paymentData = data.vehicle.bookedBy[0].payment; // Assuming expense data is passed in `data.expenses`
 
   const calculateFinalDues = (pendingAmount, fine, amountPaid) => {
     return Number(pendingAmount) + Number(fine) - Number(amountPaid);
@@ -96,94 +101,122 @@ const FuelDetails = ({ data }) => {
     console.log("finalDue", finalDue);
   }, [pendingAmount, fine, amountPaid]);
 
+  const router = useRouter();
+
+  const handleGoBack = () => {
+    router.back();
+  };
+
   return (
-    <div className="p-4">
-      <button
-        onClick={handleToggleForm}
-        className="mb-4 rounded-md bg-indigo-600 px-4 py-2 font-semibold text-white shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75"
+    <div className="py-8 px-8 min-h-[90vh]  bg-white rounded-xl shadow-xl">
+    <div className=" flex justify-between w-full">
+    <div>
+    {showForm ? "": <button
+        onClick={handleGoBack}
+        className=" mb-4 flex gap-3 items-center rounded-md bg-indigo-700 px-4 py-2  text-white shadow-md hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75"
       >
-        {showForm ? "Back" : "Add New Fuel"}
+       <IoIosArrowBack className=" fill-white" />
+       back
+      </button>}
+    </div>
+    <button
+        onClick={handleToggleForm}
+        className=" mb-4 rounded-md bg-indigo-700 px-4 py-2  text-white shadow-md hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75"
+      >
+        {showForm ? <p className="flex items-center gap-3"><IoIosArrowBack className=" fill-white" />Back</p> : "Add New Fuel"}
       </button>
+    </div>
+      
 
       {!showForm ? (
         <div>
-          <h2 className="mb-4 text-2xl font-bold">Fuel Payments Other</h2>
-          <table className="min-w-full border border-gray-300 bg-white">
+          <h2 className="mb-4 text-2xl font-bold text-indigo-900 underline  text-center">Fuel Payments Other</h2>
+          <div className="overflow-x-auto md:overflow-x-visible">
+          <table className="min-w-full border  border-gray-300 bg-white">
             <thead>
-              <tr>
-                <th className="border-b px-4 py-2">Date</th>
-                <th className="border-b px-4 py-2">Fuel Type</th>
-                <th className="border-b px-4 py-2">Volume</th>
-                <th className="border-b px-4 py-2">Rate</th>
-                <th className="border-b px-4 py-2">Total Cost</th>
+              <tr className=" w-full border border-indigo-600 bg-indigo-300 text-indigo-900">
+                <th className=" text-nowrap border border-indigo-600 p-2 pr-3 text-sm font-medium text-indigo-900  md:text-base  ">Date</th>
+                <th className=" text-nowrap border border-indigo-600 p-2 pr-3 text-sm font-medium text-indigo-900  md:text-base  ">Fuel Type</th>
+                <th className=" text-nowrap border border-indigo-600 p-2 pr-3 text-sm font-medium text-indigo-900  md:text-base  ">Volume</th>
+                <th className=" text-nowrap border border-indigo-600 p-2 pr-3 text-sm font-medium text-indigo-900  md:text-base  ">Rate</th>
+                <th className=" text-nowrap border border-indigo-600 p-2 pr-3 text-sm font-medium text-indigo-900  md:text-base  ">Total Cost</th>
               </tr>
             </thead>
             <tbody>
               {expenseData.map((expense, index) => (
-                <tr key={index}>
-                  <td className="border-b px-4 py-2 text-center">
+                <tr className="w-full text-center" key={index}>
+                  <td className="border border-indigo-900 p-2 text-indigo-900">
                     {new Date(expense.date).toLocaleDateString()}
                   </td>
-                  <td className="border-b px-4 py-2 text-center">
+                  <td className="border border-indigo-900 p-2 text-indigo-900">
                     {expense.fuelType}
                   </td>
-                  <td className="border-b px-4 py-2 text-center">
+                  <td className="border border-indigo-900 p-2 text-indigo-900">
                     {expense.fuelVolume}
                   </td>
-                  <td className="border-b px-4 py-2 text-center">
+                  <td className="border border-indigo-900 p-2 text-indigo-900">
                     {expense.fuelRate}
                   </td>
-                  <td className="border-b px-4 py-2 text-center ">
+                  <td className="border border-indigo-900 p-2 text-indigo-900">
                     {expense.fuelVolume * expense.fuelRate}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-
+ </div>
           <br />
           <br />
           <br />
           <br />
 
-          <h2 className="mb-4 text-2xl font-bold">Other Payment History</h2>
+          <h2 className="mb-4 text-2xl font-bold text-indigo-900 underline  text-center">Other Payment History</h2>
+          <div className="overflow-x-auto md:overflow-x-visible">
           <table className="min-w-full border border-gray-300 bg-white">
             <thead>
-              <tr>
-                <th className="border-b px-4 py-2">Date</th>
-                <th className="border-b px-4 py-2">Fuel Type</th>
-                <th className="border-b px-4 py-2">Volume</th>
-                <th className="border-b px-4 py-2">Rate</th>
-                <th className="border-b px-4 py-2">Total Cost</th>
+              <tr className=" w-full border border-indigo-600 bg-indigo-300 text-indigo-900">
+                <th className=" text-nowrap border border-indigo-600 p-2 pr-3 text-sm font-medium text-indigo-900  md:text-base  ">Date</th>
+                <th className=" text-nowrap border border-indigo-600 p-2 pr-3 text-sm font-medium text-indigo-900  md:text-base  ">Amount Paid</th>
+                <th className=" text-nowrap border border-indigo-600 p-2 pr-3 text-sm font-medium text-indigo-900  md:text-base  ">final Due</th>
+                <th className=" text-nowrap border border-indigo-600 p-2 pr-3 text-sm font-medium text-indigo-900  md:text-base  ">Fine</th>
+                <th className=" text-nowrap border border-indigo-600 p-2 pr-3 text-sm font-medium text-indigo-900  md:text-base  ">payment mode </th>
+                <th className=" text-nowrap border border-indigo-600 p-2 pr-3 text-sm font-medium text-indigo-900  md:text-base  ">Remarks </th>
               </tr>
             </thead>
             <tbody>
-              {expenseData.map((expense, index) => (
-                <tr key={index}>
-                  <td className="border-b px-4 py-2 text-center">
-                    {new Date(expense.date).toLocaleDateString()}
+              {paymentData.map((payment, index) => (
+                <tr className="w-full text-center"  key={index}>
+                  <td className="border border-indigo-900 p-2 text-indigo-900">
+                    {new Date(payment.date).toLocaleDateString()}
                   </td>
-                  <td className="border-b px-4 py-2 text-center">
-                    {expense.fuelType}
+                  <td className="border border-indigo-900 p-2 text-indigo-900">
+                    {payment.amountPaid}
                   </td>
-                  <td className="border-b px-4 py-2 text-center">
-                    {expense.fuelVolume}
+                  <td className="border border-indigo-900 p-2 text-indigo-900">
+                    {payment.finalDue}
                   </td>
-                  <td className="border-b px-4 py-2 text-center">
-                    {expense.fuelRate}
+                  <td className="border border-indigo-900 p-2 text-indigo-900">
+                    {payment.fine}
                   </td>
-                  <td className="border-b px-4 py-2 text-center ">
-                    {expense.fuelVolume * expense.fuelRate}
+                  <td className="border border-indigo-900 p-2 text-indigo-900">
+                    {payment.paymentMode }
+                  </td>
+                  <td className="border border-indigo-900 p-2 text-indigo-900">
+                    {payment.remarks }
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       ) : (
         <div>
-          <h2 className="mb-4 text-2xl font-bold">Booking Details</h2>
-          <div className="mb-4 grid grid-cols-3 gap-4">
+           <h2 className="mb-4 text-2xl font-bold text-indigo-900 underline  text-center">Booking Details</h2>
+           <div className="bg-indigo-100 rounded-2xl shadow-xl p-6 mb-8">
+
+          
+          <div className="mb-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-4 ">
             <p>
               <strong>Vehicle Hire NO:</strong> {data.bookings.orderNumber}
             </p>
@@ -196,7 +229,7 @@ const FuelDetails = ({ data }) => {
             </p>
           </div>
 
-          <div className="mb-4 grid grid-cols-3 gap-4">
+          <div className="mb-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-4">
             <p>
               <strong>Owner Name Number:</strong>{" "}
               {data.vehicle?.owner?.name}
@@ -210,7 +243,7 @@ const FuelDetails = ({ data }) => {
             </p>
           </div>
 
-          <div className="mb-4 grid grid-cols-3 gap-4">
+          <div className="mb-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-4">
             <p>
               <strong>Hire Date:</strong>{" "}
               {new Date(data.bookings.date).toLocaleDateString()}
@@ -220,13 +253,13 @@ const FuelDetails = ({ data }) => {
               <strong>Pending Amount:</strong> {pendingAmount}
             </p>
           </div>
-
-          <h2 className="mb-4 text-2xl font-bold">Fuel Details</h2>
+          </div>
+           <h2 className="mb-4 text-2xl font-bold text-indigo-900 underline  text-center">Fuel Details</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-4">
               <label className="block">
-                <span className="text-gray-700">Payment Mode </span>
-                <input
+                <span className="text-gray-700 font-semibold ">Payment Mode </span>
+                <Input
                   type="text"
                   value={paymentMode}
                   onChange={(e) => setPaymentMode(e.target.value)}
@@ -234,8 +267,8 @@ const FuelDetails = ({ data }) => {
                 />
               </label>
               <label className="block">
-                <span className="text-gray-700">Payment Date</span>
-                <input
+                <span className="text-gray-700 font-semibold ">Payment Date</span>
+                <Input
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
@@ -243,8 +276,8 @@ const FuelDetails = ({ data }) => {
                 />
               </label>
               <label className="block">
-                <span className="text-gray-700">Fine</span>
-                <input
+                <span className="text-gray-700 font-semibold ">Fine</span>
+                <Input
                   type="number"
                   value={fine}
                   onChange={(e) => setFine(e.target.value)}
@@ -252,8 +285,8 @@ const FuelDetails = ({ data }) => {
                 />
               </label>
               <label className="block">
-                <span className="text-gray-700">Amount Paid</span>
-                <input
+                <span className="text-gray-700 font-semibold ">Amount Paid</span>
+                <Input
                   type="number"
                   value={amountPaid}
                   onChange={(e) => setAmountPaid(e.target.value)}
@@ -262,8 +295,8 @@ const FuelDetails = ({ data }) => {
               </label>
 
               <label className="block">
-                <span className="text-gray-700">Final Dues</span>
-                <input
+                <span className="text-gray-700 font-semibold ">Final Dues</span>
+                <Input
                   type="number"
                   value={finalDue}
                   readOnly
@@ -272,8 +305,8 @@ const FuelDetails = ({ data }) => {
               </label>
 
               <label className="block">
-                <span className="text-gray-700">Remarks</span>
-                <input
+                <span className="text-gray-700 font-semibold ">Remarks</span>
+                <Input
                   type="text"
                   value={remarks}
                   onChange={(e) => setRemarks(e.target.value)}
@@ -281,12 +314,15 @@ const FuelDetails = ({ data }) => {
                 />
               </label>
             </div>
-            <button
+         <div className="flex justify-center pt-8">
+         <button
               type="submit"
-              className="w-full rounded-md bg-indigo-600 px-4 py-2 font-semibold text-white shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75"
+              className="w-1/3 rounded-md  bg-indigo-600 px-4 py-2 font-semibold text-white shadow-md hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-75"
             >
               {loading ? "Adding..." : "Save Fuel Payment"}
             </button>
+         </div>
+           
           </form>
         </div>
       )}
