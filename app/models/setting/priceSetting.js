@@ -12,7 +12,7 @@ const additionalChargeSchema = new mongoose.Schema({
 // Define the main schema
 const priceSettingSchema = new mongoose.Schema({
     customer: { type: String, required: true },
-    constumerId:{type:String, required:true},
+    customerId:{type:String, required:true},
   fromLocation: { type: String, required: true },
   toLocation: { type: String, required: true },
   searchItemProduct: { type: String, required: true },
@@ -61,7 +61,7 @@ const priceSettingSchema = new mongoose.Schema({
 
   // Additional charges
   additionalCharges: [additionalChargeSchema],
-});
+},{timestamps:true});
 
 // Create the model
 
