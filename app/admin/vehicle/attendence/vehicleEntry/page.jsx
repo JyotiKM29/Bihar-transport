@@ -8,10 +8,12 @@ import { useToast } from "../../../../components/ui/use-toast";
 import { UserContext } from "../../../../context/UserContextProvider";
 import {
   Form,
+  FormField,
 } from "../../../../components/ui/form";
 import { Input } from "@/app/components/ui/input";
 import FieldForm from "../../FieldForm";
 import { useRouter } from "next/navigation";
+import SearchVOD from "./SearchVOD";
 
 const formSchema = z.object({
   vehicleNo: z.string(),
@@ -19,8 +21,8 @@ const formSchema = z.object({
   vehicleLength: z.string(),
   passingWeight: z.string(),
   carryWeight: z.string(),
-  driverMobileNo: z.string(),
-  ownerMobileNo: z.string(),
+  driverMobileNo: z.coerce.string(),
+  ownerMobileNo: z.coerce.string(),
   fromAddress: z.string(),
   specificRoutes: z.string(),
   inTime:  z.string(),
@@ -28,6 +30,14 @@ const formSchema = z.object({
   remarks: z.string(),
   location: z.array(z.string()),
 });
+
+const formatTime = (timestamp) => {
+  const date = new Date(timestamp);
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${hours}:${minutes}`;
+};
+
 
 const VehicleEntry = () => {
   const { toast } = useToast();
@@ -45,7 +55,7 @@ const VehicleEntry = () => {
     ownerMobileNo: undefined,
     fromAddress: undefined,
     specificRoutes: undefined,
-    inTime: undefined,
+    inTime: formatTime(new Date().getTime()),
     outTime: undefined,
     remarks: undefined,
     location:  [],
@@ -110,16 +120,27 @@ const VehicleEntry = () => {
   }
 
   return (
-    <div className="min-h-[70vh] p-8 rounded-xl shadow-2xl bg-white">
+    <div className="min-h-[90vh] p-8 rounded-xl shadow-2xl bg-white">
     <div>
       <Button onClick={handleBack}>Back</Button>
     </div>
-    <h2 className="text-2xl font-semibold text-center underline text-blue-800">In a Vehicle </h2>
+    <h2 className="text-2xl font-semibold text-center underline text-blue-800 mb-10">In a Vehicle </h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(MyHandleSubmit)}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-6">
-
-    <FieldForm form={form} nameValue="vehicleNo" label="Vehicle No" type="text" />
+          <FormField
+          control={form.control}
+          name="vehicleNo"
+          render={({ field }) => (
+            <SearchVOD
+              form={form}
+              field={field}
+              label="Vehicle No"
+             
+            />
+          )}
+        />
+    {/* <FieldForm form={form} nameValue="vehicleNo" label="Vehicle No" type="text" /> */}
     <FieldForm form={form} nameValue="vehicleType" label="Vehicle Type" type="text" />
     <FieldForm form={form} nameValue="vehicleLength" label="Vehicle Length" type="text" />
     <FieldForm form={form} nameValue="passingWeight" label="Passing Weight" type="text" />
