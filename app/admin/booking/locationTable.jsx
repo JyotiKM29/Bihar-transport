@@ -45,7 +45,7 @@ const LocationTable = ({ locations }) => {
   //       throw new Error("Failed to fetch locations");
   //     }
   //   } catch (error) {
-      console.error("Error:", error.message);
+      // console.error("Error:", error.message);
   //     toast({
   //       title: "Error",
   //       description: "Failed to fetch locations",
@@ -99,7 +99,7 @@ const LocationTable = ({ locations }) => {
   //       throw new Error("Failed to update location");
   //     }
   //   } catch (error) {
-      console.error("Error:", error.message);
+      // console.error("Error:", error.message);
   //     toast({
   //       title: "Error",
   //       description: "Failed to update location",

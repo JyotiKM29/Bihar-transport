@@ -8,6 +8,7 @@ import {
 
 import Registration from './registration/page';
 import Allocation from './allocation/page';
+import Attendence from './attendence/page';
 
 
 function Vehicle() {
@@ -21,6 +22,9 @@ function Vehicle() {
           <TabsTrigger value="allocation">
           Vehicle Details
           </TabsTrigger>
+          <TabsTrigger value="attendence">
+         Attendence
+          </TabsTrigger>
          
         
         </TabsList>
@@ -29,6 +33,9 @@ function Vehicle() {
         </TabsContent>
         <TabsContent value="allocation">
         <Allocation />
+        </TabsContent>
+        <TabsContent value="attendence">
+        <Attendence />
         </TabsContent>
        
       
