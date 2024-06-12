@@ -94,7 +94,7 @@ const VehicleEntry = () => {
   
     if(response.ok){
       setIsLoading(false);
-      displayToast("Successfully Booked, Click view Booking button to view the booking", "✅");
+      displayToast("Successfully Mark Attendence", "✅");
       const userDetail = newResult.user;
       reset(initialFormState);
     }
