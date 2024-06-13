@@ -32,7 +32,7 @@ export async function POST(req, res) {
     if (vehicle.payment && vehicle.payment.length > 0) {
       vehicle.payment.push(paymentDetails);
     } else {
-      vehicle.expanse.fuel = [paymentDetails];
+      vehicle.payment = [paymentDetails];
     }
 
     const id = bookingId;
