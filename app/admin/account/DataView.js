@@ -19,7 +19,7 @@ import {
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 
-export function DataTable({ columns, data }) {
+export default function DataTable({ columns, data }) {
   function getExportFileBlob({ columns, data, fileType, fileName }) {
     if (fileType === "xlsx") {
       const header = columns.map((c) => ({ header: c.header, accessorKey: c.accessorKey }));

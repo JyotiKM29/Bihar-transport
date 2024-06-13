@@ -6,7 +6,7 @@ import React, { useContext, useEffect, useState } from 'react'
 
 import { IoIosArrowBack } from "react-icons/io";
 
-const page = () => {
+const PriceSetting = () => {
     const route = useRouter();
     const { user } = useContext(UserContext);
 
@@ -124,4 +124,4 @@ const page = () => {
   )
 }
 
-export default page
+export default PriceSetting
