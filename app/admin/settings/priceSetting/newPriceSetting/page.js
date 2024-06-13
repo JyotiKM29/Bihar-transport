@@ -38,6 +38,7 @@ const additionalChargeSchema = z.object({
 });
 
 const formSchema = z.object({
+  adminId:z.string(),
   customer: z.string(),
   customerId: z.string(),
   fromLocation: z.string(),
@@ -95,6 +96,7 @@ const VehicleEntry = () => {
 
 
   const initialFormState = {
+    adminId:"",
     customer: undefined,
     customerId: undefined,
     fromLocation: undefined,
@@ -157,10 +159,11 @@ const VehicleEntry = () => {
   };
 
   async function MyHandleSubmit(values) {
+    
+    values.adminId = user?._id;
     console.log("price :", values);
-
     try {
-      const response = await fetch("api/setting/priceSetting/create", {
+      const response = await fetch("/api/setting/priceSetting/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -183,7 +186,7 @@ const VehicleEntry = () => {
       }
     } catch (error) {
       // console.error("Error:", newResult.message);
-      // displayToast("Error", "❌", newResult.message);
+      displayToast("Error", "❌", error.message);
       setIsLoading(false);
     }
   }
