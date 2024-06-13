@@ -3,7 +3,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { Button } from "../../../../components/ui/button";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import * as z from "zod";
 import { useToast } from "../../../../components/ui/use-toast";
 import { UserContext } from "../../../../context/UserContextProvider";
@@ -88,6 +88,11 @@ const VehicleEntry = () => {
   const { user } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
   const route = useRouter();
+  const [units , setUnits] = useState();
+  const [chargesList, setChargesList] = useState([]);
+
+  const userId = user?._id;
+
 
   const initialFormState = {
     customer: undefined,
@@ -169,7 +174,7 @@ const VehicleEntry = () => {
       if (response.ok) {
         setIsLoading(false);
         displayToast("Successfully Price Setting updated", "✅");
-        const userDetail = newResult.user;
+        // const userDetail = newResult.user;
         reset(initialFormState);
       } else {
         console.error("Error:", newResult.message);
@@ -177,8 +182,8 @@ const VehicleEntry = () => {
         setIsLoading(false);
       }
     } catch (error) {
-      console.error("Error:", newResult.message);
-      displayToast("Error", "❌", newResult.message);
+      // console.error("Error:", newResult.message);
+      // displayToast("Error", "❌", newResult.message);
       setIsLoading(false);
     }
   }
@@ -187,6 +192,7 @@ const VehicleEntry = () => {
     route.back();
   }
   const addProduct = (product) => {
+    console.log(product);
     append(product);
     form.setValue("additionalCharges", {
       chargeName: "",
@@ -205,6 +211,64 @@ const VehicleEntry = () => {
     update(index, updatedProduct);
   };
 
+  useEffect(()=>{
+    const fetchUnits = async () => {
+      // Fetch units data from API
+      try {
+     
+
+        const response = await fetch(`/api/getunits/6630a60370282f06184d9cd6`, {
+          method: "GET",
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setUnits(data.data);
+        console.log("Units", data);
+      } catch (error) {
+        console.error("Error fetching units:", error.message);
+      }
+    };
+
+    const fetchAdditionalCharges = async () => {
+      // Fetch units data from API
+      try {
+        const response = await fetch(`/api/setting/additionalCharges/get/6630a60370282f06184d9cd6`, {
+          method: "GET",
+        });
+ 
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+ 
+        const data = await response.json();
+       //  console.log("rate as per data:", data.data);
+        setChargesList(data.data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchAdditionalCharges();
+    fetchUnits();
+  },[])
+
+  const rate = form.watch("additionalCharges.rate",0);
+  const qty = form.watch("additionalCharges.qty",0);
+
+  function calculateAmount(rate , qty){
+    const amount = rate * qty;
+    form.setValue("additionalCharges.amount",amount);
+
+  }
+
+  useEffect(()=>{
+    calculateAmount(rate, qty);
+  },[rate, qty])
+
   return (
     <div className="min-h-[90vh] rounded-xl bg-white p-8 shadow-2xl">
       <div>
@@ -217,7 +281,7 @@ const VehicleEntry = () => {
         </Button>
       </div>
       <h2 className=" mb-10 text-center text-3xl font-semibold text-indigo-800 underline">
-        Price Setting
+      New Price Setting
       </h2>
       <Form {...form}>
         <form
@@ -381,12 +445,43 @@ const VehicleEntry = () => {
                   label=" To Weight"
                   type="text"
                 />
-                <FieldForm
+                {/* <FieldForm
                   form={form}
                   nameValue="weightUnit"
                   label="Weight Unit"
                   type="text"
-                />
+                /> */}
+                  <FormField
+                    control={form.control}
+                    name="weightUnit"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="flex flex-1 gap-4 items-center justify-center ">
+                            <FormLabel className="text-nowrap text-sm lg:text-base">
+                             Weight Unit 
+                          </FormLabel>
+                          <div className="flex flex-1 flex-col">
+                            <FormControl>
+                              <select
+                                {...field}
+                                
+                              >
+                                <option value=""> Select  Weight Unit</option>
+                               
+                                {Array.isArray(units) &&
+                                  units.map((unit) => (
+                                    <option key={unit.name} value={unit.name}>
+                                      {unit.name}
+                                    </option>
+                                  ))}
+                              </select>
+                            </FormControl>
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      );
+                    }}
+                  />
               </>
             )}
             {form.watch("rateAsPer", "Quantity") === "Quantity" && (
@@ -407,12 +502,45 @@ const VehicleEntry = () => {
               label=" To Qty"
               type="text"
             />
-            <FieldForm
+            {/* <FieldForm
               form={form}
               nameValue="qtyUnit"
               label="Qty Unit "
               type="text"
-            />
+            /> */}
+
+            <FormField
+                    control={form.control}
+                    name="qtyUnit"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="flex flex-1 gap-4 items-center justify-center ">
+                            <FormLabel className="text-nowrap text-sm lg:text-base">
+                             Quantity Unit 
+                          </FormLabel>
+                          <div className="flex flex-1 flex-col">
+                            <FormControl>
+                              <select
+                                {...field}
+                                
+                              >
+                                <option value=""> Select  Quantity Unit</option>
+                               
+                                {Array.isArray(units) &&
+                                  units.map((unit) => (
+                                    <option key={unit.name} value={unit.name}>
+                                      {unit.name}
+                                    </option>
+                                  ))}
+                              </select>
+                            </FormControl>
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      );
+                    }}
+                  />
+              
                </>
             )}
             {form.watch("rateAsPer", "Distance") === "Distance" && (
@@ -497,12 +625,44 @@ const VehicleEntry = () => {
             <p className="col-span-2 mb-4 text-center text-xl font-medium text-cyan-800  underline">
               Additional Chargers
             </p>
-            <FieldForm
+            {/* <FieldForm
               form={form}
               nameValue="additionalCharges.chargeName"
               label="Charge Name "
               type="text"
-            />
+            /> */}
+            <FormField
+                    control={form.control}
+                    name="additionalCharges.chargeName"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="flex flex-1 gap-4 items-center justify-center ">
+                            <FormLabel className="text-nowrap text-sm lg:text-base">
+                             Charge Name
+                          </FormLabel>
+                          <div className="flex flex-1 flex-col">
+                            <FormControl>
+                              <select
+                                {...field}
+                                
+                              >
+                                <option value=""> Select  Charge Name</option>
+                                {Array.isArray(chargesList) &&
+                                  chargesList.map((unit) => (
+                                    <option key={unit.name} value={unit.name}>
+                                      {unit.name}
+                                    </option>
+                                  ))}
+                             
+                              </select>
+                            </FormControl>
+                            <FormMessage />
+                          </div>
+                        </FormItem>
+                      );
+                    }}
+                  />
+
             <FieldForm
               form={form}
               nameValue="additionalCharges.rate"
@@ -525,7 +685,7 @@ const VehicleEntry = () => {
               <Button
                 type="button"
                 className=" mb-6 mt-3 w-1/5 bg-green-800 hover:bg-green-900 focus:bg-green-900"
-                onClick={() => addProduct(form.getValues("product"))}
+                onClick={() => addProduct(form.getValues("additionalCharges"))}
               >
                 Add Product
               </Button>
