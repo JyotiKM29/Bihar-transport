@@ -7,6 +7,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { IoIosArrowBack } from "react-icons/io";
 
 const PriceSetting = () => {
+    const [loading , setLoading] = useState(true);
     const route = useRouter();
     const { user } = useContext(UserContext);
 
@@ -30,12 +31,12 @@ const PriceSetting = () => {
       
               const data = await response.json();
     
-            //   setLoading(false);
+              setLoading(false);
               console.log("data", data);
               setData(data.data);
             }
           } catch (error) {
-            // setLoading(false);
+            setLoading(false);
             console.error("Error:", error);
           }
         };
@@ -61,8 +62,9 @@ const PriceSetting = () => {
     <h2 className=" mb-10 text-center text-3xl font-semibold text-blue-800 underline">
         Price Setting
       </h2>
-
-      <div className="overflow-x-auto md:overflow-x-visible">
+ {
+  loading ? <p className='text-indigo-600 font-medium text-xl'>Loading...</p>:
+  <div className="overflow-x-auto md:overflow-x-visible">
           <table className="min-w-full border  border-gray-300 bg-white">
             <thead>
               <tr className=" w-full border border-indigo-600 bg-indigo-300 text-indigo-900">
@@ -118,6 +120,8 @@ const PriceSetting = () => {
             </tbody>
           </table>
  </div>
+ }
+     
         
 
     </div>
