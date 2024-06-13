@@ -11,6 +11,7 @@ import { useReactToPrint } from 'react-to-print';
 import { Printer } from 'lucide-react';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 function Invoice({ params }) {
   const [loader, setLoader] = useState(false);
@@ -326,9 +327,14 @@ function Invoice({ params }) {
          
       <div className="overflow-x-auto">
         <div ref={documentRef} className="min-w-full rounded-xl bg-white p-4 px-8  ">
-          <h1 className="text-center text-3xl font-medium uppercase text-green-600 underline mb-6 tracking-wider ">
-            Invoice
+        <div className="flex items-center justify-between">
+        <span> &nbsp; </span>
+        <h1 className="text-center text-3xl font-medium  underline mb-6 tracking-wider ">
+         Invoice
           </h1>
+          <Image  className="" src={'/bt-logo.jpg'} height={150} width={150} alt="bihar transport"/>
+        </div>
+      
           <div className="grid min-h-24 grid-cols-7  ">
             <div className="col-span-3 border border-gray-400  p-2">
               <p>
