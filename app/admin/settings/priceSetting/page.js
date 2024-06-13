@@ -7,7 +7,10 @@ import React, { useContext, useEffect, useState } from 'react'
 import { IoIosArrowBack } from "react-icons/io";
 
 const PriceSetting = () => {
+
     const [loading , setLoading] = useState(true);
+
+
     const route = useRouter();
     const { user } = useContext(UserContext);
 

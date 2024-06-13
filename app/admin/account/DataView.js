@@ -19,6 +19,7 @@ import {
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 
+
 export default function DataTable({ columns, data }) {
   function getExportFileBlob({ columns, data, fileType, fileName }) {
     if (fileType === "xlsx") {
@@ -84,7 +85,7 @@ export default function DataTable({ columns, data }) {
       <div className="rounded-md border w-full mt-8">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table && table.getHeaderGroups && table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead key={header.id} className='bg-blue-50 border'>

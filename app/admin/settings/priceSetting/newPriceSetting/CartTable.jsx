@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ShoppingCart } from "lucide-react";
-import { Button } from "../../../components/ui/button";
+import { Button } from "../../../../components/ui/button";
 import { Input } from "@/app/components/ui/input";
 
 const CartTable = ({ items, onDelete, onEdit }) => {

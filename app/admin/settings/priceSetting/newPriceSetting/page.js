@@ -1,18 +1,34 @@
 "use client";
 import { IoIosArrowBack } from "react-icons/io";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm , useFieldArray} from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { Button } from "../../../../components/ui/button";
 import { useContext, useState } from "react";
 import * as z from "zod";
 import { useToast } from "../../../../components/ui/use-toast";
 import { UserContext } from "../../../../context/UserContextProvider";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../../../components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../../../components/ui/form";
 import { Input } from "@/app/components/ui/input";
 import FieldForm from "../../FieldForm";
 import { useRouter } from "next/navigation";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/ui/select";
-import CartTable from "../CartTable";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/app/components/ui/select";
+import CartTable from "./CartTable";
+import SearchLedger from "./SearchLedger";
+import SearchItem from "./SearchItem";
+import SearchVehicleType from "./SearchVehicleType";
 
 const additionalChargeSchema = z.object({
   chargeName: z.string(),
@@ -31,46 +47,41 @@ const formSchema = z.object({
   rateAsPer: z.enum(["Weight", "Quantity", "Distance", "Per Trip", "Fixed"]),
 
   // Weight details
-  fromWeight: z.coerce.number(),
-  toWeight: z.coerce.number(),
-  weightUnit: z.string(),
+  fromWeight: z.coerce.number().optional(),
+  toWeight: z.coerce.number().optional(),
+  weightUnit: z.string().optional(),
 
   // Vehicle details
-  vehicleType: z.string(),
+  vehicleType: z.string().optional(),
 
   // Quantity details
-  fromQty: z.coerce.number(),
-  toQty: z.coerce.number(),
-  qtyUnit: z.string(),
+  fromQty: z.coerce.number().optional(),
+  toQty: z.coerce.number().optional(),
+  qtyUnit: z.string().optional(),
 
   // Distance details
-  openingKM: z.coerce.number(),
-  closingKM: z.coerce.number(),
+  openingKM: z.coerce.number().optional(),
+  closingKM: z.coerce.number().optional(),
 
   // Per trip details
-  fromTrip: z.coerce.number(),
-  toTrip: z.coerce.number(),
+  fromTrip: z.coerce.number().optional(),
+  toTrip: z.coerce.number().optional(),
 
   // Rates
   partyRate: z.object({
-    rate: z.coerce.number(),
-    freight: z.coerce.number(),
+    rate: z.coerce.number().optional(),
+    freight: z.coerce.number().optional(),
   }),
   vehicleHireRate: z.object({
-    rate: z.coerce.number(),
-    freight: z.coerce.number(),
+    rate: z.coerce.number().optional(),
+    freight: z.coerce.number().optional(),
   }),
 
   // Additional charges
   additionalCharges: z.array(additionalChargeSchema),
 });
 
-const formatTime = (timestamp) => {
-  const date = new Date(timestamp);
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  return `${hours}:${minutes}`;
-};
+
 
 const VehicleEntry = () => {
   const { toast } = useToast();
@@ -140,8 +151,6 @@ const VehicleEntry = () => {
     });
   };
 
-
-
   async function MyHandleSubmit(values) {
     console.log("price :", values);
 
@@ -159,10 +168,7 @@ const VehicleEntry = () => {
 
       if (response.ok) {
         setIsLoading(false);
-        displayToast(
-          "Successfully Price Setting updated",
-          "✅",
-        );
+        displayToast("Successfully Price Setting updated", "✅");
         const userDetail = newResult.user;
         reset(initialFormState);
       } else {
@@ -186,9 +192,8 @@ const VehicleEntry = () => {
       chargeName: "",
       rate: 0,
       qty: 0,
-     
+
       amount: 0,
-     
     });
   };
 
@@ -203,28 +208,47 @@ const VehicleEntry = () => {
   return (
     <div className="min-h-[90vh] rounded-xl bg-white p-8 shadow-2xl">
       <div>
-        <Button onClick={handleBack} className="bg-indigo-600 hover:bg-indigo-700 flex gap-4">
-        <IoIosArrowBack />
-        Back</Button>
+        <Button
+          onClick={handleBack}
+          className="flex gap-4 bg-indigo-600 hover:bg-indigo-700"
+        >
+          <IoIosArrowBack />
+          Back
+        </Button>
       </div>
       <h2 className=" mb-10 text-center text-3xl font-semibold text-indigo-800 underline">
-      New Price Setting
+        Price Setting
       </h2>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(MyHandleSubmit)} className="flex flex-col gap-6">
-          <div className="grid grid-cols-1 gap-x-6 lg:grid-cols-2 border border-indigo-100 shadow-xl bg-indigo-200 rounded-2xl px-8 py-6">
-            <FieldForm
+        <form
+          onSubmit={form.handleSubmit(MyHandleSubmit)}
+          className="flex flex-col gap-6"
+        >
+          <div className="grid grid-cols-1 gap-x-6 rounded-2xl border border-indigo-100 bg-indigo-200 px-8 py-6 shadow-xl lg:grid-cols-2">
+            {/* <FieldForm
               form={form}
               nameValue="customer"
               label="Customer"
               type="text"
-            />
-            <FieldForm
+            /> */}
+             <FormField
+            control={form.control}
+            name="customer"
+            render={({ field }) => (
+              <SearchLedger
+             
+                form={form}
+                field={field}
+                label="Customer"
+              />
+            )}
+          />
+            {/* <FieldForm
               form={form}
               nameValue="customerId"
               label="Customer Id "
               type="text"
-            />
+            /> */}
             <FieldForm
               form={form}
               nameValue="fromLocation"
@@ -237,111 +261,140 @@ const VehicleEntry = () => {
               label="To Location "
               type="text"
             />
-            <FieldForm
+            {/* <FieldForm
               form={form}
               nameValue="searchItemProduct"
               label="Search Item Product "
               type="text"
-            />
-             <FieldForm
+            /> */}
+
+<FormField
+                  control={form.control}
+                  name="searchItemProduct"
+                  render={({ field }) => (
+                    <SearchItem
+                     
+                      form={form}
+                      field={field}
+                        label="Search Item Product "
+                    />
+                  )}
+                />
+
+            {/* <FieldForm
               form={form}
               nameValue="vehicleType"
               label="Vehicle Type"
               type="text"
+            /> */}
+            <FormField
+                        control={form.control}
+                        name="vehicleType"
+                        render={({ field }) => (
+                          <SearchVehicleType
+                            form={form}
+                            field={field}
+                            label="Vehicle Type"
+                          />
+                        )}
+                      />
+
+            <FormField
+              control={form.control}
+              name="way"
+              render={({ field }) => {
+                return (
+                  <FormItem className="flex items-center justify-center gap-4">
+                    <FormLabel className="text-nowrap text-sm lg:text-base">
+                      Trip Type:
+                    </FormLabel>
+                    <Select
+                      className="flex flex-1 flex-col"
+                      onValueChange={field.onChange}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Trip Type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="One Way">One Way</SelectItem>
+                        <SelectItem value="Two Way">Two Way</SelectItem>
+                        <SelectItem value="Returning">Returning</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
-          
-            
-              <FormField
-                  control={form.control}
-                 name="way"
-                  render={({ field }) => {
-                    return (
-                      <FormItem className="flex items-center justify-center gap-4">
-                        <FormLabel className="text-nowrap text-sm lg:text-base">
-                          Trip Type:
-                        </FormLabel>
-                        <Select
-                          className="flex flex-1 flex-col"
-                          onValueChange={field.onChange}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select Trip Type" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="One Way">One Way</SelectItem>
-                            <SelectItem value="Two way">Two way</SelectItem>
-                            <SelectItem value="Return">Return</SelectItem>
-                            <SelectItem value="All">All</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
+
+            <FormField
+              control={form.control}
+              name="rateAsPer"
+              render={({ field }) => {
+                return (
+                  <FormItem className="flex items-center justify-center gap-4">
+                    <FormLabel className="text-nowrap text-sm lg:text-base">
+                      Rate as per:
+                    </FormLabel>
+                    <Select
+                      className="flex flex-1 flex-col"
+                      onValueChange={field.onChange}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Trip Type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="Weight">Weight</SelectItem>
+                        <SelectItem value="Quantity">Quantity</SelectItem>
+                        <SelectItem value="Distance">Distance</SelectItem>
+                        <SelectItem value="Per Trip">Per Trip</SelectItem>
+                        <SelectItem value="Fixed">Fixed</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 gap-x-6 rounded-2xl border border-indigo-100 bg-indigo-50 px-8 py-6 shadow-xl lg:grid-cols-2">
+            {form.watch("rateAsPer", "Weight") === "Weight" && (
+              <>
+                <p className="col-span-2 mb-4 text-center text-xl font-medium text-indigo-800  underline">
+                  Weight
+                </p>
+
+                <FieldForm
+                  form={form}
+                  nameValue="fromWeight"
+                  label=" From Weight"
+                  type="text"
                 />
-
-<FormField
-                  control={form.control}
-                 name="rateAsPer"
-                  render={({ field }) => {
-                    return (
-                      <FormItem className="flex items-center justify-center gap-4">
-                        <FormLabel className="text-nowrap text-sm lg:text-base">
-                          Rate as per:
-                        </FormLabel>
-                        <Select
-                          className="flex flex-1 flex-col"
-                          onValueChange={field.onChange}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select Trip Type" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="Weight">Weight</SelectItem>
-                            <SelectItem value="Quantity">Quantity</SelectItem>
-                            <SelectItem value="Distance">Distance</SelectItem>
-                            <SelectItem value="Per Trip">Per Trip</SelectItem>
-                            <SelectItem value="Fixed">Fixed</SelectItem>
-                           
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
+                <FieldForm
+                  form={form}
+                  nameValue="toWeight"
+                  label=" To Weight"
+                  type="text"
                 />
-                </div>
+                <FieldForm
+                  form={form}
+                  nameValue="weightUnit"
+                  label="Weight Unit"
+                  type="text"
+                />
+              </>
+            )}
+            {form.watch("rateAsPer", "Quantity") === "Quantity" && (
+              <>
+            <p className="col-span-2 mb-4 mt-6 text-center text-xl font-medium text-indigo-800 underline">
+              Quantity
+            </p>
 
-<div className="grid grid-cols-1 gap-x-6 lg:grid-cols-2 border border-indigo-100 shadow-xl bg-indigo-50 rounded-2xl px-8 py-6">
-
-<p className="col-span-2 text-center font-medium underline text-xl text-indigo-800  mb-4">Weight</p>
-          
-            <FieldForm
-              form={form}
-              nameValue="fromWeight"
-              label=" From Weight"
-              type="text"
-            />
-            <FieldForm
-              form={form}
-              nameValue="toWeight"
-              label=" To Weight"
-              type="text"
-            />
-            <FieldForm
-              form={form}
-              nameValue="weightUnit"
-              label="Weight Unit"
-              type="text"
-            />
-           
-
-<p className="col-span-2 text-center font-medium underline text-xl text-indigo-800 mt-6 mb-4">Quantity</p>
-   
             <FieldForm
               form={form}
               nameValue="fromQty"
@@ -360,8 +413,14 @@ const VehicleEntry = () => {
               label="Qty Unit "
               type="text"
             />
-<p className="col-span-2 text-center font-medium underline text-xl text-indigo-800 mt-6 mb-4">Distance</p>
-   
+               </>
+            )}
+            {form.watch("rateAsPer", "Distance") === "Distance" && (
+              <>
+            <p className="col-span-2 mb-4 mt-6 text-center text-xl font-medium text-indigo-800 underline">
+              Distance
+            </p>
+
             <FieldForm
               form={form}
               nameValue="openingKM"
@@ -374,8 +433,14 @@ const VehicleEntry = () => {
               label="Closing KM "
               type="text"
             />
-            <p className="col-span-2 text-center font-medium underline text-xl text-indigo-800 mt-6 mb-4">Trip</p>
-   
+               </>
+            )}
+            {form.watch("rateAsPer", "Per Trip") === "Per Trip" && (
+              <>
+            <p className="col-span-2 mb-4 mt-6 text-center text-xl font-medium text-indigo-800 underline">
+              Trip
+            </p>
+
             <FieldForm
               form={form}
               nameValue="fromTrip"
@@ -388,9 +453,14 @@ const VehicleEntry = () => {
               label="To Trip "
               type="text"
             />
+   </>
+            )}
+            {form.watch("rateAsPer", "Fixed") === "Fixed" && (
+              <>
+            <p className="col-span-2 mb-4 mt-6 text-center text-xl font-medium text-indigo-800 underline">
+              Party Rate
+            </p>
 
-<p className="col-span-2 text-center font-medium underline text-xl text-indigo-800 mt-6 mb-4">Party Rate</p>
-   
             <FieldForm
               form={form}
               nameValue="partyRate.rate"
@@ -404,8 +474,10 @@ const VehicleEntry = () => {
               type="text"
             />
 
-<p className="col-span-2 text-center font-medium underline text-xl text-indigo-800 mt-6 mb-4">Vehicle Rate</p>
-   
+            <p className="col-span-2 mb-4 mt-6 text-center text-xl font-medium text-indigo-800 underline">
+              Vehicle Rate
+            </p>
+
             <FieldForm
               form={form}
               nameValue="vehicleHireRate.rate"
@@ -418,57 +490,61 @@ const VehicleEntry = () => {
               label="Freight "
               type="text"
             />
+            </>)}
           </div>
 
-          <div className="grid grid-cols-1 gap-x-6 lg:grid-cols-2 border border-cyan-100 shadow-xl bg-cyan-50 rounded-2xl px-8 py-6">
-          <p className="col-span-2 text-center font-medium underline text-xl text-cyan-800  mb-4">Additional Chargers</p>
-          <FieldForm
+          <div className="grid grid-cols-1 gap-x-6 rounded-2xl border border-cyan-100 bg-cyan-50 px-8 py-6 shadow-xl lg:grid-cols-2">
+            <p className="col-span-2 mb-4 text-center text-xl font-medium text-cyan-800  underline">
+              Additional Chargers
+            </p>
+            <FieldForm
               form={form}
               nameValue="additionalCharges.chargeName"
               label="Charge Name "
               type="text"
             />
-          <FieldForm
+            <FieldForm
               form={form}
               nameValue="additionalCharges.rate"
               label="Rate"
               type="text"
             />
-          <FieldForm
+            <FieldForm
               form={form}
               nameValue="additionalCharges.qty"
               label="Quantity"
               type="text"
             />
-          <FieldForm
+            <FieldForm
               form={form}
               nameValue="additionalCharges.amount"
               label="Amount "
               type="text"
             />
             <div className="col-span-2 flex justify-center">
-            <Button
-              type="button"
-              className=' w-1/5 mt-3 mb-6 bg-green-800 hover:bg-green-900 focus:bg-green-900'
-              onClick={() => addProduct(form.getValues("product"))}
-            >
-              Add Product
-            </Button>
+              <Button
+                type="button"
+                className=" mb-6 mt-3 w-1/5 bg-green-800 hover:bg-green-900 focus:bg-green-900"
+                onClick={() => addProduct(form.getValues("product"))}
+              >
+                Add Product
+              </Button>
             </div>
-         
-            <div className="col-span-2 mt-8">
 
-            <CartTable
-          items={fields}
-          onDelete={deleteProduct}
-          onEdit={editProduct}
-          form={form}
-        />
+            <div className="col-span-2 mt-8">
+              <CartTable
+                items={fields}
+                onDelete={deleteProduct}
+                onEdit={editProduct}
+                form={form}
+              />
             </div>
-          
           </div>
           <div className="mt-10 flex w-full justify-center">
-            <Button type="submit" className="h-12 w-full text-lg lg:w-1/3 bg-indigo-600 hover:bg-indigo-700">
+            <Button
+              type="submit"
+              className="h-12 w-full bg-indigo-600 text-lg hover:bg-indigo-700 lg:w-1/3"
+            >
               {isLoading ? "Loading..." : "Submit"}
             </Button>
           </div>
