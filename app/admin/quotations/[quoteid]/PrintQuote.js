@@ -6,6 +6,7 @@ import { FaUserLarge } from "react-icons/fa6";
 import { useReactToPrint } from "react-to-print";
 import { Printer } from "lucide-react";
 import { Button } from "@/app/components/ui/button";
+import Image from "next/image";
 
 
 const PrintQuote = ({
@@ -69,9 +70,7 @@ const PrintQuote = ({
           </div>
           {/* company Image  */}
           <div className="flex items-center justify-center border-b-2 border-red-700 ">
-            <h4 className="text-2xl  font-semibold uppercase text-blue-700">
-              Bihar Tranport
-            </h4>
+          <Image src={'/bt-logo.jpg'} height={200} width={250} alt="bihar transport"/>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-8 p-2">
@@ -172,7 +171,7 @@ const PrintQuote = ({
         <div className="p-2">
           <div>
             <p>
-              <span className="font-semibold">Remarks :</span>hikwhfihkn
+              <span className="font-semibold">Remarks :</span>
             </p>
             <p>&nbsp;</p>
             <p>&nbsp;</p>
