@@ -24,7 +24,7 @@ export async function POST(req, res) {
     if (!booking)
       return Response.json({ message: "booking not found" }, { status: 400 });
 
-    let vehicle = await vehicleModel.findOne({ _id: vehicleId });
+    const vehicle = await vehicleModel.findOne({ _id: vehicleId });
 
     if (!vehicle)
       return Response.json({ message: "vehicle not found" }, { status: 400 });
@@ -60,25 +60,29 @@ export async function POST(req, res) {
 
         console.log("totalPaidAmount", vehicle.bookedBy[i].totalPaidAmount);
         console.log("balance Amount", vehicle.bookedBy[i].balanceAmount);
-        console.log("net bhara : ", vehicle.bookedBy[i].netBhara);
+       console.log("net bhara : ", vehicle.bookedBy[i].netBhara);
+       
 
+       vehicle.bookedBy[i].fine= paymentDetails?.fine
         vehicle.bookedBy[i].totalPaidAmount += paymentDetails?.amountPaid;
-        vehicle.bookedBy[i].balanceAmount = vehicle.bookedBy[i].netBhara - vehicle.bookedBy[i].totalPaidAmount;
+        vehicle.bookedBy[i].balanceAmount = paymentDetails?.finalDue;
 
 
         console.log("totalPaidAmount", vehicle.bookedBy[i].totalPaidAmount);
         console.log("balance Amount", vehicle.bookedBy[i].balanceAmount);
         console.log("net bhara : ", vehicle.bookedBy[i].netBhara);
+        
+        const newVehicle = await vehicle.save();
+        console.log(newVehicle);
 
+ return Response.json({ message: "fuel details added successfully", newVehicle });
 
           
     }
 
-    const newVehicle = await vehicle.save();
 
 
   
-       console.log(newVehicle);
 
         return Response.json({ message: "fuel details added successfully" });
 
