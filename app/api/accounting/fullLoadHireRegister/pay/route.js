@@ -18,7 +18,6 @@ export async function POST(req, res) {
       return Response.json({ message: "admin not found" }, { status: 400 });
 
     // find the booking
-
     const booking = await bookingmodel.findOne({ _id: bookingId });
 
     if (!booking)
@@ -32,60 +31,37 @@ export async function POST(req, res) {
     if (vehicle.payment && vehicle.payment.length > 0) {
       vehicle.payment.push(paymentDetails);
     } else {
-      vehicle.expanse.fuel = [paymentDetails];
+      vehicle.payment = [paymentDetails];
     }
 
-    const id = bookingId;
     let bookingFound = false;
     let i = 0;
 
     for (; i < vehicle.bookedBy.length; i++) {
-
-        if(bookingId === id){
-            bookingFound=true;
-            break;
-        }
-     
-    }
-
-
-     if (bookingFound) {
+      if (vehicle.bookedBy[i].bookingId === bookingId) { // Correct condition
         bookingFound = true;
-
-        if (vehicle.bookedBy[i].payment && vehicle.bookedBy[i].payment.length > 0) {
-          vehicle.bookedBy[i].payment.push(paymentDetails);
-        } else {
-          vehicle.bookedBy[i].payment = [paymentDetails];
-        }
-
-        console.log("totalPaidAmount", vehicle.bookedBy[i].totalPaidAmount);
-        console.log("balance Amount", vehicle.bookedBy[i].balanceAmount);
-       console.log("net bhara : ", vehicle.bookedBy[i].netBhara);
-       
-
-       vehicle.bookedBy[i].fine= paymentDetails?.fine
-        vehicle.bookedBy[i].totalPaidAmount += paymentDetails?.amountPaid;
-        vehicle.bookedBy[i].balanceAmount = paymentDetails?.finalDue;
-
-
-        console.log("totalPaidAmount", vehicle.bookedBy[i].totalPaidAmount);
-        console.log("balance Amount", vehicle.bookedBy[i].balanceAmount);
-        console.log("net bhara : ", vehicle.bookedBy[i].netBhara);
-        
-        const newVehicle = await vehicle.save();
-        console.log(newVehicle);
-
- return Response.json({ message: "fuel details added successfully", newVehicle });
-
-          
+        break;
+      }
     }
 
+    if (bookingFound) {
+      if (vehicle.bookedBy[i].payment && vehicle.bookedBy[i].payment.length > 0) {
+        vehicle.bookedBy[i].payment.push(paymentDetails);
+      } else {
+        vehicle.bookedBy[i].payment = [paymentDetails];
+      }
 
+      vehicle.bookedBy[i].fine = paymentDetails?.fine;
+      vehicle.bookedBy[i].totalPaidAmount += paymentDetails?.amountPaid;
+      vehicle.bookedBy[i].balanceAmount = paymentDetails?.finalDue;
 
-  
+      const newVehicle = await vehicle.save();
+      console.log(newVehicle);
 
-        return Response.json({ message: "fuel details added successfully" });
+      return Response.json({ message: "fuel details added successfully", newVehicle });
+    }
 
+    return Response.json({ message: "booking not found in vehicle's bookedBy list" }, { status: 400 });
   } catch (error) {
     console.log(error);
     return Response.json({ message: error.message }, { status: 400 });

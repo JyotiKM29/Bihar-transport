@@ -14,6 +14,8 @@ const FuelPage = ({ params }) => {
   const router = useRouter();
   const id = params.id;
 
+  
+
 
   const adminId = user?._id;
 
@@ -38,6 +40,9 @@ const FuelPage = ({ params }) => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const newData = await response.json();
+        newData.id = id;
+
+        console.log(newData);
 
         setData(newData.data);
 

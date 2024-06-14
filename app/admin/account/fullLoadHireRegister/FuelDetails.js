@@ -19,6 +19,8 @@ const FuelDetails = ({ data }) => {
 
   const adminId = user?._id;
 
+  // console.log(data);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -27,9 +29,9 @@ const FuelDetails = ({ data }) => {
       date,
       slipCouponNo,
       petrolPump,
-      fuelVolume,
-      fuelRate,
-      cashReceived,
+      fuelVolume: parseFloat(fuelVolume),
+      fuelRate: parseFloat(fuelRate),
+      cashReceived: parseFloat(cashReceived),
       paymentTerm,
       remarks,
       bookingId: data.bookings_id,
@@ -38,9 +40,11 @@ const FuelDetails = ({ data }) => {
     const value = {
       fuelDetails,
       adminId,
-      bookingId: data.bookings_id,
+      bookingId: data.bookings._id,
       vehicleId: data.vehicle._id,
     };
+
+    console.log(value);
 
     const response = await fetch("/api/accounting/fullLoadHireRegister/giveFuel", {
       method: "POST",
@@ -56,7 +60,7 @@ const FuelDetails = ({ data }) => {
     if (response.ok) {
       displayToast("Given money for petrol", "✅");
     } else {
-      displayToast("Try again later, there's some error", "✅", result.message);
+      displayToast("Try again later, there's some error", "❌", result.message);
     }
   };
 
@@ -78,32 +82,46 @@ const FuelDetails = ({ data }) => {
     <div className="p-4">
       <button
         onClick={handleToggleForm}
-        className="mb-4 py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75"
+        className="mb-4 rounded-md bg-indigo-600 px-4 py-2 font-semibold text-white shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75"
       >
         {showForm ? "Back" : "Add New Fuel"}
       </button>
-      
+
       {!showForm ? (
         <div>
-          <h2 className="text-2xl font-bold mb-4">Expense Data</h2>
-          <table className="min-w-full bg-white border border-gray-300">
+          <h2 className="mb-4 text-2xl font-bold">Expense Data</h2>
+          <table className="min-w-full border border-gray-300 bg-white">
             <thead>
               <tr>
-                <th className="px-4 py-2 border-b">Date</th>
-                <th className="px-4 py-2 border-b">Fuel Type</th>
-                <th className="px-4 py-2 border-b">Volume</th>
-                <th className="px-4 py-2 border-b">Rate</th>
-                <th className="px-4 py-2 border-b">Total Cost</th>
+                <th className="border-b px-4 py-2">Date</th>
+                <th className="border-b px-4 py-2">Coupon No</th>
+                <th className="border-b px-4 py-2">Fuel Type</th>
+                <th className="border-b px-4 py-2">Volume</th>
+                <th className="border-b px-4 py-2">Rate</th>
+                <th className="border-b px-4 py-2">Total Cost</th>
               </tr>
             </thead>
             <tbody>
               {expenseData.map((expense, index) => (
                 <tr key={index}>
-                  <td className="px-4 py-2 border-b text-center">{new Date(expense.date).toLocaleDateString()}</td>
-                  <td className="px-4 py-2 border-b text-center">{expense.fuelType}</td>
-                  <td className="px-4 py-2 border-b text-center">{expense.fuelVolume}</td>
-                  <td className="px-4 py-2 border-b text-center">{expense.fuelRate}</td>
-                  <td className="px-4 py-2 border-b text-center ">{expense.fuelVolume * expense.fuelRate}</td>
+                  <td className="border-b px-4 py-2 text-center">
+                    {new Date(expense.date).toLocaleDateString()}
+                  </td>
+                   <td className="border-b px-4 py-2 text-center">
+                    {expense?.slipCouponNo}
+                  </td>
+                  <td className="border-b px-4 py-2 text-center">
+                    {expense.fuelType}
+                  </td>
+                  <td className="border-b px-4 py-2 text-center">
+                    {expense.fuelVolume}
+                  </td>
+                  <td className="border-b px-4 py-2 text-center">
+                    {expense.fuelRate}
+                  </td>
+                  <td className="border-b px-4 py-2 text-center">
+                    {expense.fuelVolume * expense.fuelRate}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -111,26 +129,51 @@ const FuelDetails = ({ data }) => {
         </div>
       ) : (
         <div>
-          <h2 className="text-2xl font-bold mb-4">Booking Details</h2>
-          <div className="grid grid-cols-3 gap-4 mb-4">
-            <p><strong>Vehicle Hire NO:</strong> {data.bookingsorderNumber}</p>
-            <p><strong>Vehicle No: </strong> {data.vehicle.vehicleNo}</p>
-            <p><strong>Shipping Charge:</strong> {data.vehicle.bookedBy[0].netBhara}</p>
+          <h2 className="mb-4 text-2xl font-bold">Booking Details</h2>
+          <div className="mb-4 grid grid-cols-3 gap-4">
+            <p>
+              <strong>Vehicle Hire NO:</strong> {data.bookingsorderNumber}
+            </p>
+            <p>
+              <strong>Vehicle No: </strong> {data.vehicle.vehicleNo}
+            </p>
+            <p>
+              <strong>Shipping Charge:</strong>{" "}
+              {data.vehicle.bookedBy[0].netBhara}
+            </p>
           </div>
-          
-          <div className="grid grid-cols-3 gap-4 mb-4">
-            <p><strong>Owner Name Number:</strong> {data.vehicle?.owner?.name}</p>
-            <p><strong>Driver Name:</strong> {data.vehicle?.driver?.name}</p>
-            <p><strong>Advance Amount:</strong> {data.vehicle?.bookedBy[0]?.advanceAmount ? data.vehicle?.bookedBy[0]?.advanceAmount : 0}</p>
+
+          <div className="mb-4 grid grid-cols-3 gap-4">
+            <p>
+              <strong>Owner Name Number:</strong> {data.vehicle?.owner?.name}
+            </p>
+            <p>
+              <strong>Driver Name:</strong> {data.vehicle?.driver?.name}
+            </p>
+            <p>
+              <strong>Advance Amount:</strong>{" "}
+              {data.vehicle?.bookedBy[0]?.advanceAmount
+                ? data.vehicle?.bookedBy[0]?.advanceAmount
+                : 0}
+            </p>
           </div>
-          
-          <div className="grid grid-cols-3 gap-4 mb-4">
-            <p><strong>Hire Date:</strong> {new Date(data.bookingsdate).toLocaleDateString()}</p>
-            <p><strong>Hire Due:</strong> {data.vehicle?.bookedBy[0]?.balanceAmount}</p>
-            <p><strong>Hire Due:</strong> {data.vehicle?.bookedBy[0]?.balanceAmount}</p>
+
+          <div className="mb-4 grid grid-cols-3 gap-4">
+            <p>
+              <strong>Hire Date:</strong>{" "}
+              {new Date(data.bookingsdate).toLocaleDateString()}
+            </p>
+            <p>
+              <strong>Hire Due:</strong>{" "}
+              {data.vehicle?.bookedBy[0]?.balanceAmount}
+            </p>
+            <p>
+              <strong>Hire Due:</strong>{" "}
+              {data.vehicle?.bookedBy[0]?.balanceAmount}
+            </p>
           </div>
-          
-          <h2 className="text-2xl font-bold mb-4">Fuel Details</h2>
+
+          <h2 className="mb-4 text-2xl font-bold">Fuel Details</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-3 gap-4">
               <label className="block">
@@ -217,7 +260,7 @@ const FuelDetails = ({ data }) => {
             </div>
             <button
               type="submit"
-              className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75"
+              className="w-full rounded-md bg-indigo-600 px-4 py-2 font-semibold text-white shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75"
             >
               {loading ? "Adding..." : "Save Fuel Payment"}
             </button>

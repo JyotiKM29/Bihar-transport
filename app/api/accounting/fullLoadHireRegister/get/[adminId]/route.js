@@ -54,53 +54,43 @@ export async function GET(req, context) {
       }, // Only select _id and allotedVehicle fields
     ).sort({_id:-1});
 
+    const dummydata = bookings;
+
     // Get all the vehicles
     const vehicleData = [];
-    for (let i = 0; i < bookings.length; i++) {
-      // Initialize vehicleData array for each booking
-      bookings[i] = bookings[i].toObject(); // Convert Mongoose document to plain JavaScript object
-      bookings[i].vehicleData = {};
+   for (let i = 0; i < bookings.length; i++) {
+     bookings[i] = bookings[i].toObject();
+     bookings[i].vehicleData = {};
 
-      // Check if allotedVehicle array exists and has at least one element
-      if (bookings[i].allotedVehicle && bookings[i].allotedVehicle.length > 0) {
-        const vehicleId = bookings[i].allotedVehicle[0].vehicleId;
+     if (bookings[i].allotedVehicle && bookings[i].allotedVehicle.length > 0) {
+       const vehicleId = bookings[i].allotedVehicle[0].vehicleId;
 
-        if (vehicleId) {
-          const vehicle = await vehicleModel.findOne({ _id: vehicleId });
+       if (vehicleId) {
+         const vehicle = await vehicleModel.findOne({ _id: vehicleId });
 
-          if (vehicle) {
-            // console.log("Vehicle found:", vehicle);
+         if (vehicle) {
+           // Filter the bookedBy array to include only the relevant bookingId
+           vehicle.bookedBy = vehicle.bookedBy.filter(
+             (booking) => booking.bookingId === bookings[i]._id.toString(),
+           );
 
-            let j;
-    for (j = 0; j < vehicle?.bookedBy?.length; j++) {
-      if (vehicle?.bookedBy[j]?.bookingId === bookings[i]._id) break;
-    }
+          //  console.log(i, vehicle.bookedBy);
 
-    vehicle?.bookedBy?.splice(0, j-1);  // Remove elements before the index
-    vehicle?.bookedBy?.splice(1, vehicle?.bookedBy?.length - 1);  // Remove elements after the index
-
-    //      const paymentData = vehicle.bookedBy.filter(
-    //   (booking) => booking.bookingId === bookings[i]?._id.toString()
-    // );
-    // console.log(vehicle.bookedBy, bookings[i]._id);
-            // vehicle.bookedBy = [];
-            // vehicle.bookedBy.push(exactData);
-
-            bookings[i].vehicleData = vehicle;
-            vehicleData.push(vehicle);
-          } else {
-            console.log("Vehicle not found for vehicleId:", vehicleId);
-          }
-        } else {
-          console.log(
-            "No vehicleId found in allotedVehicle for booking:",
-            bookings[i]._id,
-          );
-        }
-      } else {
-        console.log("No allotedVehicle found for booking:", bookings[i]._id);
-      }
-    }
+           bookings[i].vehicleData = vehicle;
+           vehicleData.push(vehicle);
+         } else {
+           console.log("Vehicle not found for vehicleId:", vehicleId);
+         }
+       } else {
+         console.log(
+           "No vehicleId found in allotedVehicle for booking:",
+           bookings[i]._id,
+         );
+       }
+     } else {
+       console.log("No allotedVehicle found for booking:", bookings[i]._id);
+     }
+   }
 
     return new Response(JSON.stringify({ bookings }), {
       status: 200,
