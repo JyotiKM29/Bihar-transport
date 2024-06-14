@@ -34,7 +34,7 @@ export async function GET(req, context) {
         delivery: 1,
         location: 1,
         date: 1,
-      },
+      }
     );
 
     if (!bookings) {
@@ -44,7 +44,7 @@ export async function GET(req, context) {
       });
     }
 
-      const newData = bookings;
+    const newData = bookings;
 
     console.log("Bookings found:", bookings);
     bookings.vehicleData = {};
@@ -52,27 +52,21 @@ export async function GET(req, context) {
 
     let vehicle;
 
-  
-
     if (bookings.allotedVehicle && bookings.allotedVehicle.length > 0) {
       const vehicleId = bookings.allotedVehicle[0].vehicleId;
       console.log("Vehicle ID:", vehicleId);
 
       if (vehicleId) {
-         vehicle = await vehicleModel.findOne({ _id: vehicleId });
+        vehicle = await vehicleModel.findOne({ _id: vehicleId });
         console.log("Vehicle found:", vehicle);
 
         if (vehicle) {
-          let j;
-          for (j = 0; j < vehicle?.bookedBy?.length; j++) {
-            if (vehicle?.bookedBy[j]?.bookingId === bookings._id) break;
-          }
+          // Filter the bookedBy array to include only the relevant bookingId
+          vehicle.bookedBy = vehicle.bookedBy.filter(
+            (booking) => booking.bookingId === bookings._id.toString()
+          );
 
-          console.log("Index found at:", j);
-
-          vehicle?.bookedBy?.splice(0, j - 1); // Remove elements before the index
-          vehicle?.bookedBy?.splice(1, vehicle?.bookedBy?.length - 1); // Remove elements after the index
-          console.log("Modified bookedBy:", vehicle?.bookedBy);
+          console.log("Filtered bookedBy:", vehicle.bookedBy);
 
           newData.vehicleData = vehicle;
         } else {
@@ -90,7 +84,9 @@ export async function GET(req, context) {
       vehicle
     }
 
-    return Response.json({ data });
+    return new Response(JSON.stringify({ data }), {
+      status: 200,
+    });
   } catch (error) {
     console.log("Error:", error);
     return new Response(JSON.stringify({ message: error.message }), {

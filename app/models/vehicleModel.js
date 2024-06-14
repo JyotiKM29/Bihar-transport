@@ -130,7 +130,7 @@ const fuelSchema = new mongoose.Schema(
     bookingId: { type: String },
     fuelType: { type: String },
     date: { type: Date, default: Date.now },
-    slipNo: { type: String },
+    slipCouponNo: { type: String },
     petrolPump: { type: String },
     fuelVolume: { type: Number, default: 0 },
     fuelRate: { type: Number, default: 0 },
