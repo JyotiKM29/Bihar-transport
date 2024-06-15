@@ -40,6 +40,14 @@ function Report() {
         >
           Vehicle No
         </Link>
+
+        <Link
+          href="/admin/report/paymentHistory"
+          className="max-w-full rounded-lg bg-violet-500 px-8 py-2 text-white shadow-md hover:bg-violet-700 "
+        >
+          Vehicle Payment History
+        </Link>
+
         <Link
           href="/admin/report/vehicleType"
           className="max-w-full rounded-lg bg-violet-500 px-8 py-2 text-white shadow-md hover:bg-violet-700 "

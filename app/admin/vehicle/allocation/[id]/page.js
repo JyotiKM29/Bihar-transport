@@ -173,27 +173,27 @@ const VechicleDetail = ({ params }) => {
                 (items, i) => (
                   <tr key={i} className="w-full text-center">
                    <td className="border border-sky-900 p-2 text-sky-700">
-                      {items.vehicleType}
+                      {items?.vehicleType}
                     </td>
                     <td className="border border-sky-900 p-2 text-sky-700">
-                      {items.arrangedBy}
+                      {items?.arrangedBy}
                     </td>
                     <td className="border border-sky-900 p-2 text-sky-700">
-                      {items.bookingId} </td>
+                      {items?.bookingId} </td>
                     <td className="border border-sky-900 p-2 text-sky-700">
-                      {items.commission}
+                      {items?.commission}
                     </td>
                     <td className="border border-sky-900 p-2 text-sky-700">
-                      {items.driverBhara}
+                      {items?.driverBhara}
                     </td>
                     <td className="border border-sky-900 p-2 text-sky-700">
-                      {items.netBhara}
+                      {items?.netBhara}
                     </td>
                     <td className="border border-sky-900 p-2 text-sky-700">
-                      {items.rateAsPer}
+                      {items?.rateAsPer}
                     </td>
                     <td className="border border-sky-900 p-2 text-sky-700">
-                      {items.remarks}
+                      {items?.remarks}
                     </td>
                    
                    
@@ -539,37 +539,82 @@ const VechicleDetail = ({ params }) => {
               </tr>
             </thead>
             <tbody>
-              {vehicleDetails?.newVehicle?.payment?.map(
-                (items, i) => (
-                  <tr key={i} className="w-full text-center">
-                   <td className="border border-sky-900 p-2 text-sky-700">
-                      {new Date(items.paymentDate).toLocaleDateString()}
-                    </td>
-                    <td className="border border-sky-900 p-2 text-sky-700">
-                      {items.paidAmount}
-                    </td>
-                    <td className="border border-sky-900 p-2 text-sky-700">
-                      {items.TDS} </td>
-                    <td className="border border-sky-900 p-2 text-sky-700">
-                      {items.paidBy}
-                    </td>
-                    <td className="border border-sky-900 p-2 text-sky-700">
-                      {items.paidTo.driverName} ,
-                      {items.paidTo.ownerName}  ,
-                      {items.paidTo.vehicleNo}  
-                    </td>
-                    <td className="border border-sky-900 p-2 text-sky-700">
-                      {items.createdBy.name}
-                    </td>
-                    <td className="border border-sky-900 p-2 text-sky-700">
-                      {items.narration}
-                    </td>
-                  
-                   
-                   
-                  </tr>
-                ),
-              )}
+            {vehicleDetails?.newVehicle?.payment?.map((items, i) => {
+  // Determine the type of item based on the presence of specific properties
+  const isFirstType = items?.paymentDate !== undefined;
+  const isSecondType = items?.recieveAmount !== undefined;
+  const isThirdType = items?.amountPaid !== undefined && items?.fine !== undefined;
+
+  // Common properties
+  const createdBy = items?.createdBy?.name || items?.createdBy;
+  const remarks = items?.narration || items?.remarks;
+
+  return (
+    <tr key={i} className="w-full text-center">
+      <td className="border border-sky-900 p-2 text-sky-700">
+        {new Date(isFirstType ? items?.paymentDate : items?.date).toLocaleDateString()}
+      </td>
+      {isFirstType ? (
+        <>
+          <td className="border border-sky-900 p-2 text-sky-700">
+            {items?.paidAmount}
+          </td>
+          <td className="border border-sky-900 p-2 text-sky-700">
+            {items?.TDS}
+          </td>
+          <td className="border border-sky-900 p-2 text-sky-700">
+            {items?.paidBy}
+          </td>
+          <td className="border border-sky-900 p-2 text-sky-700">
+            {items?.paidTo?.driverName} , {items?.paidTo?.ownerName} , {items?.paidTo?.vehicleNo}
+          </td>
+        </>
+      ) : isSecondType ? (
+        <>
+          <td className="border border-sky-900 p-2 text-sky-700">
+            {items?.recieveAmount}
+          </td>
+          <td className="border border-sky-900 p-2 text-sky-700">
+            {items?.paymentMode}
+          </td>
+          
+          <td className="border border-sky-900 p-2 text-sky-700">
+            {items?.recieveFrom}
+          </td>
+          <td className="border border-sky-900 p-2 text-sky-700">
+            {items?.newMode}
+          </td>
+        </>
+      ) : isThirdType ? (
+        <>
+          <td className="border border-sky-900 p-2 text-sky-700">
+            {items?.amountPaid}
+          </td>
+          <td className="border border-sky-900 p-2 text-sky-700">
+            {items?.fine}
+          </td>
+          {/* <td className="border border-sky-900 p-2 text-sky-700">
+            {items?.finalDue}
+          </td> */}
+          <td className="border border-sky-900 p-2 text-sky-700">
+            {items?.paymentMode}
+          </td>
+          <td className="border border-sky-900 p-2 text-sky-700">
+            {items?.newMode}
+          </td>
+        </>
+      ) : null}
+      <td className="border border-sky-900 p-2 text-sky-700">
+        {createdBy}
+      </td>
+       
+      <td className="border border-sky-900 p-2 text-sky-700">
+        {remarks}
+      </td>
+    </tr>
+  );
+})}
+
             </tbody>
           </table>
           </div>

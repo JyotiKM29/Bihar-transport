@@ -36,7 +36,7 @@ export default function ColumnHeader() {
       try {
         const response = await fetch(`/api/vehicledeletion`, {
           method: "DELETE",
-          body: JSON.stringify({ _id: id, adminId: user._id }),
+          body: JSON.stringify({ _id: id, adminId: user?._id }),
         });
         console.log(response);
 
