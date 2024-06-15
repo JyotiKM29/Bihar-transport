@@ -1,5 +1,6 @@
 "use client";
 
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -27,7 +28,6 @@ const VehicleNoBooking = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
   const tableRef = useRef();
-
   const initialFormState = {
     adminId: "",
     vehicleNo: "",
@@ -59,7 +59,7 @@ const VehicleNoBooking = () => {
       });
 
       setFilteredData(filteredData);
-      setData(filteredData)
+      setData(filteredData);
       setIsLoading(false);
       displayToast("Successfully", "✅");
       console.log("Filtered data:", filteredData);
@@ -128,70 +128,109 @@ const VehicleNoBooking = () => {
     "Confirm Booking",
     "Delivered Booking",
   ];
+
 const handleExportPDF = () => {
-  // Initialize jsPDF and set up the document
-  const doc = new jsPDF();
-
-  // Format 'from' and 'to' fields before rendering in PDF
-  const formattedData = data.map((item, index) => ({
-    ...item,
-    from: item.loadingPoint ? item.loadingPoint.join(", ") : "",
-    to: item.unloadingPoint ? item.unloadingPoint.join(", ") : "",
-  }));
-
-  // Generate the PDF table directly from formatted data
-  doc.autoTable({
-    head: [
-      [
-        'SI No.', 'Date', 'LR No.', 'Vehicle No.', 'From', 'To', 'Bill To',
-        'Qty', 'A. Weight', 'C. Weight', 'Rate', 'Hire Amt', 'Other Charges',
-        'Shortage', 'Advance', 'Total Amt'
-      ]
-    ],
-    body: formattedData.map(row => [
-      row.index + 1, new Date(row.date).toLocaleDateString(), row.orderNumber,
-      row.vehicleData.vehicleNo, row.loadingPoints, row.unloadingPoints,
-      row.billTo, row.itemsList.item[0]?.quantity + row.itemsList.item[0]?.quantityUnit,
-      row.itemsList.totalActualWeight + row.itemsList.item[0]?.actualWeightUnit,
-      row.itemsList.item[0]?.chargedWeight + row.itemsList.item[0]?.actualWeightUnit,
-      row.itemsList.item[0]?.rate + ' per ' + row.itemsList.item[0]?.rateAsPer,
-      row.totalBillingAmount, row.additionalCharges?.totalCharge, row.shortage,
-      row.advanceAmount, row.totalBillingAmount
-    ]),
-    startY: 10,
+  const doc = new jsPDF({
+    orientation: "landscape",
+    unit: "pt",
+    format: "a4"
   });
 
-  // Save the PDF with a name
-  doc.save("booking_report.pdf");
-};
+  const tableElement = document.getElementById("bookingTable");
 
- const calculateTotals = (data) => {
-  let totalQty = 0;
-  let totalActualWeight = 0;
-  let totalBillingAmount = 0;
-  let totalAdditionalCharge = 0;
+  // Add logo
+  const logoUrl = "https://bihar-transport.vercel.app/_next/image?url=%2Fbt-logo.jpg&w=256&q=75";
+  const img = new Image();
+  img.src = logoUrl;
 
-  data.forEach((item) => {
-    totalQty += item.itemsList.item[0]?.quantity || 0;
-    totalActualWeight += item.itemsList.totalActualWeight || 0;
-    totalBillingAmount += item.totalBillingAmount || 0;
-    totalAdditionalCharge += item.additionalCharges?.totalCharge||0;
-  });
+  img.onload = () => {
+    doc.addImage(img, 'JPEG', 40, 10, 50, 50); // Add logo image to the PDF (x, y, width, height)
 
-  return {
-    totalQty,
-    totalActualWeight,
-    totalBillingAmount,
-    totalAdditionalCharge,
+    // Add title
+    doc.text("Vehicle Trip Report", 100, 30);
+
+    // Add timestamp
+    const date = new Date();
+    const formattedDate = date.toLocaleDateString().replace(/\//g, '-');
+    const formattedTime = date.toTimeString().slice(0, 8);
+    const timestamp = `Exported on: ${formattedDate} at ${formattedTime}`;
+    doc.text(timestamp, 100, 50);
+
+    // AutoTable configuration
+    doc.autoTable({
+      html: "#bookingTable",
+      startY: 70, // Adjust to fit the logo and timestamp
+      styles: { halign: 'center', valign: 'middle', fontSize: 8 },
+      headStyles: { fillColor: [52, 152, 219] },
+      columnStyles: {
+        0: { cellWidth: 20 }, // SI No.
+        1: { cellWidth: 60 }, // Date
+        2: { cellWidth: 60 }, // LR No.
+        3: { cellWidth: 60 }, // Vehicle No.
+        4: { cellWidth: 80 }, // From
+        5: { cellWidth: 80 }, // To
+        6: { cellWidth: 30 }, // Bill To
+        7: { cellWidth: 40 }, // Qty
+        8: { cellWidth: 60 }, // A. Weight
+        9: { cellWidth: 40 }, // C. Weight
+        10: { cellWidth: 40 }, // Rate
+        11: { cellWidth: 60 }, // Hire Amt
+        12: { cellWidth: 40 }, // Other Charges
+        13: { cellWidth: 30 }, // Shortage
+        14: { cellWidth: 30 }, // Advance
+        15: { cellWidth: 60 }  // Total Amt
+      },
+      didDrawPage: function (data) {
+        // Add page number at bottom
+        let pageSize = doc.internal.pageSize;
+        let pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
+        doc.text('Page ' + doc.internal.getNumberOfPages(), data.settings.margin.left, pageHeight - 10);
+      },
+      didParseCell: function (data) { 
+        if (data.cell.raw.innerText === "From" || data.cell.raw.innerText === "To") {
+          data.cell.styles.halign = 'left'; // Align "From" and "To" columns to the left
+        }
+      },
+      bodyStyles: {
+        valign: 'top', // Align text to the top
+        overflow: 'linebreak', // Wrap text in the cell
+      }
+    });
+
+    const vehicleNo = data[0].vehicleData.vehicleNo || 'unknown';
+    const fileName = `vehicleReport-of-${vehicleNo}-${formattedDate}.pdf`;
+
+    doc.save(fileName);
   };
 };
 
-let totals = calculateTotals(data);
 
+  const calculateTotals = (data) => {
+    let totalQty = 0;
+    let totalActualWeight = 0;
+    let totalBillingAmount = 0;
+    let totalAdditionalCharge = 0;
 
-useEffect(()=>{
-totals = calculateTotals(data);
-},[data])
+    data.forEach((item) => {
+      totalQty += item.itemsList.item[0]?.quantity || 0;
+      totalActualWeight += item.itemsList.totalActualWeight || 0;
+      totalBillingAmount += item.totalBillingAmount || 0;
+      totalAdditionalCharge += item.additionalCharges?.totalCharge || 0;
+    });
+
+    return {
+      totalQty,
+      totalActualWeight,
+      totalBillingAmount,
+      totalAdditionalCharge,
+    };
+  };
+
+  let totals = calculateTotals(data);
+
+  useEffect(() => {
+    totals = calculateTotals(data);
+  }, [data]);
 
   return (
     <div>
@@ -253,38 +292,59 @@ totals = calculateTotals(data);
                   </td>
                   <td className="border border-sky-900 p-2">{item.orderNumber}</td>
                   <td className="border border-sky-900 p-2">{item.vehicleData.vehicleNo}</td>
-                  <td className="border border-sky-900 p-2">{item.loadingPoints}</td>
-                  <td className="border border-sky-900 p-2">{item.unloadingPoints}</td>
+                  <td className="border border-sky-900 p-2">
+                    {item.loadingPoints ? item.loadingPoints.join(", ") : ""}
+                  </td>
+                  <td className="border border-sky-900 p-2">
+                    {item.unloadingPoints ? item.unloadingPoints.join(", ") : ""}
+                  </td>
                   <td className="border border-sky-900 p-2">{item.billTo}</td>
-                  <td className="border border-sky-900 p-2">{item.itemsList.item[0]?.quantity}{item.itemsList.item[0]?.quantityUnit}</td>
-                  <td className="border border-sky-900 p-2">{item.itemsList.totalActualWeight}{item.itemsList.item[0]?.actualWeightUnit}</td>
-                  <td className="border border-sky-900 p-2">{item.itemsList.item[0]?.chargedWeight}{item.itemsList.item[0]?.actualWeightUnit}</td>
-                  <td className="border border-sky-900 p-2">{item.itemsList.item[0]?.rate} per {item.itemsList.item[0]?.rateAsPer}</td>
-                  <td className="border border-sky-900 p-2">{item.totalBillingAmount}</td>
-                  <td className="border border-sky-900 p-2">{item.additionalCharges?.totalCharge}</td>
+                  <td className="border border-sky-900 p-2">
+                    {item.itemsList.item[0]?.quantity}
+                    {item.itemsList.item[0]?.quantityUnit}
+                  </td>
+                  <td className="border border-sky-900 p-2">
+                    {item.itemsList.totalActualWeight}
+                    {item.itemsList.item[0]?.actualWeightUnit}
+                  </td>
+                  <td className="border border-sky-900 p-2">
+                    {item.itemsList.item[0]?.chargedWeight}
+                    {item.itemsList.item[0]?.actualWeightUnit}
+                  </td>
+                  <td className="border border-sky-900 p-2">
+                    {item.itemsList.item[0]?.rate} per{" "}
+                    {item.itemsList.item[0]?.rateAsPer}
+                  </td>
+                  <td className="border border-sky-900 p-2">
+                    {item.totalBillingAmount}
+                  </td>
+                  <td className="border border-sky-900 p-2">
+                    {item.additionalCharges?.totalCharge}
+                  </td>
                   <td className="border border-sky-900 p-2">{item.shortage}</td>
                   <td className="border border-sky-900 p-2">{item.advanceAmount}</td>
-                  <td className="border border-sky-900 p-2">{item.totalBillingAmount}</td>
+                  <td className="border border-sky-900 p-2">
+                    {item.totalBillingAmount}
+                  </td>
                 </tr>
               ))}
-              
             </tbody>
             <tfoot>
-  <tr className="text-center font-semibold">
-    <td colSpan="7" className="border border-sky-600 p-2">
-      Total
-    </td>
-    <td className="border border-sky-600 p-2">{totals.totalQty}</td>
-    <td className="border border-sky-600 p-2">{totals.totalActualWeight}</td>
-    <td className="border border-sky-600 p-2"></td>
-    <td className="border border-sky-600 p-2"></td>
-    <td className="border border-sky-600 p-2"></td>
-    <td className="border border-sky-600 p-2">{totals.totalAdditionalCharge}</td>
-      <td className="border border-sky-600 p-2"></td>
-        <td className="border border-sky-600 p-2"></td>
-    <td className="border border-sky-600 p-2">{totals.totalBillingAmount}</td>
-  </tr>
-</tfoot>
+              <tr className="text-center font-semibold">
+                <td colSpan="7" className="border border-sky-600 p-2">
+                  Total
+                </td>
+                <td className="border border-sky-600 p-2">{totals.totalQty}</td>
+                <td className="border border-sky-600 p-2">{totals.totalActualWeight}</td>
+                <td className="border border-sky-600 p-2"></td>
+                <td className="border border-sky-600 p-2"></td>
+                <td className="border border-sky-600 p-2"></td>
+                <td className="border border-sky-600 p-2">{totals.totalAdditionalCharge}</td>
+                <td className="border border-sky-600 p-2"></td>
+                <td className="border border-sky-600 p-2"></td>
+                <td className="border border-sky-600 p-2">{totals.totalBillingAmount}</td>
+              </tr>
+            </tfoot>
           </table>
           <div className="flex items-center justify-center">
             <Button
@@ -296,7 +356,6 @@ totals = calculateTotals(data);
           </div>
         </div>
       )}
-     
     </div>
   );
 };
