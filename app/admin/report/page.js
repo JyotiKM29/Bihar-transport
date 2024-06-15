@@ -49,6 +49,13 @@ function Report() {
         </Link>
 
         <Link
+          href="/admin/report/vehicleTrip"
+          className="max-w-full rounded-lg bg-violet-500 px-8 py-2 text-white shadow-md hover:bg-violet-700 "
+        >
+          Vehicle Trip
+        </Link>
+
+        <Link
           href="/admin/report/vehicleType"
           className="max-w-full rounded-lg bg-violet-500 px-8 py-2 text-white shadow-md hover:bg-violet-700 "
         >
