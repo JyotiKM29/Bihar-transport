@@ -32,6 +32,7 @@ export async function POST(req, res) {
       Delivered: 0,
       Cancelled: 0,
       Restart: 0,
+    
     };
 
     async function updateStatusData() {
@@ -94,6 +95,7 @@ export async function POST(req, res) {
       totalRevenue,
       totalCommision,
       totalDriverBhara,
+      newVehicle:vehicle,
     };
 
     // console.log(data);
