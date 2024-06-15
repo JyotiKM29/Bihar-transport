@@ -101,11 +101,67 @@ const VehicleNoBooking = () => {
     "Delivered Booking",
   ];
 
-  const handleExportPDF = () => {
-    const doc = new jsPDF();
-    doc.autoTable({ html: "#paymentTable" });
-    doc.save("payment_history.pdf");
+const handleExportPDF = () => {
+   const doc = new jsPDF({
+    orientation: "portrait", // Change orientation to portrait
+    unit: "pt",
+    format: "a4"
+  });
+
+  const logoUrl = "https://bihar-transport.vercel.app/_next/image?url=%2Fbt-logo.jpg&w=256&q=75";
+  const img = new Image();
+  img.src = logoUrl;
+
+  img.onload = () => {
+    doc.addImage(img, 'JPEG', 40, 10, 50, 50); // Add logo image to the PDF (x, y, width, height)
+
+    // Add title
+    doc.text("Payment History Report", 100, 30);
+
+    // Add timestamp
+    const date = new Date();
+    const formattedDate = date.toLocaleDateString().replace(/\//g, '-');
+    const formattedTime = date.toTimeString().slice(0, 8);
+    const timestamp = `Exported on: ${formattedDate} at ${formattedTime}`;
+    doc.text(timestamp, 100, 50);
+
+    // AutoTable configuration
+    doc.autoTable({
+      html: "#paymentTable",
+      startY: 70, // Adjust to fit the logo and timestamp
+      styles: { halign: 'center', valign: 'middle', fontSize: 8 },
+      headStyles: { fillColor: [52, 152, 219] },
+      columnStyles: {
+        0: { cellWidth: 60 }, // Payment Date
+        1: { cellWidth: 60 }, // Paid Amount
+        2: { cellWidth: 40 }, // TDS
+        3: { cellWidth: 60 }, // Paid by
+        4: { cellWidth: 80 }, // Paid To
+        5: { cellWidth: 60 }, // Created By
+        6: { cellWidth: 100 }, // Narration
+      },
+      didDrawPage: function (data) {
+        // Add page number at bottom
+        let pageSize = doc.internal.pageSize;
+        let pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
+        doc.text('Page ' + doc.internal.getNumberOfPages(), data.settings.margin.left, pageHeight - 10);
+      },
+      didParseCell: function (data) { 
+        if (data.cell.raw.innerText === "Paid by" || data.cell.raw.innerText === "Paid To") {
+          data.cell.styles.halign = 'left'; // Align "Paid by" and "Paid To" columns to the left
+        }
+      },
+      bodyStyles: {
+        valign: 'top', // Align text to the top
+        overflow: 'linebreak', // Wrap text in the cell
+      }
+    });
+
+    const fileName = `payment_history_${formattedDate}.pdf`;
+    doc.save(fileName);
   };
+};
+
 
   const calculateTotals = (payments) => {
     let totalTDS = 0;
