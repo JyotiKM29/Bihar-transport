@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Tabs,
   TabsContent,
@@ -19,13 +19,18 @@ import BulkReceive from './bulkReceive/BulkReceive';
 import BulkPayment from './bulkPayment/BulkPayment';
 import PendingPayment from './pendingPayment/PendingPayment';
 import HireRegister from './fullLoadHireRegister/HireRegister';
+import { UserContext } from '@/app/context/UserContextProvider';
 
 const Page = () => {
   const [selectedTab, setSelectedTab] = useState(null);
   const router = useRouter();
+  const user = useContext(UserContext);  
+
+
   const searchParams = useSearchParams();
   let tabValue = searchParams.get("tab");
   if (!tabValue) tabValue = "newLedger";
+
 
   useEffect(() => {
     setSelectedTab(tabValue);
@@ -35,6 +40,16 @@ const Page = () => {
     setSelectedTab(value);
     router.push(`/admin/account?tab=${value}`);
   };
+
+   if (!user?.user?.isOwner) {
+     return (
+       <div className="h-full w-full ">
+         <h1 className="font-semiBold text-2xl">
+           Your are not Allowed , ask Owner
+         </h1>
+       </div>
+     );
+   };
 
   return (
     <div className="min-h-[95vh] w-full">

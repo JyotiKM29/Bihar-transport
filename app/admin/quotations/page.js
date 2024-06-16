@@ -17,10 +17,14 @@ const Quotation = () => {
     const [data, setData] = useState(null);
   
     const userId = user?._id;
+
+
+
   
     useEffect(() => {
       const fetchData = async () => {
         try {
+
           if (userId) {
             const response = await fetch(`/api/quote/get/${userId}`, {
               method: "GET",
@@ -47,6 +51,22 @@ const Quotation = () => {
     
       fetchData();
     }, [userId]);
+
+
+         if (!user?.isOwner) {
+     return (
+       <div className="h-full w-full ">
+         <h1 className="font-semiBold text-2xl">
+           Your are not Allowed , ask Owner
+         </h1>
+       </div>
+     );
+   };
+
+
+
+
+
   return (
     <div className="min-h-[90vh] w-full rounded-2xl  bg-white p-8  shadow-sm "> 
    

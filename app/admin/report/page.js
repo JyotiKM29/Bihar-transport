@@ -7,8 +7,24 @@ import InvoiceReport from "./stateWise/page";
 import { Button } from "../../components/ui/button";
 import Link from "next/link";
 
+
 function Report() {
   const [showBooking, setShowBooking] = useState(true);
+
+
+         if (!user?.isOwner) {
+     return (
+       <div className="h-full w-full ">
+         <h1 className="font-semiBold text-2xl">
+           Your are not Allowed , ask Owner
+         </h1>
+       </div>
+     );
+   };
+
+
+
+
 
   return (
     <div className="min-h-[90vh] w-full rounded-2xl  bg-white p-8 shadow-sm xl:px-24 ">
