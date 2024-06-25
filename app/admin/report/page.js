@@ -1,18 +1,18 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import BookingReport from "./bookingDate/page";
 import VehicleReport from "./vehicleNo/page";
 import InvoiceReport from "./stateWise/page";
 import { Button } from "../../components/ui/button";
 import Link from "next/link";
-
+import { UserContext } from "@/app/context/UserContextProvider";
 
 function Report() {
   const [showBooking, setShowBooking] = useState(true);
+  const user = useContext(UserContext);
 
-
-         if (!user?.isOwner) {
+   if (!user?.isOwner) {
      return (
        <div className="h-full w-full ">
          <h1 className="font-semiBold text-2xl">
@@ -20,11 +20,7 @@ function Report() {
          </h1>
        </div>
      );
-   };
-
-
-
-
+   }
 
   return (
     <div className="min-h-[90vh] w-full rounded-2xl  bg-white p-8 shadow-sm xl:px-24 ">
