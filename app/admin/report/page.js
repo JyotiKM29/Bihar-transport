@@ -10,7 +10,9 @@ import { UserContext } from "@/app/context/UserContextProvider";
 
 function Report() {
   const [showBooking, setShowBooking] = useState(true);
-  const user = useContext(UserContext);
+  const {user} = useContext(UserContext);
+
+
 
    if (!user?.isOwner) {
      return (
