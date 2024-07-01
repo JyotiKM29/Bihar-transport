@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext,useEffect, useState } from "react";
 import {
   FormControl,
   FormItem,
@@ -8,12 +8,11 @@ import {
 import { Input } from "../../components/ui/input";
 import { UserContext } from "../../context/UserContextProvider";
 
-const SearchInput = ({ form, field, personName }) => {
+const SearchInputPhone = ({ form, field, personType }) => {
   const { user } = useContext(UserContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [inputValue, setInputValue] = useState("");
-
 
   async function fetchData(value) {
     try {
@@ -22,36 +21,33 @@ const SearchInput = ({ form, field, personName }) => {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
       const result = await res.json();
-      // console.log("data: ", result);
-      
 
       if (result && Array.isArray(result.newdata)) {
+        console.log("result", result)
         const results = result.newdata.filter((booking) => {
-          const consignorNameToSearch = booking.basicInfo.accountName;
-           
+          const contactNoToSearch = booking.basicInfo.contactNo;
 
           return (
             value &&
-            consignorNameToSearch &&
-            consignorNameToSearch.toLowerCase().includes(value.toLowerCase())
+            contactNoToSearch &&
+            contactNoToSearch.toString().includes(value.toString())
           );
         });
 
         setSearchResult(results.slice(0, 5));
-        // console.log("here: ", result);
       } else {
-        // console.log("Person not found");
-        if (personName === "consignorName") {
-          setSearchResult([{ consignorName: value }]);
+        if (personType === "consignor") {
+          setSearchResult([{ contactNo: value }]);
+          
         } else {
-          setSearchResult([{ consigneeName: value }]);
+          setSearchResult([{ contactNo: value }]);
+          console.log("search result: ", searchResult);
         }
       }
     } catch (error) {
-      // console.log("Fetch failed", error);
+      console.error("Fetch failed", error);
     }
   }
-
 
   function handleChange(value) {
     setInputValue(value);
@@ -69,7 +65,7 @@ const SearchInput = ({ form, field, personName }) => {
   return (
     <FormItem className="flex flex-1 items-center justify-center gap-4">
       <FormLabel className="text-nowrap text-sm lg:text-base">
-        {personName === "consignorName" ? "Consignor" : "Consignee"} Name :
+        {personType === "consignor" ? "Consignor" : "Consignee"} Mobile Number:
       </FormLabel>
       <div className="relative flex flex-1 flex-col">
         <FormControl>
@@ -79,8 +75,6 @@ const SearchInput = ({ form, field, personName }) => {
             onChange={(e) => handleChange(e.target.value)}
           />
         </FormControl>
-       
-      
         <FormMessage />
 
         <div className="min-h absolute top-12 z-20 w-full overflow-y-scroll rounded-sm bg-slate-100">
@@ -89,9 +83,7 @@ const SearchInput = ({ form, field, personName }) => {
               className="w-full cursor-pointer px-3 py-2 hover:bg-slate-200"
               onClick={() => {
                 field.onChange(searchTerm);
-
                 setSearchTerm("");
-               
               }}
             >
               {searchTerm} ( not found)
@@ -105,49 +97,24 @@ const SearchInput = ({ form, field, personName }) => {
                 key={id}
                 className="w-full cursor-pointer px-3 py-2 hover:bg-slate-200"
                 onClick={() => {
-                  
                   setSearchResult([]);
                   setSearchTerm("");
-                
-                  if (personName === "consignorName") {
-                    setInputValue(result?.basicInfo?.accountName);
-                    form.setValue(
-                      "consignorMobileNumber",
-                      result?.basicInfo?.contactNo,
-                    );
-                    form.setValue(
-                      "consignorName",
-                      result?.basicInfo?.accountName,
-                    );
-                    form.setValue(
-                      "consignorAddress",
-                      result?.basicInfo?.officeAddress,
-                    );
-                    form.setValue("consignorID", result?._id);
-                      
+
+                  if (personType === "consignor") {
+                    setInputValue(result.basicInfo.contactNo);
+                    form.setValue("consignorMobileNumber", result.basicInfo.contactNo);
+                    form.setValue("consignorName", result.basicInfo.accountName);
+                    form.setValue("consignorAddress", result.basicInfo.officeAddress);
+                    form.setValue("consignorID", result._id);
                   } else {
-                  
-                     setInputValue(result?.basicInfo?.accountName);
-                     form.setValue(
-                       "consigneeMobileNumber",
-                       result?.basicInfo?.contactNo,
-                     );
-                     form.setValue(
-                       "consigneeName",
-                       result?.basicInfo?.accountName,
-                     );
-                    form.setValue(
-                      "consigneeAddress",
-                      result?.basicInfo?.officeAddress,
-                    );
-                  
+                    setInputValue(result.basicInfo.contactNo);
+                    form.setValue("consigneeMobileNumber", result.basicInfo.contactNo);
+                    form.setValue("consigneeName", result.basicInfo.accountName);
+                    form.setValue("consigneeAddress", result.basicInfo.officeAddress);
                   }
-                
-                    }}
+                }}
               >
-                {/* {result?.type === "company" && result?.company.consignorName}
-                {result?.type === "personal" && result?.personal.consignorName} */}
-                {result?.basicInfo?.accountName } ,  {result?.basicInfo?.contactNo} , {result?.basicInfo?.officeAddress}
+                {result.basicInfo.accountName}, {result.basicInfo.contactNo}, {result.basicInfo.officeAddress}
               </div>
             ))}
         </div>
@@ -156,4 +123,4 @@ const SearchInput = ({ form, field, personName }) => {
   );
 };
 
-export default SearchInput;
+export default SearchInputPhone;
