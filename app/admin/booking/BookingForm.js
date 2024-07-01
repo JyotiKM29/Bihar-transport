@@ -91,6 +91,16 @@ const formSchema = z.object({
     required_error: "Consignor mobile number is required",
     invalid_type_error: "Invalid number format",
   }),
+
+  consigneeAddress: z.string({
+    required_error: "Consignee Address is required",
+  }),
+
+  consignorAddress: z.string({
+    required_error: "Consignor Address is required",
+  }),
+
+
   loadingPoints: z.array(z.string(), {
     required_error: "At least one loading point is required",
   }),
@@ -172,10 +182,12 @@ export default function ProfileForm() {
     bookingType: "",
     consignorName: undefined,
     consignorMobileNumber: 0,
+    consignorAddress: "",
     consignorID: "",
     loadingPoints: [""],
     consigneeName: undefined,
     consigneeMobileNumber: 0,
+    consigneeAddress:"",
     unloadingPoints: [""],
     way: "",
     material: "",
@@ -475,7 +487,7 @@ export default function ProfileForm() {
    
 
     value.adminId = user._id;
-    // console.log(value);
+    console.log(value);
     setIsLoading(true);
     setIsLoading2(true);
     try {
@@ -706,6 +718,49 @@ export default function ProfileForm() {
                 );
               }}
             />
+
+            {/* address of consignor and consignee, changes after client */}
+
+            <FormField
+              control={form.control}
+              name="consignorAddress"
+              render={({ field }) => {
+                return (
+                  <FormItem className="flex items-center justify-center gap-4">
+                    <FormLabel className="text-nowrap text-sm lg:text-base">
+                      Consignee Address :
+                    </FormLabel>
+                    <div className="flex flex-1 flex-col">
+                      <FormControl>
+                        <Input type="text" value={field.value} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                );
+              }}
+            />
+
+            <FormField
+              control={form.control}
+              name="consigneeAddress"
+              render={({ field }) => {
+                return (
+                  <FormItem className="flex items-center justify-center gap-4">
+                    <FormLabel className="text-nowrap text-sm lg:text-base">
+                      Consignee Address :
+                    </FormLabel>
+                    <div className="flex flex-1 flex-col">
+                      <FormControl>
+                        <Input type="text" value={field.value} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                );
+              }}
+            />
+
             <FormField
               control={form.control}
               name="loadingPoints"
@@ -783,19 +838,19 @@ export default function ProfileForm() {
                           </FormLabel>
                           <div className="flex flex-1 flex-col">
                             <FormControl>
-                             <select {...field}>
-    <option value="">
-                {tripType && tripType.length > 0
-                  ? "Select Trip "
-                  : "Loading..."}
-              </option>
-              {Array.isArray(tripType) &&
-                tripType.map((trip) => (
-                  <option key={trip.value} value={trip.value}>
-                    {trip.name}
-                  </option>
-                ))}
-            </select>
+                              <select {...field}>
+                                <option value="">
+                                  {tripType && tripType.length > 0
+                                    ? "Select Trip "
+                                    : "Loading..."}
+                                </option>
+                                {Array.isArray(tripType) &&
+                                  tripType.map((trip) => (
+                                    <option key={trip.value} value={trip.value}>
+                                      {trip.name}
+                                    </option>
+                                  ))}
+                              </select>
                             </FormControl>
                             <FormMessage />
                           </div>
@@ -995,19 +1050,22 @@ export default function ProfileForm() {
                           </FormLabel>
                           <div className="flex flex-1 flex-col ">
                             <FormControl>
-                             <select {...field}>
-    <option value="">
-                {paymentTerm && paymentTerm.length > 0
-                  ? "Select Payment Term "
-                  : "Loading..."}
-              </option>
-              {Array.isArray(paymentTerm) &&
-                paymentTerm.map((payment) => (
-                  <option key={payment.value} value={payment.value}>
-                    {payment.name}
-                  </option>
-                ))}
-            </select>
+                              <select {...field}>
+                                <option value="">
+                                  {paymentTerm && paymentTerm.length > 0
+                                    ? "Select Payment Term "
+                                    : "Loading..."}
+                                </option>
+                                {Array.isArray(paymentTerm) &&
+                                  paymentTerm.map((payment) => (
+                                    <option
+                                      key={payment.value}
+                                      value={payment.value}
+                                    >
+                                      {payment.name}
+                                    </option>
+                                  ))}
+                              </select>
                             </FormControl>
                             <FormMessage />
                           </div>

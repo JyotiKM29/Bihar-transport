@@ -112,6 +112,10 @@ const SearchInput = ({ form, field, personName }) => {
                       "consignorName",
                       result?.basicInfo?.accountName,
                     );
+                    form.setValue(
+                      "consignorAddress",
+                      result?.basicInfo?.officeAddress,
+                    );
                     form.setValue("consignorID", result?._id);
                       
                   } else {
@@ -125,6 +129,10 @@ const SearchInput = ({ form, field, personName }) => {
                        "consigneeName",
                        result?.basicInfo?.accountName,
                      );
+                    form.setValue(
+                      "consigneeAddress",
+                      result?.basicInfo?.officeAddress,
+                    );
                   
                   }
                 
