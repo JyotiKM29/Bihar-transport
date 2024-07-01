@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "../../components/ui/form";
 import SearchInput from "./SearchInput";
+import SearchInputPhone from "./SearchInputPhone"
 import * as z from "zod";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
@@ -680,7 +681,7 @@ export default function ProfileForm() {
               </Link>
             </div>
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="consignorMobileNumber"
               render={({ field }) => {
@@ -698,8 +699,24 @@ export default function ProfileForm() {
                   </FormItem>
                 );
               }}
-            />
-            <FormField
+            /> */}
+
+       <FormField
+  control={form.control}
+  name="consignorMobileNumber"
+  render={({ field }) => (
+    <SearchInputPhone
+      form={form}
+      field={field}
+      personType="consignor"
+    />
+  )}
+/>
+
+
+
+
+            {/* <FormField
               control={form.control}
               name="consigneeMobileNumber"
               render={({ field }) => {
@@ -717,7 +734,24 @@ export default function ProfileForm() {
                   </FormItem>
                 );
               }}
-            />
+            /> */}
+
+
+            <FormField
+  control={form.control}
+  name="consigneeMobileNumber"
+  render={({ field }) => (
+    <SearchInputPhone
+      form={form}
+      field={field}
+      personType="consignee"
+    />
+  )}
+/>
+
+
+
+
 
             {/* address of consignor and consignee, changes after client */}
 
