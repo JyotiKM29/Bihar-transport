@@ -190,10 +190,10 @@ export default function ProfileForm() {
     consigneeMobileNumber: 0,
     consigneeAddress:"",
     unloadingPoints: [""],
-    way: "",
+    way: "oneWay",
     material: "",
     vehicleType: undefined,
-    noOfVehicle: "",
+    noOfVehicle: "1",
     partyBhara: 0,
     paymentTerm: "",
     remarks: "",
@@ -923,7 +923,7 @@ export default function ProfileForm() {
                           </FormLabel>
                           <div className="flex flex-1 flex-col">
                             <FormControl>
-                              <select {...field}>
+                                <select {...field} value={field.value || "1"}>                                
                                 <option value="">Select No of Vehicle</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
