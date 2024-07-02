@@ -22,7 +22,7 @@ const refreshToken = async () => {
     );
 
     const data = await result.json();
-    console.log("refresh data",data);
+    // console.log("refresh data",data);
     return data;
   } catch (error) {
     console.error("Error refreshing token:", error);
@@ -36,7 +36,7 @@ export async function GET(req, context) {
     // Replace spaces with %20 in the search query
     params.value = params.value.replace(/ /g, "%20");
 
-    console.log(params.value);
+    // console.log(params.value);
     await connectDB();
 
     const admin = await userModel.findOne({ _id: params.adminId });
@@ -47,7 +47,7 @@ export async function GET(req, context) {
     }
 
     const map = await Map.findOne();
-    console.log("map", map);
+    // console.log("map", map);
     let access_token;
 
     if (!map) {
@@ -66,9 +66,10 @@ export async function GET(req, context) {
     } else {
       access_token = map.access_token.access_token;
     }
-    console.log(access_token);
+    // console.log(access_token);
 
     async function fetchDataWithRetry(tries = 3) {
+      console.log(tries,"checking");
       const result = await fetch(
         `https://atlas.mapmyindia.com/api/places/textsearch/json?query=${params.value}`,
         {
@@ -80,6 +81,8 @@ export async function GET(req, context) {
       );
 
       const data = await result.json();
+
+      // console.log("heres is the response", data);
 
       if (data.error && data.error === "invalid_token" && tries > 0) {
         const newToken = await refreshToken();

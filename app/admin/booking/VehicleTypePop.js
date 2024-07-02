@@ -35,7 +35,7 @@ const formSchema = z.object({
   heightUnit:z.string(),
   weight:z.coerce.number(),
   weightUnit:z.string(),
-  capacity:z.string(),
+  // capacity:z.string(),
   adminId:z.string(),
 })
 
@@ -43,14 +43,14 @@ const VehicleTypePop = () => {
     const initialFormState = {
       name: undefined,
       length: undefined,
-      lengthUnit: undefined,
+      lengthUnit: "feet",
       width: undefined,
-      widthUnit: undefined,
+      widthUnit: "feet",
       height: undefined,
-      heightUnit: undefined,
+      heightUnit: "feet",
       weight: undefined,
       weightUnit: undefined,
-      capacity: undefined,
+      // capacity: undefined,
       adminId: "",
       }; 
     
@@ -176,7 +176,7 @@ const VehicleTypePop = () => {
               );
             }}
           />
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="capacity"
                 render={({ field }) => {
@@ -194,7 +194,7 @@ const VehicleTypePop = () => {
                     </FormItem>
                   );
                 }}
-              />
+              /> */}
 
 <div className="flex w-full items-center gap-0">
  <FormField

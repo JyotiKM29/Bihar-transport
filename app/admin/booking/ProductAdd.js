@@ -29,37 +29,21 @@ const formSchema = z.object({
   hsnNo: z.string(),
   qtyUnit:z.string(),
   // packageGroup: z.enum(["Personal", "General", "Other"]),
-  packageType: z.enum([
-    "Box",
-    "Bag",
-    "Basta",
-    "Bundle",
-    "Cartoon",
-    "Carate",
-    "Drums",
-    "Loose",
-    "Packet",
-    "Roll",
-    "TIN",
-    "TON",
-  ]),
-  weightType: z.enum([
-    "BAGS",
-    "TEN NUMBERS/UNITS",
-    "METERS",
-    "KILO METERS",
-    "HUNDRED NUMBERS/UNITS",
-    "HUNDRED KILOMETERS",
-    "DOZENS",
-    "CENTI METERS",
-    "BOXES",
-    "BUNDLES",
-    "TONNES",
-    "KILO GRAMS",
-    "QUINTALS",
-    "GRAMS",
-    "LITRES",
-  ]),
+  // packageType: z.enum([
+  //   "Box",
+  //   "Bag",
+  //   "Basta",
+  //   "Bundle",
+  //   "Cartoon",
+  //   "Carate",
+  //   "Drums",
+  //   "Loose",
+  //   "Packet",
+  //   "Roll",
+  //   "TIN",
+  //   "TON",
+  // ]),
+  weightType: z.string(),
   tax: z.coerce.number(),
   conversionFactor: z.string().optional(),
 });
@@ -243,7 +227,11 @@ const ProductAdd = () => {
             }}
           />
 
-          <FormField
+
+
+
+
+          {/* <FormField
             control={form.control}
             name="packageType"
             render={({ field }) => {
@@ -275,8 +263,44 @@ const ProductAdd = () => {
                 </FormItem>
               );
             }}
+          /> */}
+
+
+
+
+          <FormField
+            control={form.control}
+            name="weightType"
+            render={({ field }) => {
+              return (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="text-nowrap text-sm lg:text-base">
+                    Weight Type :
+                  </FormLabel>
+                  <div className="flex flex-1 flex-col">
+                    <FormControl>
+                      <select {...field}>
+                        <option value="">Select Weight Type</option>
+                        {Array.isArray(unitsData) &&
+                              unitsData.map((unit) => (
+                                <option key={unit.name} value={unit.name}>
+                                  {unit.name}
+                                </option>
+                              ))}
+                       
+                      </select>
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              );
+            }}
           />
 
+
+
+
+{/* 
           <FormField
             control={form.control}
             name="weightType"
@@ -319,7 +343,7 @@ const ProductAdd = () => {
                 </FormItem>
               );
             }}
-          />
+          /> */}
 
           <FormField
             control={form.control}
