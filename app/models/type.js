@@ -8,11 +8,11 @@ const typeSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    lenght: {
+    length: {
         type: Number,
       
     },
-    lenghtUnit: {
+    lengthUnit: {
         type: String,
      
     },
@@ -39,10 +39,6 @@ const typeSchema = new mongoose.Schema({
     weightUnit: {
         type: String,
      
-    },
-    capacity: {
-        type: Number,
-       
     },
     addedBy: {
         name: { type: String },

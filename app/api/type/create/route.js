@@ -7,7 +7,7 @@ export async function POST(req, res) {
 
     try {
 
-        const { name, lenght, lenghtUnit, width, widthUnit, height, heightUnit, weight, weightUnit, capacity, adminId } = await req.json();
+        const { name, length, lengthUnit, width, widthUnit, height, heightUnit, weight, weightUnit, adminId } = await req.json();
 
         await connectDB();
         const admin = await user.findOne({ $and: [{ _id: adminId }, { $or: [{ isAdmin: true }, { isOwner: true }] }] });
@@ -18,17 +18,18 @@ export async function POST(req, res) {
 
         const data = new Type({
             name,
-            lenght,
-            lenghtUnit,
+            length,
+            lengthUnit,
             width,
             widthUnit,
             height,
             heightUnit,
             weight,
             weightUnit,
-            capacity,
             addedBy: { name: admin.name, adminId: adminId }
         });
+
+        // console.log(data);
 
 
         await data.save();

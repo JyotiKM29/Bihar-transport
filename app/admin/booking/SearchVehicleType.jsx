@@ -114,7 +114,7 @@ const SearchVehicleType = ({ form, field, label  }) => {
                    
                 }}
               >
-                {result.name} , {result.length}{result.lengthUnit} , {result.weight}{result.weightUnit} , {result.capacity}
+                {result.name} , {result.length}{result.lengthUnit} , {result.weight}{result.weightUnit}
               </div>
             ))}
         </div>
