@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
 import { useToast } from "../../../components/ui/use-toast";
-
+import { useRouter } from 'next/navigation';
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
@@ -22,6 +22,7 @@ export default function ColumnHeader() {
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
+  const router = useRouter();
 
   const [columns, setColumns] = useState([]);
 
@@ -208,7 +209,7 @@ export default function ColumnHeader() {
           </div>
         ),
         cell: ({ row }) => (
-         <div>
+          <div>
             <p>
               {row.original?.itemsList?.item[0]?.material} (
               {row.original?.itemsList?.item[0]?.quantity}
@@ -260,6 +261,29 @@ export default function ColumnHeader() {
           </div>
         ),
       },
+
+      {
+        id: "actions",
+        enableHiding: false,
+        header: (
+          <div className="text-center">
+            <p>&nbsp;</p>
+            <p>Vehicle  </p>
+            <p>Dispatch</p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div
+            className="inline-block cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 active:bg-red-900"
+            onClick={(e) =>
+              router.push(`/admin/booking/dispatedVehicle/${row.original._id}`)
+            }
+          >
+            <p>Vehicle Dispatch</p>
+          </div>
+        ),
+      },
+
       {
         id: "actions",
         enableHiding: false,
@@ -271,9 +295,8 @@ export default function ColumnHeader() {
           </div>
         ),
         cell: ({ row }) => {
-          return ( <CancellationPop bookingId={row.original._id}/> )
-        }
-
+          return <CancellationPop bookingId={row.original._id} />;
+        },
       },
       {
         accessorKey: "partyBhara",

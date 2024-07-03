@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
 import { useToast } from "../../../components/ui/use-toast";
-
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
@@ -25,6 +25,7 @@ export default function ColumnHeader() {
   const { toast } = useToast();
   const [isloading, setIsLoading] = useState();
   const { user } = useContext(UserContext);
+  const router = useRouter();
 
   const [columns, setColumns] = useState([]);
  
@@ -321,6 +322,30 @@ export default function ColumnHeader() {
         header: (
           <div className="text-center">
             <p>&nbsp;</p>
+            <p>Deliver </p>
+            <p>Material</p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div
+            className="inline-block cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 active:bg-red-900"
+            onClick={(e) =>
+              router.push(
+                `/admin/booking/delivered/deliveredDetail/${row.original._id}`,
+              )
+            }
+          >
+            <p>Deliver Material</p>
+          </div>
+        ),
+      },
+
+      {
+        id: "actions",
+        enableHiding: false,
+        header: (
+          <div className="text-center">
+            <p>&nbsp;</p>
             <p>Cancel</p>
             <p> Booking </p>
           </div>
@@ -378,7 +403,9 @@ href={`/admin/booking/cancel/${row.original._id}`}
    </Link>
                 </DropdownMenuItem> */}
                 <DropdownMenuItem>
-                  <Link href={`/admin/booking/delivered/deliveredDetail/${row.original._id}`}>
+                  <Link
+                    href={`/admin/booking/delivered/deliveredDetail/${row.original._id}`}
+                  >
                     Deliver Material
                   </Link>
                 </DropdownMenuItem>

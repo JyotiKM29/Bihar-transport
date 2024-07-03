@@ -42,20 +42,21 @@ const LocationAdd = ({ form, field, label, nameValue }) => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const result = await response.json();
+        console.log("result : ", result);
         const suggestedLocations = result.result.suggestedLocations;
 
         if (result && Array.isArray(suggestedLocations)) {
-          const results = suggestedLocations.filter((location) => {
-            const lowerCaseValue = value.toLowerCase();
-            const lowerCasePlaceName = location.placeName.toLowerCase();
-            const lowerCasePlaceAddress = location.placeAddress.toLowerCase();
-            return (
-              lowerCasePlaceName.includes(lowerCaseValue) ||
-              lowerCasePlaceAddress.includes(lowerCaseValue)
-            );
-          });
+          // const results = suggestedLocations.filter((location) => {
+          //   const lowerCaseValue = value.toLowerCase();
+          //   const lowerCasePlaceName = location.placeName.toLowerCase();
+          //   const lowerCasePlaceAddress = location.placeAddress.toLowerCase();
+          //   return (
+          //     lowerCasePlaceName.includes(lowerCaseValue) ||
+          //     lowerCasePlaceAddress.includes(lowerCaseValue)
+          //   );
+          // });
 
-          setSearchResult(results.slice(0, 5));
+          setSearchResult(suggestedLocations.slice(0, 5));
         } else {
           setSearchResult([{ placeAddress: value }]);
         }

@@ -43,8 +43,8 @@ const formSchema = z.object({
     actualWgtUnit: z.string({ message: "Actual Weight Unit is required" }),
     rateAsPer: z.string({ message: "Rate As Per is required" }),
     rate: z.string({ message: "Rate is required" }),
-    chargedWgt: z.coerce.number({ message: "Charged Weight is required" }),
-    chargedWgtUnit: z.string({ message: "Charged Weight Unit is required" }),
+    chargedWgt: z.coerce.number({ message: "Charged Weight is required" }).optional(),
+    chargedWgtUnit: z.string({ message: "Charged Weight Unit is required" }).optional(),
     availableWgt: z.coerce.number(),
     driverBhara: z.coerce.number(),
     commission: z.coerce.number(),
@@ -54,7 +54,7 @@ const formSchema = z.object({
   }),
   payableLiability: z.string().nonempty({ message: "Payable Liability is required" }),
   recievableLiability: z.string().nonempty({ message: "Receivable Liability is required" }),
-  billTo: z.string().nonempty({ message: "Bill To is required" }),
+  billTo: z.string().nonempty({ message: "Bill To is required" }).optional(),
 });
 
 const AllocateVehicle = ({ params, ledgerBalance }) => {
@@ -63,6 +63,7 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
   const [receivableData, setReceivable] = useState([]);
   const [paymentLibilityData, setPaymentLibility] = useState([]);
   const [rateAsPerData, setRateAsPerData] = useState([]);
+    const [isCommissionEditable, setIsCommissionEditable] = useState(false);
   const { user } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
   const [loading2, setLoading2] = useState(false);
@@ -94,7 +95,7 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
       actualWgt: undefined,
       actualWgtUnit: undefined,
       availableWgt: undefined,
-      rateAsPer: undefined,
+      rateAsPer: "fixed",
       rate: undefined,
       chargedWgt: undefined,
       chargedWgtUnit: undefined,
@@ -123,16 +124,89 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
     availableWgt = form.getValues("materialDetails.availableWgt");
   }, [vehicleNo]);
 
-  function calNetBhara(driverBhara) {
-    const commission = driverBhara * 0.05;
-    form.setValue("materialDetails.commission", commission.toFixed(2));
-    const netBhara = driverBhara - commission;
-    form.setValue("materialDetails.netBhara", netBhara.toFixed(2));
-  }
+  // function calNetBhara(driverBhara) {
+  //   const commission = driverBhara * 0.05;
+  //   form.setValue("materialDetails.commission", commission.toFixed(2));
+  //   const netBhara = driverBhara - commission;
+  //   form.setValue("materialDetails.netBhara", netBhara.toFixed(2));
+  // }
+
+
+
+
 
   useEffect(() => {
     calNetBhara(DriverBhara);
   }, [DriverBhara]);
+
+
+
+
+ const handleCommissionChange = (e) => {
+    const commission = parseFloat(e.target.value) || 0;
+    form.setValue("materialDetails.commission", commission.toFixed(2));
+    updateNetBharaAndPercentage(commission);
+  };
+
+  const updateNetBharaAndPercentage = (commission) => {
+    const driverBhara = parseFloat(form.getValues("materialDetails.driverBhara")) || 0;
+    const netBhara = driverBhara - commission;
+    const percentage = driverBhara ? (commission / driverBhara) * 100 : 0;
+
+    form.setValue("materialDetails.netBhara", netBhara.toFixed(2));
+    form.setValue("materialDetails.commissionPercentage", percentage.toFixed(2));
+  };
+
+  const calNetBhara = (driverBhara) => {
+    if (!isCommissionEditable) {
+      const commission = driverBhara * 0.05;
+      form.setValue("materialDetails.commission", commission.toFixed(2));
+      updateNetBharaAndPercentage(commission);
+    } else {
+      const commission = parseFloat(form.getValues("materialDetails.commission")) || 0;
+      updateNetBharaAndPercentage(commission);
+    }
+  };
+
+  useEffect(() => {
+    const driverBhara = parseFloat(form.getValues("materialDetails.driverBhara")) || 0;
+    calNetBhara(driverBhara);
+  }, [isCommissionEditable]);
+
+
+
+
+  // for stop scrolling 
+
+   useEffect(() => {
+     const disableScrollOnNumberInput = (e) => {
+       if (e.target.type === "number") {
+         e.preventDefault();
+       }
+     };
+
+     const handleWheelEvent = (e) => {
+       if (document.activeElement.type === "number") {
+         document.activeElement.blur();
+       }
+     };
+
+     window.addEventListener("wheel", disableScrollOnNumberInput, {
+       passive: false,
+     });
+     window.addEventListener("wheel", handleWheelEvent);
+
+     return () => {
+       window.removeEventListener("wheel", disableScrollOnNumberInput);
+       window.removeEventListener("wheel", handleWheelEvent);
+     };
+   }, []);
+
+
+
+
+
+
 
   async function myhandleSubmit(value) {
     try {
@@ -301,9 +375,13 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
               <h2 className="text-2xl font-medium text-blue-500 underline">
                 Hired Vehicle Details
               </h2>
-        
 
-              <FieldForm form={form} name="orderNo" label="Order No" type="string" />
+              <FieldForm
+                form={form}
+                name="orderNo"
+                label="Order No"
+                type="string"
+              />
               <FieldForm form={form} name="date" label="Date " type="date" />
               <FormField
                 control={form.control}
@@ -372,7 +450,7 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
 
                       <FormControl>
                         <select {...field}>
-                        <option value=''>Select Arranged By </option>
+                          <option value="">Select Arranged By </option>
                           <option value="Self">Self</option>
                           <option value="Other transporter">
                             Other transporter
@@ -459,44 +537,41 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
                   }}
                 /> */}
 
-<FormField
-  control={form.control}
-  name="materialDetails.qtyUnit"
-  render={({ field }) => {
-    return (
-      <FormItem className="flex flex-1 items-center justify-center">
-        <div className="flex flex-1 flex-col">
-          <FormControl>
-            <select
-              {...field}
-              className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
-            >
-              {/* Default option similar to the first component */}
-              {/* <option key={qtyUnit}>
+                <FormField
+                  control={form.control}
+                  name="materialDetails.qtyUnit"
+                  render={({ field }) => {
+                    return (
+                      <FormItem className="flex flex-1 items-center justify-center">
+                        <div className="flex flex-1 flex-col">
+                          <FormControl>
+                            <select
+                              {...field}
+                              className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                            >
+                              {/* Default option similar to the first component */}
+                              {/* <option key={qtyUnit}>
                 {qtyUnit ? qtyUnit : "Select Quantity Unit"} */}
-              {/* </option> */}
+                              {/* </option> */}
 
-<option> Select QTY unit</option>
+                              <option> Select QTY unit</option>
 
-              {Array.isArray(data) &&
-                data.map((unit) => (
-                  <option key={unit.name} value={unit.name}>
-                    {unit.name}
-                  </option>
-                ))}
-            </select>
-          </FormControl>
-          <FormMessage />
-        </div>
-      </FormItem>
-    );
-  }}
-/>
+                              {Array.isArray(data) &&
+                                data.map((unit) => (
+                                  <option key={unit.name} value={unit.name}>
+                                    {unit.name}
+                                  </option>
+                                ))}
+                            </select>
+                          </FormControl>
+                          <FormMessage />
+                        </div>
+                      </FormItem>
+                    );
+                  }}
+                />
 
-  <UnitAdd onUnitAdded={handleUnitAdded} />
-
-
-
+                <UnitAdd onUnitAdded={handleUnitAdded} />
               </div>
 
               <div className="flex w-full items-center gap-0">
@@ -509,18 +584,18 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
                         <FormLabel className="text-nowrap text-sm lg:text-base">
                           Actual Weight :
                         </FormLabel>
-                        <div className="flex flex-1 flex-col relative">
+                        <div className="relative flex flex-1 flex-col">
                           <FormControl>
                             <Input
                               type="text"
                               {...field}
                               className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
                             />
-                            
                           </FormControl>
-                          <p className="text-[12px] bg-orange-100 absolute bottom-1 w-full">Must less than {availableWgt} KG</p>
+                          <p className="absolute bottom-1 w-full bg-orange-100 text-[12px]">
+                            Must less than {availableWgt} KG
+                          </p>
                           <FormMessage />
-                         
                         </div>
                       </FormItem>
                     );
@@ -550,37 +625,37 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
                 />
               </div>
               <FormField
-  control={form.control}
-  name="materialDetails.rateAsPer"
-  render={({ field }) => {
-    return (
-      <FormItem className="flex items-center justify-center gap-4">
-        <FormLabel className="text-nowrap text-sm lg:text-base">
-          Rate as Per :
-        </FormLabel>
-        <div className="flex flex-1 flex-col">
-          <FormControl>
-            <select {...field}>
-              <option value="">
-                {rateAsPerData && rateAsPerData.length > 0
-                  ? "Select Rate As Per"
-                  : "Loading..."}
-              </option>
-              {Array.isArray(rateAsPerData) &&
-                rateAsPerData.map((rate) => (
-                  <option key={rate.value} value={rate.value}>
-                    {rate.name}
-                  </option>
-                ))}
-            </select>
-          </FormControl>
+                control={form.control}
+                name="materialDetails.rateAsPer"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Rate as Per :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <select {...field}>
+                            <option value="">
+                              {rateAsPerData && rateAsPerData.length > 0
+                                ? "Select Rate As Per"
+                                : "Loading..."}
+                            </option>
+                            {Array.isArray(rateAsPerData) &&
+                              rateAsPerData.map((rate) => (
+                                <option key={rate.value} value={rate.value}>
+                                  {rate.name}
+                                </option>
+                              ))}
+                          </select>
+                        </FormControl>
 
-          <FormMessage />
-        </div>
-      </FormItem>
-    );
-  }}
-/>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
 
               <FieldForm
                 form={form}
@@ -588,61 +663,70 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
                 label="Rate "
                 type="text"
               />
-              <div className="flex w-full items-center gap-0">
-                <FormField
-                  control={form.control}
-                  name="materialDetails.chargedWgt"
-                  render={({ field }) => {
-                    return (
-                      <FormItem className="flex items-center justify-center gap-4">
-                        <FormLabel className="text-nowrap text-sm lg:text-base">
-                          Charged Weight :
-                        </FormLabel>
-                        <div className="flex flex-1 flex-col">
-                          <FormControl>
-                            <Input
-                              type="text"
-                              {...field}
-                              className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
-                            />
-                          </FormControl>
 
-                          <FormMessage />
-                        </div>
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="materialDetails.chargedWgtUnit"
-                  render={({ field }) => {
-                    return (
-                      <FormItem className="flex flex-1 items-center justify-center ">
-                        <div className="flex flex-1 flex-col">
-                          <FormControl>
-                            <select
-                              {...field}
-                              className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
-                            >
-                              <option value=""> Select Unit of Weight </option>
-                             <option value='kg'>Kg</option>
-                            </select>
-                          </FormControl>
-                          <FormMessage />
-                        </div>
-                      </FormItem>
-                    );
-                  }}
-                />
-              </div>
+              {form.watch(`materialDetails.rateAsPer`, "fixed") !== "fixed" && (
+                <>
+                  <div className="flex w-full items-center gap-0">
+                    <FormField
+                      control={form.control}
+                      name="materialDetails.chargedWgt"
+                      render={({ field }) => {
+                        return (
+                          <FormItem className="flex items-center justify-center gap-4">
+                            <FormLabel className="text-nowrap text-sm lg:text-base">
+                              Charged Weight :
+                            </FormLabel>
+                            <div className="flex flex-1 flex-col">
+                              <FormControl>
+                                <Input
+                                  type="text"
+                                  {...field}
+                                  className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
+                                />
+                              </FormControl>
+
+                              <FormMessage />
+                            </div>
+                          </FormItem>
+                        );
+                      }}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="materialDetails.chargedWgtUnit"
+                      render={({ field }) => {
+                        return (
+                          <FormItem className="flex flex-1 items-center justify-center ">
+                            <div className="flex flex-1 flex-col">
+                              <FormControl>
+                                <select
+                                  {...field}
+                                  className="mb-[.47rem] rounded-bl-[0px] rounded-br rounded-tl-[0px] rounded-tr"
+                                >
+                                  <option value="">
+                                    {" "}
+                                    Select Unit of Weight{" "}
+                                  </option>
+                                  <option value="kg">Kg</option>
+                                </select>
+                              </FormControl>
+                              <FormMessage />
+                            </div>
+                          </FormItem>
+                        );
+                      }}
+                    />
+                  </div>
+                </>
+              )}
+
               <FieldForm
                 form={form}
                 name="materialDetails.driverBhara"
                 label="Driver Bhara ( &#8377;)"
                 type="number"
               />
-
+              {/* 
               <FormField
                 control={form.control}
                 name="materialDetails.commission"
@@ -664,13 +748,83 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
                             />
                           </div>
                         </FormControl>
-                        <p className="text-[12px] -mt-2">commision value is 5% of Driver Bhara</p>
+                        <p className="-mt-2 text-[12px]">
+                          commision value is 5% of Driver Bhara
+                        </p>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              /> */}
+
+              <FormField
+                control={form.control}
+                name="materialDetails.commission"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Commission :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-yellow-100 pl-2">
+                            <p className="text-xl font-medium">&#8377;</p>
+                            <Input
+                              type="text"
+                              {...field}
+                              className="border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                              readOnly={!isCommissionEditable}
+                              onChange={handleCommissionChange}
+                            />
+                          </div>
+                        </FormControl>
+                        <p className="-mt-2 text-[12px]">
+                          By default Commission value is 5% of Driver Bhara
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setIsCommissionEditable(!isCommissionEditable)
+                          }
+                          className="mt-2 text-sm text-blue-500"
+                        >
+                          {isCommissionEditable
+                            ? "Lock Commission"
+                            : "Edit Commission"}
+                        </button>
                         <FormMessage />
                       </div>
                     </FormItem>
                   );
                 }}
               />
+              <FormField
+                control={form.control}
+                name="materialDetails.commissionPercentage"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Commission Percentage :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input
+                            type="text"
+                            {...field}
+                            className="border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                            readOnly
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+
               <FormField
                 control={form.control}
                 name="materialDetails.netBhara"
@@ -714,7 +868,7 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
                             <p className="text-xl font-medium">&#8377;</p>
                             <Input
                               type="number"
-                              value={Number(ledgerBalance).toFixed(2)} 
+                              value={Number(ledgerBalance).toFixed(2)}
                               className="border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
                               readOnly
                             />
@@ -736,7 +890,7 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
               />
             </div>
 
-            <div className=" row-span-1 rounded-xl bg-red-300 p-4 shadow-xl  ">
+            <div className="row-span-1 rounded-xl bg-red-300 p-4 shadow-xl  ">
               <FormField
                 control={form.control}
                 name="payableLiability"
@@ -752,18 +906,19 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
                           {...field}
                           className="border border-red-300 bg-red-200 focus-visible:ring-1"
                         >
-                         <option value="">
-                {paymentLibilityData && paymentLibilityData.length > 0
-                  ? "Select payable liability"
-                  : "Loading..."}
-              </option>
-              {Array.isArray(paymentLibilityData) &&
-                paymentLibilityData.map((rate) => (
-                  <option key={rate.value} value={rate.value}>
-                    {rate.name}
-                  </option>
-                ))}
-            </select>
+                          <option value="">
+                            {paymentLibilityData &&
+                            paymentLibilityData.length > 0
+                              ? "Select payable liability"
+                              : "Loading..."}
+                          </option>
+                          {Array.isArray(paymentLibilityData) &&
+                            paymentLibilityData.map((rate) => (
+                              <option key={rate.value} value={rate.value}>
+                                {rate.name}
+                              </option>
+                            ))}
+                        </select>
                       </FormControl>
 
                       <FormMessage />
@@ -787,18 +942,18 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
                           {...field}
                           className="border border-red-300 bg-red-200 focus-visible:ring-1"
                         >
-                         <option value="">
-                {receivableData && receivableData.length > 0
-                  ? "Select Recievable Liabilitly"
-                  : "Loading..."}
-              </option>
-              {Array.isArray(receivableData) &&
-                receivableData.map((rate) => (
-                  <option key={rate.value} value={rate.value}>
-                    {rate.name}
-                  </option>
-                ))}
-            </select>
+                          <option value="">
+                            {receivableData && receivableData.length > 0
+                              ? "Select Recievable Liabilitly"
+                              : "Loading..."}
+                          </option>
+                          {Array.isArray(receivableData) &&
+                            receivableData.map((rate) => (
+                              <option key={rate.value} value={rate.value}>
+                                {rate.name}
+                              </option>
+                            ))}
+                        </select>
                       </FormControl>
 
                       <FormMessage />
@@ -808,46 +963,56 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
               />
             </div>
 
-            <div className="  rounded-2xl border bg-blue-300 p-4 shadow-xl">
-              <FormField
-                control={form.control}
-                name="billTo"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Bill To
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-blue-100 pl-2">
-                            <p className="text-xl font-medium">&#8377;</p>
-                            <Input
-                              type="text"
-                              {...field}
-                              className="border-none bg-blue-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
-                            />
+            {form.watch(`recievableLiability`, "consignor") ===
+              "thirdParty" && (
+              <>
+                <div className="  rounded-2xl border bg-blue-300 p-4 shadow-xl">
+                  <FormField
+                    control={form.control}
+                    name="billTo"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="flex items-center justify-center gap-4">
+                          <FormLabel className="text-nowrap text-sm lg:text-base">
+                            Bill To
+                          </FormLabel>
+                          <div className="flex flex-1 flex-col">
+                            <FormControl>
+                              <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-blue-100 pl-2">
+                                <p className="text-xl font-medium">&#8377;</p>
+                                <Input
+                                  type="text"
+                                  {...field}
+                                  className="border-none bg-blue-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
+                                />
+                              </div>
+                            </FormControl>
                           </div>
-                        </FormControl>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
-              />
-            </div>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                </div>
+              </>
+            )}
           </div>
 
           <div className="mt-4  grid w-full grid-cols-1 gap-4 p-4 xl:grid-cols-2 xl:gap-14">
-            <Button type="submit"   onClick={(e) => {
+            <Button
+              type="submit"
+              onClick={(e) => {
                 setAllocate(true);
-
-              }}>
+              }}
+            >
               {isloading ? "Loading..." : "Assign Vehicle Only"}
             </Button>
-            <Button type="submit" onClick={(e)=>{
-              setRouteDispatch(true);
-            }}>
+            <Button
+              type="submit"
+              onClick={(e) => {
+                setRouteDispatch(true);
+              }}
+            >
               {loading2 ? "Loading..." : " Continue & Dispatch"}
             </Button>
           </div>

@@ -211,6 +211,7 @@ const bookingSchema = new mongoose.Schema(
     bookingType: { type: String },
     consignorName: { type: String, required: true },
     consignorMobileNumber: { type: Number },
+    consignorAddress:{type:String},
     loadingPoints: [
       {
         type: String,
@@ -218,6 +219,7 @@ const bookingSchema = new mongoose.Schema(
     ],
     consigneeName: { type: String },
     consigneeMobileNumber: { type: Number },
+    consigneeAddress:{type:String},
     unloadingPoints: [
       {
         type: String,

@@ -36,6 +36,8 @@ export async function GET(req, context) {
     // Replace spaces with %20 in the search query
     params.value = params.value.replace(/ /g, "%20");
 
+    console.log(params);
+
     // console.log(params.value);
     await connectDB();
 
@@ -98,6 +100,8 @@ export async function GET(req, context) {
     }
 
     const result = await fetchDataWithRetry();
+    // console.log("response sent", result);
+
     return Response.json({ result }, { status: 200 });
       
   } catch (error) {
