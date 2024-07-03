@@ -54,7 +54,7 @@ const formSchema = z.object({
   }),
   payableLiability: z.string().nonempty({ message: "Payable Liability is required" }),
   recievableLiability: z.string().nonempty({ message: "Receivable Liability is required" }),
-  billTo: z.string().nonempty({ message: "Bill To is required" }),
+  billTo: z.string().nonempty({ message: "Bill To is required" }).optional(),
 });
 
 const AllocateVehicle = ({ params, ledgerBalance }) => {
@@ -174,6 +174,33 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
   }, [isCommissionEditable]);
 
 
+
+
+  // for stop scrolling 
+
+   useEffect(() => {
+     const disableScrollOnNumberInput = (e) => {
+       if (e.target.type === "number") {
+         e.preventDefault();
+       }
+     };
+
+     const handleWheelEvent = (e) => {
+       if (document.activeElement.type === "number") {
+         document.activeElement.blur();
+       }
+     };
+
+     window.addEventListener("wheel", disableScrollOnNumberInput, {
+       passive: false,
+     });
+     window.addEventListener("wheel", handleWheelEvent);
+
+     return () => {
+       window.removeEventListener("wheel", disableScrollOnNumberInput);
+       window.removeEventListener("wheel", handleWheelEvent);
+     };
+   }, []);
 
 
 
@@ -699,7 +726,7 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
                 label="Driver Bhara ( &#8377;)"
                 type="number"
               />
-{/* 
+              {/* 
               <FormField
                 control={form.control}
                 name="materialDetails.commission"
@@ -731,74 +758,72 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
                 }}
               /> */}
 
-<FormField
-        control={form.control}
-        name="materialDetails.commission"
-        render={({ field }) => {
-          return (
-            <FormItem className="flex items-center justify-center gap-4">
-              <FormLabel className="text-nowrap text-sm lg:text-base">
-                Commission :
-              </FormLabel>
-              <div className="flex flex-1 flex-col">
-                <FormControl>
-                  <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-yellow-100 pl-2">
-                    <p className="text-xl font-medium">&#8377;</p>
-                    <Input
-                      type="text"
-                      {...field}
-                      className="border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                      readOnly={!isCommissionEditable}
-                      onChange={handleCommissionChange}
-                    />
-                  </div>
-                </FormControl>
-                <p className="text-[12px] -mt-2">By default Commission value is 5% of Driver Bhara</p>
-                <button
-                  type="button"
-                  onClick={() => setIsCommissionEditable(!isCommissionEditable)}
-                  className="mt-2 text-sm text-blue-500"
-                >
-                  {isCommissionEditable ? "Lock Commission" : "Edit Commission"}
-                </button>
-                <FormMessage />
-              </div>
-            </FormItem>
-          );
-        }}
-      />
-      <FormField
-        control={form.control}
-        name="materialDetails.commissionPercentage"
-        render={({ field }) => {
-          return (
-            <FormItem className="flex items-center justify-center gap-4">
-              <FormLabel className="text-nowrap text-sm lg:text-base">
-                Commission Percentage :
-              </FormLabel>
-              <div className="flex flex-1 flex-col">
-                <FormControl>
-                  <Input
-                    type="text"
-                    {...field}
-                    className="border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                    readOnly
-                  />
-                </FormControl>
-                <FormMessage />
-              </div>
-            </FormItem>
-          );
-        }}
-      />
-    
-
-
-
-
-
-
-           
+              <FormField
+                control={form.control}
+                name="materialDetails.commission"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Commission :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-yellow-100 pl-2">
+                            <p className="text-xl font-medium">&#8377;</p>
+                            <Input
+                              type="text"
+                              {...field}
+                              className="border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                              readOnly={!isCommissionEditable}
+                              onChange={handleCommissionChange}
+                            />
+                          </div>
+                        </FormControl>
+                        <p className="-mt-2 text-[12px]">
+                          By default Commission value is 5% of Driver Bhara
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setIsCommissionEditable(!isCommissionEditable)
+                          }
+                          className="mt-2 text-sm text-blue-500"
+                        >
+                          {isCommissionEditable
+                            ? "Lock Commission"
+                            : "Edit Commission"}
+                        </button>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+              <FormField
+                control={form.control}
+                name="materialDetails.commissionPercentage"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Commission Percentage :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <Input
+                            type="text"
+                            {...field}
+                            className="border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                            readOnly
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
 
               <FormField
                 control={form.control}
@@ -865,7 +890,7 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
               />
             </div>
 
-            <div className=" row-span-1 rounded-xl bg-red-300 p-4 shadow-xl  ">
+            <div className="row-span-1 rounded-xl bg-red-300 p-4 shadow-xl  ">
               <FormField
                 control={form.control}
                 name="payableLiability"
@@ -938,34 +963,39 @@ const AllocateVehicle = ({ params, ledgerBalance }) => {
               />
             </div>
 
-            <div className="  rounded-2xl border bg-blue-300 p-4 shadow-xl">
-              <FormField
-                control={form.control}
-                name="billTo"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                        Bill To
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-blue-100 pl-2">
-                            <p className="text-xl font-medium">&#8377;</p>
-                            <Input
-                              type="text"
-                              {...field}
-                              className="border-none bg-blue-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
-                            />
+            {form.watch(`recievableLiability`, "consignor") ===
+              "thirdParty" && (
+              <>
+                <div className="  rounded-2xl border bg-blue-300 p-4 shadow-xl">
+                  <FormField
+                    control={form.control}
+                    name="billTo"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="flex items-center justify-center gap-4">
+                          <FormLabel className="text-nowrap text-sm lg:text-base">
+                            Bill To
+                          </FormLabel>
+                          <div className="flex flex-1 flex-col">
+                            <FormControl>
+                              <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-blue-100 pl-2">
+                                <p className="text-xl font-medium">&#8377;</p>
+                                <Input
+                                  type="text"
+                                  {...field}
+                                  className="border-none bg-blue-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
+                                />
+                              </div>
+                            </FormControl>
                           </div>
-                        </FormControl>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
-              />
-            </div>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                </div>
+              </>
+            )}
           </div>
 
           <div className="mt-4  grid w-full grid-cols-1 gap-4 p-4 xl:grid-cols-2 xl:gap-14">
