@@ -17,6 +17,7 @@ import { useToast } from "../../../components/ui/use-toast";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
+import { useRouter } from 'next/navigation';
 
 export default function ColumnHeader() {
   const { toast } = useToast();
@@ -24,6 +25,7 @@ export default function ColumnHeader() {
   const { user } = useContext(UserContext);
 
   const [columns, setColumns] = useState([]);
+  const router = useRouter();
 
   const displayToast = (title, action, description = "") => {
     toast({
@@ -295,6 +297,32 @@ export default function ColumnHeader() {
           </div>
         ),
       },
+
+      {
+  id: "actions",
+  enableHiding: false,
+  header: (
+    <div className="text-center">
+      <p>&nbsp;</p>
+      <p>Allot </p>
+      <p>Vehicle</p>
+    </div>
+  ),
+  cell: ({ row }) => (
+    <div
+      className="inline-block cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 active:bg-red-900"
+      onClick={(e) =>
+        router.push(`/admin/booking/${row.original.orderNumber}`)
+      }
+    >
+      <p>Allot Vehicle</p>
+    </div>
+  ),
+},
+
+
+     
+
       {
         id: "actions",
         enableHiding: false,
@@ -306,9 +334,8 @@ export default function ColumnHeader() {
           </div>
         ),
         cell: ({ row }) => {
-          return ( <CancellationPop bookingId={row.original._id}/> )
-        }
-
+          return <CancellationPop bookingId={row.original._id} />;
+        },
       },
       {
         id: "actions",
@@ -336,8 +363,6 @@ export default function ColumnHeader() {
                     Allocate Vehicle
                   </Link>
                 </DropdownMenuItem>
-              
-            
               </DropdownMenuContent>
             </DropdownMenu>
           );
