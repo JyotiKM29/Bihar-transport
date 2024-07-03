@@ -211,7 +211,7 @@ export default function ColumnHeader() {
           </div>
         ),
         cell: ({ row }) => (
-           <div>
+          <div>
             <p>
               {row.original?.itemsList?.item[0]?.material} (
               {row.original?.itemsList?.item[0]?.quantity}
@@ -255,7 +255,7 @@ export default function ColumnHeader() {
         cell: ({ row }) => (
           <div>
             <p>{row.original.allotedVehicle[0]?.rateAsPer}</p>
-             <p>
+            <p>
               {row.original.itemsList.item &&
                 row.original.itemsList.item.length > 0 &&
                 `${row.original.itemsList.item[0]?.rateAsPer || row.original.itemsList?.item[0]?.rateAsPer} Per ${row.original.itemsList.item[0]?.rateUnit || row.original.itemsList?.item[0]?.rateUnit}`}
@@ -298,6 +298,29 @@ export default function ColumnHeader() {
           </div>
         ),
       },
+
+      {
+        id: "actions",
+        enableHiding: false,
+        header: (
+          <div className="text-center">
+            <p>&nbsp;</p>
+            <p>Confirm</p>
+            <p>Booking</p>
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div
+            className="inline-block cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 active:bg-red-900"
+            onClick={(e) =>
+              handleConfirm("Confirmed", `${row.original._id}`, e)
+            }
+          >
+            <p>Confirm Booking</p>
+          </div>
+        ),
+      },
+
       {
         id: "actions",
         enableHiding: false,
@@ -309,9 +332,8 @@ export default function ColumnHeader() {
           </div>
         ),
         cell: ({ row }) => {
-          return ( <CancellationPop bookingId={row.original._id}/> )
-        }
-
+          return <CancellationPop bookingId={row.original._id} />;
+        },
       },
       {
         id: "actions",
