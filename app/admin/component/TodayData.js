@@ -132,7 +132,7 @@ const TodayData = () => {
               </div>
             </Link>
             <Link
-              href="/admin/booking?tab=intilize"
+              href="/admin/vehicle"
               className="flex  h-full w-full  
           rounded-3xl bg-white p-4 shadow-md "
             >
