@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 const validateDriverProof = function (value) {
   return (
     Array.isArray(value) &&
-    value.length === 2 &&
+    value.length >= 1 &&
     value.every((url) => typeof url === "string" && url.trim().length > 0)
   );
 };
