@@ -5,6 +5,7 @@ import Order from "../../../../models/orderModel";
 import connnectDB from "../../../../middleware/connectDB";
 import { log } from "console";
 import { exists } from "fs";
+import vehicleAttendence from "@/app/models/vehicleAttendence";
 
 export async function GET(req, context) {
   try {
@@ -49,7 +50,10 @@ export async function GET(req, context) {
     data.orderDispatched = booking.filter(
       (item) => item.status === "Dispatched",
     ).length;
-    data.lorryInCampus = dvehicle.length;
+
+
+
+
     data.inTransit = booking.filter(
       (item) => item.status === "In Transit",
     ).length;
@@ -205,6 +209,14 @@ export async function GET(req, context) {
     data.advanceBooking = booking.filter(
       (item) => item.paymentTerm === "Advance",
     ).length;
+
+    const date = new Date();
+
+    const attendence = await vehicleAttendence.find({
+      createdAt: { $gte: new Date(date) },
+    }).countDocuments();
+
+    data.lorryInCampus = attendence;
     // log(data);
 
     return Response.json({ data, adminId }, { status: 200 });

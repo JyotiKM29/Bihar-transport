@@ -314,154 +314,614 @@ const RegistrationForm = () => {
 
   return (
     <div className="max-w max-h  bg-white px-0 ">
-    <Form {...form}>
-  <form onSubmit={form.handleSubmit(MyHandleSubmit)} className="grid grid-cols-1  lg:grid-cols-2 2xl:grid-cols-3  gap-x-10 xl:px-4">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(MyHandleSubmit)}
+          className="grid grid-cols-1  gap-x-10 lg:grid-cols-2  xl:px-4 2xl:grid-cols-3"
+        >
+          <h2 className="col-span-full mb-6 mt-3 text-center text-3xl font-semibold tracking-normal text-blue-500 underline underline-offset-1">
+            Vehicle Details
+          </h2>
+          <FieldForm
+            form={form}
+            nameValue="vehicleNo"
+            label="Vehicle No"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="registrationAuthority"
+            label="Registration Authority"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="fuelName"
+            label="Fuel Name"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="vehicleAge"
+            label="Vehicle Age"
+            type="number"
+          />
+          <FieldForm
+            form={form}
+            nameValue="vehicleType"
+            label="Vehicle Type"
+            type="text"
+          />
+          {/* <FieldForm
+            form={form}
+            nameValue="vehicleClass"
+            label="Vehicle Class"
+            type="text"
+          /> */}
+
+           <FormField
+            control={form.control}
+            name="vehicleClass"
+            render={({ field }) => {
+              return (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="text-nowrap text-sm lg:text-base">
+                    Vehicle Class :
+                  </FormLabel>
+                  <div className="flex flex-1 flex-col">
+                    <FormControl>
+                      <select {...field}>
+                        <option value="">Select Vehicle Class </option>
+                        <option value="lcv">LCV</option>
+                        <option value="mcv">MCV</option>
+                        <option value="hcv">HCV</option>
+                      </select>
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              );
+            }}
+          />
 
 
-  
-  <h2 className="col-span-full text-3xl text-center font-semibold mb-6 mt-3 text-blue-500 underline underline-offset-1 tracking-normal">Vehicle Details</h2>
-    <FieldForm form={form} nameValue="vehicleNo" label="Vehicle No" type="text" />
-    <FieldForm form={form} nameValue="registrationAuthority" label="Registration Authority" type="text" />
-    <FieldForm form={form} nameValue="fuelName" label="Fuel Name" type="text" />
-    <FieldForm form={form} nameValue="vehicleAge" label="Vehicle Age" type="number" />
-    <FieldForm form={form} nameValue="vehicleType" label="Vehicle Type" type="text" />
-    <FieldForm form={form} nameValue="vehicleClass" label="Vehicle Class" type="text" />
-    <FieldForm form={form} nameValue="vehicleLength" label="Vehicle Length" type="text" />
-    <FieldForm form={form} nameValue="passingCapacity" label="Passing Capacity" type="text" />
-    <FieldForm form={form} nameValue="maxCapacity" label="Max Capacity" type="text" />
-    <FieldForm form={form} nameValue="chassisNo" label="Chassis No" type="text" />
-    <FieldForm form={form} nameValue="EngineNo" label="Engine No" type="text" />
-    <FieldForm form={form} nameValue="fitnessValidUpTo" label="Fitness Valid Up To" type="date" />
-    <FieldForm form={form} nameValue="taxPaidUpTo" label="Tax Paid Up To" type="date" />
-    <FieldForm form={form} nameValue="insurenceValidUpTo" label="Insurance Valid Up To" type="date" />
-    <FieldForm form={form} nameValue="permitValidUpTo" label="Permit Valid Up To" type="date" />
-    <FieldForm form={form} nameValue="nationalPermit" label="National Permit" type="checkbox" />
-    <FieldForm form={form} nameValue="nationalPermitValidUpTo" label="National Permit Valid Up To" type="date" />
-   
-    <FieldForm form={form} nameValue="rcPhoto" label="RC Photo" type="file" fileNumber={2}/>
-    <FieldForm form={form} nameValue="Remark" label="Remark" type="text" />
-    
-    {/* Add fields for owner and driver here */}
-    
-    {/* ...existing fields... */}
-    <h2 className="col-span-full text-3xl text-center font-semibold mb-6 mt-3 text-blue-500 underline underline-offset-1 tracking-normal">Owner Details</h2>
-    <FieldForm form={form} nameValue="owner.proofType" label="Owner Proof Type" type="text" />
-    <FieldForm form={form} nameValue="owner.proofNumber" label="Owner Proof Number" type="text" />
-    <FieldForm form={form} nameValue="owner.name" label="Owner Name" type="text" />
-    <FieldForm form={form} nameValue="owner.DOB" label="Owner Date of Birth" type="date" />
-    <FieldForm form={form} nameValue="owner.phone" label="Owner Phone" type="text" />
-    <FieldForm form={form} nameValue="owner.secondPhone" label="Owner Second Phone" type="text" />
-    <FieldForm form={form} nameValue="owner.address" label="Owner Address" type="text" />
-    <FieldForm form={form} nameValue="owner.rating" label="Owner Rating" type="number" />
-    <FieldForm form={form} nameValue="owner.withPhone" label="Owner With Phone" type="checkbox" />
-    <FieldForm form={form} nameValue="owner.bank.upiNo" label="Owner Bank UPI No" type="number" />
-    <FieldForm form={form} nameValue="owner.bank.name" label="Owner Bank Name" type="text" />
-    <FieldForm form={form} nameValue="owner.bank.accNo" label="Owner Bank Account No" type="number" />
-    <FieldForm form={form} nameValue="owner.bank.ifscCode" label="Owner Bank IFSC Code" type="text" />
-    <FieldForm form={form} nameValue="owner.bank.proof" label="Owner Bank Proof" type="file" fileNumber={2}/>
-    <FieldForm form={form} nameValue="owner.remarks" label="Owner Remarks" type="text" />
-    <FieldForm form={form} nameValue="owner.img" label="Owner Photo" type="file" fileNumber={1}/>
 
-    <h2 className="col-span-full text-3xl text-center font-semibold mb-6 mt-3 text-blue-500 underline underline-offset-1 tracking-normal">Driver Details</h2>
-    <FieldForm form={form} nameValue="driver.licenseNo" label="Driver License No" type="text" />
-    <FieldForm form={form} nameValue="driver.name" label="Driver Name" type="text" />
-    <FieldForm form={form} nameValue="driver.issueDate" label="Driver License Issue Date" type="date" />
-    <FieldForm form={form} nameValue="driver.licenceValidity" label="Driver License Validity" type="date" />
-    <FieldForm form={form} nameValue="driver.DOB" label="Driver Date of Birth" type="date" />
-    <FieldForm form={form} nameValue="driver.vehicleClass" label="Driver Vehicle Class" type="text" />
-    <FieldForm form={form} nameValue="driver.licenceAuthority" label="Driver License Authority" type="text" />
-    <FieldForm form={form} nameValue="driver.address" label="Driver Address" type="text" />
-    <FieldForm form={form} nameValue="driver.phone" label="Driver Phone" type="text" />
-    <FieldForm form={form} nameValue="driver.altPhone" label="Driver Alternate Phone" type="text" />
-    <FieldForm form={form} nameValue="driver.rating" label="Driver Rating" type="number" />
-    <FieldForm form={form} nameValue="driver.smartPhone" label="Driver Has Smartphone" type="checkbox" />
-    <FieldForm form={form} nameValue="driver.owner" label="Driver Is Owner" type="checkbox" />
-    <FieldForm form={form} nameValue="driver.proof" label="Driver Proof" type="file" fileNumber={2} />
-    <FieldForm form={form} nameValue="driver.img" label="Driver Photo" type="file" fileNumber={1}/>
 
-    <h2 className="col-span-full text-3xl text-center font-semibold mb-6 mt-3 text-blue-500 underline underline-offset-1 tracking-normal">Transporter Details</h2>
-    <FormField
-                control={form.control}
-                name="transporterDetails.vehicleGuarantor"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex items-center justify-center gap-4">
-                      <FormLabel className="text-nowrap text-sm lg:text-base">
-                      Vehicle Guarantor :
-                      </FormLabel>
-                      <div className="flex flex-1 flex-col">
-                        <FormControl>
-                          <select {...field}>
-                            <option value="">Select Vehicle Guarantor </option>
-                            <option value="Self">Self</option>
-                            <option value="Others"> Others </option>
-                            
-                          </select>
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  );
-                }}
+          <FieldForm
+            form={form}
+            nameValue="vehicleLength"
+            label="Vehicle Length"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="passingCapacity"
+            label="Passing Capacity"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="maxCapacity"
+            label="Max Capacity"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="chassisNo"
+            label="Chassis No"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="EngineNo"
+            label="Engine No"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="fitnessValidUpTo"
+            label="Fitness Valid Up To"
+            type="date"
+          />
+          <FieldForm
+            form={form}
+            nameValue="taxPaidUpTo"
+            label="Tax Paid Up To"
+            type="date"
+          />
+          <FieldForm
+            form={form}
+            nameValue="insurenceValidUpTo"
+            label="Insurance Valid Up To"
+            type="date"
+          />
+
+          <FieldForm
+            form={form}
+            nameValue="permitValidUpTo"
+            label="Permit Valid Up To"
+            type="date"
+          />
+          {/* <FieldForm
+            form={form}
+            nameValue="nationalPermit"
+            label="National Permit"
+            type="checkbox"
+          /> */}
+
+          {/* { national permit as a selective with yes or no option } */}
+
+          <FormField
+            control={form.control}
+            name="nationalPermit"
+            render={({ field }) => {
+              return (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="text-nowrap text-sm lg:text-base">
+                   National Permit :
+                  </FormLabel>
+                  <div className="flex flex-1 flex-col">
+                    <FormControl>
+                      <select {...field}>
+                        <option value="">Select National Permit </option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                      </select>
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              );
+            }}
+          />
+
+          <FieldForm
+            form={form}
+            nameValue="nationalPermitValidUpTo"
+            label="National Permit Valid Up To"
+            type="date"
+          />
+
+          <FieldForm
+            form={form}
+            nameValue="rcPhoto"
+            label="RC Photo"
+            type="file"
+            fileNumber={2}
+          />
+          <FieldForm
+            form={form}
+            nameValue="Remark"
+            label="Remark"
+            type="text"
+          />
+
+          {/* Add fields for owner and driver here */}
+
+          {/* ...existing fields... */}
+          <h2 className="col-span-full mb-6 mt-3 text-center text-3xl font-semibold tracking-normal text-blue-500 underline underline-offset-1">
+            Owner Details
+          </h2>
+          <FieldForm
+            form={form}
+            nameValue="owner.proofType"
+            label="Owner Proof Type"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="owner.proofNumber"
+            label="Owner Proof Number"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="owner.name"
+            label="Owner Name"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="owner.DOB"
+            label="Owner Date of Birth"
+            type="date"
+          />
+          <FieldForm
+            form={form}
+            nameValue="owner.phone"
+            label="Owner Phone"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="owner.secondPhone"
+            label="Owner Second Phone"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="owner.address"
+            label="Owner Address"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="owner.rating"
+            label="Owner Rating"
+            type="number"
+          />
+          <FieldForm
+            form={form}
+            nameValue="owner.withPhone"
+            label="Owner With Phone"
+            type="checkbox"
+          />
+          <FieldForm
+            form={form}
+            nameValue="owner.bank.upiNo"
+            label="Owner Bank UPI No"
+            type="number"
+          />
+          <FieldForm
+            form={form}
+            nameValue="owner.bank.name"
+            label="Owner Bank Name"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="owner.bank.accNo"
+            label="Owner Bank Account No"
+            type="number"
+          />
+          <FieldForm
+            form={form}
+            nameValue="owner.bank.ifscCode"
+            label="Owner Bank IFSC Code"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="owner.bank.proof"
+            label="Owner Bank Proof"
+            type="file"
+            fileNumber={2}
+          />
+          <FieldForm
+            form={form}
+            nameValue="owner.remarks"
+            label="Owner Remarks"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="owner.img"
+            label="Owner Photo"
+            type="file"
+            fileNumber={1}
+          />
+
+          <h2 className="col-span-full mb-6 mt-3 text-center text-3xl font-semibold tracking-normal text-blue-500 underline underline-offset-1">
+            Driver Details
+          </h2>
+          <FieldForm
+            form={form}
+            nameValue="driver.licenseNo"
+            label="Driver License No"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="driver.name"
+            label="Driver Name"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="driver.issueDate"
+            label="Driver License Issue Date"
+            type="date"
+          />
+          <FieldForm
+            form={form}
+            nameValue="driver.licenceValidity"
+            label="Driver License Validity"
+            type="date"
+          />
+          <FieldForm
+            form={form}
+            nameValue="driver.DOB"
+            label="Driver Date of Birth"
+            type="date"
+          />
+          {/* <FieldForm
+            form={form}
+            nameValue="driver.vehicleClass"
+            label="Driver Vehicle Class"
+            type="text"
+          /> */}
+
+          {/* selctive vehicle class  */}
+
+          <FormField
+            control={form.control}
+            name="driver.vehicleClass"
+            render={({ field }) => {
+              return (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="text-nowrap text-sm lg:text-base">
+                    Driver Vehicle Class :
+                  </FormLabel>
+                  <div className="flex flex-1 flex-col">
+                    <FormControl>
+                      <select {...field}>
+                        <option value="">Select Vehicle Class </option>
+                        <option value="lcv">LCV</option>
+                        <option value="mcv">MCV</option>
+                        <option value="hcv">HCV</option>
+                      </select>
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              );
+            }}
+          />
+
+          <FieldForm
+            form={form}
+            nameValue="driver.licenceAuthority"
+            label="Driver License Authority"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="driver.address"
+            label="Driver Address"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="driver.phone"
+            label="Driver Phone"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="driver.altPhone"
+            label="Driver Alternate Phone"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="driver.rating"
+            label="Driver Rating"
+            type="number"
+          />
+          <FieldForm
+            form={form}
+            nameValue="driver.smartPhone"
+            label="Driver Has Smartphone"
+            type="checkbox"
+          />
+          <FieldForm
+            form={form}
+            nameValue="driver.owner"
+            label="Driver Is Owner"
+            type="checkbox"
+          />
+          <FieldForm
+            form={form}
+            nameValue="driver.proof"
+            label="Driver Proof"
+            type="file"
+            fileNumber={2}
+          />
+          <FieldForm
+            form={form}
+            nameValue="driver.img"
+            label="Driver Photo"
+            type="file"
+            fileNumber={1}
+          />
+
+          <h2 className="col-span-full mb-6 mt-3 text-center text-3xl font-semibold tracking-normal text-blue-500 underline underline-offset-1">
+            Transporter Details
+          </h2>
+          <FormField
+            control={form.control}
+            name="transporterDetails.vehicleGuarantor"
+            render={({ field }) => {
+              return (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="text-nowrap text-sm lg:text-base">
+                    Vehicle Guarantor :
+                  </FormLabel>
+                  <div className="flex flex-1 flex-col">
+                    <FormControl>
+                      <select {...field}>
+                        <option value="">Select Vehicle Guarantor </option>
+                        <option value="Self">Self</option>
+                        <option value="Others"> Others </option>
+                      </select>
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              );
+            }}
+          />
+
+          {/* (form.getValues("transporterDetails.vehicleGuarantor") ) &&  */}
+
+          {form.getValues("transporterDetails.vehicleGuarantor") && (
+            <>
+              <FieldForm
+                form={form}
+                nameValue="transporterDetails.ifOther.proofType"
+                label="Proof Type"
+                type="text"
               />
-   
+              <FieldForm
+                form={form}
+                nameValue="transporterDetails.ifOther.proofNumber"
+                label="Proof Number"
+                type="text"
+              />
+              <FieldForm
+                form={form}
+                nameValue="transporterDetails.ifOther.name"
+                label="Name"
+                type="text"
+              />
+              <FieldForm
+                form={form}
+                nameValue="transporterDetails.ifOther.dob"
+                label="Dob"
+                type="date"
+              />
+              <FieldForm
+                form={form}
+                nameValue="transporterDetails.ifOther.sDWOf"
+                label="SDWOf"
+                type="text"
+              />
+              <FieldForm
+                form={form}
+                nameValue="transporterDetails.ifOther.mobileNo"
+                label="MobileNo"
+                type="number"
+              />
+              <FieldForm
+                form={form}
+                nameValue="transporterDetails.ifOther.alternateMobNo"
+                label="Alt MobNo"
+                type="number"
+              />
+              <FieldForm
+                form={form}
+                nameValue="transporterDetails.ifOther.officeAddress"
+                label="Office Address"
+                type="text"
+              />
+              <FieldForm
+                form={form}
+                nameValue="transporterDetails.ifOther.temporaryAddress"
+                label="Temporary Address"
+                type="text"
+              />
+              <FieldForm
+                form={form}
+                nameValue="transporterDetails.ifOther.permanentAddress"
+                label="Permanent Address"
+                type="text"
+              />
+              <FieldForm
+                form={form}
+                nameValue="transporterDetails.ifOther.sameAddress"
+                label="Same Address"
+                type="checkbox"
+              />
+              <FieldForm
+                form={form}
+                nameValue="transporterDetails.ifOther.serviceToState"
+                label="Service To State"
+                type="text"
+              />
+              <FieldForm
+                form={form}
+                nameValue="transporterDetails.ifOther.transporterRating"
+                label="Transporter Rating"
+                type="number"
+              />
+              <FieldForm
+                form={form}
+                nameValue="transporterDetails.ifOther.typeOfVehicle"
+                label="Type of Vehicle"
+                type="text"
+              />
+            </>
+          )}
 
+          {/* bank detail */}
+          <FieldForm
+            form={form}
+            nameValue="transporterDetails.bankDetails.bankName"
+            label="Bank Name"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="transporterDetails.bankDetails.nameOnPassbook"
+            label="Name on Passbook"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="transporterDetails.bankDetails.accountNo"
+            label="Account No"
+            type="number"
+          />
+          <FieldForm
+            form={form}
+            nameValue="transporterDetails.bankDetails.ifscCode"
+            label="Ifsc Code"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="transporterDetails.bankDetails.upiNo"
+            label="Upi No"
+            type="number"
+          />
+          <FieldForm
+            form={form}
+            nameValue="transporterDetails.bankDetails.upiType"
+            label="Upi Type"
+            type="text"
+          />
 
-   {/* (form.getValues("transporterDetails.vehicleGuarantor") ) &&  */}
+          {/* Multiple contact */}
+          <FieldForm
+            form={form}
+            nameValue="transporterDetails.multipleContacts[0].contactPerson"
+            label="Contact Person"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="transporterDetails.multipleContacts[0].mobileNo"
+            label="Mobile No"
+            type="number"
+          />
+          <FieldForm
+            form={form}
+            nameValue="transporterDetails.multipleContacts[0].designation"
+            label="Designation"
+            type="text"
+          />
+          <FieldForm
+            form={form}
+            nameValue="transporterDetails.transporterVisitingCardProof"
+            label="Transporter Visiting CardProof"
+            type="file"
+            fileNumber={1}
+          />
+          <FieldForm
+            form={form}
+            nameValue="transporterDetails.remarks"
+            label="Owner Remarks"
+            type="text"
+          />
+          {/* transporterVisitingCardProof */}
 
-   {
-    (form.getValues("transporterDetails.vehicleGuarantor") ) && 
-    
-      <>
-      <FieldForm form={form} nameValue="transporterDetails.ifOther.proofType" label="Proof Type" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.ifOther.proofNumber" label="Proof Number" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.ifOther.name" label="Name" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.ifOther.dob" label="Dob" type="date" />
-    <FieldForm form={form} nameValue="transporterDetails.ifOther.sDWOf" label="SDWOf" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.ifOther.mobileNo" label="MobileNo" type="number" />
-    <FieldForm form={form} nameValue="transporterDetails.ifOther.alternateMobNo" label="Alt MobNo" type="number" />
-    <FieldForm form={form} nameValue="transporterDetails.ifOther.officeAddress" label="Office Address" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.ifOther.temporaryAddress" label="Temporary Address" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.ifOther.permanentAddress" label="Permanent Address" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.ifOther.sameAddress" label="Same Address" type="checkbox" />
-    <FieldForm form={form} nameValue="transporterDetails.ifOther.serviceToState" label="Service To State" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.ifOther.transporterRating" label="Transporter Rating" type="number" />
-    <FieldForm form={form} nameValue="transporterDetails.ifOther.typeOfVehicle" label="Type of Vehicle" type="text" />
-
-      </>
-    
-   }
-    
-    {/* bank detail */}
-    <FieldForm form={form} nameValue="transporterDetails.bankDetails.bankName" label="Bank Name" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.bankDetails.nameOnPassbook" label="Name on Passbook" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.bankDetails.accountNo" label="Account No" type="number" />
-    <FieldForm form={form} nameValue="transporterDetails.bankDetails.ifscCode" label="Ifsc Code" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.bankDetails.upiNo" label="Upi No" type="number" />
-    <FieldForm form={form} nameValue="transporterDetails.bankDetails.upiType" label="Upi Type" type="text" />
-
-    {/* Multiple contact */}
-    <FieldForm form={form} nameValue="transporterDetails.multipleContacts[0].contactPerson" label="Contact Person" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.multipleContacts[0].mobileNo" label="Mobile No" type="number" />
-    <FieldForm form={form} nameValue="transporterDetails.multipleContacts[0].designation" label="Designation" type="text" />
-    <FieldForm form={form} nameValue="transporterDetails.transporterVisitingCardProof" label="Transporter Visiting CardProof" type="file" fileNumber={1}/>
-    <FieldForm form={form} nameValue="transporterDetails.remarks" label="Owner Remarks" type="text" />
-    {/* transporterVisitingCardProof */}
-   
-
-
-
-
-
-
-    <div className="col-span-full flex  md:justify-center my-8">
-  <Button type="submit" className="h-16  text-lg w-full xl:w-1/3">
-    {isloading ? "Loading..." : "Submit"}
-  </Button>
-</div>
-  </form>
-</Form>
-
+          <div className="col-span-full my-8  flex md:justify-center">
+            <Button type="submit" className="h-16  w-full text-lg xl:w-1/3">
+              {isloading ? "Loading..." : "Submit"}
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };
