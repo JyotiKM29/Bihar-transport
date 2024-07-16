@@ -224,7 +224,7 @@ export default function ColumnHeader() {
               }}
             >
               <i className="fas fa-gas-pump mr-2"></i>
-              {row.original.vehicleData.bookedBy[0].balanceAmount === 0 ? "Paid" : "Pay Now"}
+              {row.original.vehicleData?.bookedBy[0]?.balanceAmount === 0 ? "Paid" : "Pay Now"}
             </button>
           );
         },
