@@ -7,12 +7,72 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
 import { Input } from "../../../components/ui/input";
 import { Pencil } from "lucide-react";
+import Toggle from "./ToggleButton";
+import { useToast } from "../../../components/ui/use-toast";
 
 export default function ColumnHeader() {
   const { user } = useContext(UserContext);
   const [columns, setColumns] = useState([]);
+  const { toast } = useToast();
   
+  const displayToast = (title, action, description = "") => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
 
+
+  const handleToggleChange = async (id, value) => {
+     
+    try {
+      console.log(`Toggle changed for ID: ${id}, New Value: ${value}`);
+      // Perform your API call or other logic here
+
+      // console.log("id:", id);
+      // console.log("value:", value);
+      // admin id
+
+      const adminId = user._id;
+      const fieldsToUpdate = {
+           "isActive": value
+      }
+
+      const response = await fetch(`/api/accounting/edit/editledger`, {
+        method: "PUT",
+        body: JSON.stringify({ _id: id, adminId, fieldsToUpdate }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+
+        displayToast("Update failed", "❌", result.message);
+
+      }
+
+      else {
+        // console.log(result);
+        // console.log("Successfully
+
+       displayToast("Successfully Updated", "✅");
+      }
+
+
+
+
+
+    } catch (error) {
+      
+      console.log("There was a problem with the toggle change.", error);
+      displayToast("Update failed", "❌", Error.message);
+
+
+
+    }
+     
+   };
 
   useEffect(() => {
     async function deleteData(id) {
@@ -32,8 +92,6 @@ export default function ColumnHeader() {
         // console.error("There was a problem with the delete request.", error);
       }
     }
-
-    
 
     setColumns([
       {
@@ -60,7 +118,7 @@ export default function ColumnHeader() {
         enableSorting: false,
         enableHiding: false,
       },
-     
+
       {
         accessorKey: "basicInfo.accountName",
         header: "Account Name",
@@ -71,7 +129,6 @@ export default function ColumnHeader() {
         header: "Address",
       },
 
-      
       {
         accessorKey: "basicInfo.contactNo",
 
@@ -87,19 +144,32 @@ export default function ColumnHeader() {
         header: "Account Group",
       },
       {
-  
+        accessorKey: "isActive",
+        header: "Active Status",
+        cell: ({ row }) => (
+          <Toggle
+            id={row.original._id}
+            isActive={row.original.isActive}
+            onToggleChange={handleToggleChange}
+          />
+        ),
+      },
+      {
         header: "Edit",
-        cell: ({ row }) =><Link href={`/admin/account/leadgerDetails/${row.original._id}`}  >
-        <div className='bg-yellow-400 p-1 h-8 w-8 rounded flex items-center justify-center'>
-        <Pencil strokeWidth={1.5}   className='fill-yellow-400 text-white h-5 w-5'/>
-        </div>
-       
-        </Link>,
+        cell: ({ row }) => (
+          <Link href={`/admin/account/leadgerDetails/${row.original._id}`}>
+            <div className="flex h-8 w-8 items-center justify-center rounded bg-yellow-400 p-1">
+              <Pencil
+                strokeWidth={1.5}
+                className="h-5 w-5 fill-yellow-400 text-white"
+              />
+            </div>
+          </Link>
+        ),
       },
     ]);
   }, [user]);
 
   return columns;
 }
-
 

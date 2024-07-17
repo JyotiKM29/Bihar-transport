@@ -431,6 +431,7 @@ const LedgerForm = () => {
                           <option value="Vehicle Vendor">
                             Vehicle Vendor{" "}
                           </option>
+                          <option value="Transporter">Transporter</option>
                           <option value="Book Receipt">Book Receipt </option>
                           <option value="Petrol Pump">Petrol Pump </option>
                         </select>

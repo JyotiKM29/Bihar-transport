@@ -20,7 +20,10 @@ export async function GET(req, context) {
     if (admin) {
       // Create a new booking
 
-      const newdata = await ledger.find({}, { basicInfo: 1 });
+      const newdata = await ledger.find(
+        {},
+        { basicInfo: 1, isActive: 1, bankDetails: 1, accountDetails: 1 },
+      );
       return Response.json(
         {
           newdata,

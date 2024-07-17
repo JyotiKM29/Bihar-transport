@@ -9,7 +9,7 @@ import { Input } from "../../components/ui/input";
 import { UserContext } from "../../context/UserContextProvider";
 import Modal from "../../components/ui/Modal"; // Assume Modal is a component you have for showing popups
 
-const SearchInput = ({ form, field, personName }) => {
+const SearchTransporter = ({ form, field, personName }) => {
   const { user } = useContext(UserContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
@@ -19,6 +19,13 @@ const SearchInput = ({ form, field, personName }) => {
 
   async function fetchData(value) {
     try {
+      
+      if (value.legth < 3) {
+        console.log("length : ", value.length);
+        return;
+      }
+
+
       const res = await fetch(`/api/senderdata/${user._id}`);
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
@@ -26,15 +33,18 @@ const SearchInput = ({ form, field, personName }) => {
       const result = await res.json();
       // console.log("data: ", result);
 
-      if (result && Array.isArray(result.newdata)) {
+      if (result && Array.isArray(result.newdata) ) {
         const results = result.newdata.filter((booking) => {
-          const consignorNameToSearch = booking.basicInfo.accountName;
+          if (booking.accountDetails.accountGroup == "Transporter") {
+          
+            const consignorNameToSearch = booking.basicInfo.accountName;
 
-          return (
-            value &&
-            consignorNameToSearch &&
-            consignorNameToSearch.toLowerCase().includes(value.toLowerCase())
-          );
+            return (
+              value &&
+              consignorNameToSearch &&
+              consignorNameToSearch.toLowerCase().includes(value.toLowerCase())
+            );
+          }
         });
 
         setSearchResult(results.slice(0, 5));
@@ -55,7 +65,7 @@ const SearchInput = ({ form, field, personName }) => {
   function handleChange(value) {
     setInputValue(value);
     setSearchTerm(value);
-    fetchData(value);
+    if(value.length >= 2) fetchData(value);
   }
 
   useEffect(() => {
@@ -77,17 +87,82 @@ const SearchInput = ({ form, field, personName }) => {
     setSearchResult([]);
     setSearchTerm("");
 
+    const {
+      bankDetails,
+      _id,
+    } = result;
+       
+
+    const { accountName, contactNo, officeAddress, rating } = result.basicInfo;
+
+   
+
+    form.setValue(
+      "transporterDetails.bankDetails.bankName",
+      bankDetails.bankName,
+    );
+
+    form.setValue(
+      "transporterDetails.bankDetails.nameOnPassbook",
+      bankDetails.nameOnPassbook,
+    );
+
+    form.setValue(
+      "transporterDetails.bankDetails.accountNo",
+      bankDetails.accountNo,
+    );
+
+    form.setValue(
+      "transporterDetails.bankDetails.ifscCode",
+      bankDetails.IFSCCode,
+    );
+
+    form.setValue("transporterDetails.bankDetails.upiNo", bankDetails.upiNo);
+    form.setValue("transporterDetails.bankDetails.upiType", bankDetails.upiType);
+    form.setValue("transporterDetails.ifOther.transporterRating", result?.basicInfo?.taxInfo?.rating);
+    form.setValue("transporterDetails.ifOther.officeAddress", officeAddress);
+    form.setValue("transporterDetails.ifOther.mobileNo", contactNo);
+    
+
+
+
+
+
+    
+
+    // if (transporterDetails.vehicleGuarantor === "Others") {
+    //   transporterDetails.ifOther = {
+    //     proofType: "", // Assuming this will be filled later
+    //     proofNumber: "", // Assuming this will be filled later
+    //     name: "", // Assuming this will be filled later
+    //     dob: "", // Assuming this will be filled later
+    //     sDWOf: "", // Assuming this will be filled later
+    //     mobileNo: "", // Assuming this will be filled later
+    //     alternateMobNo: "", // Assuming this will be filled later
+    //     officeAddress: "", // Assuming this will be filled later
+    //     temporaryAddress: "", // Assuming this will be filled later
+    //     permanentAddress: "", // Assuming this will be filled later
+    //     sameAddress: "", // Assuming this will be filled later
+    //     serviceToState: "", // Assuming this will be filled later
+    //     transporterRating: "", // Assuming this will be filled later
+    //     typeOfVehicle: "", // Assuming this will be filled later
+    //   };
+    // }
+
+
+
+
+
+    setInputValue(accountName);
     if (personName === "consignorName") {
-      setInputValue(result.basicInfo.accountName);
-      form.setValue("consignorMobileNumber", result.basicInfo.contactNo);
-      form.setValue("consignorName", result.basicInfo.accountName);
-      form.setValue("consignorAddress", result.basicInfo.officeAddress);
-      form.setValue("consignorID", result._id);
+      form.setValue("consignorMobileNumber", contactNo);
+      form.setValue("consignorName", accountName);
+      form.setValue("consignorAddress", officeAddress);
+      form.setValue("consignorID", _id);
     } else {
-      setInputValue(result.basicInfo.accountName);
-      form.setValue("consigneeMobileNumber", result.basicInfo.contactNo);
-      form.setValue("consigneeName", result.basicInfo.accountName);
-      form.setValue("consigneeAddress", result.basicInfo.officeAddress);
+      form.setValue("consigneeMobileNumber", contactNo);
+      form.setValue("consigneeName", accountName);
+      form.setValue("consigneeAddress", officeAddress);
     }
   }
 
@@ -104,7 +179,8 @@ const SearchInput = ({ form, field, personName }) => {
   return (
     <FormItem className="flex flex-1 items-center justify-center gap-4">
       <FormLabel className="text-nowrap text-sm lg:text-base">
-        {personName === "consignorName" ? "Consignor" : "Consignee"} Name :
+        {personName === "transporterName" ? "Transporter" : "Vehicle Vendor"}{" "}
+        Name :
       </FormLabel>
       <div className="relative flex flex-1 flex-col">
         <FormControl>
@@ -114,6 +190,7 @@ const SearchInput = ({ form, field, personName }) => {
             onChange={(e) => handleChange(e.target.value)}
           />
         </FormControl>
+        <p className="underline" >Type Atleast 2 charector to serach</p>
 
         <FormMessage />
 
@@ -140,7 +217,7 @@ const SearchInput = ({ form, field, personName }) => {
               >
                 {result.basicInfo.accountName} , {result.basicInfo.contactNo} ,{" "}
                 {result.basicInfo.officeAddress},{" "}
-                {result.isActive? "Active" : "Inactive"}
+                {result.isActive ? "Active" : "Inactive"}
               </div>
             ))}
         </div>
@@ -159,4 +236,4 @@ const SearchInput = ({ form, field, personName }) => {
   );
 };
 
-export default SearchInput;
+export default SearchTransporter;
