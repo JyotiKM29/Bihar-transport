@@ -8,14 +8,70 @@ import { UserContext } from "../../../context/UserContextProvider";
 import { Input } from "../../../components/ui/input";
 import { Pencil } from "lucide-react";
 import Toggle from "./ToggleButton";
+import { useToast } from "../../../components/ui/use-toast";
 
 export default function ColumnHeader() {
   const { user } = useContext(UserContext);
   const [columns, setColumns] = useState([]);
+  const { toast } = useToast();
+  
+  const displayToast = (title, action, description = "") => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
 
-   const handleToggleChange = (id, value) => {
-     console.log(`Toggle changed for ID: ${id}, New Value: ${value}`);
-     // Perform your API call or other logic here
+
+  const handleToggleChange = async (id, value) => {
+     
+    try {
+      console.log(`Toggle changed for ID: ${id}, New Value: ${value}`);
+      // Perform your API call or other logic here
+
+      // console.log("id:", id);
+      // console.log("value:", value);
+      // admin id
+
+      const adminId = user._id;
+      const fieldsToUpdate = {
+           "isActive": value
+      }
+
+      const response = await fetch(`/api/accounting/edit/editledger`, {
+        method: "PUT",
+        body: JSON.stringify({ _id: id, adminId, fieldsToUpdate }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+
+        displayToast("Update failed", "❌", result.message);
+
+      }
+
+      else {
+        // console.log(result);
+        // console.log("Successfully
+
+       displayToast("Successfully Updated", "✅");
+      }
+
+
+
+
+
+    } catch (error) {
+      
+      console.log("There was a problem with the toggle change.", error);
+      displayToast("Update failed", "❌", Error.message);
+
+
+
+    }
+     
    };
 
   useEffect(() => {
