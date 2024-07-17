@@ -4,7 +4,7 @@ import { Button } from "../../../components/ui/button";
 
 import React, { useContext, useEffect, useState } from "react";
 import ColumnHeader from "./ColumnHeader";
-import { DataTable } from "../data-table";
+import { DataTable } from "./data-table";
 import * as XLSX from "xlsx";
 
 
