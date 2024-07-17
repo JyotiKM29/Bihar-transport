@@ -52,7 +52,7 @@ export async function PUT(req, res) {
       const updatedVehicle = await existingVehicle.save();
 
       // console.log(updatedVehicle);
-      console.log("Vehicle Updated:", updatedVehicle);
+      // console.log("Vehicle Updated:", updatedVehicle);
 
 
       return Response.json(
