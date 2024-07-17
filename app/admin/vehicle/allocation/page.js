@@ -46,7 +46,7 @@ const Allocation = () => {
   return (
     <div className="min-h h-[94vh] w-full space-y-6">
       <div className="h-8  w-full ">
-        <h1 className="hidden text-4xl  lg:block ">Allocation Vehicles</h1>
+        <h1 className="hidden text-4xl  lg:block ">Vehicle Details</h1>
       </div>
       <div
         className="min-h w-full 

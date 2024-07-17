@@ -1,6 +1,5 @@
 "use client";
 
-
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "../../../components/ui/button";
 import { Checkbox } from "../../../components/ui/checkbox";
@@ -25,10 +24,83 @@ import {
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../context/UserContextProvider";
+import { useToast } from "@/app/components/ui/use-toast";
+import Toggle from "../../account/leadgerDetails/ToggleButton";
 
 export default function ColumnHeader() {
   const { user } = useContext(UserContext);
   const [columns, setColumns] = useState([]);
+
+  const { toast } = useToast();
+
+  const displayToast = (title, action, description = "") => {
+    toast({
+      title,
+      action,
+      description,
+    });
+  };
+
+  const handleToggleChange = async (id, value, previousValue) => {
+    try {
+      console.log(`Toggle changed for ID: ${id}, New Value: ${value}`);
+      const adminId = user._id;
+      const fieldsToUpdate = {
+        isActive: value,
+      };
+
+      const response = await fetch(`/api/vehicleupdation`, {
+        method: "PUT",
+        body: JSON.stringify({ _id: id, adminId, fieldsToUpdate }),
+      });
+
+      const result = await response.json();
+      console.log("result: ", result);
+
+      if (!response.ok) {
+        displayToast("Update failed", "❌", result.message);
+        // Revert the toggle back to its previous value
+        setColumns((prevColumns) =>
+          prevColumns.map((col) =>
+            col.id === "isActive"
+              ? {
+                  ...col,
+                  cell: (row) => (
+                    <Toggle
+                      id={row.original._id}
+                      isActive={previousValue}
+                      onToggleChange={handleToggleChange}
+                    />
+                  ),
+                }
+              : col,
+          ),
+        );
+      } else {
+        displayToast("Successfully Updated", "✅");
+      }
+    } catch (error) {
+      console.log("There was a problem with the toggle change.", error);
+      displayToast("Update failed", "❌", error.message);
+      // Revert the toggle back to its previous value
+      setColumns((prevColumns) =>
+        prevColumns.map((col) =>
+          col.id === "isActive"
+            ? {
+                ...col,
+                cell: (row) => (
+                  <Toggle
+                    id={row.original._id}
+                    isActive={previousValue}
+                    onToggleChange={handleToggleChange}
+                  />
+                ),
+              }
+            : col,
+        ),
+      );
+    }
+  };
 
   useEffect(() => {
     async function deleteData(id) {
@@ -86,12 +158,17 @@ export default function ColumnHeader() {
         accessorKey: "allotmentStatus",
         header: "Allocation",
         cell: ({ row }) => {
-          return (row.original.allotmentStatus === true) ? 
-          <span className="bg-green-600 text-white p-1 px-4 rounded-2xl">Booked</span> :
-          <span className="bg-orange-400 text-white p-1 px-4 rounded-2xl">Unbooked</span>;
-        }
+          return row.original.allotmentStatus ? (
+            <span className="rounded-2xl bg-green-600 p-1 px-4 text-white">
+              Booked
+            </span>
+          ) : (
+            <span className="rounded-2xl bg-orange-400 p-1 px-4 text-white">
+              Unbooked
+            </span>
+          );
+        },
       },
-
       {
         accessorKey: "vehicleType",
         header: "Vehicle Type",
@@ -108,7 +185,19 @@ export default function ColumnHeader() {
         accessorKey: "registrationAuthority",
         header: " Registration Authority",
       },
-
+      {
+        accessorKey: "isActive",
+        header: "Active Status",
+        cell: ({ row }) => (
+          <Toggle
+            id={row.original._id}
+            isActive={row.original.isActive}
+            onToggleChange={(id, value) =>
+              handleToggleChange(id, value, row.original.isActive)
+            }
+          />
+        ),
+      },
       {
         id: "actions",
         enableHiding: false,

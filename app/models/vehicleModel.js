@@ -317,6 +317,10 @@ const vehicleSchema = new mongoose.Schema(
       },
     ],
     payment: [],
+    isActive:{
+      type:Boolean,
+      default:true
+    },
   },
   { timestamps: true },
 );
