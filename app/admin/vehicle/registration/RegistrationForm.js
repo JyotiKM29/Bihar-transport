@@ -16,6 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../../../components/ui/form";
+import SearchTransporter from "../SearchTransporter";
 
 const driverSchema = z.object({
   licenseNo: z.string({ message: "License No is required" }),
@@ -359,7 +360,7 @@ const RegistrationForm = () => {
             type="text"
           /> */}
 
-           <FormField
+          <FormField
             control={form.control}
             name="vehicleClass"
             render={({ field }) => {
@@ -383,9 +384,6 @@ const RegistrationForm = () => {
               );
             }}
           />
-
-
-
 
           <FieldForm
             form={form}
@@ -458,7 +456,7 @@ const RegistrationForm = () => {
               return (
                 <FormItem className="flex items-center justify-center gap-4">
                   <FormLabel className="text-nowrap text-sm lg:text-base">
-                   National Permit :
+                    National Permit :
                   </FormLabel>
                   <div className="flex flex-1 flex-col">
                     <FormControl>
@@ -768,12 +766,25 @@ const RegistrationForm = () => {
                 label="Proof Number"
                 type="text"
               />
-              <FieldForm
+              {/* <FieldForm
                 form={form}
                 nameValue="transporterDetails.ifOther.name"
                 label="Name"
                 type="text"
+              /> */}
+
+              <FormField
+                control={form.control}
+                name="transporterDetails.ifOther.name"
+                render={({ field }) => (
+                  <SearchTransporter
+                    form={form}
+                    field={field}
+                    personName={"transporterName"}
+                  />
+                )}
               />
+
               <FieldForm
                 form={form}
                 nameValue="transporterDetails.ifOther.dob"
@@ -910,7 +921,7 @@ const RegistrationForm = () => {
           <FieldForm
             form={form}
             nameValue="transporterDetails.remarks"
-            label="Owner Remarks"
+            label="Transporter Remarks"
             type="text"
           />
           {/* transporterVisitingCardProof */}
