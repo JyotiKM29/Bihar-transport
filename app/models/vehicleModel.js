@@ -177,6 +177,10 @@ const allotmentSchema = new mongoose.Schema(
     payment: [paymentSchema],
     totalPaidAmount: { type: Number, default: 0 },
     fuelDetails:[fuelSchema],
+    materialDetails: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
+    },
   },
   { _id: false }, // To exclude this subdocument from having its own _id
 );
