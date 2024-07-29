@@ -6,11 +6,10 @@ import connectDB from "../../middleware/connectDB";
 export async function PUT(req, res) {
   try {
     await connectDB();
-    console.log("yes");
 
     const { _id, adminId, fieldsToUpdate } = await req.json();
 
-    console.log(_id, adminId, fieldsToUpdate);
+    console.log("fieldsToUpdate", fieldsToUpdate);
 
     const admin = await user.findOne({ _id: adminId });
     if (admin && (admin.isAdmin || admin.isOwner)) {
@@ -20,23 +19,51 @@ export async function PUT(req, res) {
       }
 
       const date = new Date();
+      const updatedByEntry = {
+        name: admin.name,
+        adminId: admin._id.toString(),
+        date: date,
+      };
 
-      Object.keys(fieldsToUpdate).forEach((field) => {
-        existingBooking[field] = fieldsToUpdate[field];
-      });
+      const setUpdateObject = {};
+      const arrayFilters = [];
+      const arrayFilterKeys = {}; // To keep track of unique keys
 
-       if (!existingBooking.updatedBy) {
-         existingBooking.updatedBy = []; // Initialize if not present
-       }
-       existingBooking.updatedBy.push({
-         name: admin.name,
-         adminId: admin._id.toString(),
-         date: date,
-       });
+      // Separate fields to update and fields that require positional filters
+      for (const [key, value] of Object.entries(fieldsToUpdate)) {
+        if (key.includes("$[")) {
+          const parts = key.split(".$[");
+          const arrayField = parts[0];
+          const arrayIndex = parts[1].split("]")[0];
 
-      const updatedBooking = await existingBooking.save();
+          // Ensure unique array filter keys with valid names
+          if (!arrayFilterKeys[arrayField]) {
+            arrayFilterKeys[arrayField] =
+              `elem${Object.keys(arrayFilterKeys).length}`;
+          }
+          const uniqueArrayKey = arrayFilterKeys[arrayField];
 
-      console.log("Booking Updated:", updatedBooking);
+          const newKey = key.replace(
+            `$[${arrayIndex}]`,
+            `$[${uniqueArrayKey}]`,
+          );
+          setUpdateObject[newKey] = value;
+          arrayFilters.push({ [uniqueArrayKey]: { $exists: true } });
+        } else {
+          setUpdateObject[key] = value;
+        }
+      }
+
+      const updateQuery = {
+        $set: setUpdateObject,
+        $push: { updatedBy: updatedByEntry },
+      };
+
+      const updateOptions = arrayFilters.length > 0 ? { arrayFilters } : {};
+
+      await Booking.updateOne({ _id }, updateQuery, updateOptions);
+
+      const updatedBooking = await Booking.findOne({ _id });
 
       return Response.json(
         {
@@ -46,7 +73,10 @@ export async function PUT(req, res) {
         { status: 200 },
       );
     } else {
-      return Response.json({ message: "Admin does not exist" }, { status: 400 });
+      return Response.json(
+        { message: "Admin does not exist" },
+        { status: 400 },
+      );
     }
   } catch (error) {
     console.error("Error updating booking:", error.message);
@@ -64,7 +94,6 @@ export async function PUT(req, res) {
 export async function GET(req, res) {
   return Response.json({ message: "Method Not Allowed" }, { status: 400 });
 }
-
 
 export async function POST(req, res) {
   return Response.json({ message: "Method Not Allowed" }, { status: 400 });
