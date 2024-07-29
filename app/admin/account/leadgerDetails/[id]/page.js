@@ -585,31 +585,31 @@ const View = ({ params }) => {
             <tbody>
                 {data?.booking?.map((booking, index) => (
                     <tr key={index}>
-                        <td className="border py-1 px-2" >{booking.savedBooking.orderNumber}</td>
-                        <td className="border py-1 px-2">{formatDate(booking.savedBooking.date)}</td>
-<td className="border py-1 px-2">{formatDate(booking.savedBooking.vehicleRequiredDate)}</td>
+                        <td className="border py-1 px-2" >{booking?.savedBooking?.orderNumber}</td>
+                        <td className="border py-1 px-2">{formatDate(booking?.savedBooking?.date)}</td>
+<td className="border py-1 px-2">{formatDate(booking?.savedBooking?.vehicleRequiredDate)}</td>
 
-                        <td className="border py-1 px-2">{booking.savedBooking.consignorName}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.consignorMobileNumber}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.loadingPoints.join(', ')}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.consigneeName}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.consigneeMobileNumber}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.unloadingPoints.join(', ')}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.way}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.vehicleType}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.partyBhara}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.paymentLiability}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.billTo}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.paymentTerm}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.advanceAmount}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.balanceAmount}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.payMode}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.transactionId}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.remarks}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.additionalCharges.enabled.toString()}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.additionalCharges.totalCharge}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.status}</td>
-                        <td className="border py-1 px-2">{booking.savedBooking.isUrgent.toString()}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.consignorName}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.consignorMobileNumber}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.loadingPoints.join(', ')}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.consigneeName}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.consigneeMobileNumber}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.unloadingPoints.join(', ')}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.way}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.vehicleType}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.partyBhara}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.paymentLiability}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.billTo}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.paymentTerm}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.advanceAmount}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.balanceAmount}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.payMode}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.transactionId}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.remarks}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.additionalCharges?.enabled.toString()}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.additionalCharges?.totalCharge}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.status}</td>
+                        <td className="border py-1 px-2">{booking?.savedBooking?.isUrgent.toString()}</td>
                        
                     </tr>
                 ))}
