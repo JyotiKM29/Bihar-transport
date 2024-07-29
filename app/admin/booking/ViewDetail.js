@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "../../components/ui/dialog";
 import Image from "next/image";
+import { FieldFormFile } from '@/app/admin/vehicle/FieldForm';
 
 const ViewDetail = ({ bookingDetails, heading }) => {
   // const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -496,7 +497,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
               label={"Dispatch Date"}
               show={editBooking}
               tableId={bookingDetails?.booking?._id}
-              identifier="paymentTerm"
+              identifier="dispatch.dispatchDetails.dispatchDate"
               value={new Date(
                 bookingDetails?.booking?.dispatch?.dispatchDetails?.dispatchDate,
               ).toLocaleDateString()}
@@ -505,16 +506,16 @@ const ViewDetail = ({ bookingDetails, heading }) => {
               label={"Dispatch Time"}
               show={editBooking}
               tableId={bookingDetails?.booking?._id}
-              identifier="paymentTerm"
+              identifier="dispatch.dispatchDetails.dispatchTime"
               value={
                 bookingDetails?.booking?.dispatch?.dispatchDetails?.dispatchTime
               }
             />
             <FieldComponent
-              label={"ledger Bal. of Party"}
+              label={"Ledger Bal. of Party"}
               show={editBooking}
               tableId={bookingDetails?.booking?._id}
-              identifier="paymentTerm"
+              identifier="dispatch.dispatchDetails.ledgerBalanceOfParty"
               value={
                 bookingDetails?.booking?.dispatch?.dispatchDetails
                   ?.ledgerBalanceOfParty
@@ -524,7 +525,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
               label={"Total Freight"}
               show={editBooking}
               tableId={bookingDetails?.booking?._id}
-              identifier="paymentTerm"
+              identifier="dispatch.dispatchDetails.totalFreight"
               value={
                 bookingDetails?.booking?.dispatch?.dispatchDetails?.totalFreight
               }
@@ -533,11 +534,12 @@ const ViewDetail = ({ bookingDetails, heading }) => {
               label={"Remarks"}
               show={editBooking}
               tableId={bookingDetails?.booking?._id}
-              identifier="paymentTerm"
+              identifier="dispatch.dispatchDetails.remarks"
               value={
                 bookingDetails?.booking?.dispatch?.dispatchDetails?.remarks
               }
             />
+
             <div className="col-span-full justify-between  rounded bg-cyan-50 p-4 sm:flex">
               <div>
                 <p className="mb-4  text-center text-xl  font-light text-cyan-700 underline">
@@ -548,7 +550,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Delivery No"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="dispatch.dispatchDetails.consignorInvoiceDetails.consignorDeliveryNo"
                   value={
                     bookingDetails?.booking?.dispatch?.dispatchDetails
                       ?.consignorInvoiceDetails?.consignorDeliveryNo
@@ -558,7 +560,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Invoice No"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="dispatch.dispatchDetails.consignorInvoiceDetails.consignorInvoiceNo"
                   value={
                     bookingDetails?.booking?.dispatch?.dispatchDetails
                       ?.consignorInvoiceDetails?.consignorInvoiceNo
@@ -568,7 +570,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Invoice date"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="dispatch.dispatchDetails.consignorInvoiceDetails.consignorInvoiceDate"
                   value={new Date(
                     bookingDetails?.booking?.dispatch?.dispatchDetails?.consignorInvoiceDetails?.consignorInvoiceDate,
                   ).toLocaleDateString()}
@@ -583,7 +585,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Bill Date"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.eWayBillDate"
                   value={new Date(
                     bookingDetails?.booking?.dispatch?.dispatchDetails?.consignorInvoiceDetails?.eWayBillDetails?.eWayBillDate,
                   ).toLocaleDateString()}
@@ -592,7 +594,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Bill No"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.eWayBillNo"
                   value={
                     bookingDetails?.booking?.dispatch?.dispatchDetails
                       ?.consignorInvoiceDetails?.eWayBillDetails?.eWayBillNo
@@ -602,7 +604,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Exp. Date"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.expDate"
                   value={new Date(
                     bookingDetails?.booking?.dispatch?.dispatchDetails?.consignorInvoiceDetails?.eWayBillDetails?.expDate,
                   ).toLocaleDateString()}
@@ -671,7 +673,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                 label={"Additional Rate For Company"}
                 show={editBooking}
                 tableId={bookingDetails?.booking?._id}
-                identifier="paymentTerm"
+                identifier="bookingDetails.booking.dispatch.dispatchDetails.dispatch.additionalRateForCompany"
                 value={
                   bookingDetails?.booking?.dispatch?.dispatchDetails?.dispatch
                     ?.additionalRateForCompany
@@ -680,46 +682,49 @@ const ViewDetail = ({ bookingDetails, heading }) => {
             </div>
             {/* Additional Details */}
             <div className="col-span-full  grid grid-cols-1 gap-x-16 rounded bg-cyan-50 p-4 md:grid-cols-2">
-              <FieldComponent
-                label={"Delivery Type"}
-                show={editBooking}
-                tableId={bookingDetails?.booking?._id}
-                identifier="paymentTerm"
-                value={
-                  bookingDetails?.booking?.dispatch?.dispatchAdditionalDetails
-                    ?.deliveryType
-                }
-              />
-              <FieldComponent
-                label={"Manual LR No"}
-                show={editBooking}
-                tableId={bookingDetails?.booking?._id}
-                identifier="paymentTerm"
-                value={
-                  bookingDetails?.booking?.dispatch?.dispatchAdditionalDetails
-                    ?.manualLRNo
-                }
-              />
-              <FieldComponent
-                label={"Broker Commission"}
-                show={editBooking}
-                tableId={bookingDetails?.booking?._id}
-                identifier="paymentTerm"
-                value={
-                  bookingDetails?.booking?.dispatch?.dispatchAdditionalDetails
-                    ?.brokerCommission
-                }
-              />
-              <FieldComponent
-                label={"Shipping Risk"}
-                show={editBooking}
-                tableId={bookingDetails?.booking?._id}
-                identifier="paymentTerm"
-                value={
-                  bookingDetails?.booking?.dispatch?.dispatchAdditionalDetails
-                    ?.shippingRisk
-                }
-              />
+              <div className="col-span-full grid grid-cols-1 gap-x-16 rounded bg-cyan-50 p-4 md:grid-cols-2">
+                <FieldComponent
+                  label={"Delivery Type"}
+                  show={editBooking}
+                  tableId={bookingDetails?.booking?._id}
+                  identifier="dispatch.dispatchAdditionalDetails.deliveryType"
+                  value={
+                    bookingDetails?.booking?.dispatch?.dispatchAdditionalDetails
+                      ?.deliveryType
+                  }
+                />
+                <FieldComponent
+                  label={"Manual LR No"}
+                  show={editBooking}
+                  tableId={bookingDetails?.booking?._id}
+                  identifier="dispatch.dispatchAdditionalDetails.manualLRNo"
+                  value={
+                    bookingDetails?.booking?.dispatch?.dispatchAdditionalDetails
+                      ?.manualLRNo
+                  }
+                />
+                <FieldComponent
+                  label={"Broker Commission"}
+                  show={editBooking}
+                  tableId={bookingDetails?.booking?._id}
+                  identifier="dispatch.dispatchAdditionalDetails.brokerCommission"
+                  value={
+                    bookingDetails?.booking?.dispatch?.dispatchAdditionalDetails
+                      ?.brokerCommission
+                  }
+                />
+                <FieldComponent
+                  label={"Shipping Risk"}
+                  show={editBooking}
+                  tableId={bookingDetails?.booking?._id}
+                  identifier="dispatch.dispatchAdditionalDetails.shippingRisk"
+                  value={
+                    bookingDetails?.booking?.dispatch?.dispatchAdditionalDetails
+                      ?.shippingRisk
+                  }
+                />
+              </div>
+
               {bookingDetails?.booking?.dispatch?.dispatchAdditionalDetails
                 ?.insurance?.isInsured === true && (
                 <>
@@ -730,7 +735,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                     label={"Insurance Provider"}
                     show={editBooking}
                     tableId={bookingDetails?.booking?._id}
-                    identifier="paymentTerm"
+                    identifier="dispatch.dispatchAdditionalDetails.insurance.insuranceProvider"
                     value={
                       bookingDetails?.booking?.dispatch
                         ?.dispatchAdditionalDetails?.insurance
@@ -741,7 +746,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                     label={"Policy No"}
                     show={editBooking}
                     tableId={bookingDetails?.booking?._id}
-                    identifier="paymentTerm"
+                    identifier="dispatch.dispatchAdditionalDetails.insurance.policyNo"
                     value={
                       bookingDetails?.booking?.dispatch
                         ?.dispatchAdditionalDetails?.insurance?.policyNo
@@ -751,7 +756,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                     label={"Broker Details"}
                     show={editBooking}
                     tableId={bookingDetails?.booking?._id}
-                    identifier="paymentTerm"
+                    identifier="dispatch.dispatchAdditionalDetails.insurance.brokerDetails"
                     value={
                       bookingDetails?.booking?.dispatch
                         ?.dispatchAdditionalDetails?.insurance?.brokerDetails
@@ -761,7 +766,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                     label={"Policy Amount"}
                     show={editBooking}
                     tableId={bookingDetails?.booking?._id}
-                    identifier="paymentTerm"
+                    identifier="dispatch.dispatchAdditionalDetails.insurance.policyAmount"
                     value={
                       bookingDetails?.booking?.dispatch
                         ?.dispatchAdditionalDetails?.insurance?.policyAmount
@@ -771,7 +776,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                     label={"Claim Amount"}
                     show={editBooking}
                     tableId={bookingDetails?.booking?._id}
-                    identifier="paymentTerm"
+                    identifier="dispatch.dispatchAdditionalDetails.insurance.claimAmount"
                     value={
                       bookingDetails?.booking?.dispatch
                         ?.dispatchAdditionalDetails?.insurance?.claimAmount
@@ -895,12 +900,11 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                 <p className="col-span-full mb-4 text-center text-xl  font-light text-cyan-700 underline">
                   Delivery Details
                 </p>
-
                 <FieldComponent
                   label={"Reporting date"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.delivery_details.reporting_date"
                   value={new Date(
                     bookingDetails?.booking?.delivery?.delivery_details?.reporting_date,
                   ).toLocaleDateString()}
@@ -909,7 +913,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Unloading date"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.delivery_details.unloading_date"
                   value={new Date(
                     bookingDetails?.booking?.delivery?.delivery_details?.unloading_date,
                   ).toLocaleDateString()}
@@ -918,7 +922,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Material Received by"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.delivery_details.material_received_by"
                   value={
                     bookingDetails?.booking?.delivery?.delivery_details
                       ?.material_received_by
@@ -928,7 +932,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Phone No"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.delivery_details.phone_number"
                   value={
                     bookingDetails?.booking?.delivery?.delivery_details
                       ?.phone_number
@@ -938,7 +942,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Stamp"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.delivery_details.stamp"
                   value={
                     bookingDetails?.booking?.delivery?.delivery_details?.stamp
                       ? "Yes "
@@ -949,7 +953,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Sign"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.delivery_details.sign"
                   value={
                     bookingDetails?.booking?.delivery?.delivery_details?.sign
                       ? "Yes "
@@ -966,7 +970,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"LR Dues Amount"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.payment_details.lr_dues_amount"
                   value={
                     bookingDetails?.booking?.delivery?.payment_details
                       ?.lr_dues_amount
@@ -976,7 +980,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Payment Modes"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.payment_details.payment_modes"
                   value={
                     bookingDetails?.booking?.delivery?.payment_details
                       ?.payment_modes
@@ -986,26 +990,26 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Amount Received "}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.payment_details.amount_received"
                   value={
                     bookingDetails?.booking?.delivery?.payment_details
                       ?.amount_received
                   }
                 />
                 <FieldComponent
-                  label={"fine "}
+                  label={"Fine "}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.payment_details.fine"
                   value={
                     bookingDetails?.booking?.delivery?.payment_details?.fine
                   }
                 />
                 <FieldComponent
-                  label={"final Due"}
+                  label={"Final Due"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.payment_details.final_due"
                   value={
                     bookingDetails?.booking?.delivery?.payment_details
                       ?.final_due
@@ -1015,7 +1019,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Remarks"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.payment_details.remarks"
                   value={
                     bookingDetails?.booking?.delivery?.payment_details?.remarks
                   }
@@ -1030,7 +1034,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Delivery date"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.consignment_info.$[ele].delivery_date"
                   value={new Date(
                     bookingDetails?.booking?.delivery?.consignment_info[0]?.delivery_date,
                   ).toLocaleDateString()}
@@ -1039,7 +1043,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Delivery No"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.consignment_info.$[ele].delivery_number"
                   value={
                     bookingDetails?.booking?.delivery?.consignment_info[0]
                       ?.delivery_number
@@ -1049,7 +1053,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"From Location"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.consignment_info.$[ele].from_location"
                   value={
                     bookingDetails?.booking?.delivery?.consignment_info[0]
                       ?.from_location
@@ -1059,7 +1063,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"To location"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.consignment_info.$[ele].to_location"
                   value={
                     bookingDetails?.booking?.delivery?.consignment_info[0]
                       ?.to_location
@@ -1069,7 +1073,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Quantity"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.consignment_info.$[ele].quantity"
                   value={
                     bookingDetails?.booking?.delivery?.consignment_info[0]
                       ?.quantity
@@ -1079,7 +1083,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Weight"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.consignment_info.$[ele].weight"
                   value={
                     bookingDetails?.booking?.delivery?.consignment_info[0]
                       ?.weight
@@ -1089,7 +1093,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Breakage"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.consignment_info.$[ele].breakage"
                   value={
                     bookingDetails?.booking?.delivery?.consignment_info[0]
                       ?.breakage
@@ -1099,7 +1103,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Excess"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.consignment_info.$[ele].excess"
                   value={
                     bookingDetails?.booking?.delivery?.consignment_info[0]
                       ?.excess
@@ -1109,7 +1113,7 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Shortage"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.consignment_info.$[ele].shortage"
                   value={
                     bookingDetails?.booking?.delivery?.consignment_info[0]
                       ?.shortage
@@ -1119,83 +1123,62 @@ const ViewDetail = ({ bookingDetails, heading }) => {
                   label={"Remarks"}
                   show={editBooking}
                   tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
+                  identifier="delivery.consignment_info.$[ele].remarks"
                   value={
                     bookingDetails?.booking?.delivery?.consignment_info[0]
                       ?.remarks
                   }
                 />
+
                 <div className="flex items-center justify-between">
-                  <FieldComponent
-                    label={"POD"}
-                    show={editBooking}
-                    tableId={bookingDetails?.booking?._id}
-                    identifier="paymentTerm"
-                    className="mr-4"
-                  />
-                  <div className="h-auto max-w-[200px]">
-                  <Dialog >
-            <DialogTrigger asChild>
-            <img
-                      src=
-                       { bookingDetails?.booking?.delivery?.consignment_info[0]
-                          ?.pod}
-                      
-                      alt="POD Image"
-                  
-                      className="h-auto w-full transform cursor-pointer rounded-md shadow-md transition-transform hover:scale-105"
-                      
+                  {editBooking ? (
+                    <FieldComponent
+                      label={"POD"}
+                      show={editBooking}
+                      type="file"
+                      tableId={bookingDetails?.booking?._id}
+                      identifier="delivery.consignment_info.$[consign].pod.$[podElem]"
+                      className="mr-4"
                     />
-            </DialogTrigger>
-            <DialogContent  className=" flex justify-center items-center">
-                <div className="rounded-3xl bg-white px-6 py-4 ">
-                <img
-                      src={
-                        bookingDetails?.booking?.delivery?.consignment_info[0]
-                          ?.pod
-                      }
-                      alt="POD Image"
-                      className="h-auto w-full transform cursor-pointer rounded-md shadow-md transition-transform hover:scale-105"
-                     
-                    />
+                  ) : (
+                    <>
+                      <FieldComponent
+                        label={"POD"}
+                        show={editBooking}
+                        tableId={bookingDetails?.booking?._id}
+                        identifier="delivery.consignment_info[0].pod[0]"
+                        className="mr-4"
+                      />
 
-                   
+                      <div className="h-auto max-w-[200px]">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <img
+                              src={
+                                bookingDetails?.booking?.delivery
+                                  ?.consignment_info[0]?.pod[0]
+                              }
+                              alt="POD Image"
+                              className="h-auto w-full transform cursor-pointer rounded-md shadow-md transition-transform hover:scale-105"
+                            />
+                          </DialogTrigger>
+                          <DialogContent className="flex items-center justify-center">
+                            <div className="rounded-3xl bg-white px-6 py-4">
+                              <img
+                                src={
+                                  bookingDetails?.booking?.delivery
+                                    ?.consignment_info[0]?.pod[0]
+                                }
+                                alt="POD Image"
+                                className="h-auto w-full transform cursor-pointer rounded-md shadow-md transition-transform hover:scale-105"
+                              />
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                    </>
+                  )}
                 </div>
-            </DialogContent>
-        </Dialog>
-                    {/* <img
-                      src={
-                        bookingDetails?.booking?.delivery?.consignment_info[0]
-                          ?.pod
-                      }
-                      alt="POD Image"
-                      className="h-auto w-full transform cursor-pointer rounded-md shadow-md transition-transform hover:scale-105"
-                      onClick={() => openLightbox(0)} // Change the index if you have multiple images
-                    /> */}
-                  </div>
-                  {/* {lightboxOpen && (
-                    <Lightbox
-                      mainSrc={
-                        bookingDetails?.booking?.delivery?.consignment_info[
-                          lightboxIndex
-                        ]?.pod
-                      }
-                      onCloseRequest={closeLightbox}
-                      enableZoom={true}
-                    />
-                  )} */}
-                </div>
-
-                {/* <FieldComponent
-                  label={"Action"}
-                  show={editBooking}
-                  tableId={bookingDetails?.booking?._id}
-                  identifier="paymentTerm"
-                  value={
-                    bookingDetails?.booking?.delivery?.consignment_info[0]
-                      ?.action
-                  }
-                /> */}
               </div>
             </div>
           </div>
