@@ -117,120 +117,75 @@ const MaterialInfo = ({ form, nameValue, onAddItem, setMaterialItems }) => {
     return totalAmount;
   }
 
-  function calAmount(rate, quantity, GSTPercentage = 0, rateMultiple, rateUnit, chargedWeightUnit, actualWeightUnit, qtyUnit) {
+  function calAmount(rate, GSTPercentage = 0, rateMultiple, rateUnit, chargedWeightUnit, actualWeightUnit, qtyUnit) {
     let amount;
+    let quantityDub = 0;  // Initialize quantityDub
 
-// console.log("rate: ", rate, "quantity: ", quantity, "GSTPercentage: ", GSTPercentage, "rateMultiplier: ", rateMultiple, "rateUnit: ", rateUnit, "charged Weight unit: ", chargedWeightUnit, "actual weight unit: ", actualWeightUnit, "qty unit: ", qtyUnit);
-     let quantityDub;
-
-
+    // Retrieve the appropriate quantity based on rateMultiple
     if (rateMultiple === "actualWeight") {
-       quantityDub = form.getValues(
-        `${nameValue}[${items.length}].actualWeight`,
-      );
+        quantityDub = form.getValues(`${nameValue}[${items.length}].actualWeight`);
     } else if (rateMultiple === "chargedWeight") {
-       quantityDub = form.getValues(
-        `${nameValue}[${items.length}].chargedWeight`,
-      );
+        quantityDub = form.getValues(`${nameValue}[${items.length}].chargedWeight`);
     } else if (rateMultiple === "quantity") {
-       quantityDub = form.getValues(`${nameValue}[${items.length}].quantity`);
+        quantityDub = form.getValues(`${nameValue}[${items.length}].quantity`);
     }
-    
 
-    // console.log("quantity here : ", quantityDub);
-    
-    
-    
-
-      if(rateUnit === "Ton"){
-              if(rateMultiple==="chargedWeight" && chargedWeightUnit){
-
-      if(chargedWeightUnit === "TON")
-               quantityDub *=1;
-       if(chargedWeightUnit === "KG")
-                           quantityDub /=1000;
-
-      if(chargedWeightUnit === "g")
-              quantityDub /= 1000000;
-
-     }else if (rateMultiple === "actualWeight" && actualWeightUnit){
-      // console.log("true");
-             if(actualWeightUnit === "TON")
-                           quantityDub *=1;
-              if(actualWeightUnit === "KG")
-                           quantityDub /=1000;
-
-             if(actualWeightUnit === "g")
-              quantityDub /= 1000000;
-
-
-     }else if (qtyUnit === "TON"){
-          quantityDub *=1;
-     }
-
-
-        //  console.log("quantity if the rateUnit is Ton : ", quantityDub);
-
-
-
-    }else {
-
-
-       if(rateMultiple==="chargedWeight" && chargedWeightUnit){
-
-      if(chargedWeightUnit === "TON")
-               quantityDub *=1000;
-
-      if(chargedWeightUnit === "g")
-              quantityDub /= 1000;
-
-     }else if (rateMultiple === "actualWeight" && actualWeightUnit){
-             if(actualWeightUnit === "TON")
-                           quantityDub *=1000;
-        
-             if(actualWeightUnit === "g")
-                           quantityDub /=1000;
+    // Convert quantities based on rate unit and weight unit
+    if (rateUnit === "Ton") {
+        if (rateMultiple === "chargedWeight" && chargedWeightUnit) {
+            if (chargedWeightUnit === "KG") quantityDub /= 1000;
+            if (chargedWeightUnit === "g") quantityDub /= 1000000;
+        } else if (rateMultiple === "actualWeight" && actualWeightUnit) {
+            if (actualWeightUnit === "KG") quantityDub /= 1000;
+            if (actualWeightUnit === "g") quantityDub /= 1000000;
+        } else if (qtyUnit === "TON") {
+            quantityDub *= 1;
+        }
+    } else if (rateUnit === "Kg") {
+        if (rateMultiple === "chargedWeight" && chargedWeightUnit) {
+            if (chargedWeightUnit === "TON") quantityDub *= 1000;
+            if (chargedWeightUnit === "g") quantityDub /= 1000;
+        } else if (rateMultiple === "actualWeight" && actualWeightUnit) {
+            if (actualWeightUnit === "TON") quantityDub *= 1000;
+            if (actualWeightUnit === "g") quantityDub /= 1000;
+        } else if (qtyUnit === "KG") {
+            quantityDub *= 1;
+        }
+    } else if (rateUnit === "g") {
+        if (rateMultiple === "chargedWeight" && chargedWeightUnit) {
+            if (chargedWeightUnit === "TON") quantityDub *= 1000000;
+            if (chargedWeightUnit === "KG") quantityDub *= 1000;
+        } else if (rateMultiple === "actualWeight" && actualWeightUnit) {
+            if (actualWeightUnit === "TON") quantityDub *= 1000000;
+            if (actualWeightUnit === "KG") quantityDub *= 1000;
+        } else if (qtyUnit === "g") {
+            quantityDub *= 1;
+        }
+    } else {
+        // Handle other cases if needed
+        if (rateMultiple === "chargedWeight" && chargedWeightUnit) {
+            if (chargedWeightUnit === "TON") quantityDub *= 1000;
+            if (chargedWeightUnit === "g") quantityDub /= 1000;
+        } else if (rateMultiple === "actualWeight" && actualWeightUnit) {
+            if (actualWeightUnit === "TON") quantityDub *= 1000;
+            if (actualWeightUnit === "g") quantityDub /= 1000;
+        } else if (qtyUnit === "TON") {
+            quantityDub *= 1000;
+        }
     }
-    else if (qtyUnit === "TON"){
-          quantityDub *=1000;
-     }
 
-
-              // console.log("quantity if the rateUnit is not Ton : ", quantityDub);
-
-
-
-
-  }
-
-// console.log(
-//   "quantityDub: ", quantityDub,
-//   "rate: ", rate,
-//   "quantity: ", quantity,
-//   "GSTPercentage: ", GSTPercentage,
-//   "rateMultiplier: ", rateMultiple,
-//   "rateUnit: ", rateUnit,
-//   "charged Weight unit: ", chargedWeightUnit,
-//   "actual weight unit: ", actualWeightUnit,
-//   "qty unit: ", qtyUnit
-// );
-
-
-      // console.log("rateUnit: ", rateUnit);
-      // console.log("rate: ", rate);
-      // console.log("quanitty after calculation: ", quantityDub);
-
+    // Calculate the amount
     amount = parseFloat(rate) * parseFloat(quantityDub);
-    
-    
-    // else {
-    //   amount = parseFloat(rate) * parseFloat(quantity);
-    // }
     amount = isNaN(amount) ? 0 : amount;
+
+    // Set the basic amount in the form
     form.setValue(`${nameValue}[${items.length}].basicAmount`, amount);
-    const total = parseFloat(amount) * Number(GSTPercentage);
-    return parseFloat(amount + total);
-  }
+
+    // Calculate the total amount including GST
+    const total = parseFloat(amount) * (1 + Number(GSTPercentage) / 100);
+    return total;
+}
+
 
   const rateMultiple = form.watch(`${nameValue}[${items.length}].rateAsPer`);
   const quantity = form.watch(`${nameValue}[${items.length}].quantity`);
@@ -254,6 +209,8 @@ const MaterialInfo = ({ form, nameValue, onAddItem, setMaterialItems }) => {
   const rateUnit = form.watch(`${nameValue}[${items.length}].rateUnit`);
   const actualWeightUnit = form.watch(`${nameValue}[${items.length}].actualWeightUnit`);
   const chargedWeightUnit = form.watch(`${nameValue}[${items.length}].chargedWeightUnit`);
+  const chargedWeight = form.watch(`${nameValue}[${items.length}].chargedWeight`);
+  const actualWeight = form.watch(`${nameValue}[${items.length}].actualWeight`);
 
   useEffect(() => {
     if (GSTType === "FCM") {
@@ -274,8 +231,11 @@ const MaterialInfo = ({ form, nameValue, onAddItem, setMaterialItems }) => {
   }, [GSTType]);
 
   useEffect(() => {
-    if (!isNaN(parseFloat(rate)) && !isNaN(parseFloat(quantity))) {
-      let result = calAmount(rate, quantity, GSTPercentage, rateMultiple, rateUnit, chargedWeightUnit, actualWeightUnit, qtyUnit);
+
+   
+
+    if (!isNaN(parseFloat(rate)) && rateMultiple !== "fixed") {
+      let result = calAmount(rate, GSTPercentage, rateMultiple, rateUnit, chargedWeightUnit, actualWeightUnit, qtyUnit);
 
       form.setValue(`${nameValue}[${items.length}].amount`, result);
     }
@@ -283,9 +243,12 @@ const MaterialInfo = ({ form, nameValue, onAddItem, setMaterialItems }) => {
   }, [
     rate,
     rateUnit,
-    quantity,
     items.length,
     nameValue,
+    chargedWeightUnit,
+    chargedWeight,
+    actualWeight,
+    actualWeightUnit,
     GSTPercentage,
     rateMultiple,
     GSTType,
