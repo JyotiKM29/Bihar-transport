@@ -236,24 +236,32 @@ export default function ProfileForm() {
     // console.log("cart")
     setMaterialItems(CartItems);
   }, [CartItems]);
+  
+function onDeleteItem(index) {
+  // Filter out the item at the provided index
+  const updatedItems = materialItems.filter((_, i) => i !== index);
 
-  function onDeleteItem(hsnRemove) {
-    // console.log("delete :", hsnRemove);
-    const updatedItems = materialItems.filter(
-      (item) => item.hsnNo !== hsnRemove,
-    );
-
-    form.setValue("itemsList", updatedItems);
-  }
+  // Update the form value with the filtered items
+  form.setValue("itemsList", updatedItems);
+}
 
 
-  const onEditItem = (updatedItem) => {
-    const updatedItems = materialItems.map((item) =>
-      item.hsnNo === updatedItem.hsnNo ? updatedItem : item,
-    );
-    setMaterialItems(updatedItems);
-    form.setValue("itemsList", updatedItems);
-  };
+  // const onEditItem = (updatedItem) => {
+  //   const updatedItems = materialItems.map((item) =>
+  //     item.hsnNo === updatedItem.hsnNo ? updatedItem : item,
+  //   );
+  //   setMaterialItems(updatedItems);
+  //   form.setValue("itemsList", updatedItems);
+  // };
+
+
+  const onEditItem = (index, updatedItem) => {
+  const updatedItems = materialItems.map((item, i) =>
+    i === index ? updatedItem : item
+  );
+  setMaterialItems(updatedItems);
+  form.setValue("itemsList", updatedItems);
+};
 
 
   function handleAddItem(newItem) {
