@@ -2,90 +2,61 @@
 import React, { useEffect, useState, useContext } from "react";
 import { ShoppingCart } from "lucide-react";
 import { UserContext } from "../../context/UserContextProvider";
+import { useToast } from "../../components/ui/use-toast";
 
-
-const CartTable = ({ form, items, onDelete, onEdit }) => {
+const CartTable = ({ form, items, onDelete, onEdit, nameValue }) => {
   const [cartItems, setCartItems] = useState(items);
   const [noOfItems, setNoOfItems] = useState(0);
   const [totalCost, setTotalCost] = useState(0.0);
   const [isEditing, setIsEditing] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(null);
   const [rateAsPerData, setRateAsPerData] = useState([]);
-  const [ok, setOk] = useState(true);
-    const { user } = useContext(UserContext);
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const { user } = useContext(UserContext);
+  const { toast } = useToast();
 
- 
   const userId = user?._id;
 
   useEffect(() => {
-   
     setCartItems(items);
-    const length = Array.isArray(cartItems) && cartItems.length ? cartItems.length : 0;
-    setNoOfItems(length);
+    setNoOfItems(items.length || 0);
 
-    const calculatedTotalCost = Array.isArray(items)
-      ? items.reduce((accumulator, currentValue) => {
-          return parseFloat(accumulator) + parseFloat(currentValue.amount);
-        }, 0)
-      : 0;
+    const calculatedTotalCost = items.reduce((accumulator, currentValue) => {
+      return parseFloat(accumulator) + parseFloat(currentValue.amount);
+    }, 0);
 
     setTotalCost(calculatedTotalCost);
-
     form.setValue("partyBhara", calculatedTotalCost);
-    // console.log("partyBhara Jyoti KM", form.getValues("partyBhara"));
-  }, [items]);
+  }, [items, cartItems]);
 
-  useEffect(()=>{
-    // console.log("it's started...");
-   fetchRateAsPer();
-},[]);
-
+  useEffect(() => {
+    fetchRateAsPer();
+  }, []);
 
   const fetchRateAsPer = async () => {
-     // Fetch units data from API
-    //  console.log("it's workiing now...")
-     try {
-       const response = await fetch(`/api/setting/rateAsPer/get/${userId}`, {
-         method: "GET",
-       });
+    try {
+      const response = await fetch(`/api/setting/rateAsPer/get/${userId}`, {
+        method: "GET",
+      });
 
-       if (!response.ok) {
-         throw new Error(`HTTP error! Status: ${response.status}`);
-       }
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
-       const data = await response.json();
-      //  console.log("rate as per data:", data.data);
-       setRateAsPerData(data.data);
-     } catch (error) {
-       console.error("Error:", error);
-     }
-   };
-
-
-  const handleEditClick = (item) => {
-    setIsEditing(true);
-    setCurrentItem(item);
+      const data = await response.json();
+      setRateAsPerData(data.data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
-  const handleFixedAmountChange = (e) => {
-  const { value } = e.target;
-  setOk(~ok);
-
-  setCurrentItem((prevItem) => ({
-    ...prevItem,
-    basicAmount: value,
-  }));
-};
-
-
-
-
-// useEffect(() => {
-//   // Call your function here
-//   handleEditChange(); // Assuming handleEditChange is defined within the same component
-// }, [ok]); // This effect will be triggered whenever currentItem changes
-
-
+  const handleEditClick = (index) => {
+    setIsEditing(true);
+    setCurrentIndex(index);
+    setCurrentItem(cartItems[index]);
+  };
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
@@ -95,55 +66,40 @@ const CartTable = ({ form, items, onDelete, onEdit }) => {
         [name]: value,
       };
 
-      if (["rate", "actualWeight", "GSTPercentage", "chargedWeight", "rateAsPer", "amount", "testAmount"].includes(name)) {
+      if (
+        [
+          "rate",
+          "actualWeight",
+          "GSTPercentage",
+          "chargedWeight",
+          "rateAsPer",
+          "amount",
+          "testAmount",
+        ].includes(name)
+      ) {
         const rateAsPer = updatedItem.rateAsPer;
         const rate = parseFloat(updatedItem.rate) || 0;
         const actualWeight = parseFloat(updatedItem.actualWeight) || 0;
         const GSTPercentage = parseFloat(updatedItem.GSTPercentage) || 0;
         const chargedWeight = parseFloat(updatedItem.chargedWeight) || 0;
         const testAmount = parseFloat(updatedItem.testAmount) || 0;
-        
-
-
-        // console.log("test AMount : ", testAmount)
-        // console.log("actual weight ", actualWeight);
-        // console.log("chargedWeight : ", chargedWeight);
-        // console.log("rate: ", rate);
-        // console.log("rate as per : ", rateAsPer);
-        // console.log("updated item : ", updatedItem);
-        // console.log("ok, checking multiplier: ", updatedItem.rateAsPer);
 
         let basicAmount;
 
-        if( rateAsPer === "fixed"){
-
-         
+        if (rateAsPer === "fixed") {
           basicAmount = testAmount;
-
-
         }
 
-        if(rateAsPer === "actualWeight"){
-
-          basicAmount = (actualWeight*rate)
-
+        if (rateAsPer === "actualWeight") {
+          basicAmount = actualWeight * rate;
         }
 
-        if(rateAsPer === "chargedWeight"){
-
-           basicAmount = (chargedWeight*rate)
+        if (rateAsPer === "chargedWeight") {
+          basicAmount = chargedWeight * rate;
         }
 
-        
-
-        // const basicAmount = (`updatedItem.${rateAsPer}` * rate);
-        let amount = basicAmount + basicAmount * (GSTPercentage);
-        // const total = rate * actualWeight + (rate * actualWeight * GSTPercentage);
-        // amount = total;
+        let amount = basicAmount + basicAmount * GSTPercentage;
         const total = amount;
-
-        // console.log("Total ", total);
-        // console.log("basic amount : ", basicAmount);
 
         return {
           ...updatedItem,
@@ -155,18 +111,65 @@ const CartTable = ({ form, items, onDelete, onEdit }) => {
 
       return updatedItem;
     });
+  };
 
-  }
   const handleEditSubmit = () => {
-    onEdit(currentItem);
-    setIsEditing(false);
-    setCurrentItem(null);
+    if (currentIndex !== null) {
+      onEdit(currentIndex, currentItem);
+      setIsEditing(false);
+      setCurrentItem(null);
+      setCurrentIndex(null);
+      setSearchTerm("");
+    }
+  };
+
+  const fetchData = async (value) => {
+    try {
+      const res = await fetch(`/api/getProduct/${user._id}`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const result = await res.json();
+
+      if (result && Array.isArray(result.data)) {
+        const results = result.data.filter((item) => {
+          return (
+            value &&
+            item.name &&
+            item.name.toLowerCase().includes(value.toLowerCase())
+          );
+        });
+
+        setSearchResults(results.slice(0, 5));
+      }
+    } catch (error) {
+      console.log("Fetch failed", error);
+    }
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
+    fetchData(value);
+  };
+
+  const handleSearchResultClick = (result) => {
+    setCurrentItem((prevItem) => ({
+      ...prevItem,
+      material: result.name,
+      hsnNo: result.hsnNo,
+      quantityUnit:result.qtyUnit? result.qtyUnit : result.weightType,
+      actualWeightUnit:result.weightType? result.weightType : result.qtyUnit,
+      chargedWeightUnit: result.weightType? result.weightType : resultqtyUnit, 
+    }));
+    setSearchResults([]);
+    setSearchTerm(result.name);
   };
 
   return (
     <div className="w-full overflow-x-scroll px-4 py-2">
       <h2 className="flex gap-2 text-xl font-semibold">
-        <ShoppingCart strokeWidth={2.5} /> Total Item in Cart <p>({noOfItems})</p>
+        <ShoppingCart strokeWidth={2.5} /> Total Item in Cart{" "}
+        <p>({noOfItems})</p>
       </h2>
 
       <div className="w-full">
@@ -187,199 +190,180 @@ const CartTable = ({ form, items, onDelete, onEdit }) => {
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(cartItems) &&
-              cartItems.map((item, i) => (
-                <tr key={i} className="w-full text-center">
-                  <td>{item.material}</td>
-                  <td>{item.hsnNo}</td>
-                  <td>
-                    {item.quantity} {item.quantityUnit}
-                  </td>
-                  <td>
-                    {item.actualWeight}
-                    {item.actualWeightUnit}
-                  </td>
-                  <td>
-                    {item.chargedWeight}
-                    {item.chargedWeightUnit}
-                  </td>
-                  <td>
-                    {item.rate}
-                  </td>
-                  <td>
-                    {item.rateAsPer}({item.rateUnit})
-                  </td>
-                  <td>{item.basicAmount}</td>
-                  <td>
-                    {item.GSTPercentage && item.GSTType
-                      ? `${item.GSTPercentage * 100} % ${item.GSTType}`
-                      : "0%"}
-                  </td>
-                  <td>{item.amount}</td>
-                  <td>
-                    <button
-                      type="button"
-                      className="font-bold"
-                      onClick={() => handleEditClick(item)}
-                    >
-                      Edit
-                    </button>{" "}
-                    /{" "}
-                    <button
-                      type="button"
-                      className="font-bold"
-                      onClick={() => onDelete(item.hsnNo)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
+            {cartItems.map((item, i) => (
+              <tr key={i} className="w-full text-center">
+                <td>{item.material}</td>
+                <td>{item.hsnNo}</td>
+                <td>
+                  {item.quantity} {item.quantityUnit}
+                </td>
+                <td>
+                  {item.actualWeight}
+                  {item.actualWeightUnit}
+                </td>
+                <td>
+                  {item.chargedWeight}
+                  {item.chargedWeightUnit}
+                </td>
+                <td>{item.rate}</td>
+                <td>
+                  {item.rateAsPer}({item.rateUnit})
+                </td>
+                <td>{item.basicAmount}</td>
+                <td>
+                  {item.GSTPercentage
+                    ? `${item.GSTPercentage * 100} % ${item.GSTType}`
+                    : "0%"}
+                </td>
+                <td>{item.amount}</td>
+                <td>
+                  <button
+                    type="button"
+                    className="font-bold"
+                    onClick={() => handleEditClick(i)}
+                  >
+                    Edit
+                  </button>{" "}
+                  /
+                  <button
+                    type="button"
+                    className="font-bold"
+                    onClick={() => onDelete(i)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
 
         {isEditing && (
           <div className="edit-form">
             <h3 className="mb-4 text-lg font-semibold">Edit Materials</h3>
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              {/* <div>
-                <label>Material</label>
+            <div className="mb-4 grid grid-cols-2 gap-4">
+              <div>
+                <label>Material Name</label>
                 <input
                   type="text"
                   name="material"
-                  value={currentItem.material}
-                  onChange={handleEditChange}
-                  className="w-full p-2 border rounded"
+                  value={isEditing ? searchTerm : currentItem?.material || ""}
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  onFocus={() => setIsEditing(true)}
+                  // onBlur={() => setIsEditing(false)}
+                  className="w-full rounded border p-2"
                 />
-              </div> */}
+                {searchResults.length > 0 && (
+                  <div className="search-results mt-1 rounded border shadow-lg">
+                    {searchResults.map((result, index) => (
+                      <div
+                        key={index}
+                        onClick={() => handleSearchResultClick(result)}
+                        className="cursor-pointer p-2 hover:bg-gray-200"
+                      >
+                        {result.name}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label>HSN</label>
+                <input
+                  type="text"
+                  name="hsnNo"
+                  value={currentItem?.hsnNo || ""}
+                  readOnly
+                  className="w-full rounded border bg-gray-100 p-2"
+                />
+              </div>
+
               <div>
                 <label>Quantity</label>
                 <input
                   type="text"
                   name="quantity"
-                  value={currentItem.quantity}
+                  value={currentItem?.quantity || ""}
                   onChange={handleEditChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full rounded border p-2"
                 />
               </div>
+
               <div>
                 <label>Actual Weight</label>
                 <input
                   type="text"
                   name="actualWeight"
-                  value={currentItem.actualWeight}
+                  value={currentItem?.actualWeight || ""}
                   onChange={handleEditChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full rounded border p-2"
                 />
               </div>
+
               <div>
                 <label>Charged Weight</label>
                 <input
                   type="text"
                   name="chargedWeight"
-                  value={currentItem.chargedWeight}
+                  value={currentItem?.chargedWeight || ""}
                   onChange={handleEditChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full rounded border p-2"
                 />
               </div>
 
-<div>
-  <label>Rate As Per</label>
-  <select
-    name="rateAsPer"
-    value={currentItem.rateAsPer}
-    onChange={handleEditChange}
-    className="w-full p-2 border rounded"
-  >
-    <option value="">
-                {rateAsPerData && rateAsPerData.length > 0
-                  ? "Select Rate As Per"
-                  : "Loading..."}
-              </option>
-              {Array.isArray(rateAsPerData) &&
-                rateAsPerData.map((rate) => (
-                  <option key={rate.value} value={rate.value}>
-                    {rate.name}
+              <div>
+                <label>Rate As Per</label>
+                <select
+                  name="rateAsPer"
+                  value={currentItem?.rateAsPer || ""}
+                  onChange={handleEditChange}
+                  className="w-full rounded border p-2"
+                >
+                  <option value="">
+                    {rateAsPerData.length > 0
+                      ? "Select Rate As Per"
+                      : "Loading..."}
                   </option>
-                ))}
-            </select>
-</div>
+                  {rateAsPerData.map((rate) => (
+                    <option key={rate.value} value={rate.value}>
+                      {rate.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-{/* <FormField
-  control={form.control}
-  name={`${nameValue}[${items.length}].rateAsPer`}
-  render={({ field }) => {
-    return (
-      <FormItem className="flex flex-1 items-center justify-center gap-4">
-
-<FormLabel className="text-nowrap text-sm lg:text-base">
-                        Rate as Per :
-                      </FormLabel>
-
-        <div className="flex flex-1 flex-col">
-          <FormControl>
-            <select
-              {...field}
-              className="rounded-bl rounded-br-[0px] rounded-tl rounded-tr-[0px]"
-            >
-              <option value="">
-                {rateAsPerData && rateAsPerData.length > 0
-                  ? "Select Actual Weight Unit"
-                  : "Loading..."}
-              </option>
-              {Array.isArray(rateAsPerData) &&
-                rateAsPerData.map((rate) => (
-                  <option key={rate.value} value={rate.value}>
-                    {rate.name}
-                  </option>
-                ))}
-            </select>
-          </FormControl>
-          <FormMessage />
-        </div>
-      </FormItem>
-    );
-  }}
-/> */}
-
-
-
-
-
-
-{currentItem.rateAsPer === "fixed" && (
-  <div>
-    <label>Amount</label>
-    <input
-      type="number"
-      name="testAmount"
-      
-      onChange={handleEditChange}
-      className="w-full p-2 border rounded"
-    />
-  </div>
-)}
-
-
-
+              {currentItem?.rateAsPer === "fixed" && (
+                <div>
+                  <label>Amount</label>
+                  <input
+                    type="number"
+                    name="testAmount"
+                    value={currentItem?.testAmount || ""}
+                    onChange={handleEditChange}
+                    className="w-full rounded border p-2"
+                  />
+                </div>
+              )}
 
               <div>
                 <label>Rate</label>
                 <input
                   type="text"
                   name="rate"
-                  value={currentItem.rate}
+                  value={currentItem?.rate || ""}
                   onChange={handleEditChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full rounded border p-2"
                 />
               </div>
+
               <div>
                 <label>GSTPercentage</label>
                 <select
                   name="GSTPercentage"
-                  value={currentItem.GSTPercentage}
+                  value={currentItem?.GSTPercentage || "0.0"}
                   onChange={handleEditChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full rounded border p-2"
                 >
                   <option value="0.0">0%</option>
                   <option value="0.02">2%</option>
@@ -389,14 +373,15 @@ const CartTable = ({ form, items, onDelete, onEdit }) => {
                   <option value="0.18">18%</option>
                 </select>
               </div>
+
               <div className="col-span-2">
                 <label>Total</label>
                 <input
                   type="text"
                   name="total"
-                  value={currentItem.total}
+                  value={currentItem?.total || ""}
                   readOnly
-                  className="w-full p-2 border rounded bg-gray-100"
+                  className="w-full rounded border bg-gray-100 p-2"
                 />
               </div>
             </div>
@@ -404,14 +389,14 @@ const CartTable = ({ form, items, onDelete, onEdit }) => {
               <button
                 type="button"
                 onClick={handleEditSubmit}
-                className="px-4 py-2 font-semibold text-white bg-blue-500 rounded hover:bg-blue-700"
+                className="rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-700"
               >
                 Save
               </button>
               <button
                 type="button"
                 onClick={() => setIsEditing(false)}
-                className="px-4 py-2 font-semibold text-white bg-yellow-500 rounded hover:bg-yellow-700"
+                className="rounded bg-yellow-500 px-4 py-2 font-semibold text-white hover:bg-yellow-700"
               >
                 Cancel
               </button>
@@ -432,6 +417,5 @@ const CartTable = ({ form, items, onDelete, onEdit }) => {
     </div>
   );
 };
-
 
 export default CartTable;
