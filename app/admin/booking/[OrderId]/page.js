@@ -1,7 +1,6 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
 import { Input } from "../../../components/ui/input";
-import { Button } from "../../../components/ui/button";
 import { UserContext } from "../../../context/UserContextProvider";
 import { useToast } from "../../../components/ui/use-toast";
 import AllocateVehicle from "./AllocateVehicle";
@@ -13,9 +12,16 @@ const Allocation = ({ params }) => {
   const { user } = useContext(UserContext);
   const [vehicleData, setVehicleData] = useState([]);
   const [ledgerBalance, setLedgerBalance] = useState(0);
-  const [newData, setNewData] = useState([]); // Initialize as an empty array
+  const [newData, setNewData] = useState({ items: [] }); // Initialize as an object with an items array
   const [vehicleNo, setVehicleNo] = useState("");
+  const [availableWgt, setAvailableWgt] = useState(0); // New state for available weight
+  const [allotedWgt, setAllotedWgt] = useState(0);
+
   const userId = user?._id;
+
+  useEffect(() => {
+    console.log("Available Wgt: ", availableWgt, "alloted weight : ", allotedWgt);
+  }, [availableWgt, allotedWgt]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,7 +50,7 @@ const Allocation = ({ params }) => {
         const ledgerId = params.OrderId;
 
         const response = await fetch(
-          `/api/accounting/getLedgerBalance/${ledgerId}`
+          `/api/accounting/getLedgerBalance/${ledgerId}`,
         );
         if (response.ok) {
           const data = await response.json();
@@ -72,14 +78,10 @@ const Allocation = ({ params }) => {
 
         console.log("Booking Data: ", result); // Debug: log the entire response
 
-        const itemsList = Array.isArray(result.booking.itemsList.items)
-          ? result.booking.itemsList
+        const itemsList = Array.isArray(result.booking.itemsList.item)
+          ? result.booking.itemsList.item
           : [];
-        setNewData(itemsList); // Correctly set the items array
-
-
-
-        setNewData(result.booking.itemsList); // Correctly set the items array
+        setNewData({ items: itemsList }); // Correctly set the items array
       } catch (error) {
         setLoading(false);
         console.error("Error: ", error);
@@ -94,13 +96,35 @@ const Allocation = ({ params }) => {
   }, [userId, params.OrderId]);
 
   useEffect(() => {
-    console.log("Booking Data items updated: ", newData);
+    console.log("Type of newData: ", typeof newData);
+    console.log("Value of newData: ", newData);
   }, [newData]);
+
+  useEffect(() => {
+    if (allotedWgt > 0) {
+      const updatedData = distributeWeight(newData.items, allotedWgt);
+      setNewData({ items: updatedData });
+    }
+  }, [allotedWgt]);
+
+  const distributeWeight = (items, weight) => {
+    let remainingWeight = weight;
+
+    return items.map(item => {
+      const availableWeight = item.actualWeight * (item.actualWeightUnit === "TON" ? 1000 : 1);
+      const allocatedWeight = Math.min(availableWeight, remainingWeight);
+      remainingWeight -= allocatedWeight;
+      return {
+        ...item,
+        allocatedWeight: allocatedWeight / (item.actualWeightUnit === "TON" ? 1000 : 1)
+      };
+    });
+  };
 
   const filterData =
     vehicleData && vehicleData.data && Array.isArray(vehicleData.data)
       ? vehicleData.data.filter((vehicle) =>
-          vehicle.vehicleNo.toLowerCase().includes(vehicleNo.toLowerCase())
+          vehicle.vehicleNo.toLowerCase().includes(vehicleNo.toLowerCase()),
         )
       : [];
 
@@ -139,14 +163,16 @@ const Allocation = ({ params }) => {
         </div>
 
         {/* data table */}
-        <table className="rounded-lg min-w-full divide-y divide-gray-200 border">
+        <table className="min-w-full divide-y divide-gray-200 rounded-lg border">
           <thead className="bg-gray-50">
             <tr>
               <th className="px-4 py-2 text-left font-medium">Vehicle No</th>
               <th className="px-4 py-2 text-left font-medium">Driver Name</th>
               <th className="px-4 py-2 text-left font-medium">Vehicle Type</th>
               <th className="px-4 py-2 text-left font-medium">Capacity</th>
-              <th className="px-4 py-2 text-left font-medium">Available Space</th>
+              <th className="px-4 py-2 text-left font-medium">
+                Available Space
+              </th>
               <th className="px-4 py-2 text-left font-medium">Vehicle Age</th>
               <th className="px-4 py-2 text-left font-medium">Allocation</th>
               <th className="px-4 py-2 text-left font-medium">Owner Name</th>
@@ -186,37 +212,62 @@ const Allocation = ({ params }) => {
 
         {/* products table */}
         <div className="mt-6">
-          <h3 className="p-1 text-2xl font-bold text-blue-700">Product Details:</h3>
-          <table className="rounded-lg min-w-full divide-y divide-gray-200 border mt-4">
+          <h3 className="p-1 text-2xl font-bold text-blue-700">
+            Product Details:
+          </h3>
+          <table className="mt-4 min-w-full divide-y divide-gray-200 rounded-lg border">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-2 text-left font-medium">Product Name</th>
+                <th className="px-4 py-2 text-left font-medium">
+                  Product Name
+                </th>
                 <th className="px-4 py-2 text-left font-medium">Weight</th>
+                <th className="px-4 py-2 text-left font-medium">
+                  Allotted Weight
+                </th>
+                
               </tr>
             </thead>
             <tbody>
-  {newData?.item?.map((item) => (
-    <tr key={item._id} className="border-t">
-      <td className="whitespace-nowrap px-4 py-2">{item.material}</td>
-      <td className="whitespace-nowrap px-4 py-2">
-        {item.actualWeight} {item.actualWeightUnit}
-      </td>
-    </tr>
-  ))}
-
-  <tr className="border-t">
-    <td className="whitespace-nowrap px-4 py-2 font-bold">Total Not alloted from this Booking</td>
-    <td className="whitespace-nowrap px-4 py-2 font-bold">
-      {newData.totalActualWeight} kg 
-    </td>
-  </tr>
-</tbody>
-
+              {newData.items.length > 0 ? (
+                newData.items.map((item) => (
+                  <tr key={item._id} className="border-t">
+                    <td className="whitespace-nowrap px-4 py-2">
+                      {item.material}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-2">
+                      {item.actualWeight} {item.actualWeightUnit}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-2">
+                      {item.allocatedWeight || 0} {item.actualWeightUnit}
+                    </td>
+                    
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="3"
+                    className="whitespace-nowrap px-4 py-2 text-center"
+                  >
+                    No products available
+                  </td>
+                </tr>
+              )}
+            </tbody>
           </table>
         </div>
-
-        <AllocateVehicle params={params} ledgerBalance={ledgerBalance} />
       </div>
+
+      <AllocateVehicle
+        vehicleData={vehicleData}
+        ledgerBalance={ledgerBalance}
+        allotedWgt={allotedWgt}
+        availableWgt={availableWgt}
+        setAllotedWgt={setAllotedWgt}
+        setAvailableWgt={setAvailableWgt}
+        params={params}
+      />
     </div>
   );
 };
