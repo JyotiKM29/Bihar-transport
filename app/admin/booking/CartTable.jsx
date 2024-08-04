@@ -33,7 +33,7 @@ const CartTable = ({ form, items, onDelete, onEdit }) => {
 
     form.setValue("partyBhara", calculatedTotalCost);
     // console.log("partyBhara Jyoti KM", form.getValues("partyBhara"));
-  }, [items]);
+  }, [items, cartItems]);
 
   useEffect(()=>{
     // console.log("it's started...");
