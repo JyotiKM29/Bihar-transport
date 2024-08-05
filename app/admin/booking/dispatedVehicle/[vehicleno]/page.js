@@ -61,7 +61,7 @@ const dispatchDetailsSchema = z.object({
     // additionalRateForCompany: z.coerce.number(),
     chargesDetails: z.array(chargesDetailsSchema),
   }),
-  ledgerBalanceOfParty: z.string(),
+  ledgerBalanceOfParty: z.number(),
   remarks: z.string(),
 });
 
@@ -129,6 +129,12 @@ const DispatchVehicle = ({ params }) => {
   const [showAdditionalDetails, setShowAdditionalDetails] = useState(false);
   const [showAdditionalRateForCompany, setShowAdditionalRateForCompany] = useState(false);
     const [showAdditionalRateForVehicle, setShowAdditionalRateForVehicle] = useState(false);
+    const [showDeliverySummary, setShowDeliverySummary ] = useState(false);
+    const [ledgerBalance , setLedgerBalance] = useState(0);
+    const [ledgerBalance2 , setLedgerBalance2] = useState(0);
+    const [pickupAdd, setPickupAdd] = useState("");
+    const [shippingAdd, setShippingAdd] = useState("");
+
 
   const [selectedTime, setSelectedTime] = useState(getCurrentTime());
   
@@ -181,7 +187,7 @@ const DispatchVehicle = ({ params }) => {
             },
           ],
         },
-        ledgerBalanceOfParty: undefined,
+        ledgerBalanceOfParty: ledgerBalance,
         remarks: undefined,
       },
 
@@ -221,6 +227,47 @@ const DispatchVehicle = ({ params }) => {
   const insurance = form.watch(
     "dispatch.dispatchAdditionalDetails.insurance.isInsured",
   );
+
+
+   const fetchLedgerData = async () => {
+      try {
+        const ledgerId = params.vehicleno;
+
+        const response = await fetch(
+          `/api/accounting/getLedgerBalance/${ledgerId}`,
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setLedgerBalance(data.balance);
+        }
+      } catch (error) {
+        console.error("Error: ", error);
+      }
+    };
+
+    const fetchBookingData = async () => {
+      try {
+        const ledgerId = params.vehicleno;
+
+        const response = await fetch(
+          `/api/bookingdetails/${ledgerId}`,
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setShippingAdd(data.booking.unloadingPoints.join(" , "));
+          setPickupAdd(data.booking.loadingPoints.join(" , "));
+        }
+      } catch (error) {
+        console.error("Error: ", error);
+      }
+    };
+
+    useEffect(()=>{
+      fetchLedgerData();
+      fetchBookingData();
+
+      console.log("ledger blance", ledgerBalance);
+    },[params.vehicleno])
 
   async function myhandleSubmit(value) {
     try {
@@ -438,12 +485,49 @@ const DispatchVehicle = ({ params }) => {
               />
 
               <div className="mt-8">
-                <FieldForm
+                {/* <FieldForm
                   form={form}
                   name="dispatch.dispatchDetails.ledgerBalanceOfParty"
                   label="LedgerBalance of Party"
                   type="text"
-                />
+                  value={ledgerBalance}
+                /> */}
+
+                 <FormField
+                control={form.control}
+                name="dispatch.dispatchDetails.ledgerBalanceOfParty"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Ledger Balance of party :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-yellow-100 pl-2">
+                            <p className="text-xl font-medium">&#8377;</p>
+                            <Input
+                              type="number"
+                              value={Number(ledgerBalance).toFixed(2)}
+                              className="border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
+                              readOnly
+                            />
+                            <Input
+                              type="nu mber"
+                              value={Number(ledgerBalance).toFixed(2) > 0 ? "credit" : "debit"  }
+                              className="border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
+                              readOnly
+                            />
+                          </div>
+                        </FormControl>
+
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+                
                 <FieldForm
                   form={form}
                   name="dispatch.dispatchDetails.remarks"
@@ -754,6 +838,100 @@ const DispatchVehicle = ({ params }) => {
                 </div>
 
                 )}
+
+                {
+                  showDeliverySummary?(
+                  <div>
+                    <h2
+                  className="mt-6 text-center text-2xl font-semibold"
+                  onClick={() =>
+                    setShowDeliverySummary(!showDeliverySummary)
+                  }
+                >
+                  Delivery Summary
+                </h2>
+
+
+                 <FormField
+                control={form.control}
+                name="pickupAddress"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Pickup Address:
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-blue-100 pl-2">
+                            {/* <p className="text-xl font-medium">&#8377;</p> */}
+                            <Input
+                              type="text  "
+                              value={pickupAdd}
+                              className="border-none bg-blue-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
+                              readOnly
+                            />
+                          </div>
+                        </FormControl>
+
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+                
+
+
+                 <FormField
+                control={form.control}
+                name="shippingAddress"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Shipping Address :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-yellow-100 pl-2">
+                            {/* <p className="text-xl font-medium">&#8377;</p> */}
+                            <Input
+                              type="text"
+                              value={shippingAdd}
+                              className="border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
+                              readOnly
+                            />
+                          </div>
+                        </FormControl>
+
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+                
+
+
+
+
+                    
+                    </div>
+                    ):(
+                      <div> 
+ <p
+                  className="my-6 max-w-full rounded-lg bg-blue-500 px-8 py-2 text-center text-xl font-semibold text-white shadow-md hover:bg-blue-700"
+                  onClick={() =>
+                    setShowDeliverySummary(!showDeliverySummary)
+                  }
+                >
+                  Delivery Summary
+                </p>
+
+                      </div>
+                    )
+                }
             </div>
           </div>
 
