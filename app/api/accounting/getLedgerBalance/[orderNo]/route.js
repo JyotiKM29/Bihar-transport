@@ -17,7 +17,7 @@ export async function GET(req, context) {
 
         await connectDB();
 
-        const booking = await Booking.findOne(
+        let booking = await Booking.findOne(
           { orderNumber: orderNo },
           { consignorMobileNumber: 1, _id:0 },
         );
@@ -25,8 +25,17 @@ export async function GET(req, context) {
         log(booking);
 
         if (!booking) {
+
+          // edge case in case to serach with id.
+          booking =  await Booking.findOne(
+          { _id: orderNo },
+          { consignorMobileNumber: 1,  _id:0 },
+        );
+
+        if(!booking)
             return Response.json({ message: "Booking does not exist" }, { status: 400 });
-        }
+        
+      }
 
         const ledgerData = await ledger.findOne({
           "basicInfo.contactNo": booking.consignorMobileNumber,
