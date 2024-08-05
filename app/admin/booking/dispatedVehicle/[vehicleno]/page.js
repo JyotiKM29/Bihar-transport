@@ -52,16 +52,16 @@ const consignorInvoiceDetailsSchema = z.object({
 
 // ------dispatch details------
 const dispatchDetailsSchema = z.object({
+  lrNo:z.string(),
   billtyType: z.string(),
   dispatchDate: z.coerce.date(),
   dispatchTime: z.string().optional(),
-  totalFreight: z.coerce.number(),
   consignorInvoiceDetails: consignorInvoiceDetailsSchema,
   dispatch: z.object({
-    additionalRateForCompany: z.coerce.number(),
+    // additionalRateForCompany: z.coerce.number(),
     chargesDetails: z.array(chargesDetailsSchema),
   }),
-  ledgerBalanceOfParty: z.string(),
+  ledgerBalanceOfParty: z.number(),
   remarks: z.string(),
 });
 
@@ -93,7 +93,6 @@ const dispatchAdditionalDetailsSchema = z.object({
   manualLRNo: z.string(),
   brokerCommission: z.coerce.number(),
   shippingRisk: z.string(),
-
   insurance: insuranceSchema,
 });
 
@@ -128,6 +127,15 @@ const DispatchVehicle = ({ params }) => {
     useState(false);
 
   const [showAdditionalDetails, setShowAdditionalDetails] = useState(false);
+  const [showAdditionalRateForCompany, setShowAdditionalRateForCompany] = useState(false);
+    const [showAdditionalRateForVehicle, setShowAdditionalRateForVehicle] = useState(false);
+    const [showDeliverySummary, setShowDeliverySummary ] = useState(false);
+    const [ledgerBalance , setLedgerBalance] = useState(0);
+    const [ledgerBalance2 , setLedgerBalance2] = useState(0);
+    const [pickupAdd, setPickupAdd] = useState("");
+    const [shippingAdd, setShippingAdd] = useState("");
+
+
   const [selectedTime, setSelectedTime] = useState(getCurrentTime());
   
 
@@ -150,13 +158,14 @@ const DispatchVehicle = ({ params }) => {
     dispatch: {
       isDispatched: true,
       dispatchDetails: {
+        lrNo: undefined,
         billtyType: undefined,
         dispatchDate: new Date().toISOString().split("T")[0],
         dispatchTime: undefined,
-        totalFreight: undefined,
+        // totalFreight: undefined,
         consignorInvoiceDetails: {
-          isPODCompulsory: undefined,
-          podType:undefined,
+          isPODCompulsory: "Yes",
+          podType:"hardCopy",
           consignorInvoiceDate: new Date().toISOString().split("T")[0],
           consignorDeliveryNo: undefined,
           consignorInvoiceNo: undefined,
@@ -168,7 +177,6 @@ const DispatchVehicle = ({ params }) => {
           },
         },
         dispatch: {
-          additionalRateForCompany: undefined,
           chargesDetails: [
             {
               chargesName: undefined,
@@ -179,7 +187,7 @@ const DispatchVehicle = ({ params }) => {
             },
           ],
         },
-        ledgerBalanceOfParty: undefined,
+        ledgerBalanceOfParty: ledgerBalance,
         remarks: undefined,
       },
 
@@ -219,6 +227,47 @@ const DispatchVehicle = ({ params }) => {
   const insurance = form.watch(
     "dispatch.dispatchAdditionalDetails.insurance.isInsured",
   );
+
+
+   const fetchLedgerData = async () => {
+      try {
+        const ledgerId = params.vehicleno;
+
+        const response = await fetch(
+          `/api/accounting/getLedgerBalance/${ledgerId}`,
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setLedgerBalance(data.balance);
+        }
+      } catch (error) {
+        console.error("Error: ", error);
+      }
+    };
+
+    const fetchBookingData = async () => {
+      try {
+        const ledgerId = params.vehicleno;
+
+        const response = await fetch(
+          `/api/bookingdetails/${ledgerId}`,
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setShippingAdd(data.booking.unloadingPoints.join(" , "));
+          setPickupAdd(data.booking.loadingPoints.join(" , "));
+        }
+      } catch (error) {
+        console.error("Error: ", error);
+      }
+    };
+
+    useEffect(()=>{
+      fetchLedgerData();
+      fetchBookingData();
+
+      console.log("ledger blance", ledgerBalance);
+    },[params.vehicleno])
 
   async function myhandleSubmit(value) {
     try {
@@ -315,9 +364,40 @@ const DispatchVehicle = ({ params }) => {
             <div className="flex w-full max-w-xl flex-col gap-0">
               <FieldForm
                 form={form}
+                name="dispatch.dispatchDetails.lrNo"
+                label="LR No"
+                type="text"
+              />
+              <FieldForm
+                form={form}
                 name="dispatch.dispatchDetails.billtyType"
                 label="Billty Type"
                 type="text"
+              />
+              <FormField
+                control={form.control}
+                name="dispatch.dispatchDetails.billtyType"
+                render={({ field }) => (
+                  <FormItem className="flex items-center space-x-4">
+                    <FormLabel className="whitespace-nowrap">
+                      Billty Type 
+                    </FormLabel>
+                    <Select>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select One" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="billty">Billty</SelectItem>
+                        <SelectItem value="invoice">Invoice</SelectItem>
+                        <SelectItem value="gstInvoice">GST Invoice</SelectItem>
+                        <SelectItem value="challan">Challan</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
               <FieldForm
                 form={form}
@@ -326,15 +406,17 @@ const DispatchVehicle = ({ params }) => {
                 type="date"
               />
               <label className="w-full items-center gap-8 md:flex">
-    <span className="block mb-2 text-sm font-medium text-gray-700">Dispatch Time:</span>
-    <input
-      type="time"
-      value={selectedTime}
-      onChange={(e) => setSelectedTime(e.target.value)}
-      className="block w-full rounded-md border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-    />
-  </label>
-             {/* <FieldForm form={form} name="dispatch.dispatchDetails.dispatchTime" label="Dispatch Time">
+                <span className="mb-2 block text-sm font-medium text-gray-700">
+                  Dispatch Time:
+                </span>
+                <input
+                  type="time"
+                  value={selectedTime}
+                  onChange={(e) => setSelectedTime(e.target.value)}
+                  className="block w-full rounded-md border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                />
+              </label>
+              {/* <FieldForm form={form} name="dispatch.dispatchDetails.dispatchTime" label="Dispatch Time">
   <input
     type="time"
     value={selectedTime}
@@ -343,143 +425,7 @@ const DispatchVehicle = ({ params }) => {
   />
 </FieldForm> */}
 
-             
-              <FieldForm
-                form={form}
-                name="dispatch.dispatchDetails.totalFreight"
-                label="Total Freight"
-                type="number"
-              />
-              {showConsignorInvoiceDetail ? (
-                <div>
-                  <h2
-                    className="mt-6 text-center text-2xl font-semibold"
-                    onClick={() =>
-                      setShowConsignorInvoiceDetail(!showConsignorInvoiceDetail)
-                    }
-                  >
-                    Consignor Invoice Details
-                  </h2>
-                  <div className="flex items-center space-x-4">
-                    <FormField
-                      control={form.control}
-                      name="dispatch.dispatchDetails.consignorInvoiceDetails.isPODCompulsory"
-                      render={({ field }) => (
-                        <FormItem className="flex items-center space-x-4">
-                          <FormLabel className="whitespace-nowrap">
-                            POD Compulsory (Yes/No)
-                          </FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value ? "Yes" : "No"}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="Yes">Yes</SelectItem>
-                              <SelectItem value="No">No</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="dispatch.dispatchDetails.consignorInvoiceDetails.podType"
-                      render={({ field }) => (
-                        <FormItem className="flex items-center space-x-4">
-                          {/* <FormLabel className="whitespace-nowrap">POD Type</FormLabel> */}
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value ? "hardCopy" : "softCopy"}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="hardCopy">
-                                Hard Copy
-                              </SelectItem>
-                              <SelectItem value="softCopy">
-                                Soft Copy
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <FieldForm
-                    form={form}
-                    name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorInvoiceDate"
-                    label="Consignor - Invoice Date"
-                    type="date"
-                  />
-                  <FieldForm
-                    form={form}
-                    name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorDeliveryNo"
-                    label="Consignor - Delivery No"
-                    type="text"
-                  />
-                  <FieldForm
-                    form={form}
-                    name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorInvoiceNo"
-                    label="Consignor - Invoice No"
-                    type="text"
-                  />
-                  <FieldForm
-                    form={form}
-                    name="dispatch.dispatchDetails.consignorInvoiceDetails.valueOfGoods"
-                    label="Value of Goods (Rs.)"
-                    type="number"
-                  />
-                </div>
-              ) : (
-                <p
-                  className="my-6 max-w-full rounded-lg bg-blue-500 px-8 py-2 text-center text-xl font-semibold text-white shadow-md hover:bg-blue-700"
-                  onClick={() =>
-                    setShowConsignorInvoiceDetail(!showConsignorInvoiceDetail)
-                  }
-                >
-                  Consignor Invoice Details
-                </p>
-              )}
-
-              {/* 
-              
-              Modified the style of this component
-              
-              <h2 className="mt-6 text-center text-2xl font-semibold">
-                e-way Bill Details
-              </h2>
-              <FieldForm
-                form={form}
-                name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.eWayBillNo"
-                label="E-Way Bill No"
-                type="text"
-              />
-              <FieldForm
-                form={form}
-                name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.eWayBillDate"
-                label="E-Way Bill Date"
-                type="date"
-              />
-              <FieldForm
-                form={form}
-                name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.expDate"
-                label="Exp-Date "
-                type="date"
-              /> */}
-              {showEWayBillDetail ? (
+{showEWayBillDetail ? (
                 <div>
                   <h2
                     className="mt-6 text-center text-2xl font-semibold"
@@ -515,18 +461,23 @@ const DispatchVehicle = ({ params }) => {
                   e-way Bill Details
                 </p>
               )}
-            </div>
 
-            <div className="flex w-full max-w-xl flex-col gap-0">
-              <h2 className="mt-6 text-center text-2xl font-semibold">
+              {showAdditionalRateForCompany? (
+                <div>
+
+                   <h2 className="mt-6 text-center text-2xl font-semibold"
+                   onClick={() =>
+                    setShowAdditionalRateForCompany(!showAdditionalRateForCompany)
+                  }
+                   >
                 Additional Rate for Company
               </h2>
-              <FieldForm
+              {/* <FieldForm
                 form={form}
                 name="dispatch.dispatchDetails.dispatch.additionalRateForCompany"
                 label="Additional Rate for Company"
                 type="number"
-              />
+              /> */}
 
               <AdditionalChargers
                 form={form}
@@ -534,12 +485,49 @@ const DispatchVehicle = ({ params }) => {
               />
 
               <div className="mt-8">
-                <FieldForm
+                {/* <FieldForm
                   form={form}
                   name="dispatch.dispatchDetails.ledgerBalanceOfParty"
                   label="LedgerBalance of Party"
                   type="text"
-                />
+                  value={ledgerBalance}
+                /> */}
+
+                 <FormField
+                control={form.control}
+                name="dispatch.dispatchDetails.ledgerBalanceOfParty"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Ledger Balance of party :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-yellow-100 pl-2">
+                            <p className="text-xl font-medium">&#8377;</p>
+                            <Input
+                              type="number"
+                              value={Number(ledgerBalance).toFixed(2)}
+                              className="border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
+                              readOnly
+                            />
+                            <Input
+                              type="nu mber"
+                              value={Number(ledgerBalance).toFixed(2) > 0 ? "credit" : "debit"  }
+                              className="border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
+                              readOnly
+                            />
+                          </div>
+                        </FormControl>
+
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+                
                 <FieldForm
                   form={form}
                   name="dispatch.dispatchDetails.remarks"
@@ -547,6 +535,19 @@ const DispatchVehicle = ({ params }) => {
                   type="text"
                 />
               </div>
+
+                  </div>
+              ):(
+                <p
+                  className="my-6 max-w-full rounded-lg bg-blue-500 px-8 py-2 text-center text-xl font-semibold text-white shadow-md hover:bg-blue-700"
+                  onClick={() =>
+                    setShowAdditionalRateForCompany(!showAdditionalRateForCompany)
+                  }
+                >
+                  Additional Rate for Company
+                </p>
+              )}
+
 
               {showAdditionalDetails ? (
                 <div>
@@ -664,13 +665,273 @@ const DispatchVehicle = ({ params }) => {
                   Additional Details
                 </p>
               )}
+
+
+
+            
+             
+
+              {/* 
+              
+              Modified the style of this component
+              
               <h2 className="mt-6 text-center text-2xl font-semibold">
-                Additional Chargers for Vehicle hired
+                e-way Bill Details
+              </h2>
+              <FieldForm
+                form={form}
+                name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.eWayBillNo"
+                label="E-Way Bill No"
+                type="text"
+              />
+              <FieldForm
+                form={form}
+                name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.eWayBillDate"
+                label="E-Way Bill Date"
+                type="date"
+              />
+              <FieldForm
+                form={form}
+                name="dispatch.dispatchDetails.consignorInvoiceDetails.eWayBillDetails.expDate"
+                label="Exp-Date "
+                type="date"
+              /> */}
+              
+            </div>
+
+            <div className="flex w-full max-w-xl flex-col gap-0">
+             
+              {showConsignorInvoiceDetail ? (
+                <div>
+                  <h2
+                    className="mt-6 text-center text-2xl font-semibold"
+                    onClick={() =>
+                      setShowConsignorInvoiceDetail(!showConsignorInvoiceDetail)
+                    }
+                  >
+                    Consignor Invoice Details
+                  </h2>
+                  <div className="flex items-center space-x-4">
+                    <FormField
+                      control={form.control}
+                      name="dispatch.dispatchDetails.consignorInvoiceDetails.isPODCompulsory"
+                      render={({ field }) => (
+                        <FormItem className="flex items-center space-x-4">
+                          <FormLabel className="whitespace-nowrap">
+                            POD Compulsory (Yes/No)
+                          </FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value ? "Yes" : "No"}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="Yes">Yes</SelectItem>
+                              <SelectItem value="No">No</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="dispatch.dispatchDetails.consignorInvoiceDetails.podType"
+                      render={({ field }) => (
+                        <FormItem className="flex items-center space-x-4">
+                          {/* <FormLabel className="whitespace-nowrap">POD Type</FormLabel> */}
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value ? "hardCopy" : "softCopy"}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="hardCopy">
+                                Hard Copy
+                              </SelectItem>
+                              <SelectItem value="softCopy">
+                                Soft Copy
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <FieldForm
+                    form={form}
+                    name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorInvoiceDate"
+                    label="Consignor - Invoice Date"
+                    type="date"
+                  />
+                  <FieldForm
+                    form={form}
+                    name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorDeliveryNo"
+                    label="Consignor - Delivery No"
+                    type="text"
+                  />
+                  <FieldForm
+                    form={form}
+                    name="dispatch.dispatchDetails.consignorInvoiceDetails.consignorInvoiceNo"
+                    label="Consignor - Invoice No"
+                    type="text"
+                  />
+                  <FieldForm
+                    form={form}
+                    name="dispatch.dispatchDetails.consignorInvoiceDetails.valueOfGoods"
+                    label="Value of Goods (Rs.)"
+                    type="number"
+                  />
+                </div>
+              ) : (
+                <p
+                  className="my-6 max-w-full rounded-lg bg-blue-500 px-8 py-2 text-center text-xl font-semibold text-white shadow-md hover:bg-blue-700"
+                  onClick={() =>
+                    setShowConsignorInvoiceDetail(!showConsignorInvoiceDetail)
+                  }
+                >
+                  Consignor Invoice Details
+                </p>
+              )}
+
+              {showAdditionalRateForVehicle? (
+                <div>
+
+
+
+      
+              <h2 className="mt-6 text-center text-2xl font-semibold"
+               onClick={() =>
+                    setShowAdditionalRateForVehicle(!showAdditionalRateForVehicle)
+                  }
+              >
+                Additional Rate for Vehicle hired
               </h2>
               <AdditionalChargers
                 form={form}
                 nameValue="dispatch.dispatchAdditionalRate"
               />
+
+              </div>
+              ):(
+              <div>
+                
+                 <p
+                  className="my-6 max-w-full rounded-lg bg-blue-500 px-8 py-2 text-center text-xl font-semibold text-white shadow-md hover:bg-blue-700"
+                  onClick={() =>
+                    setShowAdditionalRateForVehicle(!showAdditionalRateForVehicle)
+                  }
+                >
+                  Additional Rate for Vehicle hired
+                </p>
+                </div>
+
+                )}
+
+                {
+                  showDeliverySummary?(
+                  <div>
+                    <h2
+                  className="mt-6 text-center text-2xl font-semibold"
+                  onClick={() =>
+                    setShowDeliverySummary(!showDeliverySummary)
+                  }
+                >
+                  Delivery Summary
+                </h2>
+
+
+                 <FormField
+                control={form.control}
+                name="pickupAddress"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Pickup Address:
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-blue-100 pl-2">
+                            {/* <p className="text-xl font-medium">&#8377;</p> */}
+                            <Input
+                              type="text  "
+                              value={pickupAdd}
+                              className="border-none bg-blue-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
+                              readOnly
+                            />
+                          </div>
+                        </FormControl>
+
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+                
+
+
+                 <FormField
+                control={form.control}
+                name="shippingAddress"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="flex items-center justify-center gap-4">
+                      <FormLabel className="text-nowrap text-sm lg:text-base">
+                        Shipping Address :
+                      </FormLabel>
+                      <div className="flex flex-1 flex-col">
+                        <FormControl>
+                          <div className="mb-2 flex h-12 items-center justify-center gap-1 rounded bg-yellow-100 pl-2">
+                            {/* <p className="text-xl font-medium">&#8377;</p> */}
+                            <Input
+                              type="text"
+                              value={shippingAdd}
+                              className="border-none bg-yellow-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 "
+                              readOnly
+                            />
+                          </div>
+                        </FormControl>
+
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+                
+
+
+
+
+                    
+                    </div>
+                    ):(
+                      <div> 
+ <p
+                  className="my-6 max-w-full rounded-lg bg-blue-500 px-8 py-2 text-center text-xl font-semibold text-white shadow-md hover:bg-blue-700"
+                  onClick={() =>
+                    setShowDeliverySummary(!showDeliverySummary)
+                  }
+                >
+                  Delivery Summary
+                </p>
+
+                      </div>
+                    )
+                }
             </div>
           </div>
 

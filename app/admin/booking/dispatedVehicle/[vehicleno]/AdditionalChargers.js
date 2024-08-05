@@ -1,17 +1,31 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import FieldForm from "../../../component/FieldForm";
 import { Button } from "../../../../components/ui/button";
+import { UserContext } from "../../../../context/UserContextProvider";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../../components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../../../components/ui/form";
 
 const AdditionalChargers = ({ form, nameValue }) => {
   const [charges, setCharges] = useState([]);
+  const [chargesList, setChargesList] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const { user } = useContext(UserContext);
 
-
-
-  function calAmount(rate , days){
-    return Number(rate) + Number(days)
-  }
+  const userId = user?._id;
 
   const rate = form.watch(`${nameValue}[${charges.length}].rate`);
   const days = form.watch(`${nameValue}[${charges.length}].days`);
@@ -23,10 +37,10 @@ const AdditionalChargers = ({ form, nameValue }) => {
     }
   }, [rate, days, charges.length, nameValue]);
 
-  useEffect(()=>{
-    const result = calAmount(rate , days)
-    form.setValue(`${nameValue}.amount`, result)
-  },[rate ,days ]);
+  useEffect(() => {
+    const result = rate && days ? Number(rate) * Number(days) : 0;
+    form.setValue(`${nameValue}.amount`, result);
+  }, [rate, days]);
 
   function handleAdditionalCharge() {
     const newCharge = {
@@ -41,16 +55,35 @@ const AdditionalChargers = ({ form, nameValue }) => {
     setShowForm(false);
   }
 
+  const fetchAdditionalCharges = async () => {
+    try {
+      const response = await fetch(`/api/setting/additionalCharges/get/${userId}`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setChargesList(data.data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAdditionalCharges();
+  }, []);
+
   return (
     <div>
-      
-
       {/* Close and Reset button */}
       <div className="flex items-center gap-3 max-w-md w-full">
         <Button
           type="button"
           variant="secondary"
-          className='flex-1'
+          className="flex-1"
           onClick={() => {
             setCharges([]);
             form.setValue(nameValue, []);
@@ -60,7 +93,7 @@ const AdditionalChargers = ({ form, nameValue }) => {
         </Button>
         <Button
           type="button"
-          className='flex-1'
+          className="flex-1"
           onClick={() => setShowForm(!showForm)}
           variant="secondary"
         >
@@ -83,7 +116,7 @@ const AdditionalChargers = ({ form, nameValue }) => {
             </thead>
             <tbody>
               {charges.map((items, i) => (
-                <tr key={i} className="w-full text-center">
+                <tr key={i} className="w-full border text-center">
                   <td>{items.chargesName}</td>
                   <td>{items.days}</td>
                   <td>{items.rate}</td>
@@ -91,6 +124,11 @@ const AdditionalChargers = ({ form, nameValue }) => {
                   <td>{items.remarks}</td>
                 </tr>
               ))}
+              <tr className="w-full text-center font-bold">
+                <td colSpan="3">Total Freight</td>
+                <td>{charges.reduce((total, item) => total + item.amount, 0)}</td>
+                <td></td>
+              </tr>
             </tbody>
           </table>
         )}
@@ -100,12 +138,36 @@ const AdditionalChargers = ({ form, nameValue }) => {
       <div>
         {showForm && (
           <>
-          <p>Fill in the details below:</p>
-            <FieldForm
-              form={form}
+            <p>Fill in the details below:</p>
+           <FormField
+              control={form.control}
               name={`${nameValue}[${charges.length}].chargesName`}
-              label="Charge Name"
-              type="text"
+              render={({ field }) => (
+                <FormItem className="flex items-center space-x-4">
+                  <FormLabel className="whitespace-nowrap">Charge Name</FormLabel>
+                  <Select {...field}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Charge" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <option value="">
+                        {chargesList && chargesList.length > 0
+                          ? "Select Additional Charge"
+                          : "Loading..."}
+                      </option>
+                      {Array.isArray(chargesList) &&
+                        chargesList.map((charge) => (
+                          <SelectItem key={charge.value} value={charge.value}>
+                            {charge.name}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
             <FieldForm
               form={form}
@@ -132,7 +194,7 @@ const AdditionalChargers = ({ form, nameValue }) => {
               type="text"
             />
             <Button
-              className='flex-1 max-w-md w-full'
+              className="flex-1 max-w-md w-full"
               type="button"
               variant="secondary"
               onClick={handleAdditionalCharge}
